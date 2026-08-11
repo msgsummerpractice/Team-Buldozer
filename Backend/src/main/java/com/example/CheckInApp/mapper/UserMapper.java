@@ -29,41 +29,15 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-        
-        UserResponse response = new UserResponse();
-        response.setId(user.getId());
-        response.setFirstName(user.getFirstName());
-        response.setLastName(user.getLastName());
-        response.setEmail(user.getEmail());
-        response.setLocation(user.getLocation());
-        response.setStatus(user.isStatus());
-        response.setRoles(user.getRoles());
-        
-        return response;
-    }
-    public void updateEntityFromRequest(User user, UserRequest request) {
-        if (request == null) {
-            return;
-        }
-        
-        if (request.getFirstName() != null && !request.getFirstName().isBlank()) {
-            user.setFirstName(request.getFirstName());
-        }
-        if (request.getLastName() != null && !request.getLastName().isBlank()) {
-            user.setLastName(request.getLastName());
-        }
-        if (request.getEmail() != null && !request.getEmail().isBlank()) {
-            user.setEmail(request.getEmail());
-        }
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            user.setPassword(request.getPassword());
-        }
-        if (request.getLocation() != null) {
-            user.setLocation(request.getLocation());
-        }
-        if (request.getRoles() != null && !request.getRoles().isEmpty()) {
-            user.setRoles(request.getRoles());
-        }
-    }
 
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .location(user.getLocation())
+                .status(user.isStatus())
+                .roles(user.getRoles())
+                .build();
+    }
 }

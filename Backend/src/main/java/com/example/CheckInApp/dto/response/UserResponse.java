@@ -2,18 +2,15 @@ package com.example.CheckInApp.dto.response;
 
 import com.example.CheckInApp.model.Location;
 import com.example.CheckInApp.model.Role;
-
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class UserResponse {
 
     private Long id;
