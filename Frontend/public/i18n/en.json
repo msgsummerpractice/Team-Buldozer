@@ -8,8 +8,8 @@
     },
     "title": "Welcome Home",
     "subtitle": "This is your application dashboard.",
-    "authenticatedMsg": "You are currently authenticated.",
-    "unauthenticatedMsg": "Please log in or register to get started."
+    "authenticated-message": "You are currently authenticated.",
+    "unauthenticated-message": "Please log in or register to get started."
   },
   "login": {
     "title": "Login",
