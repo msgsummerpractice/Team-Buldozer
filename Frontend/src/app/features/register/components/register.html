@@ -3,10 +3,12 @@
   (ngSubmit)="onSubmit()"
   class="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg space-y-4"
 >
-  <h2 class="text-2xl font-bold text-center text-gray-800">Create account</h2>
+  <h2 class="text-2xl font-bold text-center text-gray-800">{{ 'register.title' | transloco }}</h2>
 
   <div>
-    <label class="block text-sm font-medium text-gray-700"> First name: </label>
+    <label class="block text-sm font-medium text-gray-700"
+      >{{ 'register.firstName' | transloco }}</label
+    >
     <input
       formControlName="firstName"
       class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -14,7 +16,9 @@
   </div>
 
   <div>
-    <label class="block text-sm font-medium text-gray-700"> Last name: </label>
+    <label class="block text-sm font-medium text-gray-700"
+      >{{ 'register.lastName' | transloco }}</label
+    >
     <input
       formControlName="lastName"
       class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -22,7 +26,9 @@
   </div>
 
   <div>
-    <label class="block text-sm font-medium text-gray-700"> Email: </label>
+    <label class="block text-sm font-medium text-gray-700"
+      >{{ 'register.email' | transloco }}</label
+    >
     <input
       type="email"
       formControlName="email"
@@ -30,37 +36,43 @@
     />
     @if (registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched) {
     <small class="text-red-500">
-      @if (registerForm.controls['email']?.hasError('required')) { Email is required. } @if
-      (registerForm.controls['email']?.hasError('email')) { Enter a valid email. }
+      @if (registerForm.controls['email']?.hasError('required')) { {{
+      'register.errors.emailRequired' | transloco }} } @if
+      (registerForm.controls['email']?.hasError('email')) { {{ 'register.errors.emailInvalid' |
+      transloco }} }
     </small>
     }
   </div>
 
   <div>
-    <label class="block text-sm font-medium text-gray-700"> Password: </label>
+    <label class="block text-sm font-medium text-gray-700"
+      >{{ 'register.password' | transloco }}</label
+    >
     <input
       type="password"
       formControlName="password"
       class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
     />
     @if (registerForm.controls['password']?.invalid && registerForm.controls['password']?.touched) {
-    <small class="text-red-500"> Password must contain at least 6 characters. </small>
+    <small class="text-red-500">{{ 'register.errors.passwordMinLength' | transloco }}</small>
     }
   </div>
 
   <div>
-    <label class="block text-sm font-medium text-gray-700"> Location: </label>
+    <label class="block text-sm font-medium text-gray-700"
+      >{{ 'register.location' | transloco }}</label
+    >
     <select
       formControlName="location"
       class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 bg-white outline-none"
     >
-      <option value="" disabled>Select a location</option>
+      <option value="" disabled>{{ 'register.selectLocation' | transloco }}</option>
       <option value="Cluj">Cluj</option>
       <option value="Timisoara">Timisoara</option>
       <option value="Mures">Mures</option>
     </select>
     @if (registerForm.controls['location']?.invalid && registerForm.controls['location']?.touched) {
-    <small class="text-red-500 block"> Location is required. </small>
+    <small class="text-red-500 block">{{ 'register.errors.locationRequired' | transloco }}</small>
     }
   </div>
 
@@ -69,11 +81,13 @@
     [disabled]="registerForm.invalid"
     class="w-full rounded-lg bg-green-600 py-2 text-white font-semibold hover:bg-green-700 transition disabled:bg-gray-400"
   >
-    Register
+    {{ 'register.submit' | transloco }}
   </button>
 </form>
 
 <p class="mt-4 text-center text-gray-600">
-  Already have an account?
-  <a routerLink="/login" class="text-blue-600 hover:underline font-medium"> Login </a>
+  {{ 'register.haveAccount' | transloco }}
+  <a routerLink="/login" class="text-blue-600 hover:underline font-medium"
+    >{{ 'register.login' | transloco }}</a
+  >
 </p>
