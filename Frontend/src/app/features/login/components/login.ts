@@ -7,7 +7,7 @@ import {
   Validators,
   FormsModule,
 } from '@angular/forms';
-import { AuthenticationService } from 'core/authentication/services/authentication.service';
+import { AuthenticationService } from '@core/authentication/services/authentication.service';
 
 @Component({
   selector: 'app-login',

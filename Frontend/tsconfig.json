@@ -13,9 +13,9 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-   "paths": {
-      "core/*": ["./src/app/core/*"],
-      "features/*": ["./src/app/features/*"]
+    "paths": {
+      "@core/*": ["./src/app/core/*"],
+      "@features/*": ["./src/app/features/*"]
     }
   },
   "angularCompilerOptions": {

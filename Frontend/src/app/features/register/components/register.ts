@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthenticationService } from 'core/authentication/services/authentication.service';
+import { AuthenticationService } from '@core/authentication/services/authentication.service';
 
 @Component({
   selector: 'app-register',

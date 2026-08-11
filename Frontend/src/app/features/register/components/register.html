@@ -29,14 +29,10 @@
       class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
     />
     @if (registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched) {
-      <small class="text-red-500">
-        @if (registerForm.controls['email']?.hasError('required')) {
-          Email is required.
-        }
-        @if (registerForm.controls['email']?.hasError('email')) {
-          Enter a valid email.
-        }
-      </small>
+    <small class="text-red-500">
+      @if (registerForm.controls['email']?.hasError('required')) { Email is required. } @if
+      (registerForm.controls['email']?.hasError('email')) { Enter a valid email. }
+    </small>
     }
   </div>
 
@@ -48,7 +44,7 @@
       class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
     />
     @if (registerForm.controls['password']?.invalid && registerForm.controls['password']?.touched) {
-      <small class="text-red-500"> Password must contain at least 6 characters. </small>
+    <small class="text-red-500"> Password must contain at least 6 characters. </small>
     }
   </div>
 
@@ -64,7 +60,7 @@
       <option value="Mures">Mures</option>
     </select>
     @if (registerForm.controls['location']?.invalid && registerForm.controls['location']?.touched) {
-      <small class="text-red-500 block"> Location is required. </small>
+    <small class="text-red-500 block"> Location is required. </small>
     }
   </div>
 
