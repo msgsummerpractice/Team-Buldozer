@@ -23,6 +23,7 @@ import { Authentication } from '../login/authService';
 })
 export class Home {
   protected authentification = inject(Authentication);
+
   logout() {
     this.authentification.logout();
   }
