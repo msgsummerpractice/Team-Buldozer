@@ -1,0 +1,71 @@
+<div class="min-h-screen bg-slate-50 p-4 md:p-8">
+	<div class="max-w-3xl mx-auto">
+		<div class="flex items-center justify-between mb-6">
+			<h1 class="text-3xl font-bold text-slate-900">My Profile</h1>
+			<a routerLink="/" class="text-sm font-semibold text-blue-700 hover:text-blue-900">Back to home</a>
+		</div>
+
+		@if (loading()) {
+		<div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+			<p class="text-slate-600">Loading account details...</p>
+		</div>
+		}
+
+		@if (!loading() && error()) {
+		<div class="bg-red-50 border border-red-200 rounded-2xl p-6">
+			<p class="font-semibold text-red-700">Unable to display profile</p>
+			<p class="mt-1 text-red-600">{{ error() }}</p>
+		</div>
+		}
+
+		@if (!loading() && profile()) {
+		<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+			<div class="px-6 py-5 border-b border-slate-100 bg-slate-50">
+				<p class="text-sm uppercase tracking-wide text-slate-500">Account holder</p>
+				<h2 class="text-2xl font-semibold text-slate-900 mt-1">{{ fullName() }}</h2>
+			</div>
+
+			<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+				<div>
+					<p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">User ID</p>
+					<p class="text-base text-slate-900 mt-1">{{ profile()!.id }}</p>
+				</div>
+
+				<div>
+					<p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Email</p>
+					<p class="text-base text-slate-900 mt-1">{{ profile()!.email }}</p>
+				</div>
+
+				<div>
+					<p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Location</p>
+					<p class="text-base text-slate-900 mt-1">{{ profile()!.location }}</p>
+				</div>
+
+				<div>
+					<p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Status</p>
+					<span
+						class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium mt-1"
+						[class.bg-emerald-100]="profile()!.status"
+						[class.text-emerald-700]="profile()!.status"
+						[class.bg-slate-200]="!profile()!.status"
+						[class.text-slate-700]="!profile()!.status"
+					>
+						{{ profile()!.status ? 'Active' : 'Inactive' }}
+					</span>
+				</div>
+
+				<div class="md:col-span-2">
+					<p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Roles</p>
+					<div class="mt-2 flex flex-wrap gap-2">
+						@for (role of profile()!.roles; track role) {
+						<span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+							{{ role }}
+						</span>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+		}
+	</div>
+</div>

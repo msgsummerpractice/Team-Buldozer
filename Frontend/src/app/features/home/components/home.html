@@ -6,6 +6,7 @@
     <button matButton="filled" routerLink="/login"><mat-icon>login</mat-icon> Login</button>
     <button matButton="filled" routerLink="/register">Register</button>
     } @if (authentification.isAuthenticated()) {
+    <button matButton="filled" routerLink="/info"><mat-icon>account_circle</mat-icon> Profile</button>
     <button matButton="filled" (click)="logout()"><mat-icon>logout</mat-icon> Logout</button>
     }
   </div>

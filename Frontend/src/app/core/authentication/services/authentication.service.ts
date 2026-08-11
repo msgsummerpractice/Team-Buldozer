@@ -31,6 +31,20 @@ export class AuthenticationService {
           if (response.token) {
             localStorage.setItem('token', response.token);
             this.isAuthenticated.set(true);
+
+            const payloadUserId = this.getUserIdFromToken(response.token);
+            const responseUserId =
+              this.toNumericId(
+                (response as SignInResponse & { userId?: unknown; id?: unknown }).userId
+              ) ??
+              this.toNumericId(
+                (response as SignInResponse & { userId?: unknown; id?: unknown }).id
+              );
+            const resolvedUserId = responseUserId ?? payloadUserId;
+
+            if (resolvedUserId) {
+              localStorage.setItem('userId', String(resolvedUserId));
+            }
           }
         })
       );
@@ -43,5 +57,39 @@ export class AuthenticationService {
   logout() {
     this.isAuthenticated.set(false);
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+  }
+
+  private toNumericId(value: unknown): number | null {
+    if (typeof value === 'number' && Number.isInteger(value) && value > 0) {
+      return value;
+    }
+
+    if (typeof value === 'string') {
+      const id = Number(value);
+      if (Number.isInteger(id) && id > 0) {
+        return id;
+      }
+    }
+
+    return null;
+  }
+
+  private getUserIdFromToken(token: string): number | null {
+    if (!token.includes('.')) return null;
+
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+      const payload = JSON.parse(payloadJson) as Record<string, unknown>;
+
+      return (
+        this.toNumericId(payload['userId']) ??
+        this.toNumericId(payload['id']) ??
+        this.toNumericId(payload['uid'])
+      );
+    } catch {
+      return null;
+    }
   }
 }
