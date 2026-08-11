@@ -4,3 +4,4 @@ public enum Location {
     CLUJ, TIMISOARA, MURES
 
 }
+ 
