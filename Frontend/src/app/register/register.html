@@ -1,0 +1,83 @@
+<form
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+  class="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg space-y-4"
+>
+  <h2 class="text-2xl font-bold text-center text-gray-800">Create account</h2>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700"> First name: </label>
+    <input
+      formControlName="firstName"
+      class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700"> Last name: </label>
+    <input
+      formControlName="lastName"
+      class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700"> Email: </label>
+    <input
+      type="email"
+      formControlName="email"
+      class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+    @if (registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched) {
+      <small class="text-red-500">
+        @if (registerForm.controls['email']?.hasError('required')) {
+          Email is required.
+        }
+        @if (registerForm.controls['email']?.hasError('email')) {
+          Enter a valid email.
+        }
+      </small>
+    }
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700"> Password: </label>
+    <input
+      type="password"
+      formControlName="password"
+      class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+    @if (registerForm.controls['password']?.invalid && registerForm.controls['password']?.touched) {
+      <small class="text-red-500"> Password must contain at least 6 characters. </small>
+    }
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700"> Location: </label>
+    <select
+      formControlName="location"
+      class="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 bg-white outline-none"
+    >
+      <option value="" disabled>Select a location</option>
+      <option value="Cluj">Cluj</option>
+      <option value="Timisoara">Timisoara</option>
+      <option value="Mures">Mures</option>
+    </select>
+    @if (registerForm.controls['location']?.invalid && registerForm.controls['location']?.touched) {
+      <small class="text-red-500 block"> Location is required. </small>
+    }
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="registerForm.invalid"
+    class="w-full rounded-lg bg-green-600 py-2 text-white font-semibold hover:bg-green-700 transition disabled:bg-gray-400"
+  >
+    Register
+  </button>
+</form>
+
+<p class="mt-4 text-center text-gray-600">
+  Already have an account?
+  <a routerLink="/login" class="text-blue-600 hover:underline font-medium"> Login </a>
+</p>
