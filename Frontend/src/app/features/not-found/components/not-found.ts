@@ -7,6 +7,4 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
   imports: [RouterLink, TranslocoPipe],
   templateUrl: './not-found.html',
 })
-export class NotFound {
-  translocoService = inject(TranslocoService);
-}
+export class NotFound {}

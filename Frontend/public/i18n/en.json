@@ -16,30 +16,30 @@
     "username": "Username",
     "password": "Password",
     "submit": "Submit",
-    "noAccount": "Don't have an account?",
+    "no-account": "Don't have an account?",
     "register": "Register"
   },
   "register": {
     "title": "Create account",
-    "firstName": "First name:",
-    "lastName": "Last name:",
+    "first-name": "First name:",
+    "last-name": "Last name:",
     "email": "Email:",
     "password": "Password:",
     "location": "Location:",
-    "selectLocation": "Select a location",
+    "select-location": "Select a location",
     "submit": "Register",
-    "haveAccount": "Already have an account?",
+    "have-account": "Already have an account?",
     "login": "Login",
     "errors": {
-      "emailRequired": "Email is required.",
-      "emailInvalid": "Enter a valid email.",
-      "passwordMinLength": "Password must contain at least 6 characters.",
-      "locationRequired": "Location is required."
+      "email-required": "Email is required.",
+      "email-invalid": "Enter a valid email.",
+      "password-min-length": "Password must contain at least 6 characters.",
+      "location-required": "Location is required."
     }
   },
-  "notFound": {
+  "not-found": {
     "title": "404",
     "message": "The page you're looking for doesn't exist.",
-    "backHome": "Return to Home"
+    "back-home": "Return to Home"
   }
 }

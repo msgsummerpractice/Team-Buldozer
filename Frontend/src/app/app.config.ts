@@ -16,7 +16,6 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    provideHttpClient(),
     provideTransloco({
       config: {
         availableLangs: ['en', 'ro'],

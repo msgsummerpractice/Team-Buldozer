@@ -14,7 +14,6 @@ export class Register {
   private fb = inject(NonNullableFormBuilder);
   private auth = inject(AuthenticationService);
   private router = inject(Router);
-  translocoService = inject(TranslocoService);
 
   registerForm = this.fb.group({
     firstName: ['', Validators.required],

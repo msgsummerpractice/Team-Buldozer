@@ -21,25 +21,25 @@
   },
   "register": {
     "title": "Creează cont",
-    "firstName": "Prenume:",
-    "lastName": "Nume de familie:",
+    "first-name": "Prenume:",
+    "last-name": "Nume de familie:",
     "email": "Email:",
     "password": "Parolă:",
     "location": "Locație:",
-    "selectLocation": "Selectați o locație",
+    "select-location": "Selectați o locație",
     "submit": "Înregistrare",
-    "haveAccount": "Aveți deja un cont?",
+    "have-account": "Aveți deja un cont?",
     "login": "Autentificare",
     "errors": {
-      "emailRequired": "Email este obligatoriu.",
-      "emailInvalid": "Introduceți un email valid.",
-      "passwordMinLength": "Parola trebuie să conțină cel puțin 6 caractere.",
-      "locationRequired": "Locația este obligatorie."
+      "email-required": "Email este obligatoriu.",
+      "email-invalid": "Introduceți un email valid.",
+      "password-min-length": "Parola trebuie să conțină cel puțin 6 caractere.",
+      "location-required": "Locația este obligatorie."
     }
   },
-  "notFound": {
+  "not-found": {
     "title": "404",
     "message": "Pagina pe care o cauți nu există.",
-    "backHome": "Înapoi acasă"
+    "back-home": "Înapoi acasă"
   }
 }

@@ -4,8 +4,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslocoPipe, TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
+import { AuthenticationDirective } from '@core/authentication/directives/authentication.directive'; // Importă directiva
 
 @Component({
   selector: 'app-header',
@@ -17,13 +18,17 @@ import { AuthenticationService } from '@core/authentication/services/authenticat
     MatIconModule,
     MatTooltipModule,
     TranslocoPipe,
+    AuthenticationDirective,
   ],
-  providers: [provideTranslocoScope('nav')],
   templateUrl: './header.html',
 })
 export class Header {
+  private authentification = inject(AuthenticationService);
   protected translocoService = inject(TranslocoService);
-  protected authentification = inject(AuthenticationService);
+
+  protected get isAuthenticated(): boolean {
+    return this.authentification.isAuthenticated();
+  }
 
   protected nextLang() {
     return this.translocoService.getActiveLang() === 'en' ? 'ro' : 'en';

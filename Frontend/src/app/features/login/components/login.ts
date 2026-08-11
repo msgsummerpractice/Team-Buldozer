@@ -19,7 +19,6 @@ export class Login {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthenticationService);
   private readonly router = inject(Router);
-  translocoService = inject(TranslocoService);
 
   showMfaStep = signal<boolean>(false);
   activeUsername = signal<string>('');
