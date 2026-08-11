@@ -2,7 +2,9 @@ package com.example.CheckInApp.dto.response;
 
 import com.example.CheckInApp.model.Location;
 import com.example.CheckInApp.model.Role;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 

@@ -3,7 +3,8 @@ VALUES (1, 'Admin', 'Admin', 'admin@gmail.com', 'admin123', 'CLUJ', true),
        (2, 'Ion', 'Popescu', 'ion@gmail.com', 'ion123', 'TIMISOARA', true),
        (3, 'Maria', 'Ionescu', 'maria@gmail.com', 'maria123', 'TIMISOARA', true),
        (4, 'Andrei', 'Muresan', 'andrei@gmail.com', 'andrei123', 'CLUJ', true),
-       (5, 'George', 'Dobre', 'george@gmail.com', 'george123', 'MURES', true);
+       (5, 'George', 'Dobre', 'george@gmail.com', 'george123', 'MURES', true)
+ON CONFLICT (id) DO NOTHING;
 
 SELECT setval(pg_get_serial_sequence('users', 'id'), coalesce(max(id), 1))
 FROM users;
@@ -14,4 +15,5 @@ VALUES (1, 'ADMIN'),
        (2, 'HR'),
        (3, 'HR'),
        (4, 'PARTICIPANT'),
-       (5, 'PARTICIPANT');
+       (5, 'PARTICIPANT')
+ON CONFLICT (user_id, role_name) DO NOTHING;

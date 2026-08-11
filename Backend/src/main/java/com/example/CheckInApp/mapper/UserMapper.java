@@ -1,16 +1,43 @@
 package com.example.CheckInApp.mapper;
 
+import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.model.User;
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class UserMapper {
 
-    public UserResponse mapUserToUserResponse(User user) {
-        UserResponse userResponse = UserResponse.builder()
+    private final PasswordEncoder passwordEncoder;
+
+    public UserMapper(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public User toEntity(UserRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setLocation(request.getLocation());
+        user.setRoles(request.getRoles());
+        user.setStatus(true);
+
+        return user;
+    }
+
+    public UserResponse toResponse(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -19,8 +46,5 @@ public class UserMapper {
                 .status(user.isStatus())
                 .roles(user.getRoles())
                 .build();
-
-        return userResponse;
     }
-
 }

@@ -5,6 +5,7 @@ import com.example.CheckInApp.mapper.UserMapper;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import com.example.CheckInApp.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,3 +23,8 @@ public class UserService {
     }
 
 }
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+}
+    }
