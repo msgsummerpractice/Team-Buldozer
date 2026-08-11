@@ -9,7 +9,7 @@ CREATE TABLE revinfo
 
 CREATE TABLE revchanges
 (
-    rev        BIGINT NOT NULL,
+    rev        BIGINT       NOT NULL,
     entityname VARCHAR(255) NOT NULL,
     CONSTRAINT pk_revchanges PRIMARY KEY (rev, entityname)
 );
@@ -21,15 +21,15 @@ CREATE TABLE users
     last_name  VARCHAR(32),
     email      VARCHAR(64),
     password   VARCHAR(128),
-    location   VARCHAR(30),
-    status     BOOLEAN NOT NULL,
+    location   VARCHAR(32),
+    status     BOOLEAN                                 NOT NULL,
     CONSTRAINT pk_users PRIMARY KEY (id)
 );
 
 CREATE TABLE user_roles
 (
-    user_id   BIGINT NOT NULL,
-    role_name VARCHAR(30) NOT NULL,
+    user_id   BIGINT      NOT NULL,
+    role_name VARCHAR(32) NOT NULL,
     CONSTRAINT pk_user_roles PRIMARY KEY (user_id, role_name)
 );
 
