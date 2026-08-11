@@ -2,14 +2,14 @@ package com.example.CheckInApp.service;
 
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
     public User getUserById(Long id) {
