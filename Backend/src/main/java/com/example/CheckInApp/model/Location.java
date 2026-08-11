@@ -1,4 +1,4 @@
-package main.java.com.example.CheckInApp.model;
+package com.example.CheckInApp.model;
 
 public enum Location {
     CLUJ, TIMISOARA, MURES
