@@ -19,7 +19,6 @@ import { Authentication } from '../login/authService';
     CommonModule,
   ],
   templateUrl: './home.html',
-  styleUrl: './home.css',
 })
 export class Home {
   protected authentification = inject(Authentication);
