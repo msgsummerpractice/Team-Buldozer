@@ -12,7 +12,7 @@ export interface SignInResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class Authentication {
+export class AuthenticationService {
   private http = inject(HttpClient);
   isAuthenticated = signal<boolean>(!!localStorage.getItem('token'));
 

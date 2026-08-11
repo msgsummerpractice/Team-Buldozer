@@ -4,8 +4,8 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthDirective } from '../login/authDirective';
-import { Authentication } from '../login/authService';
+import { AuthenticationDirective } from 'core/authentication/directives/authentication.directive';
+import { AuthenticationService } from 'core/authentication/services/authentication.service';
 
 @Component({
   selector: 'app-home',
@@ -14,14 +14,14 @@ import { Authentication } from '../login/authService';
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
-    AuthDirective,
+    AuthenticationDirective,
     RouterLink,
     CommonModule,
   ],
   templateUrl: './home.html',
 })
 export class Home {
-  protected authentification = inject(Authentication);
+  protected authentification = inject(AuthenticationService);
 
   logout() {
     this.authentification.logout();

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Authentication } from '../login/authService';
+import { AuthenticationService } from 'core/authentication/services/authentication.service';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +11,7 @@ import { Authentication } from '../login/authService';
 })
 export class Register {
   private fb = inject(NonNullableFormBuilder);
-  private auth = inject(Authentication);
+  private auth = inject(AuthenticationService);
   private router = inject(Router);
 
   registerForm = this.fb.group({

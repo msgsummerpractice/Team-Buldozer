@@ -1,11 +1,11 @@
 import { Directive, effect, inject, TemplateRef, ViewContainerRef } from '@angular/core';
-import { Authentication } from './authService';
+import { AuthenticationService } from 'core/authentication/services/authentication.service';
 
 @Directive({
   selector: '[appAuth]',
 })
-export class AuthDirective {
-  private authService = inject(Authentication);
+export class AuthenticationDirective {
+  private authService = inject(AuthenticationService);
   private templateRef = inject(TemplateRef);
   private viewContainerRef = inject(ViewContainerRef);
 

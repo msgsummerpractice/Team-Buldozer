@@ -7,7 +7,7 @@ import {
   Validators,
   FormsModule,
 } from '@angular/forms';
-import { Authentication } from './authService';
+import { AuthenticationService } from 'core/authentication/services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ import { Authentication } from './authService';
 })
 export class Login {
   private readonly fb = inject(NonNullableFormBuilder);
-  private readonly auth = inject(Authentication);
+  private readonly auth = inject(AuthenticationService);
   private readonly router = inject(Router);
 
   showMfaStep = signal<boolean>(false);
