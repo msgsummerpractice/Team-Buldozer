@@ -2,17 +2,19 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe],
   templateUrl: './register.html',
 })
 export class Register {
   private fb = inject(NonNullableFormBuilder);
   private auth = inject(AuthenticationService);
   private router = inject(Router);
+  translocoService = inject(TranslocoService);
 
   registerForm = this.fb.group({
     firstName: ['', Validators.required],
