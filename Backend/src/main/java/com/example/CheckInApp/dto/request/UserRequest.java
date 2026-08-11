@@ -21,11 +21,11 @@ import java.util.Set;
 public class UserRequest {
 
     @NotBlank(message = "First name is required")
-    @Size(max = 32, message = "First name must be at most 32 characters")
+    @Size(min= 3, max = 32, message = "First name must be at most 32 characters and at least 3 characters")
     private String firstName;
 
     @NotBlank(message = "Last name is required")
-    @Size(max = 32, message = "Last name must be at most 32 characters")
+    @Size(min = 3, max = 32, message = "Last name must be at most 32 characters and at least 3 characters")
     private String lastName;
 
     @NotBlank(message = "Email is required")
