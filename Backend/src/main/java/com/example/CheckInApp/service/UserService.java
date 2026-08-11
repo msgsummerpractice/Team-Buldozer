@@ -19,12 +19,12 @@ public class UserService {
 
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(userMapper::mapUserToUserResponse).toList();
+        return users.stream().map(userMapper::toResponse).toList();
     }
 
-}
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
-}
     }
+
+}
