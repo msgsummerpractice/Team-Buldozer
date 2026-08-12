@@ -27,9 +27,7 @@ export class Header {
   private router = inject(Router);
   protected translocoService = inject(TranslocoService);
 
-  protected get isAuthenticated(): boolean {
-    return this.authService.isAuthenticated();
-  }
+  protected isAuthenticated = this.authService.isAuthenticated;
 
   protected nextLang() {
     return this.translocoService.getActiveLang() === 'en' ? 'ro' : 'en';

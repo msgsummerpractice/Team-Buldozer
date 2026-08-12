@@ -46,25 +46,20 @@ export class AuthenticationService {
       .post<SignInResponse>(`${this.apiUrl}/authentication/login`, { email, password })
       .pipe(
         tap((response) => {
-          if (response?.token && response?.roles) {
-            this.storeAuthCredentials(response.token, response.roles);
+          if (response.token) {
+            localStorage.setItem('token', response.token);
+            this._isAuthenticated.set(true);
           }
         })
       );
   }
 
-  private storeAuthCredentials(token: string, roles: string[]): void {
-    try {
-      localStorage.setItem('token', token);
-      localStorage.setItem('roles', JSON.stringify(roles));
-      this.userRoles.set(roles);
-      this.isAuthenticated.set(true);
-    } catch {
-      throw new Error('Failed to store authentication data');
-    }
+  register(user: any) {
+    return this.http.post<any>('http://localhost:8080/api/register', user);
   }
 
-  logout(): void {
+  logout() {
+    this.isAuthenticated.set(false);
     localStorage.removeItem('token');
     localStorage.removeItem('roles');
     this.isAuthenticated.set(false);
