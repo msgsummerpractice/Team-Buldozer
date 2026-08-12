@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { tap, throwError } from 'rxjs';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import type { SignInResponse } from './signin.response.interface';
+import { environment } from '../../../../environments/environment';
+
 @Service()
 export class AuthenticationService {
   private readonly http = inject(HttpClient);
   private readonly authz = inject(AuthorizationService);
-  private readonly apiUrl = 'http://localhost:8080/api';
+  private readonly apiUrl = environment.apiUrl;
 
   readonly isAuthenticated = signal<boolean>(this.hasValidToken());
 
@@ -36,7 +38,7 @@ export class AuthenticationService {
   }
 
   register(user: any) {
-    return this.http.post<any>('http://localhost:8080/api/register', user);
+    return this.http.post<any>(`${this.apiUrl}/register`, user);
   }
 
   logout(): void {
