@@ -31,12 +31,12 @@ export class Header {
     return this.authentification.isAuthenticated();
   }
 
-  protected nextLang() {
-    return this.translocoService.getActiveLang() === 'en' ? 'ro' : 'en';
+  getActiveLang(): string {
+    return this.translocoService.getActiveLang();
   }
 
   toggleLang() {
-    this.translocoService.setActiveLang(this.nextLang());
+    this.translocoService.setActiveLang(this.getActiveLang() === 'ro' ? 'en' : 'ro');
   }
 
   logout() {

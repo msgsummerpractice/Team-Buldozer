@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { Home } from '@features/home/components/home';
 import { NotFound } from '@features/not-found/components/not-found';
-import {Users} from '@features/users/users';
 
 export const routes: Routes = [
   {
