@@ -27,7 +27,7 @@ export const routes: Routes = [
   },
   {
     path: 'users',
-    component: Users
+    loadComponent: () => import('@features/users/users').then((m) => m.Users),
   },
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },

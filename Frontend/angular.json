@@ -9,7 +9,11 @@
   "projects": {
     "my-app": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -27,7 +31,7 @@
               "src/assets",
               "src/staticwebapp.config.json"
             ],
-            "styles": ["src/material-theme.scss", "src/styles.css"]
+            "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {

@@ -1,12 +1,12 @@
-import {Role} from '@core/users/model/role';
-import {Location} from '@core/users/model/location';
+import {UserRole} from '@core/users/model/user-role';
+import {UserLocation} from '@core/users/model/user-location';
 
-export interface UserResponse {
+export type UserResponse = {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
-  location: Location;
+  location: UserLocation;
   status: boolean;
-  roles: Role[];
+  roles: UserRole[];
 }

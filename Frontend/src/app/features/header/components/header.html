@@ -1,10 +1,10 @@
-<mat-toolbar class="app-toolbar sticky top-0 z-50 !h-20">
+<mat-toolbar class="app-toolbar sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-4 h-full">
     <a routerLink="/" class="flex items-center gap-2 no-underline h-full py-2">
       <img
         src="assets/images/logoApp.png"
         alt="logo"
-        class="h-full w-auto mix-blend-multiply object-contain"
+        class="h-26"
       />
     </a>
 
@@ -13,7 +13,7 @@
         <mat-icon>home</mat-icon>
       </button>
 
-      <button mat-stroked-button (click)="toggleLang()" class="min-w-0 px-3">
+      <button matButton="outlined" (click)="toggleLang()" class="min-w-0 px-3">
         {{ nextLang().toUpperCase() }}
       </button>
 
