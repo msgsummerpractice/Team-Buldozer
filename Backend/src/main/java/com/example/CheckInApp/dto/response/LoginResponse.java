@@ -3,6 +3,7 @@ package com.example.CheckInApp.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -12,9 +13,6 @@ public class LoginResponse {
     private String token;
     private String type = "Bearer";
     private long expiresIn;
-
-    public LoginResponse(String token) {
-        this.token = token;
-        this.type = "Bearer";
-    }
+    private List<String> roles;
+    private String message;
 }

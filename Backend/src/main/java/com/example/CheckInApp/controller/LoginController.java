@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/authentication")
+@RequestMapping("/api/auth")
 @Slf4j
 public class LoginController {
 
     @Autowired
     private LoginService loginService;
+    
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {

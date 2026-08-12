@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   ReactiveFormsModule,
@@ -7,7 +7,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-login',
@@ -20,10 +20,6 @@ export class Login {
   private readonly auth = inject(AuthenticationService);
   private readonly router = inject(Router);
 
-  showMfaStep = signal<boolean>(false);
-  activeUsername = signal<string>('');
-  mfaCode = '';
-
   protected readonly loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(5)]],
@@ -35,22 +31,28 @@ export class Login {
     const { username, password } = this.loginForm.getRawValue();
 
     this.auth.login(username, password).subscribe({
-      next: (res) => {
-        if (res.mfaRequired) {
-          this.activeUsername.set(username);
-          this.showMfaStep.set(true);
-        }
+      next: () => {
+        const userRole = this.auth.getUserRole();
+        this.redirectByRole(userRole);
       },
       error: (err) => console.error('Login failed', err),
     });
   }
 
-  onVerifyMfa(): void {
-    if (!this.mfaCode) return;
+  private redirectByRole(role: string | null): void {
+    if (!role) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
-    this.auth.verifyMfa(this.activeUsername(), this.mfaCode).subscribe({
-      next: () => this.router.navigate(['/info']),
-      error: (err) => console.error('MFA verification failed', err),
-    });
+    const roleRoutes: { [key: string]: string } = {
+      participant: '/home/participant',
+      marketing: '/home/marketing',
+      hr: '/home/hr',
+      admin: '/home/admin',
+    };
+
+    const route = roleRoutes[role.toLowerCase()] || '/';
+    this.router.navigate([route]);
   }
 }
