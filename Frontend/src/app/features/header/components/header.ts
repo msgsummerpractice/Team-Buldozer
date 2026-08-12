@@ -39,6 +39,8 @@ export class Header {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login']);
+    }
   }
 }
