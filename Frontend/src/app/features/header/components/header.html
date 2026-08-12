@@ -1,22 +1,10 @@
-<mat-toolbar class="app-toolbar sticky top-0 z-50 !h-20">
-  <div class="flex justify-between items-center w-full px-4 h-full">
+<mat-toolbar class="app-toolbar sticky top-0 z-50">
+  <div class="flex justify-between items-center w-full h-full">
     <a routerLink="/" class="flex items-center gap-2 no-underline h-full py-2">
-      <img
-        src="assets/images/logoApp.png"
-        alt="logo"
-        class="h-full w-auto mix-blend-multiply object-contain"
-      />
+      <img src="assets/images/logoApp.png" alt="logo" class="h-26" />
     </a>
 
     <div class="flex items-center gap-1">
-      <button mat-icon-button routerLink="/" [matTooltip]="'home.nav.home' | transloco">
-        <mat-icon>home</mat-icon>
-      </button>
-
-      <button mat-stroked-button (click)="toggleLang()" class="min-w-0 px-3">
-        {{ nextLang().toUpperCase() }}
-      </button>
-
       <button
         *appAuth
         mat-icon-button
@@ -28,9 +16,17 @@
 
       @if (!isAuthenticated()) {
       <button mat-icon-button routerLink="/login" [matTooltip]="'home.nav.login' | transloco">
+        <mat-icon>login</mat-icon>
+      </button>
+      } @else {
+      <button mat-icon-button routerLink="/info" [matTooltip]="'home.nav.login' | transloco">
         <mat-icon>person</mat-icon>
       </button>
       }
+
+      <button matButton="outlined" (click)="toggleLang()" class="min-w-0 px-3">
+        {{ getActiveLang().toUpperCase() }}
+      </button>
     </div>
   </div>
 </mat-toolbar>

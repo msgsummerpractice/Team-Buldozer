@@ -66,5 +66,12 @@
     "title": "404",
     "message": "Pagina pe care o cauți nu există.",
     "back-home": "Înapoi acasă"
+  },
+  "error-interceptor": {
+    "default": "A apărut o eroare neașteptată",
+    "0": "Nu s-a putut stabili conexiunea",
+    "401": "Autentificare necesară. Te rugăm să te conectezi.",
+    "403": "Nu ai permisiunea de a accesa această pagină.",
+    "500": "Eroare internă de server"
   }
 }
