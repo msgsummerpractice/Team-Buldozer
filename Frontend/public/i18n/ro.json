@@ -1,0 +1,45 @@
+{
+  "home": {
+    "nav": {
+      "home": "Acasă",
+      "login": "Autentificare",
+      "register": "Înregistrare",
+      "logout": "Deconectare"
+    },
+    "title": "Bine ați venit acasă",
+    "subtitle": "Acesta este tabloul de bord al aplicației dvs.",
+    "authenticated-message": "Sunteți autentificat în prezent.",
+    "unauthenticated-message": "Vă rugăm să vă autentificați sau să vă înregistrați pentru a începe."
+  },
+  "login": {
+    "title": "Autentificare",
+    "username": "Nume de utilizator",
+    "password": "Parolă",
+    "submit": "Trimite",
+    "no-account": "Nu aveți un cont?",
+    "register": "Înregistrare"
+  },
+  "register": {
+    "title": "Creează cont",
+    "first-name": "Prenume:",
+    "last-name": "Nume de familie:",
+    "email": "Email:",
+    "password": "Parolă:",
+    "location": "Locație:",
+    "select-location": "Selectați o locație",
+    "submit": "Înregistrare",
+    "have-account": "Aveți deja un cont?",
+    "login": "Autentificare",
+    "errors": {
+      "email-required": "Email este obligatoriu.",
+      "email-invalid": "Introduceți un email valid.",
+      "password-min-length": "Parola trebuie să conțină cel puțin 6 caractere.",
+      "location-required": "Locația este obligatorie."
+    }
+  },
+  "not-found": {
+    "title": "404",
+    "message": "Pagina pe care o cauți nu există.",
+    "back-home": "Înapoi acasă"
+  }
+}

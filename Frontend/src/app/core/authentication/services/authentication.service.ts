@@ -37,7 +37,7 @@ export class AuthenticationService {
   }
 
   register(user: any) {
-    return this.http.post<any>('http://localhost:8080/api/auth/register', user);
+    return this.http.post<any>('http://localhost:8080/api/register', user);
   }
 
   logout() {

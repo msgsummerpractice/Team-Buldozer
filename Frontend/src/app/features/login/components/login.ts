@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import {
   ReactiveFormsModule,
@@ -8,11 +7,12 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, FormsModule, RouterLink, TranslocoPipe],
   templateUrl: './login.html',
 })
 export class Login {
