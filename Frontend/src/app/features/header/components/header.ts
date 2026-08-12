@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,9 +26,7 @@ export class Header {
   private authentification = inject(AuthenticationService);
   protected translocoService = inject(TranslocoService);
 
-  protected get isAuthenticated(): boolean {
-    return this.authentification.isAuthenticated();
-  }
+  protected readonly isAuthenticated = this.authentification.isAuthenticated;
 
   protected nextLang() {
     return this.translocoService.getActiveLang() === 'en' ? 'ro' : 'en';
