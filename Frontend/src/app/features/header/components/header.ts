@@ -26,9 +26,7 @@ export class Header {
   private authentification = inject(AuthenticationService);
   protected translocoService = inject(TranslocoService);
 
-  protected get isAuthenticated(): boolean {
-    return this.authentification.isAuthenticated();
-  }
+  protected isAuthenticated = this.authentification.isAuthenticated;
 
   protected nextLang() {
     return this.translocoService.getActiveLang() === 'en' ? 'ro' : 'en';
