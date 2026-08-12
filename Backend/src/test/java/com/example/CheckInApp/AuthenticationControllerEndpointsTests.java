@@ -11,12 +11,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.example.CheckInApp.controller.RegisterController;
 import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.exception.DuplicateEmailException;
+import com.example.CheckInApp.service.JwtUtil;
 
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 @WebMvcTest(RegisterController.class)
@@ -35,6 +37,12 @@ public class AuthenticationControllerEndpointsTests {
 
     @MockitoBean
     private RegisterService registerService;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
+
+    @MockitoBean
+    private UserDetailsService userDetailsService;
 
     @Test
 void testRegisterUserSuccess() throws Exception {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/authentication")
 @Slf4j
