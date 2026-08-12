@@ -12,11 +12,9 @@
   --mdc-outlined-button-label-text-color: var(--mat-sys-on-primary);
   --mdc-outlined-button-outline-color: var(--mat-sys-on-primary);
   --mat-button-outlined-outline-color: var(--mat-sys-on-primary);
+  button {
+    --mat-button-outlined-label-text-color: var(--mat-sys-on-primary) !important;
+  }
 
-  border-bottom: 1px solid var(--mat-sys-on-primary);
-}
-
-.app-toolbar a,
-.app-toolbar button {
-  color: var(--mat-sys-on-primary);
+  box-shadow: 0 3px 8px 3px rgba(0, 0, 0, 0.5);
 }
