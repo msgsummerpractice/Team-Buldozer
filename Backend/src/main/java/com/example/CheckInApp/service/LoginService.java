@@ -4,8 +4,8 @@ import com.example.CheckInApp.dto.request.LoginRequest;
 import com.example.CheckInApp.dto.response.LoginResponse;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,26 +15,28 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class LoginService {
 
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    private final  JwtUtil jwtUtil;
-
-    private final UserRepository userRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
+    
+    @Autowired
+    private UserRepository userRepository;
     
     public LoginResponse authenticate(LoginRequest loginRequest) {
-        log.info("Authenticating user: {}", loginRequest.getEmail());
+        log.info("Authenticating user: {}", loginRequest.getUsername());
 
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getEmail(),
+                            loginRequest.getUsername(),
                             loginRequest.getPassword())
             );
             
-            User user = userRepository.findByEmail(loginRequest.getEmail())
+            User user = userRepository.findByEmail(loginRequest.getUsername())
                     .orElseThrow(() -> new BadCredentialsException("User not found"));
             
             List<String> roles = user.getRoles()
@@ -42,10 +44,10 @@ public class LoginService {
                     .map(role -> role.name().toLowerCase())
                     .collect(Collectors.toList());
             
-            String token = jwtUtil.generateToken(loginRequest.getEmail());
+            String token = jwtUtil.generateToken(loginRequest.getUsername());
             long expiresIn = jwtUtil.getExpirationTime();
 
-            log.info("Authentication successful for user: {}", loginRequest.getEmail());
+            log.info("Authentication successful for user: {}", loginRequest.getUsername());
 
             LoginResponse response = new LoginResponse();
             response.setToken(token);
@@ -57,8 +59,11 @@ public class LoginService {
             return response;
 
         } catch (BadCredentialsException e) {
-            log.warn("Invalid credentials for user: {}", loginRequest.getEmail());
+            log.warn("Invalid credentials for user: {}", loginRequest.getUsername());
             throw new BadCredentialsException("Invalid username or password", e);
+        } catch (Exception e) {
+            log.error("Authentication error: {}", e.getMessage());
+            throw new BadCredentialsException("Authentication failed", e);
         }
     }
 }
