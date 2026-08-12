@@ -1,15 +1,12 @@
 package com.example.CheckInApp.controller;
 
 import com.example.CheckInApp.dto.response.UserResponse;
-import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,17 +31,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponse> patchUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
-        UserResponse updatedUser = userService.patchUser(id, userRequest);
-        return ResponseEntity.ok(updatedUser);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
-        UserResponse updatedUser = userService.updateUser(id, userRequest);
-        return ResponseEntity.ok(updatedUser);
-    }
+    
 
 
 
