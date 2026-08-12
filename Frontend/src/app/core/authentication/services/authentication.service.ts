@@ -14,7 +14,8 @@ export interface SignInResponse {
 })
 export class AuthenticationService {
   private http = inject(HttpClient);
-  isAuthenticated = signal<boolean>(!!localStorage.getItem('token'));
+  private readonly _isAuthenticated = signal<boolean>(!!localStorage.getItem('token'));
+  public readonly isAuthenticated = this._isAuthenticated.asReadonly();
 
   login(username: string, password: string) {
     return this.http.post<SignInResponse>('http://localhost:8080/api/auth/login', {
@@ -30,32 +31,18 @@ export class AuthenticationService {
         tap((response) => {
           if (response.token) {
             localStorage.setItem('token', response.token);
-            this.isAuthenticated.set(true);
-
-            const payloadUserId = this.getUserIdFromToken(response.token);
-            const responseUserId =
-              this.toNumericId(
-                (response as SignInResponse & { userId?: unknown; id?: unknown }).userId
-              ) ??
-              this.toNumericId(
-                (response as SignInResponse & { userId?: unknown; id?: unknown }).id
-              );
-            const resolvedUserId = responseUserId ?? payloadUserId;
-
-            if (resolvedUserId) {
-              localStorage.setItem('userId', String(resolvedUserId));
-            }
+            this._isAuthenticated.set(true);
           }
         })
       );
   }
 
   register(user: any) {
-    return this.http.post<any>('http://localhost:8080/api/auth/register', user);
+    return this.http.post<any>('http://localhost:8080/api/register', user);
   }
 
   logout() {
-    this.isAuthenticated.set(false);
+    this._isAuthenticated.set(false);
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
   }
