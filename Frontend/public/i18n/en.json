@@ -1,0 +1,45 @@
+{
+  "home": {
+    "nav": {
+      "home": "Home",
+      "login": "Login",
+      "register": "Register",
+      "logout": "Logout"
+    },
+    "title": "Welcome Home",
+    "subtitle": "This is your application dashboard.",
+    "authenticated-message": "You are currently authenticated.",
+    "unauthenticated-message": "Please log in or register to get started."
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Submit",
+    "no-account": "Don't have an account?",
+    "register": "Register"
+  },
+  "register": {
+    "title": "Create account",
+    "first-name": "First name:",
+    "last-name": "Last name:",
+    "email": "Email:",
+    "password": "Password:",
+    "location": "Location:",
+    "select-location": "Select a location",
+    "submit": "Register",
+    "have-account": "Already have an account?",
+    "login": "Login",
+    "errors": {
+      "email-required": "Email is required.",
+      "email-invalid": "Enter a valid email.",
+      "password-min-length": "Password must contain at least 6 characters.",
+      "location-required": "Location is required."
+    }
+  },
+  "not-found": {
+    "title": "404",
+    "message": "The page you're looking for doesn't exist.",
+    "back-home": "Return to Home"
+  }
+}
