@@ -14,7 +14,8 @@ export interface SignInResponse {
 })
 export class AuthenticationService {
   private http = inject(HttpClient);
-  isAuthenticated = signal<boolean>(!!localStorage.getItem('token'));
+  private readonly _isAuthenticated = signal<boolean>(!!localStorage.getItem('token'));
+  public readonly isAuthenticated = this._isAuthenticated.asReadonly();
 
   login(username: string, password: string) {
     return this.http.post<SignInResponse>('http://localhost:8080/api/auth/login', {
@@ -30,7 +31,7 @@ export class AuthenticationService {
         tap((response) => {
           if (response.token) {
             localStorage.setItem('token', response.token);
-            this.isAuthenticated.set(true);
+            this._isAuthenticated.set(true);
           }
         })
       );
@@ -41,7 +42,7 @@ export class AuthenticationService {
   }
 
   logout() {
-    this.isAuthenticated.set(false);
+    this._isAuthenticated.set(false);
     localStorage.removeItem('token');
   }
 }
