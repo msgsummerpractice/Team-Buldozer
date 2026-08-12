@@ -9,13 +9,38 @@
     "title": "Bine ați venit acasă",
     "subtitle": "Acesta este tabloul de bord al aplicației dvs.",
     "authenticated-message": "Sunteți autentificat în prezent.",
-    "unauthenticated-message": "Vă rugăm să vă autentificați sau să vă înregistrați pentru a începe."
+    "unauthenticated-message": "Vă rugăm să vă autentificați sau să vă înregistrați pentru a începe.",
+    "participant": {
+      "title": "Tabloul de bord al participantului",
+      "description": "Bine ați venit în tabloul de bord al participantului. Aici puteți gestiona activitățile și vizualiza progresul."
+    },
+    "marketing": {
+      "title": "Tabloul de bord de marketing",
+      "description": "Bine ați venit în tabloul de bord de marketing. Accesați instrumentele de campanie și analize aici."
+    },
+    "hr": {
+      "title": "Tabloul de bord HR",
+      "description": "Bine ați venit în tabloul de bord HR. Gestionați înregistrările angajaților și resursele."
+    },
+    "admin": {
+      "title": "Tabloul de bord administratorului",
+      "description": "Bine ați venit în tabloul de bord administratorului. Acces complet la sistem și instrumente de management disponibile."
+    }
   },
   "login": {
     "title": "Autentificare",
-    "username": "Nume de utilizator",
+    "email": "Email",
+    "emailPlaceholder": "Introduceți emailul",
+    "emailRequired": "Email este obligatoriu",
+    "emailInvalid": "Vă rugăm să introduceți o adresă de email validă",
     "password": "Parolă",
-    "submit": "Trimite",
+    "passwordPlaceholder": "Introduceți parola",
+    "passwordRequired": "Parola este obligatorie",
+    "passwordMinLength": "Parola trebuie să conțină cel puțin 5 caractere",
+    "submit": "Autentificare",
+    "loggingIn": "Se autentifică...",
+    "forgotPassword": "Ați uitat parola?",
+    "username": "Nume de utilizator",
     "no-account": "Nu aveți un cont?",
     "register": "Înregistrare"
   },

@@ -9,13 +9,38 @@
     "title": "Welcome Home",
     "subtitle": "This is your application dashboard.",
     "authenticated-message": "You are currently authenticated.",
-    "unauthenticated-message": "Please log in or register to get started."
+    "unauthenticated-message": "Please log in or register to get started.",
+    "participant": {
+      "title": "Participant Dashboard",
+      "description": "Welcome to the Participant Dashboard. Here you can manage your activities and view your progress."
+    },
+    "marketing": {
+      "title": "Marketing Dashboard",
+      "description": "Welcome to the Marketing Dashboard. Access campaign tools and analytics here."
+    },
+    "hr": {
+      "title": "HR Dashboard",
+      "description": "Welcome to the HR Dashboard. Manage employee records and resources."
+    },
+    "admin": {
+      "title": "Admin Dashboard",
+      "description": "Welcome to the Admin Dashboard. Full system access and management tools available."
+    }
   },
   "login": {
     "title": "Login",
-    "username": "Username",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
     "password": "Password",
-    "submit": "Submit",
+    "passwordPlaceholder": "Enter your password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 5 characters",
+    "submit": "Login",
+    "loggingIn": "Logging in...",
+    "forgotPassword": "Forgot password?",
+    "username": "Username",
     "no-account": "Don't have an account?",
     "register": "Register"
   },
