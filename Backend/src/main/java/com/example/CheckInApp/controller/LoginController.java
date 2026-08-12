@@ -25,7 +25,7 @@ public class LoginController {
             LoginResponse response = loginService.authenticate(loginRequest);
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
-            log.warn("Login failed for user: {}", loginRequest.getUsername());
+            log.warn("Login failed for user: {}", loginRequest.getEmail());
             throw new AuthenticationException("Invalid username or password");
         } catch (Exception e) {
             log.error("Authentication error: {}", e.getMessage());

@@ -2,46 +2,60 @@ package com.example.CheckInApp.service;
 
 import com.example.CheckInApp.dto.request.LoginRequest;
 import com.example.CheckInApp.dto.response.LoginResponse;
+import com.example.CheckInApp.model.User;
+import com.example.CheckInApp.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class LoginService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final  JwtUtil jwtUtil;
+
+    private final UserRepository userRepository;
     public LoginResponse authenticate(LoginRequest loginRequest) {
-        log.info("Authenticating user: {}", loginRequest.getUsername());
+        log.info("Authenticating user: {}", loginRequest.getEmail());
 
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
+                            loginRequest.getEmail(),
                             loginRequest.getPassword())
             );
-            String token = jwtUtil.generateToken(loginRequest.getUsername());
+            
+            User user = userRepository.findByEmail(loginRequest.getEmail())
+                    .orElseThrow(() -> new BadCredentialsException("User not found"));
+            
+            List<String> roles = user.getRoles()
+                    .stream()
+                    .map(role -> role.name().toLowerCase())
+                    .collect(Collectors.toList());
+            
+            String token = jwtUtil.generateToken(loginRequest.getEmail());
             long expiresIn = jwtUtil.getExpirationTime();
 
-            log.info("Authentication successful for user: {}", loginRequest.getUsername());
+            log.info("Authentication successful for user: {}", loginRequest.getEmail());
 
-            LoginResponse response = new LoginResponse(token);
+            LoginResponse response = new LoginResponse();
+            response.setToken(token);
             response.setExpiresIn(expiresIn);
+            response.setEmail(loginRequest.getEmail());
+            response.setRoles(roles);
             return response;
 
         } catch (BadCredentialsException e) {
-            log.warn("Invalid credentials for user: {}", loginRequest.getUsername());
+            log.warn("Invalid credentials for user: {}", loginRequest.getEmail());
             throw new BadCredentialsException("Invalid username or password", e);
-        } catch (Exception e) {
-            log.error("Authentication error: {}", e.getMessage());
-            throw new BadCredentialsException("Authentication failed", e);
         }
     }
 }
