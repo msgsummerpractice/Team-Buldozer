@@ -21,6 +21,7 @@ import { AuthenticationDirective } from '@core/authentication/directives/authent
     AuthenticationDirective,
   ],
   templateUrl: './header.html',
+  styleUrl: './header.scss',
 })
 export class Header {
   private authentification = inject(AuthenticationService);

@@ -1,43 +1,72 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {UserService} from '@core/users/services/user-service';
 import {UserResponse} from '@core/users/dto/user.response';
-import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {MatButton, MatIconButton} from '@angular/material/button';
 import {debounceTime, distinctUntilChanged, Subject} from 'rxjs';
-import {MatIcon} from '@angular/material/icon';
-import {RouterLink} from '@angular/router';
-import {TranslocoPipe} from '@jsverse/transloco';
-import {MatTooltip} from '@angular/material/tooltip';
+import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatTableModule} from '@angular/material/table';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-users',
   imports: [
-    CommonModule,
     FormsModule,
-    MatButton,
-    MatIcon,
-    MatIconButton,
-    RouterLink,
-    TranslocoPipe,
-    MatTooltip
+    MatIconModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTableModule,
+    MatChipsModule,
+    MatPaginatorModule,
+    MatTooltipModule,
   ],
   templateUrl: './users.html',
-  styleUrl: './users.css',
 })
 export class Users implements OnInit {
-
   private readonly userService = inject(UserService);
   private _users = signal<UserResponse[]>([]);
-  private _filteredUsers = signal<UserResponse[]>([]);
 
-  readonly users = this._filteredUsers.asReadonly();
+  protected searchTerm = signal<string>('');
+  protected pageIndex = signal<number>(0);
+  protected pageSize = signal<number>(5);
 
-  searchTerm = signal<string>('');
-  pageIndex = signal<number>(0);
-  pageSize = signal<number>(10);
+  protected readonly displayedColumns = ['firstName', 'lastName', 'email', 'location', 'status', 'roles', 'manage'];
 
   private searchSubject = new Subject<string>();
+
+  readonly filteredUsers = computed(() => {
+    const allUsers = this._users();
+    const term = this.searchTerm().toLowerCase().trim();
+
+    if (!term) {
+      return allUsers;
+    }
+
+    return allUsers.filter(user =>
+      user.firstName.toLowerCase().includes(term) ||
+      user.lastName.toLowerCase().includes(term) ||
+      user.email.toLowerCase().includes(term) ||
+      user.location?.toString().toLowerCase().includes(term) ||
+      user.roles?.some(role => role.toLowerCase().includes(term))
+    );
+  })
+
+  readonly paginatedUsers = computed(() => {
+    const filtered = this.filteredUsers();
+    const start = this.pageIndex() * this.pageSize();
+    const end = start + this.pageSize();
+
+    return filtered.slice(start, end);
+  });
+
+  readonly users = computed(() => this.filteredUsers());
 
   ngOnInit() {
     this.loadUsers();
@@ -48,55 +77,24 @@ export class Users implements OnInit {
     ).subscribe(term => {
       this.searchTerm.set(term);
       this.pageIndex.set(0);
-      this.applyFilters()
     })
   }
 
+  ngOnDestroy(): void {
+    this.searchSubject.complete();
+  }
+
   loadUsers(): void {
-    this.userService.getAllUsers().subscribe({
-      next: (data) => {
-        this._users.set(data);
-        this.applyFilters();
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    })
+    this.userService.getAllUsers().subscribe(data => this._users.set(data));
   }
 
   onSearch(term: string): void {
     this.searchSubject.next(term);
   }
 
-  onPageChange(pageIndex: number): void {
-    this.pageIndex.set(pageIndex);
-  }
-
-  private applyFilters(): void {
-    let filtered = this._users();
-
-    const term = this.searchTerm().toLowerCase();
-    if (term) {
-      filtered = filtered.filter(user =>
-        user.firstName.toLowerCase().includes(term) ||
-        user.lastName.toLowerCase().includes(term) ||
-        user.email.toLowerCase().includes(term) ||
-        user.location?.toString().toLowerCase().includes(term) ||
-        user.roles?.some(role => role.toLowerCase().includes(term))
-      );
-    }
-
-    this._filteredUsers.set(filtered);
-  }
-
-  get paginatedUsers(): UserResponse[] {
-    const start = this.pageIndex() * this.pageSize();
-    const end = start + this.pageSize();
-    return this.users().slice(start, end);
-  }
-
-  ngOnDestroy(): void {
-    this.searchSubject.complete();
+  onPage(event: PageEvent): void {
+    this.pageIndex.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
   }
 
 }

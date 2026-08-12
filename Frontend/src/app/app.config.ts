@@ -7,11 +7,12 @@ import { authenticationInterceptor } from '@core/authentication/interceptors/aut
 import { provideServiceWorker } from '@angular/service-worker';
 import { TranslocoHttpLoader } from '@core/i18n/services/transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
+import {errorInterceptor} from '@core/interceptors/error-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authenticationInterceptor])),
+    provideHttpClient(withInterceptors([authenticationInterceptor, errorInterceptor])),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
