@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe],
   templateUrl: './register.html',
 })
 export class Register {
