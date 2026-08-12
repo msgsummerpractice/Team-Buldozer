@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -12,8 +12,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
 })
 export class Register {
   private fb = inject(NonNullableFormBuilder);
-  private auth = inject(AuthenticationService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   registerForm = this.fb.group({
     firstName: ['', Validators.required],
@@ -24,16 +24,11 @@ export class Register {
   });
 
   onSubmit() {
-    if (this.registerForm.invalid) return;
-
-    this.auth.register(this.registerForm.getRawValue()).subscribe({
-      next: () => {
-        console.log('Account created');
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.log(err);
-      },
+    this.snackBar.open('Registration is not available. Please contact support.', 'OK', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['error-snackbar'],
     });
   }
 }

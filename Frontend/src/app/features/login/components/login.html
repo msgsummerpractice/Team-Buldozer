@@ -7,12 +7,21 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1"
-          >{{ 'login.username' | transloco }}</label
+          >{{ 'Email' | transloco }}</label
         >
         <input
-          formControlName="username"
-          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          [class.border-red-500]="isFieldInvalid('email')"
+          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none transition"
         />
+        @if (isFieldInvalid('email')) {
+        <p class="mt-1 text-sm text-red-600">
+          @if (loginForm.get('email')?.hasError('required')) { Email is required } @else if
+          (loginForm.get('email')?.hasError('email')) { Please enter a valid email address }
+        </p>
+        }
       </div>
 
       <div>
@@ -22,24 +31,36 @@
         <input
           type="password"
           formControlName="password"
-          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+          autocomplete="current-password"
+          [class.border-red-500]="isFieldInvalid('password')"
+          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none transition"
         />
+        @if (isFieldInvalid('password')) {
+        <p class="mt-1 text-sm text-red-600">
+          @if (loginForm.get('password')?.hasError('required')) { Password is required } @else if
+          (loginForm.get('password')?.hasError('minlength')) { Password must be at least 5
+          characters }
+        </p>
+        }
       </div>
 
       <button
         type="submit"
-        [disabled]="loginForm.invalid"
-        class="w-full bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-300"
+        [disabled]="isLoading()"
+        class="w-full bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed"
       >
-        {{ 'login.submit' | transloco }}
+        {{ isLoading() ? 'Logging in...' : ('login.submit' | transloco) }}
       </button>
     </form>
 
-    <p class="text-center text-sm text-gray-500 mt-6">
-      {{ 'login.noAccount' | transloco }}
-      <a routerLink="/register" class="text-blue-600 font-semibold hover:underline"
-        >{{ 'login.register' | transloco }}</a
+    <div class="mt-4 text-center">
+      <a
+        href="#"
+        (click)="$event.preventDefault()"
+        class="text-sm text-blue-600 hover:text-blue-700 hover:underline transition"
       >
-    </p>
+        Forgot password?
+      </a>
+    </div>
   </div>
 </div>
