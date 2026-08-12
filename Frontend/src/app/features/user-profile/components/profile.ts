@@ -1,13 +1,40 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { UserProfile } from '../models/userProfile.model';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { UserLocation, UserProfile } from '../models/userProfile.model';
+
+interface ProfileFormState {
+  firstName: string;
+  lastName: string;
+  email: string;
+  location: UserLocation;
+}
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+    TranslocoPipe,
+  ],
   templateUrl: './profile.html',
 })
 export class Profile {
@@ -17,6 +44,12 @@ export class Profile {
   readonly profile = signal<UserProfile | null>(null);
   readonly loading = signal<boolean>(true);
   readonly error = signal<string>('');
+  readonly saving = signal<boolean>(false);
+  readonly saveMessage = signal<string>('');
+  readonly editMode = signal<boolean>(false);
+  readonly locationOptions: UserLocation[] = ['CLUJ', 'TIMISOARA', 'MURES'];
+
+  formState: ProfileFormState = this.createEmptyFormState();
 
   readonly fullName = computed(() => {
     const currentProfile = this.profile();
@@ -42,6 +75,7 @@ export class Profile {
     this.http.get<UserProfile>(`http://localhost:8080/api/v1/users/${userId}`).subscribe({
       next: (userProfile: UserProfile) => {
         this.profile.set(userProfile);
+        this.syncFormFromProfile(userProfile);
         this.loading.set(false);
       },
       error: () => {
@@ -49,6 +83,51 @@ export class Profile {
         this.loading.set(false);
       },
     });
+  }
+
+  saveChanges(): void {
+    const userId = this.profile()?.id ?? this.resolveUserId();
+
+    if (!userId) {
+      this.error.set('Could not determine the account id for saving changes.');
+      return;
+    }
+
+    this.error.set('');
+    this.saveMessage.set('');
+    this.saving.set(true);
+
+    this.http
+      .put<UserProfile>(`http://localhost:8080/api/v1/users/profile/${userId}`, this.formState)
+      .subscribe({
+        next: (updatedProfile: UserProfile) => {
+          this.profile.set(updatedProfile);
+          this.syncFormFromProfile(updatedProfile);
+          this.saveMessage.set('Profile changes saved successfully.');
+          this.editMode.set(false);
+          this.saving.set(false);
+        },
+        error: (response: HttpErrorResponse) => {
+          this.error.set(this.extractSaveError(response));
+          this.saving.set(false);
+        },
+      });
+  }
+
+  enableEditMode(): void {
+    this.saveMessage.set('');
+    this.editMode.set(true);
+  }
+
+  cancelEditMode(): void {
+    const currentProfile = this.profile();
+    if (currentProfile) {
+      this.syncFormFromProfile(currentProfile);
+    }
+
+    this.error.set('');
+    this.saveMessage.set('');
+    this.editMode.set(false);
   }
 
   private resolveUserId(): number | null {
@@ -90,5 +169,35 @@ export class Profile {
     } catch {
       return null;
     }
+  }
+
+  private createEmptyFormState(): ProfileFormState {
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+      location: 'CLUJ',
+    };
+  }
+
+  private mapProfileToForm(profile: UserProfile): ProfileFormState {
+    return {
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      location: profile.location,
+    };
+  }
+
+  private syncFormFromProfile(profile: UserProfile): void {
+    this.formState = this.mapProfileToForm(profile);
+  }
+
+  private extractSaveError(error: HttpErrorResponse): string {
+    return (
+      (typeof error.error === 'string' ? error.error : error.error?.message) ??
+      error.message ??
+      'Could not save changes right now.'
+    );
   }
 }
