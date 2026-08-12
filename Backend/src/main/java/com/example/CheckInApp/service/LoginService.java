@@ -26,37 +26,26 @@ public class LoginService {
     public LoginResponse authenticate(LoginRequest loginRequest) {
         log.info("Authenticating user: {}", loginRequest.getEmail());
 
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getEmail(),
-                            loginRequest.getPassword())
-            );
-            
-            User user = userRepository.findByEmail(loginRequest.getEmail())
-                    .orElseThrow(() -> new BadCredentialsException("User not found"));
-            
-            List<String> roles = user.getRoles()
-                    .stream()
-                    .map(role -> role.name().toLowerCase())
-                    .collect(Collectors.toList());
-            
-            String token = jwtUtil.generateToken(loginRequest.getEmail());
-            long expiresIn = jwtUtil.getExpirationTime();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword())
+        );
+        
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new BadCredentialsException("User not found"));
+        
+        List<String> roles = user.getRoles()
+                .stream()
+                .map(role -> role.name().toLowerCase())
+                .collect(Collectors.toList());
+        
+        String token = jwtUtil.generateToken(loginRequest.getEmail());
+        long expiresIn = jwtUtil.getExpirationTime();
 
-            log.info("Authentication successful for user: {}", loginRequest.getEmail());
+        log.info("Authentication successful for user: {}", loginRequest.getEmail());
 
-            LoginResponse response = new LoginResponse();
-            response.setToken(token);
-            response.setExpiresIn(expiresIn);
-            response.setEmail(loginRequest.getEmail());
-            response.setRoles(roles);
-            return response;
-
-        } catch (BadCredentialsException e) {
-            log.warn("Invalid credentials for user: {}", loginRequest.getEmail());
-            throw new BadCredentialsException("Invalid username or password", e);
-        }
+        return new LoginResponse(token, "Bearer", expiresIn, loginRequest.getEmail(), roles);
     }
 }
 
