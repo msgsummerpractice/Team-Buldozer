@@ -41,5 +41,12 @@
     "title": "404",
     "message": "The page you're looking for doesn't exist.",
     "back-home": "Return to Home"
+  },
+  "error-interceptor": {
+    "default": "An unexpected error occurred",
+    "0": "No connection returned",
+    "401": "Authentication required. Please log in.",
+    "403": "You do not have permission to access this page.",
+    "500": "Internal Server Error"
   }
 }

@@ -17,8 +17,9 @@ export const routes: Routes = [
     loadComponent: () => import('@features/register/components/register').then((m) => m.Register),
   },
   {
-    path: '404',
-    component: NotFound,
+    path: 'users',
+    loadComponent: () => import('@features/users/users').then((m) => m.Users),
   },
+  { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },
 ];

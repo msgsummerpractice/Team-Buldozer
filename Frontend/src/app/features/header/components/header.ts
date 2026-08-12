@@ -21,6 +21,7 @@ import { AuthenticationDirective } from '@core/authentication/directives/authent
     AuthenticationDirective,
   ],
   templateUrl: './header.html',
+  styleUrl: './header.scss',
 })
 export class Header {
   private authentification = inject(AuthenticationService);
@@ -28,12 +29,12 @@ export class Header {
 
   protected readonly isAuthenticated = this.authentification.isAuthenticated;
 
-  protected nextLang() {
-    return this.translocoService.getActiveLang() === 'en' ? 'ro' : 'en';
+  getActiveLang(): string {
+    return this.translocoService.getActiveLang();
   }
 
   toggleLang() {
-    this.translocoService.setActiveLang(this.nextLang());
+    this.translocoService.setActiveLang(this.getActiveLang() === 'ro' ? 'en' : 'ro');
   }
 
   logout() {
