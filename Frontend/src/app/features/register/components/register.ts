@@ -10,12 +10,6 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-function passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
-  const password = group.get('password')?.value;
-  const confirm = group.get('confirmPassword')?.value;
-  return password === confirm ? null : { passwordMismatch: true };
-}
-
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -46,7 +40,7 @@ export class Register {
       confirmPassword: ['', Validators.required],
       location: ['', Validators.required],
     },
-    { validators: passwordMatchValidator }
+    { validators: this.passwordMatchValidator.bind(this) }
   );
 
   onSubmit() {
@@ -65,5 +59,11 @@ export class Register {
         );
       },
     });
+  }
+
+  private passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+    return password === confirm ? null : { passwordMismatch: true };
   }
 }
