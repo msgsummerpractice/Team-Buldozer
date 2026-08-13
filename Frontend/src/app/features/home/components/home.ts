@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { RolesAssignedDirective } from '@core/authorization/directives/role-assigned.directive';
 
 @Component({
   selector: 'app-home',
-  standalone: true,
-  imports: [TranslocoPipe],
+  imports: [TranslocoPipe, RolesAssignedDirective],
   templateUrl: './home.html',
 })
 export class Home {
-  protected authentification = inject(AuthenticationService);
+  protected auth = inject(AuthenticationService);
 }

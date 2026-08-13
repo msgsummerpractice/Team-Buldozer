@@ -4,6 +4,12 @@
       <img src="assets/images/logoApp.png" alt="logo" class="h-26" />
     </a>
 
+    <div>
+      <button *rolesAssigned="'ADMIN'" mat-icon-button routerLink="/users">
+        <span class="text-xl">View Users </span>
+      </button>
+    </div>
+
     <div class="flex items-center gap-1">
       <button
         *appAuth

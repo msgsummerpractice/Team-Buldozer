@@ -12,6 +12,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { UserLocation, UserLocationEnum } from '@core/users/model/user-location';
 
 @Component({
   selector: 'app-users',
@@ -26,6 +28,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatChipsModule,
     MatPaginatorModule,
     MatTooltipModule,
+    TranslocoPipe,
   ],
   templateUrl: './users.html',
 })
@@ -37,6 +40,8 @@ export class Users implements OnInit {
   protected readonly pageIndex = signal<number>(0);
   protected readonly pageSize = signal<number>(5);
   protected readonly pageSizeList = [5, 10, 25, 50];
+
+  protected readonly UserLocations = UserLocationEnum;
 
   protected readonly displayedColumns = [
     'firstName',

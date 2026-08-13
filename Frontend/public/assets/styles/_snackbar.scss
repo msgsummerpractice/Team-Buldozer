@@ -1,0 +1,22 @@
+.error-snackbar {
+  --mat-snack-bar-container-color: #d43e33;
+  --mat-snack-bar-supporting-text-color: #fff;
+  --mat-button-text-label-text-color: #fff;
+}
+
+.info-snackbar {
+  --mat-snack-bar-container-color: #007bff;
+  --mat-snack-bar-supporting-text-color: #fff;
+  --mat-button-text-label-text-color: #fff;
+}
+
+.success-snackbar {
+  --mat-snack-bar-container-color: #2bcc46;
+  --mat-snack-bar-supporting-text-color: #fff;
+  --mat-button-text-label-text-color: #fff;
+}
+.warning-snackbar {
+  --mat-snack-bar-container-color: #ffc107;
+  --mat-snack-bar-supporting-text-color: #000;
+  --mat-button-text-label-text-color: #000;
+}
