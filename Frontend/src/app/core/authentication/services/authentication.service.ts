@@ -20,22 +20,20 @@ export class AuthenticationService {
   }
 
   login(email: string, password: string) {
-    return this.http
-      .post<SignInResponse>(`${this.apiUrl}/authentication/login`, { email, password })
-      .pipe(
-        tap((response) => {
-          if (response.token) {
-            localStorage.setItem('token', response.token);
-            this.isAuthenticated.set(true);
-            this.notification.showSuccess('success-messages.login-successful');
-            this.router.navigate(['/home']);
-          }
-        })
-      );
+    return this.http.post<SignInResponse>(`${this.apiUrl}/auth/login`, { email, password }).pipe(
+      tap((response) => {
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+          this.isAuthenticated.set(true);
+          this.notification.showSuccess('success-messages.login-successful');
+          this.router.navigate(['/home']);
+        }
+      })
+    );
   }
 
   register(user: any) {
-    return this.http.post<any>(`${this.apiUrl}/register`, user);
+    return this.http.post<any>(`${this.apiUrl}/auth/register`, user);
   }
 
   logout(): void {

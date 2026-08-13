@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import { AuthenticationDirective } from '@core/authentication/directives/authentication.directive';
+import { RolesAssignedDirective } from '@core/authorization/directives/role-assigned.directive';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,7 @@ import { AuthenticationDirective } from '@core/authentication/directives/authent
     MatTooltipModule,
     TranslocoPipe,
     AuthenticationDirective,
+    RolesAssignedDirective,
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',

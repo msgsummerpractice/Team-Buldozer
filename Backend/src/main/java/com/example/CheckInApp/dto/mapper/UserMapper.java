@@ -1,4 +1,4 @@
-package com.example.CheckInApp.mapper;
+package com.example.CheckInApp.dto.mapper;
 
 import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.dto.response.UserResponse;
@@ -20,14 +20,15 @@ public class UserMapper {
             return null;
         }
 
-        User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setLocation(request.getLocation());
-        user.setRoles(request.getRoles());
-        user.setStatus(true);
+        User user = User.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .location(request.getLocation())
+                .roles(request.getRoles())
+                .status(true)
+                .build();
 
         return user;
     }

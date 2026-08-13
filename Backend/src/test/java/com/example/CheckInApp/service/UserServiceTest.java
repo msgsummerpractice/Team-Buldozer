@@ -1,7 +1,7 @@
 package com.example.CheckInApp.service;
 
 import com.example.CheckInApp.dto.response.UserResponse;
-import com.example.CheckInApp.mapper.UserMapper;
+import com.example.CheckInApp.dto.mapper.UserMapper;
 import com.example.CheckInApp.model.Location;
 import com.example.CheckInApp.model.Role;
 import com.example.CheckInApp.model.User;
