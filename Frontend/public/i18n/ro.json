@@ -55,11 +55,18 @@
     "submit": "Înregistrare",
     "have-account": "Aveți deja un cont?",
     "login": "Autentificare",
+    "confirm-password": "Confirmare parolă:",
+    "success": "Cont creat cu succes! Redirecționare...",
     "errors": {
+      "first-name-required": "Prenumele este obligatoriu.",
+      "last-name-required": "Numele de familie este obligatoriu.",
       "email-required": "Email este obligatoriu.",
       "email-invalid": "Introduceți un email valid.",
-      "password-min-length": "Parola trebuie să conțină cel puțin 6 caractere.",
-      "location-required": "Locația este obligatorie."
+      "password-min-length": "Parola trebuie să aibă cel puțin 8 caractere.",
+      "password-mismatch": "Parolele nu coincid.",
+      "location-required": "Locația este obligatorie.",
+      "duplicate-email": "Acest email este deja înregistrat.",
+      "server-error": "A apărut o eroare. Vă rugăm să încercați din nou."
     }
   },
   "not-found": {
