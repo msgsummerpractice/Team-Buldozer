@@ -6,6 +6,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -16,6 +17,7 @@ import { finalize } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    RouterLink,
   ],
   templateUrl: './login.html',
 })
