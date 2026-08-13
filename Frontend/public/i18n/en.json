@@ -114,5 +114,32 @@
   "common": {
     "close": "Close",
     "ok": "OK"
+  },
+  "users": {
+    "title": "User Management",
+    "search": "Search by name, email, location or role",
+    "first-name": "FIRST NAME",
+    "last-name": "LAST NAME",
+    "email": "EMAIL",
+    "location": "LOCATION",
+    "status": "STATUS",
+    "roles": "ROLES",
+    "manage": "MANAGE",
+    "cluj": "CLUJ",
+    "timisoara": "TIMISOARA",
+    "mures": "TARGU MURES",
+    "active": "Active",
+    "inactive": "Inactive",
+    "no-users": "No users found",
+    "adjust": "Try adjusting the search term to find a matching user.",
+    "manage-roles": "Manage Roles"
+  },
+  "paginator": {
+    "itemsPerPage": "Items per page:",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "firstPage": "First page",
+    "lastPage": "Last page",
+    "range": "of"
   }
 }

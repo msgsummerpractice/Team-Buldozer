@@ -8,7 +8,9 @@ export class AuthorizationService {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = jwtDecode<JwtInterface>(token);
-      const userRoles = decodedToken?.roles || [];
+      const userRoles = (decodedToken?.roles || []).map((r) =>
+        r.startsWith('ROLE_') ? r.substring(5) : r,
+      );
       return roles.some((role) => userRoles.includes(role));
     }
     return false;

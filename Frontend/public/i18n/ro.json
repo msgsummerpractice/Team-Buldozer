@@ -114,5 +114,32 @@
   "common": {
     "close": "Închide",
     "ok": "OK"
+  },
+  "users": {
+    "title": "Gestionează Utilizatorii",
+    "search": "Caută după nume, email, locație sau rol",
+    "first-name": "PRENUME",
+    "last-name": "NUME",
+    "email": "EMAIL",
+    "location": "LOCAȚIE",
+    "status": "STATUS",
+    "roles": "ROLURI",
+    "manage": "GESTIONEAZĂ",
+    "cluj": "CLUJ",
+    "timisoara": "TIMIȘOARA",
+    "mures": "TÂRGU MUREȘ",
+    "active": "Activ",
+    "inactive": "Inactiv",
+    "no-users": "Niciun utilizator găsit",
+    "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un utilizator potrivit.",
+    "manage-roles": "Gestionează Rolurile"
+  },
+  "paginator": {
+    "itemsPerPage": "Elemente pe pagină:",
+    "nextPage": "Pagina următoare",
+    "previousPage": "Pagina precedentă",
+    "firstPage": "Prima pagină",
+    "lastPage": "Ultima pagină",
+    "range": "din"
   }
 }

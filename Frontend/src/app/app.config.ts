@@ -7,6 +7,8 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { TranslocoHttpLoader } from '@core/i18n/services/transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { errorInterceptor } from '@core/interceptors/error-interceptor';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { TranslocoPaginatorIntl } from '@core/i18n/services/transloco-paginator-intl';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,5 +32,9 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
+    {
+      provide: MatPaginatorIntl,
+      useClass: TranslocoPaginatorIntl,
+    },
   ],
 };
