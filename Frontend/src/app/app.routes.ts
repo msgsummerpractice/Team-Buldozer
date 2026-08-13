@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from '@features/home/components/home';
 import { NotFound } from '@features/not-found/components/not-found';
+import { authorizationGuard } from '@core/authorization/guards/authorization.guard';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,7 @@ export const routes: Routes = [
   {
     path: 'users',
     loadComponent: () => import('@features/users/users').then((m) => m.Users),
+    canActivate: [authorizationGuard(['ADMIN'])],
   },
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },

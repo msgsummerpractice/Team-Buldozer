@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { AuthenticationService } from '@core/authentication/services/authentication.service';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +18,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 export class Register {
   private fb = inject(NonNullableFormBuilder);
   private router = inject(Router);
+  private readonly auth = inject(AuthenticationService);
 
   private _success = signal(false);
   private _serverErrorKey = signal('');
