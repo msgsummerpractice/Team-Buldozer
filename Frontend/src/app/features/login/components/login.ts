@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
-import { NotificationService } from '@core/services/notification-service';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,8 +22,6 @@ import { finalize } from 'rxjs';
 export class Login {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthenticationService);
-  private readonly router = inject(Router);
-  private readonly notification = inject(NotificationService);
 
   protected readonly isLoading = signal(false);
   protected readonly loginForm = this.fb.group({
@@ -43,10 +40,6 @@ export class Login {
     this.auth
       .login(email, password)
       .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/home']);
-        },
-      });
+      .subscribe();
   }
 }

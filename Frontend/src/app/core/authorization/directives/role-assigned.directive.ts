@@ -6,7 +6,7 @@ import { AuthorizationService } from '@core/authorization/services/authorization
   standalone: true,
 })
 export class RolesAssignedDirective {
-  private authz = inject(AuthorizationService);
+  private authorization = inject(AuthorizationService);
   private templateRef = inject(TemplateRef);
   private viewContainerRef = inject(ViewContainerRef);
 
@@ -17,7 +17,7 @@ export class RolesAssignedDirective {
       const requiredRoles = this.rolesAssigned();
       const roles = Array.isArray(requiredRoles) ? requiredRoles : [requiredRoles];
 
-      const hasAccess = this.authz.hasAnyRole(roles);
+      const hasAccess = this.authorization.hasAnyRole(roles);
 
       if (hasAccess) {
         this.viewContainerRef.createEmbeddedView(this.templateRef);

@@ -1,13 +1,17 @@
 import { Service, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import type { SignInResponse } from './signin.response.interface';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@environments/environment';
+import { NotificationService } from '@core/notification/services/notification.service';
 
 @Service()
 export class AuthenticationService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
+  private readonly notification = inject(NotificationService);
+  private readonly router = inject(Router);
 
   readonly isAuthenticated = signal<boolean>(this.hasValidToken());
 
@@ -23,6 +27,8 @@ export class AuthenticationService {
           if (response.token) {
             localStorage.setItem('token', response.token);
             this.isAuthenticated.set(true);
+            this.notification.showSuccess('success-messages.login-successful');
+            this.router.navigate(['/home']);
           }
         })
       );
