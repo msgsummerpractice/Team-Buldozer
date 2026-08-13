@@ -1,7 +1,6 @@
 import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-
 import { routes } from './app.routes';
 import { authenticationInterceptor } from '@core/authentication/interceptors/authentication.interceptor';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -21,7 +20,11 @@ export const appConfig: ApplicationConfig = {
       config: {
         availableLangs: ['en', 'ro'],
         defaultLang: 'en',
-        // Remove this option if your application doesn't support changing language in runtime.
+        fallbackLang: 'ro',
+        missingHandler: {
+          allowEmpty: false,
+          useFallbackTranslation: true,
+        },
         reRenderOnLangChange: true,
         prodMode: !isDevMode(),
       },

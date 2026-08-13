@@ -7,18 +7,15 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [ReactiveFormsModule, RouterLink, TranslocoPipe],
   templateUrl: './register.html',
 })
 export class Register {
   private fb = inject(NonNullableFormBuilder);
-  private auth = inject(AuthenticationService);
   private router = inject(Router);
 
   private _success = signal(false);

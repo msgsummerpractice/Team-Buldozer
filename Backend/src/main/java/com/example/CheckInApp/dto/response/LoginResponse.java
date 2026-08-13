@@ -3,7 +3,6 @@ package com.example.CheckInApp.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +13,4 @@ public class LoginResponse {
     private String type = "Bearer";
     private long expiresIn;
     private String email;
-    private List<String> roles;
 }
