@@ -1,8 +1,9 @@
 package com.example.CheckInApp.dto.mapper;
 
 import java.util.Base64;
-import com.example.CheckInApp.dto.UserProfile.request.UserProfileRequest;
+
 import com.example.CheckInApp.dto.response.UserResponse;
+import com.example.CheckInApp.dto.request.UserProfileRequest;
 import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,7 +52,6 @@ public class UserMapper {
                 .profilePicture(user.getProfilePicture() != null ? Base64.getEncoder().encodeToString(user.getProfilePicture()) : null)
                 .build();
     }
-
     
     public User fromProfileToEntity(UserProfileRequest request, User existingUser) {
         if(request.getFirstName() != null) {
