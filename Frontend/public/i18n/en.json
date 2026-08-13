@@ -30,11 +30,18 @@
     "submit": "Register",
     "have-account": "Already have an account?",
     "login": "Login",
+    "confirm-password": "Confirm Password:",
+    "success": "Account created successfully! Redirecting to login...",
     "errors": {
+      "first-name-required": "First name is required.",
+      "last-name-required": "Last name is required.",
       "email-required": "Email is required.",
       "email-invalid": "Enter a valid email.",
-      "password-min-length": "Password must contain at least 6 characters.",
-      "location-required": "Location is required."
+      "password-min-length": "Password must be at least 8 characters.",
+      "password-mismatch": "Passwords do not match.",
+      "location-required": "Location is required.",
+      "duplicate-email": "This email is already registered.",
+      "server-error": "An error occurred. Please try again."
     }
   },
   "not-found": {
