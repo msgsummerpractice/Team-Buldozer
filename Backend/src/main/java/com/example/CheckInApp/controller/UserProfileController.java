@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CheckInApp.service.UserService;
 import com.example.CheckInApp.dto.UserProfile.request.UserProfileRequest;
-import com.example.CheckInApp.dto.UserProfile.response.UserProfileResponse;
+import com.example.CheckInApp.dto.response.UserResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +25,14 @@ public class UserProfileController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserProfileResponse> patchUserProfile(@PathVariable Long id, @Valid @RequestBody UserProfileRequest userProfileRequest) {
-        UserProfileResponse updatedUserProfile = userService.patchUserProfile(id, userProfileRequest);
+    public ResponseEntity<UserResponse> patchUserProfile(@PathVariable Long id, @Valid @RequestBody UserProfileRequest userProfileRequest) {
+        UserResponse updatedUserProfile = userService.patchUserProfile(id, userProfileRequest);
         return ResponseEntity.ok(updatedUserProfile);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserProfileResponse> updateUserProfile(@PathVariable Long id, @Valid @RequestBody UserProfileRequest userProfileRequest) {
-        UserProfileResponse updatedUserProfile = userService.updateUserProfile(id, userProfileRequest);
+    public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id, @Valid @RequestBody UserProfileRequest userProfileRequest) {
+        UserResponse updatedUserProfile = userService.updateUserProfile(id, userProfileRequest);
         return ResponseEntity.ok(updatedUserProfile);
     }
 

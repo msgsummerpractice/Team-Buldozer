@@ -3,7 +3,7 @@ package com.example.CheckInApp.service;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.mapper.UserMapper;
 import com.example.CheckInApp.dto.UserProfile.request.UserProfileRequest;
-import com.example.CheckInApp.dto.UserProfile.response.UserProfileResponse;
+import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
@@ -79,7 +79,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserProfileResponse updateUserProfile(Long id, UserProfileRequest userProfileRequest) {
+    public UserResponse updateUserProfile(Long id, UserProfileRequest userProfileRequest) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
         
@@ -94,7 +94,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserProfileResponse patchUserProfile(Long id, UserProfileRequest userProfileRequest) {
+    public UserResponse patchUserProfile(Long id, UserProfileRequest userProfileRequest) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
         

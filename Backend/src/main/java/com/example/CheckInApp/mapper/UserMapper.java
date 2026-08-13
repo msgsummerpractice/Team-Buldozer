@@ -1,9 +1,8 @@
 package com.example.CheckInApp.mapper;
 
 import com.example.CheckInApp.dto.UserProfile.request.UserProfileRequest;
-import com.example.CheckInApp.dto.UserProfile.response.UserProfileResponse;
-import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.dto.response.UserResponse;
+import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -50,12 +49,12 @@ public class UserMapper {
                 .build();
     }
 
-    public UserProfileResponse fromProfileToResponse(User user) {
+    public UserResponse fromProfileToResponse(User user) {
         if (user == null) {
             return null;
         }
 
-        return UserProfileResponse.builder()
+        return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
