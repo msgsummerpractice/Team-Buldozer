@@ -1,56 +1,47 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import {
-  ReactiveFormsModule,
-  NonNullableFormBuilder,
-  Validators,
-  FormsModule,
-} from '@angular/forms';
+import { Router } from '@angular/router';
+import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, RouterLink, TranslocoPipe],
+  imports: [
+    ReactiveFormsModule,
+    TranslocoPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterLink,
+  ],
   templateUrl: './login.html',
 })
 export class Login {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthenticationService);
-  private readonly router = inject(Router);
 
-  showMfaStep = signal<boolean>(false);
-  activeUsername = signal<string>('');
-  mfaCode = '';
-
+  protected readonly isLoading = signal(false);
   protected readonly loginForm = this.fb.group({
-    username: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(5)]],
   });
 
   onSubmit(): void {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      return;
+    }
 
-    const { username, password } = this.loginForm.getRawValue();
+    this.isLoading.set(true);
+    const { email, password } = this.loginForm.getRawValue();
 
-    this.auth.login(username, password).subscribe({
-      next: (res) => {
-        if (res.mfaRequired) {
-          this.activeUsername.set(username);
-          this.showMfaStep.set(true);
-        }
-      },
-      error: (err) => console.error('Login failed', err),
-    });
-  }
-
-  onVerifyMfa(): void {
-    if (!this.mfaCode) return;
-
-    this.auth.verifyMfa(this.activeUsername(), this.mfaCode).subscribe({
-      next: () => this.router.navigate(['/info']),
-      error: (err) => console.error('MFA verification failed', err),
-    });
+    this.auth
+      .login(email, password)
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe();
   }
 }

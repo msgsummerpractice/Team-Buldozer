@@ -9,13 +9,38 @@
     "title": "Bine ați venit acasă",
     "subtitle": "Acesta este tabloul de bord al aplicației dvs.",
     "authenticated-message": "Sunteți autentificat în prezent.",
-    "unauthenticated-message": "Vă rugăm să vă autentificați sau să vă înregistrați pentru a începe."
+    "unauthenticated-message": "Vă rugăm să vă autentificați sau să vă înregistrați pentru a începe.",
+    "participant": {
+      "title": "Tabloul de bord al participantului",
+      "description": "Bine ați venit în tabloul de bord al participantului. Aici puteți gestiona activitățile și vizualiza progresul."
+    },
+    "marketing": {
+      "title": "Tabloul de bord de marketing",
+      "description": "Bine ați venit în tabloul de bord de marketing. Accesați instrumentele de campanie și analize aici."
+    },
+    "hr": {
+      "title": "Tabloul de bord HR",
+      "description": "Bine ați venit în tabloul de bord HR. Gestionați înregistrările angajaților și resursele."
+    },
+    "admin": {
+      "title": "Tabloul de bord administratorului",
+      "description": "Bine ați venit în tabloul de bord administratorului. Acces complet la sistem și instrumente de management disponibile."
+    }
   },
   "login": {
     "title": "Autentificare",
-    "username": "Nume de utilizator",
+    "email": "Email",
+    "emailPlaceholder": "Introduceți emailul",
+    "emailRequired": "Email este obligatoriu",
+    "emailInvalid": "Vă rugăm să introduceți o adresă de email validă",
     "password": "Parolă",
-    "submit": "Trimite",
+    "passwordPlaceholder": "Introduceți parola",
+    "passwordRequired": "Parola este obligatorie",
+    "passwordMinLength": "Parola trebuie să conțină cel puțin 5 caractere",
+    "submit": "Autentificare",
+    "loggingIn": "Se autentifică...",
+    "forgotPassword": "Ați uitat parola?",
+    "username": "Nume de utilizator",
     "no-account": "Nu aveți un cont?",
     "register": "Înregistrare"
   },
@@ -32,6 +57,8 @@
     "login": "Autentificare",
     "confirm-password": "Confirmare parolă:",
     "success": "Cont creat cu succes! Redirecționare...",
+    "success-title": "Cont creat!",
+    "success-subtitle": "Vei fi redirecționat către pagina de autentificare în scurt timp.",
     "errors": {
       "first-name-required": "Prenumele este obligatoriu.",
       "last-name-required": "Numele de familie este obligatoriu.",
@@ -76,5 +103,64 @@
     "401": "Autentificare necesară. Te rugăm să te conectezi.",
     "403": "Nu ai permisiunea de a accesa această pagină.",
     "500": "Eroare internă de server"
+  },
+  "server-error-codes": {
+    "ERR-01": "Acreditări invalide. Verificați emailul și parola.",
+    "ERR-02": "Utilizatorul nu a fost găsit.",
+    "ERR-03": "Contul este blocat. Contactați suportul.",
+    "ERR-04": "Sesiunea dvs. a expirat. Conectați-vă din nou.",
+    "ERR-05": "Token invalid. Conectați-vă din nou.",
+    "ERR-10": "Acest email este deja înregistrat. Folosiți un alt email sau conectați-vă.",
+    "ERR-11": "Format email invalid. Introduceți o adresă de email validă.",
+    "ERR-12": "Parola este prea slabă. Alegeți o parolă mai puternică.",
+    "ERR-13": "Un câmp obligatoriu lipsește. Completați toate câmpurile obligatorii.",
+    "ERR-20": "Resursa nu a fost găsită.",
+    "ERR-21": "Resursa există deja.",
+    "ERR-30": "Nu aveți permisiuni suficiente pentru a efectua această acțiune.",
+    "ERR-31": "Acces interzis.",
+    "ERR-40": "Introducere invalidă. Verificați datele.",
+    "ERR-41": "Un parametru obligatoriu lipsește.",
+    "ERR-50": "Eroare internă de server. Încercați din nou mai târziu.",
+    "ERR-51": "Eroare de bază de date. Încercați din nou mai târziu.",
+    "ERR-52": "Serviciul este temporar indisponibil. Încercați din nou mai târziu.",
+    "ERR-99": "A apărut o eroare necunoscută. Încercați din nou."
+  },
+  "success-messages": {
+    "login-successful": "Autentificare reușită!",
+    "logout-successful": "Ați fost deconectat cu succes.",
+    "registration-successful": "Înregistrare reușită! Bine ați venit.",
+    "profile-updated": "Profilul a fost actualizat cu succes.",
+    "password-changed": "Parola a fost schimbată cu succes."
+  },
+  "common": {
+    "close": "Închide",
+    "ok": "OK"
+  },
+  "users": {
+    "title": "Gestionează Utilizatorii",
+    "search": "Caută după nume, email, locație sau rol",
+    "first-name": "PRENUME",
+    "last-name": "NUME",
+    "email": "EMAIL",
+    "location": "LOCAȚIE",
+    "status": "STATUS",
+    "roles": "ROLURI",
+    "manage": "GESTIONEAZĂ",
+    "cluj": "CLUJ",
+    "timisoara": "TIMIȘOARA",
+    "mures": "TÂRGU MUREȘ",
+    "active": "Activ",
+    "inactive": "Inactiv",
+    "no-users": "Niciun utilizator găsit",
+    "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un utilizator potrivit.",
+    "manage-roles": "Gestionează Rolurile"
+  },
+  "paginator": {
+    "itemsPerPage": "Elemente pe pagină:",
+    "nextPage": "Pagina următoare",
+    "previousPage": "Pagina precedentă",
+    "firstPage": "Prima pagină",
+    "lastPage": "Ultima pagină",
+    "range": "din"
   }
 }

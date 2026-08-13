@@ -1,45 +1,68 @@
-<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+<div class="fixed inset-0 bg-gray-50 flex items-center justify-center p-4 overflow-hidden">
   <div class="max-w-md w-full bg-white rounded-xl shadow-md p-6 border border-gray-100">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6"
-      >{{ 'login.title' | transloco }}</h2
-    >
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+      {{ 'login.title' | transloco }}
+    </h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1"
-          >{{ 'login.username' | transloco }}</label
-        >
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'login.email' | transloco }}</mat-label>
         <input
-          formControlName="username"
-          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+          matInput
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          [placeholder]="'login.emailPlaceholder' | transloco"
         />
-      </div>
+        @if (loginForm.get('email')?.hasError('required')) {
+        <mat-error>{{ 'login.emailRequired' | transloco }}</mat-error>
+        } @if (loginForm.get('email')?.hasError('email')) {
+        <mat-error>{{ 'login.emailInvalid' | transloco }}</mat-error>
+        }
+      </mat-form-field>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1"
-          >{{ 'login.password' | transloco }}</label
-        >
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'login.password' | transloco }}</mat-label>
         <input
+          matInput
           type="password"
           formControlName="password"
-          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+          autocomplete="current-password"
+          [placeholder]="'login.passwordPlaceholder' | transloco"
         />
-      </div>
+        @if (loginForm.get('password')?.hasError('required')) {
+        <mat-error>{{ 'login.passwordRequired' | transloco }}</mat-error>
+        } @if (loginForm.get('password')?.hasError('minlength')) {
+        <mat-error>{{ 'login.passwordMinLength' | transloco }}</mat-error>
+        }
+      </mat-form-field>
 
       <button
+        mat-raised-button
+        color="primary"
         type="submit"
-        [disabled]="loginForm.invalid"
-        class="w-full bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-300"
+        [disabled]="isLoading()"
+        class="w-full"
       >
-        {{ 'login.submit' | transloco }}
+        {{ isLoading() ? ('login.loggingIn' | transloco) : ('login.submit' | transloco) }}
       </button>
     </form>
 
-    <p class="text-center text-sm text-gray-500 mt-6">
-      {{ 'login.noAccount' | transloco }}
-      <a routerLink="/register" class="text-blue-600 font-semibold hover:underline"
-        >{{ 'login.register' | transloco }}</a
+    <div class="mt-4 text-center">
+      <a
+        href="#"
+        (click)="$event.preventDefault()"
+        class="text-sm text-blue-600 hover:text-blue-700 hover:underline transition"
       >
+        {{ 'login.forgotPassword' | transloco }}
+      </a>
+    </div>
+
+    <p class="mt-3 text-center text-sm text-gray-500">
+      {{ 'login.no-account' | transloco }}
+      <a routerLink="/register" class="text-blue-600 hover:underline">{{
+        'login.register' | transloco
+      }}</a>
     </p>
   </div>
 </div>
