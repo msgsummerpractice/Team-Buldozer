@@ -1,11 +1,10 @@
 package com.example.CheckInApp.service;
 
 import com.example.CheckInApp.dto.response.UserResponse;
-import com.example.CheckInApp.mapper.userProfileMapper.UserProfileMapper;
+import com.example.CheckInApp.mapper.UserMapper;
 import com.example.CheckInApp.dto.UserProfile.request.UserProfileRequest;
 import com.example.CheckInApp.dto.UserProfile.response.UserProfileResponse;
 import com.example.CheckInApp.dto.request.UserRequest;
-import com.example.CheckInApp.mapper.UserMapper;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final  UserProfileMapper userProfileMapper;
 
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -85,10 +83,10 @@ public class UserService {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
         
-        userProfileMapper.toEntity(userProfileRequest, existingUser);
+        userMapper.fromProfileToEntity(userProfileRequest, existingUser);
         try {
             User updatedUser = userRepository.save(existingUser);
-            return userProfileMapper.toResponse(updatedUser);
+            return userMapper.fromProfileToResponse(updatedUser);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error updating user profile: (email invalid)" + e.getMessage());
         }
@@ -100,10 +98,10 @@ public class UserService {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
         
-        userProfileMapper.toEntity(userProfileRequest, existingUser);
+        userMapper.fromProfileToEntity(userProfileRequest, existingUser);
         try {
             User updatedUser = userRepository.save(existingUser);
-            return userProfileMapper.toResponse(updatedUser);
+            return userMapper.fromProfileToResponse(updatedUser);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error patching user profile: (email invalid)" + e.getMessage());
         }
