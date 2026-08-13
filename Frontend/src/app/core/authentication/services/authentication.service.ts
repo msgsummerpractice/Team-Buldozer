@@ -39,5 +39,39 @@ export class AuthenticationService {
   logout(): void {
     localStorage.removeItem('token');
     this.isAuthenticated.set(false);
+    localStorage.removeItem('userId');
+  }
+
+  private toNumericId(value: unknown): number | null {
+    if (typeof value === 'number' && Number.isInteger(value) && value > 0) {
+      return value;
+    }
+
+    if (typeof value === 'string') {
+      const id = Number(value);
+      if (Number.isInteger(id) && id > 0) {
+        return id;
+      }
+    }
+
+    return null;
+  }
+
+  private getUserIdFromToken(token: string): number | null {
+    if (!token.includes('.')) return null;
+
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+      const payload = JSON.parse(payloadJson) as Record<string, unknown>;
+
+      return (
+        this.toNumericId(payload['userId']) ??
+        this.toNumericId(payload['id']) ??
+        this.toNumericId(payload['uid'])
+      );
+    } catch {
+      return null;
+    }
   }
 }

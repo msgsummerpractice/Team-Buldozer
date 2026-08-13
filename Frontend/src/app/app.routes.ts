@@ -3,6 +3,7 @@ import { Home } from '@features/home/components/home';
 import { NotFound } from '@features/not-found/components/not-found';
 import { authorizationGuard } from '@core/authorization/guards/authorization.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
+import { Users } from '@features/users/users';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,14 @@ export const routes: Routes = [
   {
     path: 'home',
     component: Home,
+  },
+  {
+    path: 'info',
+    loadComponent: () => import('@features/user-profile/components/profile').then((m) => m.Profile),
+  },
+  {
+    path: 'info/:id',
+    loadComponent: () => import('@features/user-profile/components/profile').then((m) => m.Profile),
   },
   {
     path: 'login',

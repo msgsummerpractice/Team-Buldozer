@@ -76,6 +76,27 @@
     "message": "Pagina pe care o cauți nu există.",
     "back-home": "Înapoi acasă"
   },
+  "profile": {
+    "title": "Profilul meu",
+    "subtitle": "Actualizați detaliile personale și comutați între modul doar citire și editare.",
+    "edit-mode": "Mod editare",
+    "normal-mode": "Mod normal",
+    "save": "Salvează modificările",
+    "saving": "Se salvează...",
+    "loading": "Se încarcă detaliile contului...",
+    "error-title": "Nu se poate salva profilul",
+    "account-holder": "Titularul contului",
+    "editing-hint": "Modul de editare este activ. Modificările nu sunt salvate până când apăsați salvare.",
+    "readonly-hint": "Profilul este în modul doar citire. Folosiți Modul editare pentru modificări.",
+    "first-name": "Prenume",
+    "last-name": "Nume de familie",
+    "email": "Email",
+    "location": "Locație",
+    "status": "Stare",
+    "roles": "Roluri",
+    "active": "Activ",
+    "inactive": "Inactiv"
+  },
   "error-interceptor": {
     "default": "A apărut o eroare neașteptată",
     "0": "Nu s-a putut stabili conexiunea",

@@ -76,6 +76,27 @@
     "message": "The page you're looking for doesn't exist.",
     "back-home": "Return to Home"
   },
+  "profile": {
+    "title": "My Profile",
+    "subtitle": "Update your personal details and switch between read-only and edit mode.",
+    "edit-mode": "Edit mode",
+    "normal-mode": "Normal mode",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "loading": "Loading account details...",
+    "error-title": "Unable to save profile",
+    "account-holder": "Account holder",
+    "editing-hint": "Editing mode is active. Changes are not saved until you click save.",
+    "readonly-hint": "Profile is in read-only mode. Use Edit mode to make changes.",
+    "first-name": "First name",
+    "last-name": "Last name",
+    "email": "Email",
+    "location": "Location",
+    "status": "Status",
+    "roles": "Roles",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
   "error-interceptor": {
     "default": "An unexpected error occurred",
     "0": "No connection returned",
