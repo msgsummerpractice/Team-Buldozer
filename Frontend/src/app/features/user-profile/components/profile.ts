@@ -77,7 +77,7 @@ export class Profile {
       return;
     }
 
-    this.http.get<UserProfile>(`${this.apiUrl}/v1/users/${userId}`).subscribe({
+    this.http.get<UserProfile>(`${this.apiUrl}/users/${userId}`).subscribe({
       next: (userProfile: UserProfile) => {
         this.profile.set(userProfile);
         this.syncFormFromProfile(userProfile);
@@ -103,7 +103,7 @@ export class Profile {
     this.saving.set(true);
 
     this.http
-      .put<UserProfile>(`${this.apiUrl}/v1/users/profile/${userId}`, this.formState)
+      .put<UserProfile>(`${this.apiUrl}/users/profile/${userId}`, this.formState)
       .subscribe({
         next: (updatedProfile: UserProfile) => {
           this.profile.set(updatedProfile);
