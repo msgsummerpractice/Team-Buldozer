@@ -12,7 +12,6 @@ import java.util.Set;
 @Setter
 @Builder
 public class UserResponse {
-
     private Long id;
     private String firstName;
     private String lastName;
