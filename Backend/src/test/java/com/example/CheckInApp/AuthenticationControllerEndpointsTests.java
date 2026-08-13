@@ -1,6 +1,5 @@
 package com.example.CheckInApp;
 
-
 import com.example.CheckInApp.service.RegisterService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +19,16 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-
 @WebMvcTest(RegisterController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource(properties = {
-    "spring.datasource.url=jdbc:h2:mem:testdb",
-    "spring.datasource.driver-class-name=org.h2.Driver",
-    "spring.datasource.username=sa",
-    "spring.datasource.password=",
-    "spring.flyway.enabled=false",
+        "spring.datasource.url=jdbc:h2:mem:testdb",
+        "spring.datasource.driver-class-name=org.h2.Driver",
+        "spring.datasource.username=sa",
+        "spring.datasource.password=",
+        "spring.flyway.enabled=false",
 })
-public class AuthenticationControllerEndpointsTests1{
+public class AuthenticationControllerEndpointsTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,38 +43,38 @@ public class AuthenticationControllerEndpointsTests1{
     private UserDetailsService userDetailsService;
 
     @Test
-void testRegisterUserSuccess() throws Exception {
-     String validJson = "{"
-            + "\"email\":\"test@example.com\","
-            + "\"password\":\"Parola123!\","
-            + "\"firstName\":\"John\","
-            + "\"lastName\":\"Doe\","
-            + "\"location\":\"CLUJ\""
-            + "}";
+    void testRegisterUserSuccess() throws Exception {
+        String validJson = "{"
+                + "\"email\":\"test@example.com\","
+                + "\"password\":\"Parola123!\","
+                + "\"firstName\":\"John\","
+                + "\"lastName\":\"Doe\","
+                + "\"location\":\"CLUJ\""
+                + "}";
 
-    mockMvc.perform(post("/api/register")
-            .contentType("application/json")
-            .content(validJson))
-            .andExpect(status().isCreated());
-}
+        mockMvc.perform(post("/api/register")
+                .contentType("application/json")
+                .content(validJson))
+                .andExpect(status().isCreated());
+    }
 
-@Test
-void testRegisterUserDuplicateEmail() throws Exception {
-    String validJson = "{"
-            + "\"email\":\"test@example.com\","
-            + "\"password\":\"Parola123!\","
-            + "\"firstName\":\"John\","
-            + "\"lastName\":\"Doe\","
-            + "\"location\":\"CLUJ\""
-            + "}";
-            doThrow(new DuplicateEmailException("Email-ul există deja!"))
-            .when(registerService).registerUser(org.mockito.ArgumentMatchers.any());
+    @Test
+    void testRegisterUserDuplicateEmail() throws Exception {
+        String validJson = "{"
+                + "\"email\":\"test@example.com\","
+                + "\"password\":\"Parola123!\","
+                + "\"firstName\":\"John\","
+                + "\"lastName\":\"Doe\","
+                + "\"location\":\"CLUJ\""
+                + "}";
+        doThrow(new DuplicateEmailException("Email-ul există deja!"))
+                .when(registerService).registerUser(org.mockito.ArgumentMatchers.any());
 
-    mockMvc.perform(post("/api/register")
-            .contentType("application/json")
-            .content(validJson))
-            .andExpect(status().isConflict()); 
-}
+        mockMvc.perform(post("/api/register")
+                .contentType("application/json")
+                .content(validJson))
+                .andExpect(status().isConflict());
+    }
 
     @Test
     void testRegisterUserInvalidInput() throws Exception {
@@ -88,7 +86,8 @@ void testRegisterUserDuplicateEmail() throws Exception {
 
         mockMvc.perform(post("/api/register")
                 .contentType("application/json")
-                .content("{\"email\":\"invalid-email\",\"password\":\"password\",\"firstName\":\"John\",\"lastName\":\"Doe\"}"))
+                .content(
+                        "{\"email\":\"invalid-email\",\"password\":\"password\",\"firstName\":\"John\",\"lastName\":\"Doe\"}"))
                 .andExpect(status().isBadRequest());
-                 }
-                }
+    }
+}
