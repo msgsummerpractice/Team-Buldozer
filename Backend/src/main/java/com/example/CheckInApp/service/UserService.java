@@ -3,7 +3,6 @@ package com.example.CheckInApp.service;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.mapper.UserMapper;
 import com.example.CheckInApp.dto.UserProfile.request.UserProfileRequest;
-import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
@@ -21,6 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    @Transactional(readOnly = true)
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(userMapper::toResponse).toList();
@@ -38,13 +38,15 @@ public class UserService {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
         
-        if(userRepository.existsByEmail(userProfileRequest.getEmail()) && !userProfileRequest.getEmail().equals(existingUser.getEmail())) {
+        if (userProfileRequest.getEmail() != null
+                && userRepository.existsByEmail(userProfileRequest.getEmail())
+                && !userProfileRequest.getEmail().equals(existingUser.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
         }
         userMapper.fromProfileToEntity(userProfileRequest, existingUser);
         try {
             User updatedUser = userRepository.save(existingUser);
-            return userMapper.fromProfileToResponse(updatedUser);
+            return userMapper.toResponse(updatedUser);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error updating user profile: (email invalid)" + e.getMessage());
         }

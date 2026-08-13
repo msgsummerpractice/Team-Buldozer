@@ -1,5 +1,6 @@
 package com.example.CheckInApp.mapper;
 
+import java.util.Base64;
 import com.example.CheckInApp.dto.UserProfile.request.UserProfileRequest;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.dto.request.UserRequest;
@@ -46,25 +47,11 @@ public class UserMapper {
                 .location(user.getLocation())
                 .status(user.isStatus())
                 .roles(user.getRoles())
+                .profilePicture(user.getProfilePicture() != null ? Base64.getEncoder().encodeToString(user.getProfilePicture()) : null)
                 .build();
     }
 
-    public UserResponse fromProfileToResponse(User user) {
-        if (user == null) {
-            return null;
-        }
-
-        return UserResponse.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .location(user.getLocation())
-                .status(user.isStatus())
-                .roles(user.getRoles())
-                .build();
-    }
-
+    
     public User fromProfileToEntity(UserProfileRequest request, User existingUser) {
         if(request.getFirstName() != null) {
             existingUser.setFirstName(request.getFirstName());
@@ -77,6 +64,9 @@ public class UserMapper {
         }
         if(request.getLocation() != null) {
             existingUser.setLocation(request.getLocation());
+        }
+        if(request.getProfilePicture() != null) {
+            existingUser.setProfilePicture(Base64.getDecoder().decode(request.getProfilePicture()));
         }
         return existingUser;
     }

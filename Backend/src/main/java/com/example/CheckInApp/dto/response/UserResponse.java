@@ -20,4 +20,6 @@ public class UserResponse {
     private Location location;
     private boolean status;
     private Set<Role> roles;
+    private String profilePicture; // Base64 encoded string representation of the profile picture
+
 }

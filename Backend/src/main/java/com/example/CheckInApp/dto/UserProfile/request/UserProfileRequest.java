@@ -29,4 +29,6 @@ public class UserProfileRequest {
     private String email;
 
     private Location location;
+
+    private String profilePicture; // Base64 encoded string
 }
