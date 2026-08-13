@@ -4,8 +4,7 @@
 >
   {{ 'register.success' | transloco }}
 </div>
-}
-
+} @else{
 <form
   [formGroup]="registerForm"
   (ngSubmit)="onSubmit()"
@@ -124,6 +123,7 @@
     {{ 'register.submit' | transloco }}
   </button>
 </form>
+}
 
 <p class="mt-4 text-center text-gray-600">
   {{ 'register.have-account' | transloco }}

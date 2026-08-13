@@ -28,9 +28,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
     "spring.datasource.driver-class-name=org.h2.Driver",
     "spring.datasource.username=sa",
     "spring.datasource.password=",
-    "spring.flyway.enabled=false"
+    "spring.flyway.enabled=false",
 })
-public class AuthenticationControllerEndpointsTests {
+public class AuthenticationControllerEndpointsTests1{
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +46,7 @@ public class AuthenticationControllerEndpointsTests {
 
     @Test
 void testRegisterUserSuccess() throws Exception {
-    String validJson = "{"
+     String validJson = "{"
             + "\"email\":\"test@example.com\","
             + "\"password\":\"Parola123!\","
             + "\"firstName\":\"John\","
@@ -69,8 +69,7 @@ void testRegisterUserDuplicateEmail() throws Exception {
             + "\"lastName\":\"Doe\","
             + "\"location\":\"CLUJ\""
             + "}";
-
-    doThrow(new DuplicateEmailException("Email-ul există deja!"))
+            doThrow(new DuplicateEmailException("Email-ul există deja!"))
             .when(registerService).registerUser(org.mockito.ArgumentMatchers.any());
 
     mockMvc.perform(post("/api/register")
@@ -91,8 +90,5 @@ void testRegisterUserDuplicateEmail() throws Exception {
                 .contentType("application/json")
                 .content("{\"email\":\"invalid-email\",\"password\":\"password\",\"firstName\":\"John\",\"lastName\":\"Doe\"}"))
                 .andExpect(status().isBadRequest());
-    }
-        
-    
-
-}
+                 }
+                }

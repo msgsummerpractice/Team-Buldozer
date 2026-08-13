@@ -40,11 +40,13 @@ export class Register {
       confirmPassword: ['', Validators.required],
       location: ['', Validators.required],
     },
-    { validators: this.passwordMatchValidator.bind(this) }
+    { validators: this.passwordMatchValidator }
   );
 
   onSubmit() {
     if (this.registerForm.invalid) return;
+
+    this._serverErrorKey.set('');
 
     const { confirmPassword, ...payload } = this.registerForm.getRawValue();
 
