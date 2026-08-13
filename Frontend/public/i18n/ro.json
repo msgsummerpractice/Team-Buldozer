@@ -4,7 +4,8 @@
       "home": "Acasă",
       "login": "Autentificare",
       "register": "Înregistrare",
-      "logout": "Deconectare"
+      "logout": "Deconectare",
+      "profile": "Profilul meu"
     },
     "title": "Bine ați venit acasă",
     "subtitle": "Acesta este tabloul de bord al aplicației dvs.",
@@ -95,7 +96,19 @@
     "status": "Stare",
     "roles": "Roluri",
     "active": "Activ",
-    "inactive": "Inactiv"
+    "inactive": "Inactiv",
+    "picture": {
+      "title": "Fotografie de profil",
+      "change": "Schimbă fotografia",
+      "no-picture": "Fără fotografie",
+      "cropper": {
+        "title": "Decupare fotografie de profil",
+        "hint": "Selectați o imagine și trageți zona de decupare pentru a ajusta.",
+        "select": "Selectează imagine",
+        "confirm": "Aplică",
+        "cancel": "Anulează"
+      }
+    }
   },
   "error-interceptor": {
     "default": "A apărut o eroare neașteptată",

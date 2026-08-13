@@ -26,6 +26,9 @@ export class AuthenticationService {
         tap((response) => {
           if (response.token) {
             localStorage.setItem('token', response.token);
+            if (response.userId) {
+              localStorage.setItem('userId', String(response.userId));
+            }
             this.isAuthenticated.set(true);
             this.notification.showSuccess('success-messages.login-successful');
             this.router.navigate(['/home']);
@@ -41,5 +44,27 @@ export class AuthenticationService {
   logout(): void {
     localStorage.removeItem('token');
     this.isAuthenticated.set(false);
+  }
+
+  getUserId(): number | null {
+    const stored = localStorage.getItem('userId');
+    if (stored) {
+      const n = Number(stored);
+      if (Number.isInteger(n) && n > 0) return n;
+    }
+    const token = localStorage.getItem('token');
+    if (!token || !token.includes('.')) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as Record<string, unknown>;
+      const candidate = payload['userId'] ?? payload['id'] ?? payload['uid'] ?? null;
+      if (typeof candidate === 'number' && Number.isInteger(candidate) && candidate > 0) return candidate;
+      if (typeof candidate === 'string') {
+        const n = Number(candidate);
+        if (Number.isInteger(n) && n > 0) return n;
+      }
+    } catch {
+      return null;
+    }
+    return null;
   }
 }

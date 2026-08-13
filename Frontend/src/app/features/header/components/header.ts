@@ -30,6 +30,13 @@ export class Header {
 
   protected isAuthenticated = this.authService.isAuthenticated;
 
+  navigateToProfile(): void {
+    const id = this.authService.getUserId();
+    if (id) {
+      this.router.navigate(['/info', id]);
+    }
+  }
+
   getActiveLang(): string {
     return this.translocoService.getActiveLang();
   }

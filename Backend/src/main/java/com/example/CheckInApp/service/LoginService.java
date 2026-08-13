@@ -37,11 +37,11 @@ public class LoginService {
                             throw new BadCredentialsException("User not found");
                     }
         
-        String token = jwtUtil.generateToken(customUserDetailsService.loadUserByUsername(user.getEmail()));
+        String token = jwtUtil.generateToken(customUserDetailsService.loadUserByUsername(user.getEmail()), user.getId());
         long expiresIn = jwtUtil.getExpirationTime();
 
 
-        return new LoginResponse(token, "Bearer", expiresIn, loginRequest.getEmail());
+        return new LoginResponse(token, "Bearer", expiresIn, loginRequest.getEmail(), user.getId());
     }
 }
 

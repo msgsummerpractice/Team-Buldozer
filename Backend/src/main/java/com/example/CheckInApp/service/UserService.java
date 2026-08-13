@@ -3,7 +3,6 @@ package com.example.CheckInApp.service;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.mapper.UserMapper;
 import com.example.CheckInApp.dto.UserProfile.request.UserProfileRequest;
-import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

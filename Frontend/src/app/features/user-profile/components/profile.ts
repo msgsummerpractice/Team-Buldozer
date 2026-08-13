@@ -12,12 +12,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { UserLocation, UserProfile } from '../models/userProfile.model';
+import { ProfilePicture } from './profile-picture/profile-picture';
+import { environment } from '@environments/environment';
 
 interface ProfileFormState {
   firstName: string;
   lastName: string;
   email: string;
   location: UserLocation;
+  profilePicture: string | null;
 }
 
 @Component({
@@ -34,12 +37,14 @@ interface ProfileFormState {
     MatInputModule,
     MatSelectModule,
     TranslocoPipe,
+    ProfilePicture,
   ],
   templateUrl: './profile.html',
 })
 export class Profile {
   private readonly http = inject(HttpClient);
   private readonly route = inject(ActivatedRoute);
+  private readonly apiUrl = environment.apiUrl;
 
   readonly profile = signal<UserProfile | null>(null);
   readonly loading = signal<boolean>(true);
@@ -72,7 +77,7 @@ export class Profile {
       return;
     }
 
-    this.http.get<UserProfile>(`http://localhost:8080/api/v1/users/${userId}`).subscribe({
+    this.http.get<UserProfile>(`${this.apiUrl}/v1/users/${userId}`).subscribe({
       next: (userProfile: UserProfile) => {
         this.profile.set(userProfile);
         this.syncFormFromProfile(userProfile);
@@ -98,7 +103,7 @@ export class Profile {
     this.saving.set(true);
 
     this.http
-      .put<UserProfile>(`http://localhost:8080/api/v1/users/profile/${userId}`, this.formState)
+      .put<UserProfile>(`${this.apiUrl}/v1/users/profile/${userId}`, this.formState)
       .subscribe({
         next: (updatedProfile: UserProfile) => {
           this.profile.set(updatedProfile);
@@ -177,6 +182,7 @@ export class Profile {
       lastName: '',
       email: '',
       location: 'CLUJ',
+      profilePicture: null,
     };
   }
 
@@ -186,7 +192,12 @@ export class Profile {
       lastName: profile.lastName,
       email: profile.email,
       location: profile.location,
+      profilePicture: profile.profilePicture ?? null,
     };
+  }
+
+  onPictureChange(base64: string | null): void {
+    this.formState = { ...this.formState, profilePicture: base64 };
   }
 
   private syncFormFromProfile(profile: UserProfile): void {

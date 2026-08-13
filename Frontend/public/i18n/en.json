@@ -4,7 +4,8 @@
       "home": "Home",
       "login": "Login",
       "register": "Register",
-      "logout": "Logout"
+      "logout": "Logout",
+      "profile": "My profile"
     },
     "title": "Welcome Home",
     "subtitle": "This is your application dashboard.",
@@ -95,7 +96,19 @@
     "status": "Status",
     "roles": "Roles",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "picture": {
+      "title": "Profile picture",
+      "change": "Change photo",
+      "no-picture": "No photo",
+      "cropper": {
+        "title": "Crop profile picture",
+        "hint": "Select an image and drag the crop area to adjust.",
+        "select": "Select image",
+        "confirm": "Apply",
+        "cancel": "Cancel"
+      }
+    }
   },
   "error-interceptor": {
     "default": "An unexpected error occurred",

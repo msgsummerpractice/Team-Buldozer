@@ -9,4 +9,5 @@ export interface UserProfile {
 	location: UserLocation;
 	status: boolean;
 	roles: UserRole[];
+	profilePicture: string | null;
 }
