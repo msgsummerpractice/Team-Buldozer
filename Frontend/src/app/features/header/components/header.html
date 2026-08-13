@@ -25,7 +25,7 @@
         <mat-icon>login</mat-icon>
       </button>
       } @else {
-      <button mat-icon-button routerLink="/info" [matTooltip]="'home.nav.login' | transloco">
+      <button mat-icon-button (click)="navigateToProfile()" [matTooltip]="'home.nav.profile' | transloco">
         <mat-icon>person</mat-icon>
       </button>
       }

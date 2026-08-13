@@ -1,0 +1,23 @@
+<div
+  class="relative w-full aspect-square rounded-xl overflow-hidden border-2 border-slate-200 bg-slate-100"
+  [class.cursor-pointer]="editMode"
+  (click)="editMode && openCropper()"
+>
+  @if (pictureUrl) {
+  <img [src]="pictureUrl" alt="Profile picture" class="w-full h-full object-cover" />
+  } @else {
+  <img
+    src="assets/images/Standard_Picture.webp"
+    alt="Default profile picture"
+    class="w-full h-full object-cover"
+  />
+  }
+
+  @if (editMode) {
+  <div
+    class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
+  >
+    <mat-icon class="text-white !text-4xl !w-10 !h-10">photo_camera</mat-icon>
+  </div>
+  }
+</div>

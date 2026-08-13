@@ -57,7 +57,7 @@ public class AuthService {
         String token = jwtUtil.generateToken(customUserDetailsService.loadUserByUsername(user.getEmail()));
         long expiresIn = jwtUtil.getExpiration();
 
-        return new LoginResponse(token, "Bearer", expiresIn, loginRequest.getEmail());
+        return new LoginResponse(token, "Bearer", expiresIn, loginRequest.getEmail(), user.getId());
     }
 
 }
