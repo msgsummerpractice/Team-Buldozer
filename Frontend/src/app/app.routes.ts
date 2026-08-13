@@ -2,6 +2,9 @@ import { Routes } from '@angular/router';
 import { Home } from '@features/home/components/home';
 import { NotFound } from '@features/not-found/components/not-found';
 import { authorizationGuard } from '@core/authorization/guards/authorization.guard';
+import { UserRoleEnum } from '@core/users/model/user-role';
+
+const UserRoles = UserRoleEnum;
 
 export const routes: Routes = [
   {
@@ -24,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'users',
     loadComponent: () => import('@features/users/users').then((m) => m.Users),
-    canActivate: [authorizationGuard(['ADMIN'])],
+    canActivate: [authorizationGuard([UserRoles.ADMIN])],
   },
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },

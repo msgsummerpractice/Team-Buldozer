@@ -71,9 +71,9 @@
               <mat-chip-set>
                 <mat-chip disableRipple="true">
                   <mat-icon matChipAvatar>place</mat-icon>
-                  @if (user.location === 'CLUJ') { {{ 'users.cluj' | transloco}} } @else if
-                  (user.location === 'TIMISOARA') { {{ 'users.timisoara' | transloco}} } @else if
-                  (user.location === 'MURES') { {{ 'users.mures' | transloco}} }
+                  @switch (user.location) { @case (UserLocations.CLUJ) { {{ 'users.cluj' |
+                  transloco}} } @case (UserLocations.TIMISOARA) { {{ 'users.timisoara' | transloco}}
+                  } @case (UserLocations.MURES) { {{ 'users.mures' | transloco}} } }
                 </mat-chip>
               </mat-chip-set>
             </td>

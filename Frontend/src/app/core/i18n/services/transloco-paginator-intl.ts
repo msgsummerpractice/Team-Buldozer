@@ -6,13 +6,12 @@ import { TranslocoService } from '@jsverse/transloco';
 @Service()
 export class TranslocoPaginatorIntl extends MatPaginatorIntl {
   private readonly translocoService = inject(TranslocoService);
-  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     super();
 
     this.translocoService.langChanges$
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed())
       .subscribe(() => this.translateLabels());
   }
 
