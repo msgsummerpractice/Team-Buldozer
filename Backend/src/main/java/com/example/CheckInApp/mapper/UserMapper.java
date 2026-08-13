@@ -75,7 +75,7 @@ public class UserMapper {
         if(request.getEmail() != null) {
             existingUser.setEmail(request.getEmail());
         }
-        if(existingUser.getLocation() != null) {
+        if(request.getLocation() != null) {
             existingUser.setLocation(request.getLocation());
         }
         return existingUser;
