@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import {
   ReactiveFormsModule,
   NonNullableFormBuilder,
@@ -24,6 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
 export class Register {
   private fb = inject(NonNullableFormBuilder);
   private router = inject(Router);
+  private auth = inject(AuthenticationService);
 
   private _success = signal(false);
   private _serverErrorKey = signal('');
