@@ -1,4 +1,4 @@
-package com.example.CheckInApp.service;
+package com.example.CheckInApp.security;
 
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -21,11 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> {
-                    return new UsernameNotFoundException("User not found with email: " + username);
-                });
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
 
         return buildUserDetails(user);
     }

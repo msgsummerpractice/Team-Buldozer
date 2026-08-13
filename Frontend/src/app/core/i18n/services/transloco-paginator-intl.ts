@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable, inject, Service } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { TranslocoService } from '@jsverse/transloco';

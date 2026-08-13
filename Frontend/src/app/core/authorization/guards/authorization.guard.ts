@@ -10,7 +10,7 @@ export const authorizationGuard = (allowedRoles: string[]): CanActivateFn => {
     const hasAccess = authorization.hasAnyRole(allowedRoles);
 
     if (!hasAccess) {
-      router.navigate(['/login']);
+      router.navigate(['/home']);
       return false;
     }
 
