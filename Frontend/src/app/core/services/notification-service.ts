@@ -9,11 +9,11 @@ export class NotificationService {
     message: string,
     action: string,
     panelClass: string,
-    hasDuration: boolean = true
+    hasDuration = true
   ): void {
     const config: MatSnackBarConfig = {
       horizontalPosition: 'end',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       panelClass: [panelClass],
     };
 
