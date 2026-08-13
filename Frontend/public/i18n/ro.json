@@ -32,6 +32,8 @@
     "login": "Autentificare",
     "confirm-password": "Confirmare parolă:",
     "success": "Cont creat cu succes! Redirecționare...",
+    "success-title": "Cont creat!",
+    "success-subtitle": "Vei fi redirecționat către pagina de autentificare în scurt timp.",
     "errors": {
       "first-name-required": "Prenumele este obligatoriu.",
       "last-name-required": "Numele de familie este obligatoriu.",
