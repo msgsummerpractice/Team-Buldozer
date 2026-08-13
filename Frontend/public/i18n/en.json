@@ -113,6 +113,7 @@
   "error-interceptor": {
     "default": "An unexpected error occurred",
     "0": "No connection returned",
+    "400": "Something went wrong with your request. Please check the web address or refresh the page and try again.",
     "401": "Authentication required. Please log in.",
     "403": "You do not have permission to access this page.",
     "500": "Internal Server Error"

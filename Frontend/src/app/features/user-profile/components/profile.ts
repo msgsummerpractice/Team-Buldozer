@@ -103,7 +103,7 @@ export class Profile {
     this.saving.set(true);
 
     this.http
-      .put<UserProfile>(`${this.apiUrl}/users/profile/${userId}`, this.formState)
+      .patch<UserProfile>(`${this.apiUrl}/users/profile/${userId}`, this.formState)
       .subscribe({
         next: (updatedProfile: UserProfile) => {
           this.profile.set(updatedProfile);

@@ -15,6 +15,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         if (error.status === 0) {
           errorMessage = 'error-interceptor.0';
+        } else if (error.status === 400) {
+          errorMessage = 'error-interceptor.400';
         } else if (error.status === 401) {
           errorMessage = 'error-interceptor.401';
         } else if (error.status === 403) {
