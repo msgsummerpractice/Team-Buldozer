@@ -57,6 +57,8 @@
     "login": "Login",
     "confirm-password": "Confirm Password:",
     "success": "Account created successfully! Redirecting to login...",
+    "success-title": "Account created!",
+    "success-subtitle": "You will be redirected to the login page shortly.",
     "errors": {
       "first-name-required": "First name is required.",
       "last-name-required": "Last name is required.",
