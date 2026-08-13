@@ -9,10 +9,21 @@ export class AuthorizationService {
     if (token) {
       const decodedToken = jwtDecode<JwtInterface>(token);
       const userRoles = (decodedToken?.roles || []).map((r) =>
-        r.startsWith('ROLE_') ? r.substring(5) : r,
+        r.startsWith('ROLE_') ? r.substring(5) : r
       );
       return roles.some((role) => userRoles.includes(role));
     }
     return false;
+  }
+
+  getUserId(): number {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecode<JwtInterface>(token);
+      const userId = decodedToken?.userId;
+      return userId;
+    }
+
+    return 0;
   }
 }

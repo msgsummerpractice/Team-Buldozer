@@ -3,4 +3,5 @@ export interface JwtInterface {
   roles: string[];
   exp: number;
   iat: number;
+  userId: number;
 }

@@ -113,6 +113,7 @@
   "error-interceptor": {
     "default": "A apărut o eroare neașteptată",
     "0": "Nu s-a putut stabili conexiunea",
+    "400": "Ceva nu a funcționat corect cu cererea ta. Te rugăm să verifici adresa web sau să reîmprospătezi pagina și să încerci din nou.",
     "401": "Autentificare necesară. Te rugăm să te conectezi.",
     "403": "Nu ai permisiunea de a accesa această pagină.",
     "500": "Eroare internă de server"

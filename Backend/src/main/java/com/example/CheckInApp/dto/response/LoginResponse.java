@@ -12,5 +12,4 @@ public class LoginResponse {
     private String type = "Bearer";
     private long expiresIn;
     private String email;
-    private Long userId;
 }
