@@ -1,4 +1,4 @@
-package com.example.CheckInApp.dto.UserProfile.request;
+package com.example.CheckInApp.dto.request;
 
 import com.example.CheckInApp.model.Location;
 
