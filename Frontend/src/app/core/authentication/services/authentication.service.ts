@@ -1,4 +1,4 @@
-import { Injectable, Service, inject, signal } from '@angular/core';
+import { Service, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, throwError } from 'rxjs';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
