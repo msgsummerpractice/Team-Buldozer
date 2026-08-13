@@ -1,7 +1,9 @@
 export type Environment = {
+  production: boolean;
   apiUrl: string;
 };
 
 export const environment: Environment = {
-  apiUrl: '',
+  production: true,
+  apiUrl: 'https://your-production-api-url.com/api',
 };

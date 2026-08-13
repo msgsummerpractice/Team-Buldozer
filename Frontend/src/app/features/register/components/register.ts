@@ -7,7 +7,6 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,7 +23,6 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class Register {
   private fb = inject(NonNullableFormBuilder);
-  private auth = inject(AuthenticationService);
   private router = inject(Router);
 
   private _success = signal(false);

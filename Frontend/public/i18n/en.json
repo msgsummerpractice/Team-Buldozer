@@ -9,13 +9,38 @@
     "title": "Welcome Home",
     "subtitle": "This is your application dashboard.",
     "authenticated-message": "You are currently authenticated.",
-    "unauthenticated-message": "Please log in or register to get started."
+    "unauthenticated-message": "Please log in or register to get started.",
+    "participant": {
+      "title": "Participant Dashboard",
+      "description": "Welcome to the Participant Dashboard. Here you can manage your activities and view your progress."
+    },
+    "marketing": {
+      "title": "Marketing Dashboard",
+      "description": "Welcome to the Marketing Dashboard. Access campaign tools and analytics here."
+    },
+    "hr": {
+      "title": "HR Dashboard",
+      "description": "Welcome to the HR Dashboard. Manage employee records and resources."
+    },
+    "admin": {
+      "title": "Admin Dashboard",
+      "description": "Welcome to the Admin Dashboard. Full system access and management tools available."
+    }
   },
   "login": {
     "title": "Login",
-    "username": "Username",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
     "password": "Password",
-    "submit": "Submit",
+    "passwordPlaceholder": "Enter your password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 5 characters",
+    "submit": "Login",
+    "loggingIn": "Logging in...",
+    "forgotPassword": "Forgot password?",
+    "username": "Username",
     "no-account": "Don't have an account?",
     "register": "Register"
   },
@@ -57,5 +82,37 @@
     "401": "Authentication required. Please log in.",
     "403": "You do not have permission to access this page.",
     "500": "Internal Server Error"
+  },
+  "server-error-codes": {
+    "ERR-01": "Invalid credentials. Please check your email and password.",
+    "ERR-02": "User not found.",
+    "ERR-03": "Account is locked. Please contact support.",
+    "ERR-04": "Your session has expired. Please log in again.",
+    "ERR-05": "Invalid token. Please log in again.",
+    "ERR-10": "This email is already registered. Please use a different email or log in.",
+    "ERR-11": "Invalid email format. Please enter a valid email address.",
+    "ERR-12": "Password is too weak. Please choose a stronger password.",
+    "ERR-13": "Required field is missing. Please fill in all required fields.",
+    "ERR-20": "Resource not found.",
+    "ERR-21": "Resource already exists.",
+    "ERR-30": "You do not have sufficient permissions to perform this action.",
+    "ERR-31": "Access denied.",
+    "ERR-40": "Invalid input. Please check your data.",
+    "ERR-41": "Required parameter is missing.",
+    "ERR-50": "Internal server error. Please try again later.",
+    "ERR-51": "Database error. Please try again later.",
+    "ERR-52": "Service is temporarily unavailable. Please try again later.",
+    "ERR-99": "An unknown error occurred. Please try again."
+  },
+  "success-messages": {
+    "login-successful": "Login successful!",
+    "logout-successful": "You have been logged out successfully.",
+    "registration-successful": "Registration successful! Welcome aboard.",
+    "profile-updated": "Profile updated successfully.",
+    "password-changed": "Password changed successfully."
+  },
+  "common": {
+    "close": "Close",
+    "ok": "OK"
   }
 }
