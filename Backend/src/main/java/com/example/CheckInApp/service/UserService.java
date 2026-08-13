@@ -34,55 +34,13 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse updateUser(Long id, UserRequest userRequest) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
-
-        existingUser.setFirstName(userRequest.getFirstName());
-        existingUser.setLastName(userRequest.getLastName());
-        existingUser.setEmail(userRequest.getEmail());
-        existingUser.setLocation(userRequest.getLocation());
-        existingUser.setRoles(userRequest.getRoles());
-
-        User updatedUser = userRepository.save(existingUser);
-        return userMapper.toResponse(updatedUser);
-    }
-    
-    @Transactional
-    public UserResponse patchUser(Long id, UserRequest userRequest) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
-
-        if (userRequest.getFirstName() != null) {
-            existingUser.setFirstName(userRequest.getFirstName());
-        }
-        if (userRequest.getLastName() != null) {
-            existingUser.setLastName(userRequest.getLastName());
-        }
-        if (userRequest.getEmail() != null) {
-            existingUser.setEmail(userRequest.getEmail());
-            try {
-                userRepository.save(existingUser);
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Email already exists: " + userRequest.getEmail());
-            }
-        }
-        if (userRequest.getLocation() != null) {
-            existingUser.setLocation(userRequest.getLocation());
-        }
-        if (userRequest.getRoles() != null && !userRequest.getRoles().isEmpty()) {
-            existingUser.setRoles(userRequest.getRoles());
-        }
-
-        User updatedUser = userRepository.save(existingUser);
-        return userMapper.toResponse(updatedUser);
-    }
-
-    @Transactional
     public UserResponse updateUserProfile(Long id, UserProfileRequest userProfileRequest) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
         
+        if(userRepository.existsByEmail(userProfileRequest.getEmail()) && !userProfileRequest.getEmail().equals(existingUser.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
         userMapper.fromProfileToEntity(userProfileRequest, existingUser);
         try {
             User updatedUser = userRepository.save(existingUser);
@@ -91,20 +49,6 @@ public class UserService {
             throw new IllegalArgumentException("Error updating user profile: (email invalid)" + e.getMessage());
         }
         
-    }
-
-    @Transactional
-    public UserResponse patchUserProfile(Long id, UserProfileRequest userProfileRequest) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
-        
-        userMapper.fromProfileToEntity(userProfileRequest, existingUser);
-        try {
-            User updatedUser = userRepository.save(existingUser);
-            return userMapper.fromProfileToResponse(updatedUser);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error patching user profile: (email invalid)" + e.getMessage());
-        }
     }
 
 }
