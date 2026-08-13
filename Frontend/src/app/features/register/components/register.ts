@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import {
   ReactiveFormsModule,
   NonNullableFormBuilder,
@@ -8,20 +9,29 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { AuthenticationService } from '@core/authentication/services/authentication.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe],
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
   templateUrl: './register.html',
+  styleUrl: './register.scss',
 })
 export class Register {
   private fb = inject(NonNullableFormBuilder);
   private router = inject(Router);
-  private readonly auth = inject(AuthenticationService);
+  private auth = inject(AuthenticationService);
 
   private _success = signal(false);
   private _serverErrorKey = signal('');
+
+  readonly showPassword = signal(false);
+  readonly showConfirmPassword = signal(false);
 
   readonly success = this._success.asReadonly();
   readonly serverErrorKey = this._serverErrorKey.asReadonly();
