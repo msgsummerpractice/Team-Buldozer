@@ -53,10 +53,10 @@ class UserControllerTest {
     void getAllUsers_returnsOkWithUserList_whenUsersExist() throws Exception {
         UserResponse user1 = UserResponse.builder()
                 .id(1L).firstName("John").lastName("Doe").email("john@example.com")
-                .userLocation(UserLocation.CLUJ).status(true).userRoles(Set.of(UserRole.PARTICIPANT)).build();
+                .location(UserLocation.CLUJ).status(true).userRoles(Set.of(UserRole.PARTICIPANT)).build();
         UserResponse user2 = UserResponse.builder()
                 .id(2L).firstName("Jane").lastName("Smith").email("jane@example.com")
-                .userLocation(UserLocation.TIMISOARA).status(false).userRoles(Set.of(UserRole.HR)).build();
+                .location(UserLocation.TIMISOARA).status(false).userRoles(Set.of(UserRole.HR)).build();
 
         when(userService.getAllUsers()).thenReturn(List.of(user1, user2));
 
