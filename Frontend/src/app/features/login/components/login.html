@@ -32,8 +32,6 @@
         />
         @if (loginForm.get('password')?.hasError('required')) {
         <mat-error>{{ 'login.passwordRequired' | transloco }}</mat-error>
-        } @if (loginForm.get('password')?.hasError('minlength')) {
-        <mat-error>{{ 'login.passwordMinLength' | transloco }}</mat-error>
         }
       </mat-form-field>
 
