@@ -28,8 +28,8 @@ public class UserMapper {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .location(request.getLocation())
-                .roles(request.getRoles())
+                .userLocation(request.getUserLocation())
+                .userRoles(request.getUserRoles())
                 .status(true)
                 .build();
 
@@ -46,27 +46,27 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
-                .location(user.getLocation())
+                .userLocation(user.getUserLocation())
                 .status(user.isStatus())
-                .roles(user.getRoles())
+                .userRoles(user.getUserRoles())
                 .profilePicture(user.getProfilePicture() != null ? Base64.getEncoder().encodeToString(user.getProfilePicture()) : null)
                 .build();
     }
-    
+
     public User fromProfileToEntity(UserProfileRequest request, User existingUser) {
-        if(request.getFirstName() != null) {
+        if (request.getFirstName() != null) {
             existingUser.setFirstName(request.getFirstName());
         }
-        if(request.getLastName() != null) {
+        if (request.getLastName() != null) {
             existingUser.setLastName(request.getLastName());
         }
-        if(request.getEmail() != null) {
+        if (request.getEmail() != null) {
             existingUser.setEmail(request.getEmail());
         }
-        if(request.getLocation() != null) {
-            existingUser.setLocation(request.getLocation());
+        if (request.getUserLocation() != null) {
+            existingUser.setUserLocation(request.getUserLocation());
         }
-        if(request.getProfilePicture() != null) {
+        if (request.getProfilePicture() != null) {
             existingUser.setProfilePicture(Base64.getDecoder().decode(request.getProfilePicture()));
         }
         return existingUser;

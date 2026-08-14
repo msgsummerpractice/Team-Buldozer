@@ -1,7 +1,7 @@
 package com.example.CheckInApp.dto.response;
 
-import com.example.CheckInApp.model.Location;
-import com.example.CheckInApp.model.Role;
+import com.example.CheckInApp.model.UserLocation;
+import com.example.CheckInApp.model.UserRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,8 +16,8 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String email;
-    private Location location;
+    private UserLocation userLocation;
     private boolean status;
-    private Set<Role> roles;
+    private Set<UserRole> userRoles;
     private String profilePicture;
 }

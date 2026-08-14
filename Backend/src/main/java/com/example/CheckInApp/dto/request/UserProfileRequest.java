@@ -1,6 +1,6 @@
 package com.example.CheckInApp.dto.request;
 
-import com.example.CheckInApp.model.Location;
+import com.example.CheckInApp.model.UserLocation;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -33,7 +33,7 @@ public class UserProfileRequest {
     private String email;
 
     @NotNull(message = "Location is required")
-    private Location location;
+    private UserLocation userLocation;
 
     private String profilePicture;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -31,7 +32,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Location location;
+    private UserLocation userLocation;
 
     private boolean status;
 
@@ -43,6 +44,9 @@ public class User {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private Set<Role> roles = new HashSet<>();
+    private Set<UserRole> userRoles = new HashSet<>();
+
+    @OneToMany(mappedBy = "createdBy")
+    private List<Event> events;
 
 }

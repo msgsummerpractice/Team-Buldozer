@@ -6,7 +6,7 @@ import com.example.CheckInApp.dto.response.LoginResponse;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.exception.DuplicateEmailException;
 import com.example.CheckInApp.dto.mapper.UserMapper;
-import com.example.CheckInApp.model.Role;
+import com.example.CheckInApp.model.UserRole;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class AuthService {
         }
 
         User user = userMapper.toEntity(request);
-        user.setRoles(Set.of(Role.PARTICIPANT));
+        user.setUserRoles(Set.of(UserRole.PARTICIPANT));
         user.setStatus(true);
 
         User savedUser = userRepository.save(user);
