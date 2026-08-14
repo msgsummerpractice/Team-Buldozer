@@ -3,3 +3,11 @@
 @use 'tailwindcss';
 @use './material-theme.scss';
 @use '../public/assets/styles/snackbar.scss';
+
+/* suppress browser-native password reveal button so only our mat-icon toggle shows */
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear {
+  display: none;
+}
+
+

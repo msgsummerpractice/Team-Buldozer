@@ -5,34 +5,34 @@
   <p class="text-lg text-gray-600 mb-8 text-center">{{ 'home.subtitle' | transloco }}</p>
 
   @if (auth.isAuthenticated()) {
-  <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl mb-8">
+  <div class="px-4 py-3 rounded-xl mb-8" style="background-color: var(--mat-sys-primary-container); border: 1px solid var(--mat-sys-primary); color: var(--mat-sys-on-primary-container)">
     <p class="text-center font-medium">{{ 'home.authenticated-message' | transloco }}</p>
   </div>
 
-  <div *rolesAssigned="'participant'" class="bg-blue-50 p-6 rounded-lg mb-6">
+  <div *rolesAssigned="'participant'" class="p-6 rounded-lg mb-6" style="background-color: var(--mat-sys-surface-container-low)">
     <h2 class="text-2xl font-bold text-gray-800 mb-3"
       >{{ 'home.participant.title' | transloco }}</h2
     >
     <p class="text-gray-700">{{ 'home.participant.description' | transloco }}</p>
   </div>
 
-  <div *rolesAssigned="'marketing'" class="bg-purple-50 p-6 rounded-lg mb-6">
+  <div *rolesAssigned="'marketing'" class="p-6 rounded-lg mb-6" style="background-color: var(--mat-sys-surface-container-low)">
     <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ 'home.marketing.title' | transloco }}</h2>
     <p class="text-gray-700">{{ 'home.marketing.description' | transloco }}</p>
   </div>
 
-  <div *rolesAssigned="'hr'" class="bg-orange-50 p-6 rounded-lg mb-6">
+  <div *rolesAssigned="'hr'" class="p-6 rounded-lg mb-6" style="background-color: var(--mat-sys-surface-container-low)">
     <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ 'home.hr.title' | transloco }}</h2>
     <p class="text-gray-700">{{ 'home.hr.description' | transloco }}</p>
   </div>
 
-  <div *rolesAssigned="'admin'" class="bg-red-50 p-6 rounded-lg mb-6">
+  <div *rolesAssigned="'admin'" class="p-6 rounded-lg mb-6" style="background-color: var(--mat-sys-surface-container-low)">
     <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ 'home.admin.title' | transloco }}</h2>
     <p class="text-gray-700">{{ 'home.admin.description' | transloco }}</p>
   </div>
 
   } @else {
-  <div class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl">
+  <div class="px-4 py-3 rounded-xl" style="background-color: var(--mat-sys-surface-container); border: 1px solid var(--mat-sys-outline-variant); color: var(--mat-sys-on-surface)">
     <p class="text-center font-medium">{{ 'home.unauthenticated-message' | transloco }}</p>
   </div>
   }
