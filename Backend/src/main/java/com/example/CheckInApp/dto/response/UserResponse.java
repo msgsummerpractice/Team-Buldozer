@@ -18,6 +18,6 @@ public class UserResponse {
     private String email;
     private UserLocation location;
     private boolean status;
-    private Set<UserRole> userRoles;
+    private Set<UserRole> roles;
     private String profilePicture;
 }

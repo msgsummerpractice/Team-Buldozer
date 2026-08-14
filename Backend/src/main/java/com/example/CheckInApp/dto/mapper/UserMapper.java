@@ -29,7 +29,7 @@ public class UserMapper {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .location(request.getLocation())
-                .userRoles(request.getUserRoles())
+                .roles(request.getRoles())
                 .status(true)
                 .build();
 
@@ -48,7 +48,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .location(user.getLocation())
                 .status(user.isStatus())
-                .userRoles(user.getUserRoles())
+                .roles(user.getRoles())
                 .profilePicture(user.getProfilePicture() != null ? Base64.getEncoder().encodeToString(user.getProfilePicture()) : null)
                 .build();
     }

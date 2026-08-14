@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails buildUserDetails(User user) {
-        Collection<? extends GrantedAuthority> authorities = user.getUserRoles()
+        Collection<? extends GrantedAuthority> authorities = user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toSet());

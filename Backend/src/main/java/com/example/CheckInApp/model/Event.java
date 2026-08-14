@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "events")
@@ -15,8 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
 @Builder
 public class Event {
 
@@ -66,7 +63,7 @@ public class Event {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User createdBy;
 
-    private boolean foodProvided;
+    private Boolean foodProvided;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

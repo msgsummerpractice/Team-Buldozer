@@ -33,7 +33,7 @@ public class AuthService {
         }
 
         User user = userMapper.toEntity(request);
-        user.setUserRoles(Set.of(UserRole.PARTICIPANT));
+        user.setRoles(Set.of(UserRole.PARTICIPANT));
         user.setStatus(true);
 
         User savedUser = userRepository.save(user);

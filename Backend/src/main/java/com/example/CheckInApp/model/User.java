@@ -11,8 +11,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
 @Entity
 @Table(name = "users")
 @Builder
@@ -47,7 +45,7 @@ public class User {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private Set<UserRole> userRoles = new HashSet<>();
+    private Set<UserRole> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "createdBy")
     private List<Event> events;

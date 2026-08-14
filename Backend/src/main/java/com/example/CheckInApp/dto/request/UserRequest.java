@@ -40,5 +40,5 @@ public class UserRequest {
     @NotNull(message = "Location is required")
     private UserLocation location;
 
-    private Set<UserRole> userRoles;
+    private Set<UserRole> roles;
 }
