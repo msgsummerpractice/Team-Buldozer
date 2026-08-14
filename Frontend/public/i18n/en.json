@@ -80,8 +80,8 @@
   "profile": {
     "title": "My Profile",
     "subtitle": "Update your personal details and switch between read-only and edit mode.",
-    "edit-mode": "Edit mode",
-    "normal-mode": "Normal mode",
+    "edit-mode": "Edit",
+    "normal-mode": "Cancel",
     "save": "Save changes",
     "saving": "Saving...",
     "loading": "Loading account details...",
@@ -151,7 +151,7 @@
     "ok": "OK"
   },
   "users": {
-    "title": "User Management",
+    "title": "View Users",
     "search": "Search by name, email, location or role",
     "first-name": "FIRST NAME",
     "last-name": "LAST NAME",

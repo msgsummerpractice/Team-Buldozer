@@ -1,72 +1,61 @@
-<div class="bg-slate-100 p-6 mx-auto max-w-7xl rounded-2xl! mt-8">
-  <div class="flex flex-col gap-4 mb-4 md:flex-row md:items-center md:justify-between">
-    <div class="flex items-center gap-4">
-      <div class="w-20 h-20 flex-shrink-0">
-        <app-profile-picture
-          [pictureBase64]="editMode() ? formState.profilePicture : (profile()?.profilePicture ?? null)"
-          [editMode]="editMode()"
-          (pictureChange)="onPictureChange($event)"
-        />
-      </div>
-      <div>
-        <h1 class="font-bold text-3xl mb-2">{{ 'profile.title' | transloco }}</h1>
-        <p class="text-slate-600"> {{ 'profile.subtitle' | transloco }} </p>
-      </div>
-    </div>
-
-    <div class="flex flex-wrap gap-2">
-      @if (!editMode()) {
-      <button mat-stroked-button color="primary" type="button" (click)="enableEditMode()">
-        <mat-icon>edit</mat-icon>
-        {{ 'profile.edit-mode' | transloco }}
-      </button>
-      } @else {
-      <button mat-stroked-button type="button" (click)="cancelEditMode()">
-        <mat-icon>visibility</mat-icon>
-        {{ 'profile.normal-mode' | transloco }}
-      </button>
-      <button
-        mat-flat-button
-        color="primary"
-        type="button"
-        [disabled]="saving()"
-        (click)="saveChanges()"
-      >
-        <mat-icon>save</mat-icon>
-        {{ saving() ? ('profile.saving' | transloco) : ('profile.save' | transloco) }}
-      </button>
-      }
-    </div>
-  </div>
-
-  @if (loading()) {
+<div class="p-6 mx-auto max-w-7xl mt-8">
   <mat-card appearance="outlined">
     <mat-card-content>
-      <p class="text-slate-600">{{ 'profile.loading' | transloco }}</p>
-    </mat-card-content>
-  </mat-card>
-  } @if (!loading() && profile()) {
-  <mat-card appearance="outlined" class="mt-4">
-    <mat-card-content>
-      <div class="flex flex-col gap-2 border-b border-slate-200 pb-4 mb-4">
-        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-          {{ 'profile.account-holder' | transloco }}
-        </p>
-        <h2 class="text-2xl font-semibold text-slate-900">{{ fullName() }}</h2>
-        <p class="text-sm text-slate-600">
-          @if (editMode()) { {{ 'profile.editing-hint' | transloco }} } @else { {{
-          'profile.readonly-hint' | transloco }} }
-        </p>
+      <div
+        class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-200"
+      >
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 flex-shrink-0 rounded-full overflow-hidden">
+            <app-profile-picture
+              [pictureBase64]="editMode() ? formState.profilePicture : (profile()?.profilePicture ?? null)"
+              [editMode]="editMode()"
+              (pictureChange)="onPictureChange($event)"
+            />
+          </div>
+          <div>
+            <h1 class="font-bold text-2xl mb-0.5">{{ 'profile.title' | transloco }}</h1>
+            @if (profile()) {
+            <p class="text-base font-medium text-slate-700">{{ fullName() }}</p>
+            }
+            <p class="text-sm text-slate-500">{{ 'profile.subtitle' | transloco }}</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          @if (!editMode()) {
+          <button mat-stroked-button color="primary" type="button" (click)="enableEditMode()">
+            <mat-icon>edit</mat-icon>
+            {{ 'profile.edit-mode' | transloco }}
+          </button>
+          } @else {
+          <button mat-stroked-button type="button" (click)="cancelEditMode()">
+            <mat-icon>close</mat-icon>
+            {{ 'profile.normal-mode' | transloco }}
+          </button>
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            [disabled]="saving()"
+            (click)="saveChanges()"
+          >
+            <mat-icon>save</mat-icon>
+            {{ saving() ? ('profile.saving' | transloco) : ('profile.save' | transloco) }}
+          </button>
+          }
+        </div>
       </div>
 
-      @if (saveMessage()) {
+      @if (loading()) {
+      <p class="text-slate-600 mt-4">{{ 'profile.loading' | transloco }}</p>
+      } @if (!loading() && profile()) { @if (saveMessage()) {
       <div
-        class="mb-4 rounded-xl border border-green-200 bg-green-100 px-4 py-3 text-sm font-medium text-green-700"
+        class="mt-4 rounded-xl border border-green-200 px-4 py-3 text-sm font-medium text-green-700"
       >
         {{ saveMessage() }}
       </div>
       } @if (!editMode()) {
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
         <div class="rounded-xl border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
             {{ 'profile.first-name' | transloco }}
@@ -131,52 +120,60 @@
         </div>
       </div>
       } @else {
-      <form #profileForm="ngForm" class="mt-2">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ 'profile.first-name' | transloco }}</mat-label>
-            <input
-              matInput
-              name="firstName"
-              [(ngModel)]="formState.firstName"
-              required
-              maxlength="32"
-            />
-          </mat-form-field>
+      <form #profileForm="ngForm">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+          <div class="bg-white rounded-xl">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+              <mat-label>{{ 'profile.first-name' | transloco }}</mat-label>
+              <input
+                matInput
+                name="firstName"
+                [(ngModel)]="formState.firstName"
+                required
+                maxlength="32"
+              />
+            </mat-form-field>
+          </div>
 
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ 'profile.last-name' | transloco }}</mat-label>
-            <input
-              matInput
-              name="lastName"
-              [(ngModel)]="formState.lastName"
-              required
-              maxlength="32"
-            />
-          </mat-form-field>
+          <div class="bg-white rounded-xl">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+              <mat-label>{{ 'profile.last-name' | transloco }}</mat-label>
+              <input
+                matInput
+                name="lastName"
+                [(ngModel)]="formState.lastName"
+                required
+                maxlength="32"
+              />
+            </mat-form-field>
+          </div>
 
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ 'profile.email' | transloco }}</mat-label>
-            <input
-              matInput
-              name="email"
-              type="email"
-              [(ngModel)]="formState.email"
-              required
-              maxlength="64"
-            />
-          </mat-form-field>
+          <div class="bg-white rounded-xl">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+              <mat-label>{{ 'profile.email' | transloco }}</mat-label>
+              <input
+                matInput
+                name="email"
+                type="email"
+                [(ngModel)]="formState.email"
+                required
+                maxlength="64"
+              />
+            </mat-form-field>
+          </div>
 
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ 'profile.location' | transloco }}</mat-label>
-            <mat-select name="location" [(ngModel)]="formState.location" required>
-              @for (location of locationOptions; track location) {
-              <mat-option [value]="location">{{ location }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          <div class="bg-white rounded-xl">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+              <mat-label>{{ 'profile.location' | transloco }}</mat-label>
+              <mat-select name="location" [(ngModel)]="formState.location" required>
+                @for (location of locationOptions; track location) {
+                <mat-option [value]="location">{{ location }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div class="rounded-xl border border-slate-200 bg-white p-4">
             <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
               {{ 'profile.status' | transloco }}
             </p>
@@ -195,7 +192,7 @@
             </mat-chip-set>
           </div>
 
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div class="rounded-xl border border-slate-200 bg-white p-4">
             <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
               {{ 'profile.roles' | transloco }}
             </p>
@@ -207,8 +204,7 @@
           </div>
         </div>
       </form>
-      }
+      } }
     </mat-card-content>
   </mat-card>
-  }
 </div>

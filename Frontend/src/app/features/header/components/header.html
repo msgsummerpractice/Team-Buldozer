@@ -1,16 +1,16 @@
 <mat-toolbar class="app-toolbar sticky top-0 z-50">
-  <div class="flex justify-between items-center w-full h-full">
-  <a routerLink="/" class="flex items-center gap-2 no-underline h-8 py-2">
-  <img src="assets/images/msg_logo.png" alt="logo" class="h-8 logo-white" />
-</a>
+  <div class="flex justify-between items-center w-full h-full px-4">
+    <a routerLink="/" class="flex items-center gap-2 no-underline h-8 py-2">
+      <img src="assets/images/msg_logo.png" alt="logo" class="h-8 logo-white" />
+    </a>
 
     <div>
-      <button *rolesAssigned="'ADMIN'" mat-icon-button routerLink="/users">
-        <span class="text-xl">View Users </span>
+      <button *rolesAssigned="'ADMIN'" mat-button routerLink="/users">
+        {{ 'users.title' | transloco }}
       </button>
     </div>
 
-    <div class="flex items-center gap-1">
+    <div class="flex items-center gap-3">
       <button
         *appAuth
         mat-icon-button
@@ -25,13 +25,25 @@
         <mat-icon>login</mat-icon>
       </button>
       } @else {
-      <button mat-icon-button (click)="navigateToProfile()" [matTooltip]="'home.nav.profile' | transloco">
+      <button
+        mat-icon-button
+        (click)="navigateToProfile()"
+        [matTooltip]="'home.nav.profile' | transloco"
+      >
         <mat-icon>person</mat-icon>
       </button>
       }
 
-      <button matButton="outlined" (click)="toggleLang()" class="min-w-0 px-3">
-        {{ getActiveLang().toUpperCase() }}
+      <button
+        (click)="toggleLang()"
+        class="lang-flag-btn"
+        [matTooltip]="getActiveLang() === 'en' ? 'Schimbă în Română' : 'Switch to English'"
+      >
+        @if (getActiveLang() === 'en') {
+        <img src="https://flagcdn.com/gb.svg" alt="English" />
+        } @else {
+        <img src="https://flagcdn.com/ro.svg" alt="Română" />
+        }
       </button>
     </div>
   </div>

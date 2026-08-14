@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.card-overrides(
+    (
+      elevated-container-color: var(--mat-sys-surface),
+    )
+  );
+  mat-card {
+    box-shadow: 1px 4px 18px -3px var(--mat-sys-outline);
+  }
+}

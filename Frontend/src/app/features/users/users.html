@@ -1,6 +1,6 @@
-<div class="bg-slate-100 p-6 mx-auto max-w-7xl rounded-2xl! mt-8">
+<div class="p-6 mx-auto max-w-7xl rounded-2xl! mt-8">
   <h1 class="font-bold text-3xl mb-4">{{ 'users.title' | transloco}}</h1>
-  <mat-card appearance="outlined">
+  <mat-card appearance="raised">
     <mat-card-content>
       <mat-form-field
         appearance="outline"
@@ -28,8 +28,8 @@
         }
       </mat-form-field>
 
-      <div class="overflow-auto rounded-xl border border-slate-200">
-        <table mat-table [dataSource]="paginatedUsers()" class="w-full">
+      <div class="overflow-auto rounded-x bg-(--mat-sys-primary)">
+        <table mat-table [dataSource]="paginatedUsers()" class="w-full app-table">
           <ng-container matColumnDef="firstName">
             <th
               mat-header-cell
@@ -136,11 +136,11 @@
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-slate-50!"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr
             mat-row
             *matRowDef="let row; columns: displayedColumns"
-            class="hover:bg-slate-50/70! transition"
+            class="hover:bg-(--mat-sys-surface-container-low)! transition"
           ></tr>
 
           <tr class="mat-row" *matNoDataRow>
