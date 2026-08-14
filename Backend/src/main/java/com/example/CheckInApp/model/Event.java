@@ -1,13 +1,11 @@
 package com.example.CheckInApp.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -15,7 +13,10 @@ import java.util.Date;
 @Table(name = "events")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 @Builder
 public class Event {
 
@@ -23,12 +24,12 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 32)
+    @Column(nullable = false, length = 256)
     private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EventLocation eventLocation;
+    private EventLocation location;
 
     @Column(nullable = false)
     private LocalDateTime startDateTime;
@@ -38,37 +39,36 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EventType eventType;
+    private EventType type;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EventStatus eventStatus;
+    private EventStatus status;
 
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "event_poster")
+    @Column(name = "poster")
     private byte[] poster;
 
     @Column(nullable = false)
-    private Date registrationStartDate;
+    private LocalDate registrationStartDate;
 
     @Column(nullable = false)
-    private Date registrationEndDate;
+    private LocalDate registrationEndDate;
 
-    @Column(nullable = false, length = 64)
+    @Column(nullable = false, length = 128)
     private String address;
 
     @Column(nullable = false, length = 1024)
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "created_by_id", nullable = false)
+    @JoinColumn(name = "created_by_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User createdBy;
 
-    @Column(nullable = false)
     private boolean foodProvided;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
-    
+
 }

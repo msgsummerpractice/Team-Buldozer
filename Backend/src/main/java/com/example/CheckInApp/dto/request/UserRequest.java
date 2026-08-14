@@ -38,7 +38,7 @@ public class UserRequest {
     private String password;
 
     @NotNull(message = "Location is required")
-    private UserLocation userLocation;
+    private UserLocation location;
 
     private Set<UserRole> userRoles;
 }

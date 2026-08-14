@@ -16,7 +16,7 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String email;
-    private UserLocation userLocation;
+    private UserLocation location;
     private boolean status;
     private Set<UserRole> userRoles;
     private String profilePicture;

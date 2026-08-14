@@ -28,7 +28,7 @@ public class UserMapper {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .userLocation(request.getUserLocation())
+                .location(request.getLocation())
                 .userRoles(request.getUserRoles())
                 .status(true)
                 .build();
@@ -46,7 +46,7 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
-                .userLocation(user.getUserLocation())
+                .location(user.getLocation())
                 .status(user.isStatus())
                 .userRoles(user.getUserRoles())
                 .profilePicture(user.getProfilePicture() != null ? Base64.getEncoder().encodeToString(user.getProfilePicture()) : null)
@@ -63,8 +63,8 @@ public class UserMapper {
         if (request.getEmail() != null) {
             existingUser.setEmail(request.getEmail());
         }
-        if (request.getUserLocation() != null) {
-            existingUser.setUserLocation(request.getUserLocation());
+        if (request.getLocation() != null) {
+            existingUser.setLocation(request.getLocation());
         }
         if (request.getProfilePicture() != null) {
             existingUser.setProfilePicture(Base64.getDecoder().decode(request.getProfilePicture()));

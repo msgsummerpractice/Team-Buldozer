@@ -33,7 +33,7 @@ public class UserProfileRequest {
     private String email;
 
     @NotNull(message = "Location is required")
-    private UserLocation userLocation;
+    private UserLocation location;
 
     private String profilePicture;
 }

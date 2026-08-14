@@ -9,7 +9,10 @@ import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "users")
 @Builder
@@ -32,7 +35,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private UserLocation userLocation;
+    private UserLocation location;
 
     private boolean status;
 
