@@ -17,7 +17,6 @@ FROM users;
 INSERT INTO user_roles (user_id, role_name)
 VALUES (1, 'ADMIN'),
        (2, 'MARKETING'),
-       (2, 'HR'),
        (3, 'HR'),
        (4, 'PARTICIPANT'),
        (5, 'PARTICIPANT')
