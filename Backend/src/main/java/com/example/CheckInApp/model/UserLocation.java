@@ -1,5 +1,5 @@
 package com.example.CheckInApp.model;
 
-public enum Location {
+public enum UserLocation {
     CLUJ, TIMISOARA, MURES
 }

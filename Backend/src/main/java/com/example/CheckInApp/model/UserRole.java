@@ -1,5 +1,5 @@
 package com.example.CheckInApp.model;
 
-public enum Role {
+public enum UserRole {
     PARTICIPANT, MARKETING, HR, ADMIN
 }

@@ -52,21 +52,21 @@ public class UserMapper {
                 .profilePicture(user.getProfilePicture() != null ? Base64.getEncoder().encodeToString(user.getProfilePicture()) : null)
                 .build();
     }
-    
+
     public User fromProfileToEntity(UserProfileRequest request, User existingUser) {
-        if(request.getFirstName() != null) {
+        if (request.getFirstName() != null) {
             existingUser.setFirstName(request.getFirstName());
         }
-        if(request.getLastName() != null) {
+        if (request.getLastName() != null) {
             existingUser.setLastName(request.getLastName());
         }
-        if(request.getEmail() != null) {
+        if (request.getEmail() != null) {
             existingUser.setEmail(request.getEmail());
         }
-        if(request.getLocation() != null) {
+        if (request.getLocation() != null) {
             existingUser.setLocation(request.getLocation());
         }
-        if(request.getProfilePicture() != null) {
+        if (request.getProfilePicture() != null) {
             existingUser.setProfilePicture(Base64.getDecoder().decode(request.getProfilePicture()));
         }
         return existingUser;
