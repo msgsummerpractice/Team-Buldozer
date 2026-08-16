@@ -68,6 +68,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_112, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(EventNotEditableException.class)
+    public ResponseEntity<ErrorResponse> handleEventNotEditable(EventNotEditableException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_113, ex.getMessage(), request);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())

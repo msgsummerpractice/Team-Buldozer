@@ -2,7 +2,9 @@ package com.example.CheckInApp.service;
 
 import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
+import com.example.CheckInApp.dto.request.EventUpdateRequest;
 import com.example.CheckInApp.dto.response.EventResponse;
+import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
 import com.example.CheckInApp.exception.InvalidFileException;
 import com.example.CheckInApp.exception.PosterNotReadException;
@@ -13,18 +15,18 @@ import com.example.CheckInApp.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
 public class EventService {
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
-    private static final Set<String> ALLOWED_CONTENT_TYPES = Set.of("image/jpeg", "image/png", "image/jpg");
+    private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
+    private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
@@ -33,7 +35,6 @@ public class EventService {
     @Transactional
     public EventResponse addEvent(EventRequest request, String userEmail) {
         validateDates(request);
-        validatePoster(request.getPoster());
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
@@ -45,12 +46,64 @@ public class EventService {
 
         applyTypeSpecificRules(event, request.getType(), request.getLocation(), request.getFoodProvided());
 
-        if (request.getPoster() != null && !request.getPoster().isEmpty()) {
-            event.setPoster(extractBytes(request.getPoster()));
+        if (request.getPoster() != null && !request.getPoster().trim().isEmpty()) {
+            byte[] posterBytes = decodePoster(request.getPoster());
+            validatePosterBytes(posterBytes);
+            event.setPoster(posterBytes);
         }
 
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
+    }
+
+    @Transactional
+    public EventResponse updateEvent(Long eventId, EventUpdateRequest request, String userEmail) {
+        Event existingEvent = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        if (existingEvent.getStatus() != EventStatus.DRAFT) {
+            throw new EventNotEditableException("Event can only be edited while in DRAFT status.");
+        }
+
+        if (request.getName() != null) {
+            existingEvent.setName(request.getName());
+        }
+        if (request.getStartDateTime() != null) {
+            existingEvent.setStartDateTime(request.getStartDateTime());
+        }
+        if (request.getEndDateTime() != null) {
+            existingEvent.setEndDateTime(request.getEndDateTime());
+        }
+        if (request.getRegistrationStartDate() != null) {
+            existingEvent.setRegistrationStartDate(request.getRegistrationStartDate());
+        }
+        if (request.getRegistrationEndDate() != null) {
+            existingEvent.setRegistrationEndDate(request.getRegistrationEndDate());
+        }
+        if (request.getAddress() != null) {
+            existingEvent.setAddress(request.getAddress());
+        }
+        if (request.getDescription() != null) {
+            existingEvent.setDescription(request.getDescription());
+        }
+
+        validateEventDates(existingEvent);
+
+        if (request.getType() != null) {
+            applyTypeSpecificRules(existingEvent, request.getType(), request.getLocation(), request.getFoodProvided());
+        } else if (request.getLocation() != null || request.getFoodProvided() != null) {
+
+            applyTypeSpecificRules(existingEvent, existingEvent.getType(), request.getLocation(), request.getFoodProvided());
+        }
+
+        if (request.getPoster() != null && !request.getPoster().trim().isEmpty()) {
+            byte[] posterBytes = decodePoster(request.getPoster());
+            validatePosterBytes(posterBytes);
+            existingEvent.setPoster(posterBytes);
+        }
+
+        Event updated = eventRepository.save(existingEvent);
+        return eventMapper.toResponse(updated);
     }
 
     private void applyTypeSpecificRules(Event event, EventType type, EventLocation location, Boolean foodProvided) {
@@ -80,19 +133,43 @@ public class EventService {
         }
     }
 
-    private void validatePoster(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
+    private byte[] decodePoster(String base64Poster) {
+        try {
+            return Base64.getDecoder().decode(base64Poster);
+        } catch (IllegalArgumentException e) {
+            throw new PosterNotReadException("Poster could not be decoded.");
+        }
+    }
+
+    private void validatePosterBytes(byte[] posterBytes) {
+        if (posterBytes == null || posterBytes.length == 0) {
             return;
         }
 
-        if (file.getSize() > MAX_FILE_SIZE) {
+        if (posterBytes.length > MAX_FILE_SIZE) {
             throw new InvalidFileException("File is over the maximum size of 5MB.");
         }
 
-        String contentType = file.getContentType();
-        if (contentType == null || !ALLOWED_CONTENT_TYPES.contains(contentType.toLowerCase())) {
+        if (!isValidImageFormat(posterBytes)) {
             throw new InvalidFileException("File format should either be JPEG or PNG.");
         }
+    }
+
+    private boolean isValidImageFormat(byte[] imageBytes) {
+        if (imageBytes == null || imageBytes.length < 4) {
+            return false;
+        }
+
+        return startsWithSignature(imageBytes, JPEG_SIGNATURE) || 
+               startsWithSignature(imageBytes, PNG_SIGNATURE);
+    }
+
+    private boolean startsWithSignature(byte[] data, byte[] signature) {
+        if (data.length < signature.length) {
+            return false;
+        }
+        
+        return Arrays.equals(data, 0, signature.length, signature, 0, signature.length);
     }
 
     private void validateDates(EventRequest request) {
@@ -104,11 +181,12 @@ public class EventService {
         }
     }
 
-    private byte[] extractBytes(MultipartFile file) {
-        try {
-            return file.getBytes();
-        } catch (IOException e) {
-            throw new PosterNotReadException("Poster could not be read.");
+    private void validateEventDates(Event event) {
+        if (event.getEndDateTime().isBefore(event.getStartDateTime())) {
+            throw new InvalidEventDataException("End date time must be after start date time.");
+        }
+        if (event.getRegistrationEndDate().isBefore(event.getRegistrationStartDate())) {
+            throw new InvalidEventDataException("Registration end date must be after registration start date.");
         }
     }
 

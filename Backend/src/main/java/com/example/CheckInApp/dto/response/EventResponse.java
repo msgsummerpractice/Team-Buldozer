@@ -23,7 +23,7 @@ public class EventResponse {
     private LocalDateTime endDateTime;
     private EventType type;
     private EventStatus status;
-    private byte[] poster;
+    private String poster;
     private LocalDate registrationStartDate;
     private LocalDate registrationEndDate;
     private String address;
