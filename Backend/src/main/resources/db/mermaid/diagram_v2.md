@@ -1,13 +1,14 @@
+```mermaid
 erDiagram
-USERS {
-BIGINT id PK
-VARCHAR first_name
-VARCHAR last_name
-VARCHAR email UK
-VARCHAR password
-VARCHAR location
-BOOLEAN status
-BLOB profile_picture
+    USERS {
+        BIGINT id PK
+        VARCHAR first_name
+        VARCHAR last_name
+        VARCHAR email UK
+        VARCHAR password
+        VARCHAR location
+        BOOLEAN status
+        BLOB profile_picture
 }
 
     USER_ROLES {
@@ -35,3 +36,4 @@ BLOB profile_picture
 
     USERS ||--o{ USER_ROLES : "has"
     USERS ||--o{ EVENTS : "creates"
+```
