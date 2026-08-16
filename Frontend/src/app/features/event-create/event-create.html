@@ -1,0 +1,213 @@
+<div class="w-full flex justify-center items-start py-10 px-4">
+  <mat-card class="w-full max-w-4xl shadow-md rounded-2xl overflow-hidden border border-slate-200">
+    <div class="px-6 pt-6 pb-4">
+      <h2 class="text-3xl font-bold text-slate-800 tracking-tight"
+        >{{ 'events.add' | transloco }}</h2
+      >
+    </div>
+
+    <mat-card-content class="p-6">
+      <form
+        [formGroup]="eventForm"
+        (ngSubmit)="onSubmit()"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+        <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full">
+          <mat-label>{{ 'events.name' | transloco }}</mat-label>
+          <input matInput formControlName="name" />
+          <mat-icon matSuffix class="text-slate-400">badge</mat-icon>
+          @if (eventForm.get('name')?.hasError('required')) {
+          <mat-error>{{ 'events.name-required' | transloco }}</mat-error>
+          } @if (eventForm.get('name')?.hasError('maxlength')) {
+          <mat-error>{{ 'events.name-max-length' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-1 w-full">
+          <mat-label>{{ 'events.type' | transloco }}</mat-label>
+          <mat-select formControlName="type">
+            @for (type of eventTypes; track type) {
+            <mat-option [value]="type"> {{ type }} </mat-option>
+            }
+          </mat-select>
+          @if (eventForm.get('type')?.hasError('required')) {
+          <mat-error>{{ 'events.type-required' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-1 w-full">
+          <mat-label>{{ 'events.location' | transloco }}</mat-label>
+
+          @if (eventForm.get('type')?.value === 'INTERNAL') {
+          <ng-container>
+            <input
+              matInput
+              [value]="'ALL'"
+              disabled
+              class="cursor-not-allowed font-medium text-slate-600"
+            />
+          </ng-container>
+          } @if (eventForm.get('type')?.value !== 'INTERNAL') {
+          <ng-container>
+            <mat-select formControlName="location">
+              @for (loc of cities; track loc) {
+              <mat-option [value]="loc"> {{ loc }} </mat-option>
+              }
+            </mat-select>
+          </ng-container>
+          }
+
+          <mat-icon matSuffix class="text-slate-400">place</mat-icon>
+          @if (eventForm.get('location')?.hasError('required')) {
+          <mat-error>{{ 'events.location-required' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-1 w-full">
+          <mat-label>{{ 'events.startDateTime' | transloco }}</mat-label>
+          <input matInput type="datetime-local" formControlName="startDateTime" />
+          @if (eventForm.get('startDateTime')?.hasError('required')) {
+          <mat-error>{{ 'events.startDateTime-required' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-1 w-full">
+          <mat-label>{{ 'events.endDateTime' | transloco }}</mat-label>
+          <input matInput type="datetime-local" formControlName="endDateTime" />
+          @if (eventForm.get('endDateTime')?.hasError('required')) {
+          <mat-error>{{ 'events.endDateTime-required' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        @if (eventForm.hasError('invalidEventDates') && eventForm.get('endDateTime')?.touched) {
+        <div
+          class="col-span-1 md:col-span-2 flex items-center gap-2 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg"
+        >
+          <mat-icon class="text-red-500 scale-90">error</mat-icon>
+          <span>{{ 'events.endDateTime-validation' | transloco }}</span>
+        </div>
+        }
+
+        <mat-form-field appearance="outline" class="col-span-1 w-full">
+          <mat-label>{{ 'events.registrationStartDate' | transloco }}</mat-label>
+          <input matInput type="date" formControlName="registrationStartDate" />
+          @if (eventForm.get('registrationStartDate')?.hasError('required')) {
+          <mat-error>{{ 'events.registrationStartDate-required' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-1 w-full">
+          <mat-label>{{ 'events.registrationEndDate' | transloco }}</mat-label>
+          <input matInput type="date" formControlName="registrationEndDate" />
+          @if (eventForm.get('registrationEndDate')?.hasError('required')) {
+          <mat-error>{{ 'events.registrationEndDate-required' | transloco }} </mat-error>
+          }
+        </mat-form-field>
+
+        @if (eventForm.hasError('invalidRegistrationDates') &&
+        eventForm.get('registrationEndDate')?.touched) {
+        <div
+          class="col-span-1 md:col-span-2 flex items-center gap-2 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg"
+        >
+          <mat-icon class="text-red-500 scale-90">error</mat-icon>
+          <span>{{ 'events.registrationDate-validation' | transloco }}</span>
+        </div>
+        }
+
+        <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full">
+          <mat-label>{{ 'events.address' | transloco }}</mat-label>
+          <input matInput formControlName="address" />
+          <mat-icon matSuffix class="text-slate-400">location_on</mat-icon>
+          @if (eventForm.get('address')?.hasError('required')) {
+          <mat-error>{{ 'events.address-required' | transloco }}</mat-error>
+          } @if (eventForm.get('address')?.hasError('maxlength')) {
+          <mat-error>{{ 'events.address-length' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full">
+          <mat-label>{{ 'events.description' | transloco }}</mat-label>
+          <textarea matInput rows="4" formControlName="description"></textarea>
+          @if (eventForm.get('description')?.hasError('required')) {
+          <mat-error>{{ 'events.description-required' | transloco }}</mat-error>
+          } @if (eventForm.get('description')?.hasError('maxlength')) {
+          <mat-error>{{ 'events.description-length' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        @if (showFoodProvided) {
+        <div class="col-span-1 md:col-span-2 py-1">
+          <mat-checkbox formControlName="foodProvided" color="primary">
+            <span class="text-slate-700 font-medium">{{ 'events.foodProvided' | transloco }}</span>
+          </mat-checkbox>
+        </div>
+        }
+
+        <mat-divider class="col-span-1 md:col-span-2 my-2"></mat-divider>
+
+        <div class="col-span-1 md:col-span-2 flex flex-col gap-3">
+          <div class="flex flex-col">
+            <span class="font-medium text-slate-800 text-sm">{{ 'events.poster' | transloco}}</span>
+            <span class="text-xs text-slate-500">{{ 'events.poster-constraints' | transloco}}</span>
+          </div>
+
+          <input
+            #fileInput
+            type="file"
+            accept="image/png, image/jpeg"
+            (change)="onFileSelected($event)"
+            hidden
+          />
+
+          <div class="flex items-center gap-4">
+            <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()">
+              <mat-icon>cloud_upload</mat-icon>
+              {{ selectedFile ? ('events.change-poster' | transloco) : ('events.upload-poster' |
+              transloco) }}
+            </button>
+
+            @if (selectedFile) {
+            <span class="text-sm text-slate-600 truncate max-w-xs"> {{ selectedFile?.name }} </span>
+            }
+          </div>
+
+          @if (imagePreview) {
+          <div class="relative inline-block mt-2 w-fit">
+            <img
+              [src]="imagePreview"
+              alt="Poster Preview"
+              class="max-w-[280px] max-h-[200px] rounded-xl object-cover border border-slate-200 shadow-sm"
+            />
+            <button
+              mat-mini-fab
+              color="warn"
+              type="button"
+              (click)="removePoster()"
+              class="!absolute top-2 right-2 !w-8 !h-8 shadow-md"
+            >
+              <mat-icon class="scale-75">delete</mat-icon>
+            </button>
+          </div>
+          }
+        </div>
+      </form>
+    </mat-card-content>
+
+    <div class="flex justify-end items-center gap-3 p-6 pt-0">
+      <button mat-button type="button" routerLink="/events" class="text-slate-600">
+        {{ 'events.cancel' | transloco }}
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        [disabled]="eventForm.invalid"
+        (click)="onSubmit()"
+        class="!px-6 !py-2"
+      >
+        <mat-icon>save</mat-icon>
+        {{ 'events.save' | transloco }}
+      </button>
+    </div>
+  </mat-card>
+</div>
