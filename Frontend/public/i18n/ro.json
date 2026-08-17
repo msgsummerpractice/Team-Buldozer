@@ -66,6 +66,7 @@
       "email-required": "Email este obligatoriu.",
       "email-invalid": "Introduceți un email valid.",
       "password-min-length": "Parola trebuie să aibă cel puțin 8 caractere.",
+      "confirm-password-required": "Vă rugăm să confirmați parola.",
       "password-mismatch": "Parolele nu coincid.",
       "location-required": "Locația este obligatorie.",
       "duplicate-email": "Acest email este deja înregistrat.",

@@ -147,10 +147,17 @@
             </mat-form-field>
           </div>
 
-          <div class="bg-white rounded-xl">
+          <div class="rounded-xl bg-slate-50">
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
               <mat-label>{{ 'profile.email' | transloco }}</mat-label>
-              <input matInput name="email" type="email" [(ngModel)]="formState.email" readonly />
+              <input
+                matInput
+                name="email"
+                type="email"
+                class="!text-slate-500"
+                [(ngModel)]="formState.email"
+                readonly
+              />
             </mat-form-field>
           </div>
 

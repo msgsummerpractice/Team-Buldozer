@@ -78,8 +78,9 @@
     >
       <mat-icon>{{ showConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
     </button>
-    @if (registerForm.controls['confirmPassword'].hasError('required') ||
-    registerForm.hasError('passwordMismatch')) {
+    @if (registerForm.controls['confirmPassword'].hasError('required')) {
+    <mat-error>{{ 'register.errors.confirm-password-required' | transloco }}</mat-error>
+    } @if (registerForm.controls['confirmPassword'].hasError('passwordMismatch')) {
     <mat-error>{{ 'register.errors.password-mismatch' | transloco }}</mat-error>
     }
   </mat-form-field>

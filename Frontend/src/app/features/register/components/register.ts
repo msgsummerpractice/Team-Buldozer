@@ -18,7 +18,16 @@ import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    TranslocoPipe,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+  ],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
@@ -74,7 +83,15 @@ export class Register {
 
   private passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
     const password = group.get('password')?.value;
-    const confirm = group.get('confirmPassword')?.value;
-    return password === confirm ? null : { passwordMismatch: true };
+    const confirmControl = group.get('confirmPassword');
+    const mismatch = password !== confirmControl?.value;
+    if (mismatch) {
+      confirmControl?.setErrors({ passwordMismatch: true });
+    } else {
+      if (confirmControl?.hasError('passwordMismatch')) {
+        confirmControl.setErrors(null);
+      }
+    }
+    return null;
   }
 }

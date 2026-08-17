@@ -66,6 +66,7 @@
       "email-required": "Email is required.",
       "email-invalid": "Enter a valid email.",
       "password-min-length": "Password must be at least 8 characters.",
+      "confirm-password-required": "Please confirm your password.",
       "password-mismatch": "Passwords do not match.",
       "location-required": "Location is required.",
       "duplicate-email": "This email is already registered.",
