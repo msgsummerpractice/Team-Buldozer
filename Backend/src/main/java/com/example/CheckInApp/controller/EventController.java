@@ -8,6 +8,9 @@ import com.example.CheckInApp.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +31,8 @@ public class EventController {
 
     @PostMapping
     @PreAuthorize("hasRole('MARKETING')")
-    public ResponseEntity<EventResponse> addEvent(@Valid @RequestBody EventRequest request, Authentication authentication) {
+    public ResponseEntity<EventResponse> addEvent(@Valid @RequestBody EventRequest request,
+            Authentication authentication) {
         EventResponse createdEvent = eventService.addEvent(request, authentication.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
@@ -46,6 +50,15 @@ public class EventController {
             @Valid @RequestBody EventUpdateRequest request) {
         EventResponse updatedEvent = eventService.updateEvent(id, request);
         return ResponseEntity.ok(updatedEvent);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EventResponse>> getAllEvents(Authentication authentication) {
+        boolean fullAccess = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_MARKETING")
+                        || a.getAuthority().equals("ROLE_HR"));
+        List<EventResponse> events = eventService.getAllEvents(fullAccess);
+        return ResponseEntity.ok(events);
     }
 
 }
