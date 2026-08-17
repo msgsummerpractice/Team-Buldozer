@@ -2,7 +2,6 @@ package com.example.CheckInApp.controller;
 
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.response.EventResponse;
-import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
