@@ -1,8 +1,8 @@
 package com.example.CheckInApp.controller;
 
 import com.example.CheckInApp.dto.response.UserResponse;
-import com.example.CheckInApp.model.Location;
-import com.example.CheckInApp.model.Role;
+import com.example.CheckInApp.model.UserLocation;
+import com.example.CheckInApp.model.UserRole;
 import com.example.CheckInApp.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,10 +53,10 @@ class UserControllerTest {
     void getAllUsers_returnsOkWithUserList_whenUsersExist() throws Exception {
         UserResponse user1 = UserResponse.builder()
                 .id(1L).firstName("John").lastName("Doe").email("john@example.com")
-                .location(Location.CLUJ).status(true).roles(Set.of(Role.PARTICIPANT)).build();
+                .location(UserLocation.CLUJ).status(true).userRoles(Set.of(UserRole.PARTICIPANT)).build();
         UserResponse user2 = UserResponse.builder()
                 .id(2L).firstName("Jane").lastName("Smith").email("jane@example.com")
-                .location(Location.TIMISOARA).status(false).roles(Set.of(Role.HR)).build();
+                .location(UserLocation.TIMISOARA).status(false).userRoles(Set.of(UserRole.HR)).build();
 
         when(userService.getAllUsers()).thenReturn(List.of(user1, user2));
 

@@ -1,7 +1,7 @@
 package com.example.CheckInApp.dto.request;
 
-import com.example.CheckInApp.model.Location;
-import com.example.CheckInApp.model.Role;
+import com.example.CheckInApp.model.UserLocation;
+import com.example.CheckInApp.model.UserRole;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +21,7 @@ import java.util.Set;
 public class UserRequest {
 
     @NotBlank(message = "First name is required")
-    @Size(min= 3, max = 32, message = "First name must be at most 32 characters and at least 3 characters")
+    @Size(min = 3, max = 32, message = "First name must be at most 32 characters and at least 3 characters")
     private String firstName;
 
     @NotBlank(message = "Last name is required")
@@ -38,7 +38,7 @@ public class UserRequest {
     private String password;
 
     @NotNull(message = "Location is required")
-    private Location location;
+    private UserLocation location;
 
-    private Set<Role> roles;
+    private Set<UserRole> roles;
 }
