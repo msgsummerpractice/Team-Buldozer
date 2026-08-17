@@ -4,6 +4,7 @@ import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.model.Event;
 import org.springframework.stereotype.Component;
+import java.util.Base64;
 
 @Component
 public class EventMapper {
@@ -37,7 +38,7 @@ public class EventMapper {
                 .endDateTime(event.getEndDateTime())
                 .type(event.getType())
                 .status(event.getStatus())
-                .poster(event.getPoster())
+                .poster(event.getPoster() != null ? Base64.getEncoder().encodeToString(event.getPoster()) : null)
                 .registrationStartDate(event.getRegistrationStartDate())
                 .registrationEndDate(event.getRegistrationEndDate())
                 .address(event.getAddress())
