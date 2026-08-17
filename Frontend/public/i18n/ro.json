@@ -149,7 +149,8 @@
   },
   "common": {
     "close": "Închide",
-    "ok": "OK"
+    "ok": "OK",
+    "cancel": "Anulează"
   },
   "users": {
     "title": "Gestionează Utilizatorii",

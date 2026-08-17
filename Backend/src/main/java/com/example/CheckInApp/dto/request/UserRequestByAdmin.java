@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.example.CheckInApp.model.UserRole;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -17,5 +18,6 @@ public class UserRequestByAdmin {
     private boolean status;
 
     @NotNull(message = "Roles cannot be null")
+    @NotEmpty(message = "At least one role must be provided")
     private Set<UserRole> roles;
 }

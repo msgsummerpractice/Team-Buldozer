@@ -1,8 +1,7 @@
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { UserService } from '@core/users/services/user-service';
 import { UserResponse } from '@core/users/dto/user.response';
-import { UserRole, UserRoleEnum } from '@core/users/model/user-role';
-import { FormsModule } from '@angular/forms';
+import { UserRole } from '@core/users/model/user-role';
 import { debounceTime, Subject } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -12,19 +11,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { MatDialog } from '@angular/material/dialog';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { UserLocationEnum } from '@core/users/model/user-location';
 import { NotificationService } from '@core/notification/services/notification.service';
-
-type PendingEdit = { status: boolean; roles: UserRole[] };
+import {
+  UserRolesDialog,
+  UserRolesDialogData,
+  UserRolesDialogResult,
+} from './user-roles-dialog/user-roles-dialog';
 
 @Component({
   selector: 'app-users',
   imports: [
-    FormsModule,
     MatIconModule,
     MatCardModule,
     MatFormFieldModule,
@@ -33,8 +33,6 @@ type PendingEdit = { status: boolean; roles: UserRole[] };
     MatTableModule,
     MatChipsModule,
     MatPaginatorModule,
-    MatTooltipModule,
-    MatSelectModule,
     MatSlideToggleModule,
     TranslocoPipe,
   ],
@@ -43,7 +41,7 @@ type PendingEdit = { status: boolean; roles: UserRole[] };
 export class Users implements OnInit, OnDestroy {
   private readonly userService = inject(UserService);
   private readonly notificationService = inject(NotificationService);
-  private readonly translocoService = inject(TranslocoService);
+  private readonly dialog = inject(MatDialog);
   private _users = signal<UserResponse[]>([]);
 
   protected readonly inputValue = signal<string>('');
@@ -53,7 +51,6 @@ export class Users implements OnInit, OnDestroy {
   protected readonly pageSizeList = [5, 10, 25, 50];
 
   protected readonly UserLocations = UserLocationEnum;
-  protected readonly UserRoles = Object.values(UserRoleEnum) as UserRole[];
 
   protected readonly displayedColumns = [
     'firstName',
@@ -65,19 +62,13 @@ export class Users implements OnInit, OnDestroy {
     'manage',
   ];
 
-  private readonly pendingEdits = signal<Map<number, PendingEdit>>(new Map());
   private readonly savingIds = signal<Set<number>>(new Set());
-
   private searchSubject = new Subject<string>();
 
   readonly filteredUsers = computed(() => {
     const allUsers = this._users();
     const term = this.searchTerm().toLowerCase().trim();
-
-    if (!term) {
-      return allUsers;
-    }
-
+    if (!term) return allUsers;
     return allUsers.filter(
       (user) =>
         user.firstName.toLowerCase().includes(term) ||
@@ -91,21 +82,13 @@ export class Users implements OnInit, OnDestroy {
   readonly paginatedUsers = computed(() => {
     const filtered = this.filteredUsers();
     const start = this.pageIndex() * this.pageSize();
-    const end = start + this.pageSize();
-
-    return filtered.slice(start, end);
+    return filtered.slice(start, start + this.pageSize());
   });
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadUsers();
-
     this.searchSubject.pipe(debounceTime(300)).subscribe((term) => {
       if (term === this.searchTerm()) return;
-      if (!this.confirmDiscardChanges()) {
-        this.inputValue.set(this.searchTerm());
-        return;
-      }
-      this.pendingEdits.set(new Map());
       this.searchTerm.set(term);
       this.pageIndex.set(0);
     });
@@ -125,71 +108,62 @@ export class Users implements OnInit, OnDestroy {
   }
 
   onPage(event: PageEvent): void {
-    if (!this.confirmDiscardChanges()) return;
-    this.pendingEdits.set(new Map());
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
   }
 
-  protected isEdited(userId: number): boolean {
-    return this.pendingEdits().has(userId);
+  protected onToggleStatus(user: UserResponse, status: boolean): void {
+    this.callApi(user.id, status, user.roles);
+  }
+
+  protected getRoleColor(role: string): string {
+    const colors: Record<string, string> = {
+      ADMIN: 'var(--color-admin)',
+      HR: 'var(--color-hr)',
+      MARKETING: 'var(--color-marketing)',
+      PARTICIPANT: 'var(--color-participant)',
+    };
+    return colors[role] ?? 'var(--color-default)';
   }
 
   protected isSaving(userId: number): boolean {
     return this.savingIds().has(userId);
   }
 
-  protected getEditStatus(user: UserResponse): boolean {
-    return this.pendingEdits().get(user.id)?.status ?? user.status;
+  protected openRolesDialog(user: UserResponse): void {
+    this.dialog
+      .open<UserRolesDialog, UserRolesDialogData, UserRolesDialogResult | undefined>(
+        UserRolesDialog,
+        {
+          data: { user },
+          width: '480px',
+        }
+      )
+      .afterClosed()
+      .subscribe((result) => {
+        if (result === undefined) return;
+        this.callApi(user.id, user.status, result.roles);
+      });
   }
 
-  protected getEditRoles(user: UserResponse): UserRole[] {
-    return this.pendingEdits().get(user.id)?.roles ?? [...user.roles];
-  }
-
-  protected onStatusChange(user: UserResponse, status: boolean): void {
-    const map = new Map(this.pendingEdits());
-    const current = map.get(user.id) ?? { status: user.status, roles: [...user.roles] };
-    map.set(user.id, { ...current, status });
-    this.pendingEdits.set(map);
-  }
-
-  protected onRolesChange(user: UserResponse, roles: UserRole[]): void {
-    const map = new Map(this.pendingEdits());
-    const current = map.get(user.id) ?? { status: user.status, roles: [...user.roles] };
-    map.set(user.id, { ...current, roles });
-    this.pendingEdits.set(map);
-  }
-
-  protected saveUser(user: UserResponse): void {
-    const edit = this.pendingEdits().get(user.id);
-    if (!edit) return;
-
+  private callApi(id: number, status: boolean, roles: UserRole[]): void {
     const saving = new Set(this.savingIds());
-    saving.add(user.id);
+    saving.add(id);
     this.savingIds.set(saving);
 
-    this.userService.updateUserStatusAndRoles(user.id, edit.status, edit.roles).subscribe({
+    this.userService.updateUserStatusAndRoles(id, status, roles).subscribe({
       next: (updated) => {
-        this._users.update((users) => users.map((u) => (u.id === user.id ? updated : u)));
-        const edits = new Map(this.pendingEdits());
-        edits.delete(user.id);
-        this.pendingEdits.set(edits);
+        this._users.update((users) => users.map((u) => (u.id === id ? updated : u)));
         const ids = new Set(this.savingIds());
-        ids.delete(user.id);
+        ids.delete(id);
         this.savingIds.set(ids);
         this.notificationService.showSuccess('success-messages.user-updated');
       },
       error: () => {
         const ids = new Set(this.savingIds());
-        ids.delete(user.id);
+        ids.delete(id);
         this.savingIds.set(ids);
       },
     });
-  }
-
-  private confirmDiscardChanges(): boolean {
-    if (this.pendingEdits().size === 0) return true;
-    return window.confirm(this.translocoService.translate('users.unsaved-changes'));
   }
 }

@@ -46,7 +46,7 @@ public class UserController {
     @PatchMapping("/{id}/status-roles")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> updateUserStatusAndRoles(@PathVariable Long id, @Valid @RequestBody UserRequestByAdmin userRequestByAdmin) {
-        UserResponse updatedUser = userService.updateUserStatusAndRoles(id, userRequestByAdmin.isStatus(), userRequestByAdmin.getRoles());
+        UserResponse updatedUser = userService.updateUserStatusAndRoles(id, userRequestByAdmin);
         return ResponseEntity.ok(updatedUser);
     }
 

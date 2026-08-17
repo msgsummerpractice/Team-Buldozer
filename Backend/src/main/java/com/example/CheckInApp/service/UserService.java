@@ -1,6 +1,7 @@
 package com.example.CheckInApp.service;
 
 import com.example.CheckInApp.dto.request.UserProfileRequest;
+import com.example.CheckInApp.dto.request.UserRequestByAdmin;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.dto.mapper.UserMapper;
 import com.example.CheckInApp.model.User;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -57,18 +57,18 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse updateUserStatusAndRoles(Long id, boolean status, Set<UserRole> roles) {
+    public UserResponse updateUserStatusAndRoles(Long id, UserRequestByAdmin request) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
 
         boolean userIsAdmin = existingUser.getRoles().contains(UserRole.ADMIN);
-        boolean removingAdmin = roles == null || !roles.contains(UserRole.ADMIN);
+        boolean removingAdmin = !request.getRoles().contains(UserRole.ADMIN);
         if (userIsAdmin && removingAdmin && userRepository.countByRolesContaining(UserRole.ADMIN) <= 1) {
             throw new IllegalArgumentException("Cannot remove the last admin");
         }
 
-        existingUser.setStatus(status);
-        existingUser.setRoles(roles);
+        existingUser.setStatus(request.isStatus());
+        existingUser.setRoles(request.getRoles());
 
         try {
             User updatedUser = userRepository.save(existingUser);
