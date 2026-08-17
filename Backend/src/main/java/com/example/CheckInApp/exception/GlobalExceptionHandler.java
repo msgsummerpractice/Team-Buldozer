@@ -78,6 +78,12 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_113, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(ForbiddenActionException.class)
+    public ResponseEntity<ErrorResponse> handleForbiddenAction(ForbiddenActionException ex, HttpServletRequest request) {
+                return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_114, ex.getMessage(), request);
+
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())

@@ -15,7 +15,7 @@ import java.util.Set;
 public class UserRequestByAdmin {
 
     @NotNull(message = "Status cannot be null")
-    private boolean status;
+    private Boolean status;
 
     @NotNull(message = "Roles cannot be null")
     @NotEmpty(message = "At least one role must be provided")

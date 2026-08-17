@@ -28,7 +28,8 @@ public enum ErrorCode {
     ERR_110("Poster could not be read"),
     ERR_111("File is invalid"),
     ERR_112("Event data is invalid"),
-    ERR_113("Event is not editable");
+    ERR_113("Event is not editable"),
+    ERR_114("Last admin can not be disabled or have its role changed ♥");
 
     private final String defaultMessage;
 

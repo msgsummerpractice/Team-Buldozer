@@ -10,6 +10,7 @@ import com.example.CheckInApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import com.example.CheckInApp.exception.DuplicateEmailException;
+import com.example.CheckInApp.exception.ForbiddenActionException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,11 +64,16 @@ public class UserService {
 
         boolean userIsAdmin = existingUser.getRoles().contains(UserRole.ADMIN);
         boolean removingAdmin = !request.getRoles().contains(UserRole.ADMIN);
-        if (userIsAdmin && removingAdmin && userRepository.countByRolesContaining(UserRole.ADMIN) <= 1) {
-            throw new IllegalArgumentException("Cannot remove the last admin");
+        boolean deactivatingUser = request.getStatus();
+        if (userIsAdmin && removingAdmin && userRepository.countByRolesContaining(UserRole.ADMIN) == 1) {
+            throw new ForbiddenActionException("Last admin must remain admin!");
         }
 
-        existingUser.setStatus(request.isStatus());
+        if(userIsAdmin && deactivatingUser && userRepository.countByRolesContaining(UserRole.ADMIN) == 1) {
+            throw new ForbiddenActionException("Last admin can not be disabled!");
+        }
+
+        existingUser.setStatus(request.getStatus());
         existingUser.setRoles(request.getRoles());
 
         try {
