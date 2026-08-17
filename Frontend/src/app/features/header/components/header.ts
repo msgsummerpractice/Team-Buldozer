@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, UrlTree } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { AuthenticationService } from '@core/authentication/services/authenticat
 import { AuthenticationDirective } from '@core/authentication/directives/authentication.directive';
 import { RolesAssignedDirective } from '@core/authorization/directives/role-assigned.directive';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-header',
@@ -34,19 +35,17 @@ export class Header {
 
   protected isAuthenticated = this.authService.isAuthenticated;
 
-  navigateToProfile(): void {
+  protected profileLink(): UrlTree | null {
     const id = this.authorization.getUserId();
-    if (id) {
-      this.router.navigate(['/info', id]);
-    }
+    return id ? this.router.createUrlTree(['/info', id]) : null;
   }
 
-  getActiveLang(): string {
-    return this.translocoService.getActiveLang();
-  }
+  protected readonly activeLang = toSignal(this.translocoService.langChanges$, {
+    initialValue: this.translocoService.getActiveLang(),
+  });
 
   toggleLang() {
-    this.translocoService.setActiveLang(this.getActiveLang() === 'ro' ? 'en' : 'ro');
+    this.translocoService.setActiveLang(this.activeLang() === 'ro' ? 'en' : 'ro');
   }
 
   logout() {
