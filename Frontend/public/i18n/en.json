@@ -178,40 +178,114 @@
     "range": "of"
   },
   "events": {
-    "add": "Add A New Event",
-    "name": "Event Name",
-    "name-required": "Event name is required",
-    "name-max-length": "Max length is 256 characters",
-    "type": "Event Type",
-    "type-required": "Event type is required",
-    "location": "Location",
-    "location-required": "Location is required",
-    "startDateTime": "Start date & Time",
-    "startDateTime-required": "Start date & time is required",
-    "endDateTime": "End date & Time",
-    "endDateTime-required": "End date & time is required",
-    "endDateTime-validation": "End Date & Time must be scheduled after Start Date & Time.",
-    "registrationStartDate": "Registration start Date",
-    "registrationStartDate-required": "Registration start date is required",
-    "registrationEndDate": "Registration end Date",
-    "registrationEndDate-required": "Registration end date is required",
-    "registrationDate-validation": "Registration End Date must be on or after Registration Start Date.",
-    "address": "Address",
-    "address-required": "Address is required",
-    "address-length": "Max length is 128 characters",
-    "description": "Event Description",
-    "description-required": "Description is required",
-    "description-length": "Max length is 1024 characters",
-    "foodProvided": "Food Provided",
-    "poster": "Event Poster",
-    "poster-constraints": "Max file size: 5MB. Accepted formats: JPEG, PNG",
-    "change-poster": "Change Poster",
-    "upload-poster": "Upload Poster",
-    "cancel": "Cancel",
-    "save": "Save Event",
-    "invalid-poster-format": "Invalid format. Only JPEG and PNG images are allowed.",
-    "poster-size": "File size exceeds the 5MB limit.",
-    "success": "Event created successfully as Draft!",
-    "failed": "Failed to create event. Please verify your inputs."
+    "create": {
+      "title": "Add A New Event"
+    },
+    "fields": {
+      "name": {
+        "label": "Event Name",
+        "errors": {
+          "required": "Event name is required",
+          "min-length": "Min length is 3 characters",
+          "max-length": "Max length is 256 characters"
+        }
+      },
+      "type": {
+        "label": "Event Type",
+        "errors": {
+          "required": "Event type is required"
+        }
+      },
+      "location": {
+        "label": "Location",
+        "errors": {
+          "required": "Location is required"
+        }
+      },
+      "start-date-time": {
+        "label": "Start Date",
+        "errors": {
+          "required": "Start date is required"
+        }
+      },
+      "start-time": {
+        "label": "Start Time",
+        "errors": {
+          "required": "Start time is required"
+        }
+      },
+      "end-date-time": {
+        "label": "End Date",
+        "errors": {
+          "required": "End date is required",
+          "invalid-range": "End date & time must be scheduled after start date & time"
+        }
+      },
+      "end-time": {
+        "label": "End Time",
+        "errors": {
+          "required": "End time is required"
+        }
+      },
+      "registration-start-date": {
+        "label": "Registration Start Date",
+        "errors": {
+          "required": "Registration start date is required"
+        }
+      },
+      "registration-end-date": {
+        "label": "Registration End Date",
+        "errors": {
+          "required": "Registration end date is required",
+          "invalid-range": "Registration end date must be on or after registration start date"
+        }
+      },
+      "address": {
+        "label": "Address",
+        "errors": {
+          "required": "Address is required",
+          "min-length": "Min length is 3 characters",
+          "max-length": "Max length is 128 characters"
+        }
+      },
+      "description": {
+        "label": "Event Description",
+        "errors": {
+          "required": "Description is required",
+          "min-length": "Min length is 3 characters",
+          "max-length": "Max length is 1024 characters"
+        }
+      },
+      "food-provided": {
+        "label": "Food Provided"
+      }
+    },
+    "poster": {
+      "label": "Event Poster",
+      "constraints": "Max file size: 5MB. Accepted formats: JPEG, PNG",
+      "actions": {
+        "change": "Change Poster",
+        "upload": "Upload Poster"
+      },
+      "errors": {
+        "invalid-format": "Invalid format. Only JPEG and PNG images are allowed.",
+        "size-limit": "File size exceeds the 5MB limit."
+      },
+      "cropper": {
+        "title": "Crop event poster",
+        "hint": "Select an image and drag the crop area to adjust. The poster is 21:9.",
+        "select": "Select image",
+        "confirm": "Apply",
+        "cancel": "Cancel"
+      }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Save Event"
+    },
+    "messages": {
+      "success": "Event created successfully as Draft!",
+      "error": "Failed to create event. Please verify your inputs."
+    }
   }
 }

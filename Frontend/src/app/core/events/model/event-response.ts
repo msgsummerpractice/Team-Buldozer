@@ -10,12 +10,12 @@ export type EventResponse = {
   endDateTime: string;
   type: EventType;
   status: EventStatus;
-  poster?: string;
   registrationStartDate: string;
   registrationEndDate: string;
   address: string;
   description: string;
-  createdById?: number;
   foodProvided: boolean | null;
   createdAt: string;
+  poster?: string;
+  createdById?: number;
 };
