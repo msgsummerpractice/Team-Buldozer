@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-
 @use 'tailwindcss';
-@use '@angular/material/prebuilt-themes/azure-blue.css';
-@use '../public/assets/styles/snackbar.scss';
+@use './material-theme.scss';
+@use '../public/assets/styles/snackbar';
+@use '../public/assets/styles/table';
+@use '../public/assets/styles/card';
+@use '../public/assets/styles/input';
 @use '../public/assets/styles/chips';

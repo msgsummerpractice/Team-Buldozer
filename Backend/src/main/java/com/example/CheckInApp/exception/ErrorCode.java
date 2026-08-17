@@ -14,22 +14,28 @@ public enum ErrorCode {
     ERR_11("Invalid email format"),
     ERR_12("Password too weak"),
     ERR_13("Required field missing"),
-    
+
     ERR_20("Resource not found"),
     ERR_21("Resource already exists"),
-    
+
     ERR_30("Insufficient permissions"),
     ERR_31("Access denied"),
 
     ERR_40("Invalid input"),
     ERR_41("Required parameter missing"),
-    ERR_99("Unknown error");
+    ERR_99("Unknown error"),
+
+    ERR_110("Poster could not be read"),
+    ERR_111("File is invalid"),
+    ERR_112("Event data is invalid"),
+    ERR_113("Event is not editable");
 
     private final String defaultMessage;
 
     ErrorCode(String defaultMessage) {
         this.defaultMessage = defaultMessage;
     }
+
     public String getCode() {
         return this.name().replace("_", "-");
     }

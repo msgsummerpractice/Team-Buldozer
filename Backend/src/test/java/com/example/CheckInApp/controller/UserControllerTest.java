@@ -49,14 +49,14 @@
 //         verify(userService).getAllUsers();
 //     }
 
-//     @Test
-//     void getAllUsers_returnsOkWithUserList_whenUsersExist() throws Exception {
-//         UserResponse user1 = UserResponse.builder()
-//                 .id(1L).firstName("John").lastName("Doe").email("john@example.com")
-//                 .location(UserLocation.CLUJ).status(true).userRoles(Set.of(UserRole.PARTICIPANT)).build();
-//         UserResponse user2 = UserResponse.builder()
-//                 .id(2L).firstName("Jane").lastName("Smith").email("jane@example.com")
-//                 .location(UserLocation.TIMISOARA).status(false).userRoles(Set.of(UserRole.HR)).build();
+    @Test
+    void getAllUsers_returnsOkWithUserList_whenUsersExist() throws Exception {
+        UserResponse user1 = UserResponse.builder()
+                .id(1L).firstName("John").lastName("Doe").email("john@example.com")
+                .location(UserLocation.CLUJ).status(true).roles(Set.of(UserRole.PARTICIPANT)).build();
+        UserResponse user2 = UserResponse.builder()
+                .id(2L).firstName("Jane").lastName("Smith").email("jane@example.com")
+                .location(UserLocation.TIMISOARA).status(false).roles(Set.of(UserRole.HR)).build();
 
 //         when(userService.getAllUsers()).thenReturn(List.of(user1, user2));
 
@@ -78,7 +78,7 @@
 //     void getAllUsers_returnsCorrectHttpStatus() throws Exception {
 //         when(userService.getAllUsers()).thenReturn(List.of());
 
-//         mockMvc.perform(get("/api/v1/users"))
-//                 .andExpect(status().isOk());
-//     }
-// }
+        mockMvc.perform(get("/api/v1/users"))
+                .andExpect(status().isOk());
+    }
+}

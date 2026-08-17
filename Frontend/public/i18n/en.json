@@ -66,6 +66,7 @@
       "email-required": "Email is required.",
       "email-invalid": "Enter a valid email.",
       "password-min-length": "Password must be at least 8 characters.",
+      "confirm-password-required": "Please confirm your password.",
       "password-mismatch": "Passwords do not match.",
       "location-required": "Location is required.",
       "duplicate-email": "This email is already registered.",
@@ -79,9 +80,8 @@
   },
   "profile": {
     "title": "My Profile",
-    "subtitle": "Update your personal details and switch between read-only and edit mode.",
-    "edit-mode": "Edit mode",
-    "normal-mode": "Normal mode",
+    "edit-mode": "Edit",
+    "cancel": "Cancel",
     "save": "Save changes",
     "saving": "Saving...",
     "loading": "Loading account details...",
@@ -153,7 +153,7 @@
     "cancel": "Cancel"
   },
   "users": {
-    "title": "User Management",
+    "title": "View Users",
     "search": "Search by name, email, location or role",
     "first-name": "FIRST NAME",
     "last-name": "LAST NAME",

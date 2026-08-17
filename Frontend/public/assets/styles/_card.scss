@@ -1,0 +1,12 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.card-overrides(
+    (
+      elevated-container-color: var(--mat-sys-surface),
+    )
+  );
+  mat-card {
+    box-shadow: 1px 4px 18px -3px var(--mat-sys-outline);
+  }
+}
