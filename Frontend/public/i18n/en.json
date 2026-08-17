@@ -79,7 +79,6 @@
   },
   "profile": {
     "title": "My Profile",
-    "subtitle": "Update your personal details and switch between read-only and edit mode.",
     "edit-mode": "Edit",
     "normal-mode": "Cancel",
     "save": "Save changes",

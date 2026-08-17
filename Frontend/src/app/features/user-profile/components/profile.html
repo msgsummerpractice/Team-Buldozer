@@ -13,11 +13,10 @@
             />
           </div>
           <div>
-            <h1 class="font-bold text-2xl mb-0.5">{{ 'profile.title' | transloco }}</h1>
+            <h1 class="font-bold text-2xl mb-0.4">{{ 'profile.title' | transloco }}</h1>
             @if (profile()) {
-            <p class="text-base font-medium text-slate-700">{{ fullName() }}</p>
+            <p class="text-[18px] font-medium text-slate-800">{{ fullName() }}</p>
             }
-            <p class="text-sm text-slate-500">{{ 'profile.subtitle' | transloco }}</p>
           </div>
         </div>
 
@@ -151,14 +150,7 @@
           <div class="bg-white rounded-xl">
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
               <mat-label>{{ 'profile.email' | transloco }}</mat-label>
-              <input
-                matInput
-                name="email"
-                type="email"
-                [(ngModel)]="formState.email"
-                required
-                maxlength="64"
-              />
+              <input matInput name="email" type="email" [(ngModel)]="formState.email" readonly />
             </mat-form-field>
           </div>
 
@@ -173,34 +165,35 @@
             </mat-form-field>
           </div>
 
-          <div class="rounded-xl border border-slate-200 bg-white p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              {{ 'profile.status' | transloco }}
-            </p>
-            <mat-chip-set class="mt-2">
-              @if (profile()!.status) {
-              <mat-chip disableRipple="true" highlighted="true" color="primary">
-                <mat-icon matChipAvatar>check_circle</mat-icon>
-                {{ 'profile.active' | transloco }}
-              </mat-chip>
-              } @else {
-              <mat-chip disableRipple="true" highlighted="true" color="warn">
-                <mat-icon matChipAvatar>cancel</mat-icon>
-                {{ 'profile.inactive' | transloco }}
-              </mat-chip>
-              }
-            </mat-chip-set>
+          <div class="rounded-xl bg-slate-50">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+              <mat-label>{{ 'profile.status' | transloco }}</mat-label>
+
+              <input
+                matInput
+                name="status"
+                class="!text-slate-500"
+                [value]="
+                profile()!.status
+                ? ('profile.active' | transloco)
+                : ('profile.inactive' | transloco)"
+                readonly
+              />
+            </mat-form-field>
           </div>
 
-          <div class="rounded-xl border border-slate-200 bg-white p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              {{ 'profile.roles' | transloco }}
-            </p>
-            <mat-chip-set class="mt-2 flex flex-wrap gap-2">
-              @for (role of profile()!.roles; track role) {
-              <mat-chip disableRipple="true">{{ role }}</mat-chip>
-              }
-            </mat-chip-set>
+          <div class="rounded-xl bg-slate-50">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+              <mat-label>{{ 'profile.roles' | transloco }}</mat-label>
+
+              <input
+                matInput
+                name="roles"
+                class="!text-slate-500"
+                [value]="profile()!.roles.join(', ')"
+                readonly
+              />
+            </mat-form-field>
           </div>
         </div>
       </form>
