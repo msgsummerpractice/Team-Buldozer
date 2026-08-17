@@ -38,7 +38,7 @@ export const routes: Routes = [
   {
     path: 'events/add',
     loadComponent: () => import('@features/event-create/event-create').then((m) => m.EventCreate),
-    canActivate: [authGuard],
+    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
   },
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },
