@@ -27,8 +27,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -166,7 +166,7 @@ class EventControllerTest {
         when(authentication.getName()).thenReturn("marketing@example.com");
         when(eventService.updateEvent(eq(1L), any(EventUpdateRequest.class), eq("marketing@example.com"))).thenReturn(response);
 
-        mockMvc.perform(put("/api/v1/events/1")
+        mockMvc.perform(patch("/api/v1/events/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .principal(authentication))
@@ -194,7 +194,7 @@ class EventControllerTest {
         when(authentication.getName()).thenReturn("marketing@example.com");
         when(eventService.updateEvent(eq(1L), any(EventUpdateRequest.class), anyString())).thenReturn(response);
 
-        mockMvc.perform(put("/api/v1/events/1")
+        mockMvc.perform(patch("/api/v1/events/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .principal(authentication))

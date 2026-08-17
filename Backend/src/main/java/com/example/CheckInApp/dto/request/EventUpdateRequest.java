@@ -20,24 +20,18 @@ public class EventUpdateRequest {
     @Size(min = 3, max = 256, message = "Name must be between 3 and 256 characters long.")
     private String name;
     
-    @NotNull(message = "Location cannot be null.")
     private EventLocation location;
 
-    @NotNull(message = "Start date time cannot be null.")
     private LocalDateTime startDateTime;
 
-    @NotNull(message = "End date time cannot be null.")
     private LocalDateTime endDateTime;
 
-    @NotNull(message = "Type cannot be null.")
     private EventType type;
 
     private String poster;
 
-    @NotNull(message = "Registration start date cannot be null.")
     private LocalDate registrationStartDate;
 
-    @NotNull(message = "Registration end date cannot be null.")
     private LocalDate registrationEndDate;
 
     @Size(min = 3, max = 128, message = "Address must be between 3 and 128 characters long.")
