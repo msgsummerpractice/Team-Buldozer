@@ -6,6 +6,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
@@ -17,6 +18,7 @@ import { finalize } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
     RouterLink,
   ],
   templateUrl: './login.html',
@@ -26,10 +28,15 @@ export class Login {
   private readonly auth = inject(AuthenticationService);
 
   protected readonly isLoading = signal(false);
+  protected readonly showPassword = signal(false);
   protected readonly loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(5)]],
+    password: ['', Validators.required],
   });
+
+  protected switchPasswordVisibility(): void {
+    this.showPassword.update((visible) => !visible);
+  }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
