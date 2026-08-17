@@ -38,8 +38,8 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponse> getEventById(@PathVariable Long id) {
-        EventResponse event = eventService.getEventById(id);
+    public ResponseEntity<EventResponse> getEventById(@PathVariable Long id, Authentication authentication) {
+        EventResponse event = eventService.getEventById(id, authentication.getName());
         return ResponseEntity.ok(event);
     }
 
@@ -54,10 +54,7 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<List<EventResponse>> getAllEvents(Authentication authentication) {
-        boolean fullAccess = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_MARKETING")
-                        || a.getAuthority().equals("ROLE_HR"));
-        List<EventResponse> events = eventService.getAllEvents(fullAccess);
+        List<EventResponse> events = eventService.getAllEvents(authentication.getName());
         return ResponseEntity.ok(events);
     }
 

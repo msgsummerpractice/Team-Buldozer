@@ -36,6 +36,7 @@ public class EventService {
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
 
+
     @Transactional
     public EventResponse addEvent(EventRequest request, String userEmail) {
 
@@ -58,12 +59,33 @@ public class EventService {
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
     }
+    
 
     @Transactional(readOnly = true)
-    public EventResponse getEventById(Long id) {
+    public EventResponse getEventById(Long id, String userEmail) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
+        if (!hasFullAccess(user) && !isEventVisibleTo(event, user)) {
+            throw new ResourceNotFoundException("Event not found with id " + id);
+        }
+
         return eventMapper.toResponse(event);
+    }
+
+    private boolean hasFullAccess(User user) {
+        return user.getRoles().contains(UserRole.MARKETING) || user.getRoles().contains(UserRole.HR);
+    }
+
+    private boolean isEventVisibleTo(Event event, User user) {
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            return false;
+        }
+        EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
+        return event.getLocation() == EventLocation.ALL || event.getLocation() == userLocation;
     }
 
     @Transactional
@@ -200,13 +222,18 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public List<EventResponse> getAllEvents(boolean fullAccess) {
+    public List<EventResponse> getAllEvents(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
         List<Event> events;
 
-        if (fullAccess) {
-            events = eventRepository.findAll();
+        if (hasFullAccess(user)) {
+            events = eventRepository.findAllByOrderByStartDateTimeDesc();
         } else {
-            events = eventRepository.findByStatus(EventStatus.PUBLISHED);
+            EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
+            events = eventRepository.findByStatusAndLocationInOrderByStartDateTimeDesc(
+                    EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL));
         }
 
         return events.stream()
