@@ -66,7 +66,7 @@ public class EventService {
         return eventMapper.toResponse(event);
     } 
     @Transactional
-    public EventResponse updateEvent(Long eventId, EventUpdateRequest request, String userEmail) {
+    public EventResponse updateEvent(Long eventId, EventUpdateRequest request) {
         Event existingEvent = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
 

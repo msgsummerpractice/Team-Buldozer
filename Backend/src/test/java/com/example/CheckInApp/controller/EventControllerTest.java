@@ -172,7 +172,7 @@ class EventControllerTest {
                 .status(EventStatus.DRAFT)
                 .build();
 
-        when(eventService.updateEvent(eq(1L), any(EventUpdateRequest.class), anyString())).thenReturn(response);
+        when(eventService.updateEvent(eq(1L), any(EventUpdateRequest.class))).thenReturn(response);
 
         mockMvc.perform(patch("/api/v1/events/1")
                         .with(user("user@example.com").roles("MARKETING"))
@@ -183,7 +183,7 @@ class EventControllerTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("Updated Event Name")));
 
-        verify(eventService).updateEvent(eq(1L), any(EventUpdateRequest.class), anyString());
+        verify(eventService).updateEvent(eq(1L), any(EventUpdateRequest.class));
     }
 
 }

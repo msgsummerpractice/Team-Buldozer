@@ -43,9 +43,8 @@ public class EventController {
     @PreAuthorize("hasRole('MARKETING')")
     public ResponseEntity<EventResponse> updateEvent(
             @PathVariable Long id,
-            @Valid @RequestBody EventUpdateRequest request,
-            Authentication authentication) {
-        EventResponse updatedEvent = eventService.updateEvent(id, request, authentication.getName());
+            @Valid @RequestBody EventUpdateRequest request) {
+        EventResponse updatedEvent = eventService.updateEvent(id, request);
         return ResponseEntity.ok(updatedEvent);
     }
 
