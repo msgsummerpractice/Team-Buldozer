@@ -150,6 +150,31 @@
     "close": "Close",
     "ok": "OK"
   },
+  "event-details": {
+    "dialog": {
+      "title": "Event Details",
+      "loading": "Loading event details...",
+      "error": "Failed to load event details.",
+      "description": "Description",
+      "start-date": "Start Date",
+      "end-date": "End Date",
+      "registration-start": "Registration Start",
+      "registration-end": "Registration End",
+      "location": "Location",
+      "address": "Address",
+      "status": "Status",
+      "type": "Type",
+      "food-provided": "Food Provided",
+      "yes": "Yes",
+      "no": "No",
+      "status-draft": "Draft",
+      "status-published": "Published",
+      "status-completed": "Completed",
+      "type-internal": "Internal",
+      "type-external": "External",
+      "type-local": "Local"
+    }
+  },
   "users": {
     "title": "View Users",
     "search": "Search by name, email, location or role",

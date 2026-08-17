@@ -150,6 +150,31 @@
     "close": "Închide",
     "ok": "OK"
   },
+  "event-details": {
+    "dialog": {
+      "title": "Detalii eveniment",
+      "loading": "Se încarcă detaliile evenimentului...",
+      "error": "Nu s-au putut încărca detaliile evenimentului.",
+      "description": "Descriere",
+      "start-date": "Data de început",
+      "end-date": "Data de sfârșit",
+      "registration-start": "Start înregistrări",
+      "registration-end": "Sfârșit înregistrări",
+      "location": "Locație",
+      "address": "Adresă",
+      "status": "Status",
+      "type": "Tip",
+      "food-provided": "Mâncare asigurată",
+      "yes": "Da",
+      "no": "Nu",
+      "status-draft": "Schiță",
+      "status-published": "Publicat",
+      "status-completed": "Finalizat",
+      "type-internal": "Intern",
+      "type-external": "Extern",
+      "type-local": "Local"
+    }
+  },
   "users": {
     "title": "Gestionează Utilizatorii",
     "search": "Caută după nume, email, locație sau rol",

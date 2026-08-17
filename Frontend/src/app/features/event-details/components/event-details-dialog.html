@@ -1,0 +1,119 @@
+<h2 mat-dialog-title>{{ 'event-details.dialog.title' | transloco }}</h2>
+
+<mat-dialog-content class="flex flex-col gap-4 min-w-96 max-w-xl">
+  @if (loading()) {
+  <div class="flex justify-center py-8">
+    <mat-spinner diameter="40" />
+  </div>
+  } @else if (error()) {
+  <p class="text-sm text-red-500">{{ error()! | transloco }}</p>
+  } @else if (event(); as data) { @if (data.poster) {
+  <img [src]="data.poster" [alt]="data.name" class="w-full h-48 object-cover rounded-lg" />
+  }
+
+  <div class="flex flex-col gap-1">
+    <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      {{ 'event-details.dialog.description' | transloco }}
+    </span>
+    <p class="text-sm text-slate-700">{{ data.description }}</p>
+  </div>
+
+  <mat-divider />
+
+  <div class="grid grid-cols-2 gap-4">
+    <div class="flex flex-col gap-1">
+      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+        {{ 'event-details.dialog.start-date' | transloco }}
+      </span>
+      <span class="text-sm text-slate-700">{{ data.startDateTime | date: 'medium' }}</span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+        {{ 'event-details.dialog.end-date' | transloco }}
+      </span>
+      <span class="text-sm text-slate-700">{{ data.endDateTime | date: 'medium' }}</span>
+    </div>
+  </div>
+
+  @if (data.registrationStartDate || data.registrationEndDate) {
+  <div class="grid grid-cols-2 gap-4">
+    <div class="flex flex-col gap-1">
+      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+        {{ 'event-details.dialog.registration-start' | transloco }}
+      </span>
+      <span class="text-sm text-slate-700"
+        >{{ data.registrationStartDate | date: 'mediumDate' }}</span
+      >
+    </div>
+    <div class="flex flex-col gap-1">
+      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+        {{ 'event-details.dialog.registration-end' | transloco }}
+      </span>
+      <span class="text-sm text-slate-700"
+        >{{ data.registrationEndDate | date: 'mediumDate' }}</span
+      >
+    </div>
+  </div>
+  }
+
+  <div class="flex flex-col gap-1">
+    <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      {{ 'event-details.dialog.location' | transloco }}
+    </span>
+    <div class="flex items-center gap-2">
+      <mat-icon class="text-slate-400 !text-[18px]">location_on</mat-icon>
+      <span class="text-sm text-slate-700">{{ data.location }}</span>
+    </div>
+  </div>
+
+  @if (data.address) {
+  <div class="flex flex-col gap-1">
+    <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      {{ 'event-details.dialog.address' | transloco }}
+    </span>
+    <span class="text-sm text-slate-700">{{ data.address }}</span>
+  </div>
+  }
+
+  <mat-divider />
+
+  <div class="flex items-start gap-6 flex-wrap">
+    <div class="flex flex-col gap-2">
+      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+        {{ 'event-details.dialog.status' | transloco }}
+      </span>
+      <mat-chip-set>
+        <mat-chip [highlighted]="true">{{ statusKey | transloco }}</mat-chip>
+      </mat-chip-set>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+        {{ 'event-details.dialog.type' | transloco }}
+      </span>
+      <mat-chip-set>
+        <mat-chip>{{ typeKey | transloco }}</mat-chip>
+      </mat-chip-set>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+        {{ 'event-details.dialog.food-provided' | transloco }}
+      </span>
+      <div class="flex items-center gap-1">
+        @if (data.foodProvided) {
+        <mat-icon class="text-green-600 !text-[18px]">check_circle</mat-icon>
+        <span class="text-sm text-green-700">{{ 'event-details.dialog.yes' | transloco }}</span>
+        } @else {
+        <mat-icon class="text-slate-400 !text-[18px]">cancel</mat-icon>
+        <span class="text-sm text-slate-500">{{ 'event-details.dialog.no' | transloco }}</span>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="close()"> {{ 'common.close' | transloco }} </button>
+</mat-dialog-actions>
