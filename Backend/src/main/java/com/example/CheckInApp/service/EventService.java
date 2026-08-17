@@ -57,7 +57,6 @@ public class EventService {
 
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
-
     }
 
     @Transactional(readOnly = true)
