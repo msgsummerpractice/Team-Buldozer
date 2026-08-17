@@ -13,16 +13,11 @@
           #searchInput
           matInput
           type="text"
-          [value]="searchTerm()"
-          (input)="onSearch(searchInput.value)"
+          [value]="inputValue()"
+          (input)="onSearchInput(searchInput.value)"
         />
-        @if (searchTerm()) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="onSearch(''); searchInput.value = ''"
-        >
+        @if (inputValue()) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="onSearchInput('')">
           <mat-icon>close</mat-icon>
         </button>
         }
@@ -124,15 +119,44 @@
               class="text-xs! font-semibold! uppercase! tracking-wider!"
               >{{ 'users.manage' | transloco}}</th
             >
-            <td mat-cell *matCellDef="let user">
-              <button
-                matButton="outlined"
-                color="primary"
-                [matTooltip]="'users.manage-roles' | transloco"
-              >
-                <mat-icon>manage_accounts</mat-icon>
-                {{ 'users.roles' | transloco}}
-              </button>
+            <td mat-cell *matCellDef="let user" class="min-w-56">
+              <div class="flex flex-col gap-2 py-2">
+                <mat-slide-toggle
+                  [checked]="getEditStatus(user)"
+                  (change)="onStatusChange(user, $event.checked)"
+                  color="primary"
+                >
+                  {{ (getEditStatus(user) ? 'users.active' : 'users.inactive') | transloco }}
+                </mat-slide-toggle>
+
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+                  <mat-label>{{ 'users.roles' | transloco }}</mat-label>
+                  <mat-select
+                    multiple
+                    [value]="getEditRoles(user)"
+                    (selectionChange)="onRolesChange(user, $event.value)"
+                  >
+                    @for (role of UserRoles; track role) {
+                    <mat-option [value]="role">{{ role }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                @if (isEdited(user.id)) {
+                <button
+                  matButton="filled"
+                  color="primary"
+                  [disabled]="isSaving(user.id)"
+                  (click)="saveUser(user)"
+                >
+                  @if (isSaving(user.id)) {
+                  <mat-icon>hourglass_empty</mat-icon>
+                  {{ 'users.saving' | transloco }} } @else {
+                  <mat-icon>save</mat-icon>
+                  {{ 'users.save' | transloco }} }
+                </button>
+                }
+              </div>
             </td>
           </ng-container>
 
