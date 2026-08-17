@@ -81,7 +81,7 @@
   "profile": {
     "title": "My Profile",
     "edit-mode": "Edit",
-    "cancel-mode": "Cancel",
+    "cancel": "Cancel",
     "save": "Save changes",
     "saving": "Saving...",
     "loading": "Loading account details...",

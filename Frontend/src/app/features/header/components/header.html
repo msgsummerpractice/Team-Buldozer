@@ -37,9 +37,9 @@
       <button
         (click)="toggleLang()"
         class="lang-flag-btn"
-        [matTooltip]="getActiveLang() === 'en' ? 'Schimbă în Română' : 'Switch to English'"
+        [matTooltip]="activeLang() === 'en' ? 'Schimbă în Română' : 'Switch to English'"
       >
-        @if (getActiveLang() === 'en') {
+        @if (activeLang() === 'en') {
         <img src="https://flagcdn.com/gb.svg" alt="English" />
         } @else {
         <img src="https://flagcdn.com/ro.svg" alt="Română" />
