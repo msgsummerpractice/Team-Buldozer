@@ -12,10 +12,13 @@ import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
-import jakarta.transaction.Transactional;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
@@ -34,11 +37,10 @@ public class EventService {
 
     @Transactional
     public EventResponse addEvent(EventRequest request, String userEmail) {
-        validateDates(request);
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
-
+        validateDates(event);
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
         event.setCreatedBy(currentUser);
@@ -54,10 +56,17 @@ public class EventService {
 
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
+
     }
 
+    @Transactional(readOnly = true)
+    public EventResponse getEventById(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
+        return eventMapper.toResponse(event);
+    }
     @Transactional
-    public EventResponse updateEvent(Long eventId, EventUpdateRequest request, String userEmail) {
+    public EventResponse updateEvent(Long eventId, EventUpdateRequest request) {
         Event existingEvent = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
 
@@ -87,7 +96,7 @@ public class EventService {
             existingEvent.setDescription(request.getDescription());
         }
 
-        validateEventDates(existingEvent);
+        validateDates(existingEvent);
 
         if (request.getType() != null) {
             applyTypeSpecificRules(existingEvent, request.getType(), request.getLocation(), request.getFoodProvided());
@@ -112,7 +121,7 @@ public class EventService {
         switch (type) {
             case INTERNAL -> {
                 event.setLocation(EventLocation.ALL);
-                event.setFoodProvided(foodProvided != null ? foodProvided : false);
+                event.setFoodProvided(Boolean.TRUE.equals(foodProvided));
             }
             case EXTERNAL -> {
                 validateSpecificCityLocation(location, type);
@@ -122,7 +131,7 @@ public class EventService {
             case LOCAL -> {
                 validateSpecificCityLocation(location, type);
                 event.setLocation(location);
-                event.setFoodProvided(foodProvided != null ? foodProvided : false);
+                event.setFoodProvided(Boolean.TRUE.equals(foodProvided));
             }
         }
     }
@@ -172,20 +181,17 @@ public class EventService {
         return Arrays.equals(data, 0, signature.length, signature, 0, signature.length);
     }
 
-    private void validateDates(EventRequest request) {
+     private void validateDates(Event request) {
+        if (request.getStartDateTime().isBefore(LocalDateTime.now())) {
+            throw new InvalidEventDataException("Start date time cannot be in the past.");
+        }
+        if (request.getRegistrationStartDate().isBefore(LocalDate.now())) {
+            throw new InvalidEventDataException("Registration start date cannot be in the past.");
+        }
         if (request.getEndDateTime().isBefore(request.getStartDateTime())) {
             throw new InvalidEventDataException("End date time must be after start date time.");
         }
         if (request.getRegistrationEndDate().isBefore(request.getRegistrationStartDate())) {
-            throw new InvalidEventDataException("Registration end date must be after registration start date.");
-        }
-    }
-
-    private void validateEventDates(Event event) {
-        if (event.getEndDateTime().isBefore(event.getStartDateTime())) {
-            throw new InvalidEventDataException("End date time must be after start date time.");
-        }
-        if (event.getRegistrationEndDate().isBefore(event.getRegistrationStartDate())) {
             throw new InvalidEventDataException("Registration end date must be after registration start date.");
         }
     }
