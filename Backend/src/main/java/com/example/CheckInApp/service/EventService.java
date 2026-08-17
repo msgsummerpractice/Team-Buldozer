@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -59,7 +60,7 @@ public class EventService {
         switch (type) {
             case INTERNAL -> {
                 event.setLocation(EventLocation.ALL);
-                event.setFoodProvided(foodProvided != null ? foodProvided : false);
+                event.setFoodProvided(Boolean.TRUE.equals(foodProvided));
             }
             case EXTERNAL -> {
                 validateSpecificCityLocation(location, type);
@@ -69,7 +70,7 @@ public class EventService {
             case LOCAL -> {
                 validateSpecificCityLocation(location, type);
                 event.setLocation(location);
-                event.setFoodProvided(foodProvided != null ? foodProvided : false);
+                event.setFoodProvided(Boolean.TRUE.equals(foodProvided));
             }
         }
     }
@@ -96,6 +97,12 @@ public class EventService {
     }
 
     private void validateDates(EventRequest request) {
+        if (request.getStartDateTime().isBefore(LocalDateTime.now())) {
+            throw new InvalidEventDataException("Start date time cannot be in the past.");
+        }
+        if (request.getRegistrationStartDate().isBefore(LocalDate.now())) {
+            throw new InvalidEventDataException("Registration start date cannot be in the past.");
+        }
         if (request.getEndDateTime().isBefore(request.getStartDateTime())) {
             throw new InvalidEventDataException("End date time must be after start date time.");
         }
