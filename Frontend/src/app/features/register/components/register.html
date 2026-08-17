@@ -78,8 +78,9 @@
     >
       <mat-icon>{{ showConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
     </button>
-    @if (registerForm.controls['confirmPassword'].hasError('required') ||
-    registerForm.hasError('passwordMismatch')) {
+    @if (registerForm.controls['confirmPassword'].hasError('required')) {
+    <mat-error>{{ 'register.errors.confirm-password-required' | transloco }}</mat-error>
+    } @if (registerForm.controls['confirmPassword'].hasError('passwordMismatch')) {
     <mat-error>{{ 'register.errors.password-mismatch' | transloco }}</mat-error>
     }
   </mat-form-field>
@@ -104,7 +105,7 @@
 
 <p class="mt-4 text-center text-gray-600">
   {{ 'register.have-account' | transloco }}
-  <a routerLink="/login" class="text-blue-600 hover:underline font-medium"
+  <a routerLink="/login" class="hover:underline font-medium" style="color: var(--mat-sys-primary)"
     >{{ 'register.login' | transloco }}</a
   >
 </p>
