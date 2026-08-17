@@ -81,7 +81,7 @@
   "profile": {
     "title": "Profilul meu",
     "edit-mode": "Editează",
-    "normal-mode": "Anulează",
+    "cancel-mode": "Anulează",
     "save": "Salvează modificările",
     "saving": "Se salvează...",
     "loading": "Se încarcă detaliile contului...",

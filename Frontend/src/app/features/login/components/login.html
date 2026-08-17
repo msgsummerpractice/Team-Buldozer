@@ -30,7 +30,7 @@
           autocomplete="current-password"
           [placeholder]="'login.passwordPlaceholder' | transloco"
         />
-        <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
+        <button matIconButton matSuffix type="button" (click)="switchPasswordVisibility()">
           <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         @if (loginForm.get('password')?.hasError('required')) {
@@ -39,7 +39,7 @@
       </mat-form-field>
 
       <button
-        mat-raised-button
+        matButton="filled"
         color="primary"
         type="submit"
         [disabled]="isLoading()"
@@ -53,8 +53,7 @@
       <a
         href="#"
         (click)="$event.preventDefault()"
-        class="text-sm hover:underline transition"
-        style="color: var(--mat-sys-primary)"
+        class="text-sm hover:underline transition text-(--mat-sys-primary)"
       >
         {{ 'login.forgotPassword' | transloco }}
       </a>
@@ -62,7 +61,7 @@
 
     <p class="mt-3 text-center text-sm text-gray-500">
       {{ 'login.no-account' | transloco }}
-      <a routerLink="/register" class="hover:underline" style="color: var(--mat-sys-primary)"
+      <a routerLink="/register" class="hover:underline text-(--mat-sys-primary)"
         >{{ 'login.register' | transloco }}</a
       >
     </p>

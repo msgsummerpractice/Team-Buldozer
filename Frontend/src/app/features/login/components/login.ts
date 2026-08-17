@@ -34,6 +34,10 @@ export class Login {
     password: ['', Validators.required],
   });
 
+  protected switchPasswordVisibility(): void {
+    this.showPassword.update((visible) => !visible);
+  }
+
   onSubmit(): void {
     if (this.loginForm.invalid) {
       return;

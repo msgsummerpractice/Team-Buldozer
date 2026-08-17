@@ -5,7 +5,7 @@
     </a>
 
     <div class="flex justify-between items-center w-full h-full px-4">
-      <button *rolesAssigned="'ADMIN'" mat-button routerLink="/users">
+      <button *rolesAssigned="'ADMIN'" matButton routerLink="/users">
         {{ 'users.title' | transloco }}
       </button>
     </div>
@@ -13,7 +13,7 @@
     <div class="flex items-center gap-3">
       <button
         *appAuth
-        mat-icon-button
+        matIconButton
         (click)="logout()"
         [matTooltip]="'home.nav.logout' | transloco"
       >
@@ -21,13 +21,13 @@
       </button>
 
       @if (!isAuthenticated()) {
-      <button mat-icon-button routerLink="/login" [matTooltip]="'home.nav.login' | transloco">
+      <button matIconButton routerLink="/login" [matTooltip]="'home.nav.login' | transloco">
         <mat-icon>login</mat-icon>
       </button>
       } @else {
       <button
-        mat-icon-button
-        (click)="navigateToProfile()"
+        matIconButton
+        [routerLink]="profileLink()"
         [matTooltip]="'home.nav.profile' | transloco"
       >
         <mat-icon>person</mat-icon>

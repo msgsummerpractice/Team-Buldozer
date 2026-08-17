@@ -34,11 +34,9 @@ export class Header {
 
   protected isAuthenticated = this.authService.isAuthenticated;
 
-  navigateToProfile(): void {
+  protected profileLink(): any[] | null {
     const id = this.authorization.getUserId();
-    if (id) {
-      this.router.navigate(['/info', id]);
-    }
+    return id ? ['/info', id] : null;
   }
 
   getActiveLang(): string {

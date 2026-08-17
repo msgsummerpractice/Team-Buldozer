@@ -14,7 +14,7 @@
           </div>
           <div>
             <h1 class="font-bold text-2xl mb-0.4">{{ 'profile.title' | transloco }}</h1>
-            @if (profile()) {
+            @if (fullName()) {
             <p class="text-[18px] font-medium text-slate-800">{{ fullName() }}</p>
             }
           </div>
@@ -22,17 +22,17 @@
 
         <div class="flex flex-wrap gap-2">
           @if (!editMode()) {
-          <button mat-stroked-button color="primary" type="button" (click)="enableEditMode()">
+          <button matButton="outlined" color="primary" type="button" (click)="enableEditMode()">
             <mat-icon>edit</mat-icon>
             {{ 'profile.edit-mode' | transloco }}
           </button>
           } @else {
-          <button mat-stroked-button type="button" (click)="cancelEditMode()">
+          <button matButton="outlined" type="button" (click)="cancelEditMode()">
             <mat-icon>close</mat-icon>
-            {{ 'profile.normal-mode' | transloco }}
+            {{ 'profile.cancel-mode' | transloco }}
           </button>
           <button
-            mat-flat-button
+            matButton="filled"
             color="primary"
             type="button"
             [disabled]="saving()"
@@ -55,25 +55,26 @@
       </div>
       } @if (!editMode()) {
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+        @if (profile(); as profile) {
         <div class="rounded-xl border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
             {{ 'profile.first-name' | transloco }}
           </p>
-          <p class="mt-2 text-base font-medium text-slate-900">{{ profile()!.firstName }}</p>
+          <p class="mt-2 text-base font-medium text-slate-900">{{ profile.firstName }}</p>
         </div>
 
         <div class="rounded-xl border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
             {{ 'profile.last-name' | transloco }}
           </p>
-          <p class="mt-2 text-base font-medium text-slate-900">{{ profile()!.lastName }}</p>
+          <p class="mt-2 text-base font-medium text-slate-900">{{ profile.lastName }}</p>
         </div>
 
         <div class="rounded-xl border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
             {{ 'profile.email' | transloco }}
           </p>
-          <p class="mt-2 text-base font-medium text-slate-900 break-all">{{ profile()!.email }}</p>
+          <p class="mt-2 text-base font-medium text-slate-900 break-all">{{ profile.email }}</p>
         </div>
 
         <div class="rounded-xl border border-slate-200 bg-white p-4">
@@ -83,7 +84,7 @@
           <mat-chip-set class="mt-2">
             <mat-chip disableRipple="true">
               <mat-icon matChipAvatar>place</mat-icon>
-              {{ profile()!.location }}
+              {{ profile.location }}
             </mat-chip>
           </mat-chip-set>
         </div>
@@ -93,7 +94,7 @@
             {{ 'profile.status' | transloco }}
           </p>
           <mat-chip-set class="mt-2">
-            @if (profile()!.status) {
+            @if (profile.status) {
             <mat-chip disableRipple="true" highlighted="true" color="primary">
               <mat-icon matChipAvatar>check_circle</mat-icon>
               {{ 'profile.active' | transloco }}
@@ -112,11 +113,12 @@
             {{ 'profile.roles' | transloco }}
           </p>
           <mat-chip-set class="mt-2 flex flex-wrap gap-2">
-            @for (role of profile()!.roles; track role) {
+            @for (role of profile.roles; track role) {
             <mat-chip disableRipple="true">{{ role }}</mat-chip>
             }
           </mat-chip-set>
         </div>
+        }
       </div>
       } @else {
       <form #profileForm="ngForm">
@@ -172,6 +174,7 @@
             </mat-form-field>
           </div>
 
+          @if (profile(); as profile) {
           <div class="rounded-xl bg-slate-50">
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
               <mat-label>{{ 'profile.status' | transloco }}</mat-label>
@@ -181,7 +184,7 @@
                 name="status"
                 class="!text-slate-500"
                 [value]="
-                profile()!.status
+                profile.status
                 ? ('profile.active' | transloco)
                 : ('profile.inactive' | transloco)"
                 readonly
@@ -197,11 +200,12 @@
                 matInput
                 name="roles"
                 class="!text-slate-500"
-                [value]="profile()!.roles.join(', ')"
+                [value]="profile.roles.join(', ')"
                 readonly
               />
             </mat-form-field>
           </div>
+          }
         </div>
       </form>
       } }

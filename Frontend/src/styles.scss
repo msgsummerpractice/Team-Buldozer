@@ -1,13 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-
 @use 'tailwindcss';
 @use './material-theme.scss';
 @use '../public/assets/styles/snackbar';
 @use '../public/assets/styles/table';
 @use '../public/assets/styles/card';
-
-/* suppress browser-native password reveal button so only our mat-icon toggle shows */
-input[type='password']::-ms-reveal,
-input[type='password']::-ms-clear {
-  display: none;
-}
+@use '../public/assets/styles/password-input';
