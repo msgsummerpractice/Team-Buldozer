@@ -12,7 +12,7 @@ import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +57,7 @@ public class EventService {
         return eventMapper.toResponse(saved);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public EventResponse getEventById(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));

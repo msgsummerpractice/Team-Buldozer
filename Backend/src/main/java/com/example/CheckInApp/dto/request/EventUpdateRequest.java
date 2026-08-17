@@ -2,8 +2,6 @@ package com.example.CheckInApp.dto.request;
 
 import com.example.CheckInApp.model.EventLocation;
 import com.example.CheckInApp.model.EventType;
-
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
