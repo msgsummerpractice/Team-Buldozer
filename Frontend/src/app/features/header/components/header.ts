@@ -1,5 +1,5 @@
 import { Component, effect, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, UrlTree } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,12 +35,12 @@ export class Header {
 
   protected isAuthenticated = this.authService.isAuthenticated;
 
-  protected profileLink(): [string, number] | null {
+  protected profileLink(): UrlTree | null {
     const id = this.authorization.getUserId();
-    return id ? ['/info', id] : null;
+    return id ? this.router.createUrlTree(['/info', id]) : null;
   }
 
-  protected activeLang = toSignal(this.translocoService.langChanges$, {
+  protected readonly activeLang = toSignal(this.translocoService.langChanges$, {
     initialValue: this.translocoService.getActiveLang(),
   });
 
