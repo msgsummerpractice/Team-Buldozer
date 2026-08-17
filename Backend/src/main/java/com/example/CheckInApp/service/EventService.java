@@ -32,10 +32,10 @@ public class EventService {
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
 
-
     @Transactional
     public EventResponse addEvent(EventRequest request, String userEmail) {
         validateDates(request);
+        validatePoster(request.getPoster());
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
@@ -119,7 +119,7 @@ public class EventService {
         switch (type) {
             case INTERNAL -> {
                 event.setLocation(EventLocation.ALL);
-                event.setFoodProvided(foodProvided != null ? foodProvided : false);
+                event.setFoodProvided(Boolean.TRUE.equals(foodProvided));
             }
             case EXTERNAL -> {
                 validateSpecificCityLocation(location, type);
@@ -129,7 +129,7 @@ public class EventService {
             case LOCAL -> {
                 validateSpecificCityLocation(location, type);
                 event.setLocation(location);
-                event.setFoodProvided(foodProvided != null ? foodProvided : false);
+                event.setFoodProvided(Boolean.TRUE.equals(foodProvided));
             }
         }
     }
@@ -188,12 +188,11 @@ public class EventService {
         }
     }
 
-    private void validateEventDates(Event event) {
-        if (event.getEndDateTime().isBefore(event.getStartDateTime())) {
-            throw new InvalidEventDataException("End date time must be after start date time.");
-        }
-        if (event.getRegistrationEndDate().isBefore(event.getRegistrationStartDate())) {
-            throw new InvalidEventDataException("Registration end date must be after registration start date.");
+    private byte[] extractBytes(MultipartFile file) {
+        try {
+            return file.getBytes();
+        } catch (IOException e) {
+            throw new PosterNotReadException("Poster could not be read.");
         }
     }
 
