@@ -1,6 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -11,15 +13,17 @@ export type UserRolesDialogData = { user: UserResponse };
 export type UserRolesDialogResult = { roles: UserRole[] };
 
 @Component({
-  selector: 'app-user-roles-dialog',
+  selector: 'app-user-roles-select',
   imports: [
     MatDialogModule,
-    MatCheckboxModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    FormsModule,
     MatButtonModule,
     MatIconModule,
     TranslocoPipe,
   ],
-  templateUrl: './user-roles-dialog.html',
+  templateUrl: './user-roles-select.html',
 })
 export class UserRolesDialog {
   private readonly dialogRef = inject(
@@ -28,16 +32,10 @@ export class UserRolesDialog {
   protected readonly data = inject<UserRolesDialogData>(MAT_DIALOG_DATA);
 
   protected readonly UserRoles = Object.values(UserRoleEnum) as UserRole[];
-  protected readonly selectedRoles = signal<Set<UserRole>>(new Set(this.data.user.roles));
+  protected selectedRoles: UserRole[] = [...this.data.user.roles];
 
-  protected isSelected(role: UserRole): boolean {
-    return this.selectedRoles().has(role);
-  }
-
-  protected toggle(role: UserRole, checked: boolean): void {
-    const next = new Set(this.selectedRoles());
-    checked ? next.add(role) : next.delete(role);
-    this.selectedRoles.set(next);
+  protected isOnlySelected(role: UserRole): boolean {
+    return this.selectedRoles.length === 1 && this.selectedRoles[0] === role;
   }
 
   protected cancel(): void {
@@ -45,6 +43,6 @@ export class UserRolesDialog {
   }
 
   protected save(): void {
-    this.dialogRef.close({ roles: [...this.selectedRoles()] });
+    this.dialogRef.close({ roles: this.selectedRoles });
   }
 }

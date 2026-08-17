@@ -6,16 +6,15 @@
 </h2>
 
 <mat-dialog-content>
-  <div class="flex flex-col gap-4 py-2 min-w-64">
-    @for (role of UserRoles; track role) {
-    <mat-checkbox
-      color="primary"
-      [checked]="isSelected(role)"
-      (change)="toggle(role, $event.checked)"
-    >
-      {{ role }}
-    </mat-checkbox>
-    }
+  <div class="py-2 min-w-64">
+    <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+      <mat-label>{{ 'users.roles' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="selectedRoles" multiple>
+        @for (role of UserRoles; track role) {
+        <mat-option [value]="role" [disabled]="isOnlySelected(role)">{{ role }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
   </div>
 </mat-dialog-content>
 
