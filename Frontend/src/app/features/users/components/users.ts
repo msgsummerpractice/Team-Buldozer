@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { UserService } from '@core/users/services/user-service';
 import { UserResponse } from '@core/users/dto/user.response';
-import { UserRole, UserRoleEnum } from '@core/users/model/user-role';
+import { UserRole } from '@core/users/model/user-role';
 import { debounceTime, Subject } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -11,11 +11,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { UserLocationEnum } from '@core/users/model/user-location';
 import { NotificationService } from '@core/notification/services/notification.service';
+import {
+  UserRolesDialog,
+  UserRolesDialogData,
+  UserRolesDialogResult,
+} from '../user-roles-select/user-roles-dialog';
 
 @Component({
   selector: 'app-users',
@@ -28,7 +33,6 @@ import { NotificationService } from '@core/notification/services/notification.se
     MatTableModule,
     MatChipsModule,
     MatPaginatorModule,
-    MatSelectModule,
     MatSlideToggleModule,
     TranslocoPipe,
   ],
@@ -38,6 +42,7 @@ import { NotificationService } from '@core/notification/services/notification.se
 export class Users implements OnInit, OnDestroy {
   private readonly userService = inject(UserService);
   private readonly notificationService = inject(NotificationService);
+  private readonly dialog = inject(MatDialog);
   private _users = signal<UserResponse[]>([]);
 
   protected readonly inputValue = signal<string>('');
@@ -47,7 +52,6 @@ export class Users implements OnInit, OnDestroy {
   protected readonly pageSizeList = [5, 10, 25, 50];
 
   protected readonly UserLocations = UserLocationEnum;
-  protected readonly UserRoles = Object.values(UserRoleEnum) as UserRole[];
 
   protected readonly displayedColumns = [
     'firstName',
@@ -60,8 +64,6 @@ export class Users implements OnInit, OnDestroy {
   ];
 
   private readonly savingIds = signal<Set<number>>(new Set());
-  // plain Map avoids signal re-renders while the panel is open
-  private readonly pendingRoles = new Map<number, UserRole[]>();
   private searchSubject = new Subject<string>();
 
   readonly filteredUsers = computed(() => {
@@ -115,19 +117,16 @@ export class Users implements OnInit, OnDestroy {
     this.callApi(user.id, status, user.roles);
   }
 
-  protected onRolesClose(user: UserResponse, roles: UserRole[]): void {
-    this.pendingRoles.delete(user.id);
-    if (!roles?.length) return;
-    this.callApi(user.id, user.status, roles);
-  }
-
-  protected setPendingRoles(userId: number, roles: UserRole[]): void {
-    this.pendingRoles.set(userId, roles);
-  }
-
-  protected isLastRoleInPanel(userId: number, committedRoles: UserRole[], role: UserRole): boolean {
-    const current = this.pendingRoles.get(userId) ?? committedRoles;
-    return current.length === 1 && current[0] === role;
+  protected openRolesDialog(user: UserResponse): void {
+    const ref = this.dialog.open<
+      UserRolesDialog,
+      UserRolesDialogData,
+      UserRolesDialogResult | undefined
+    >(UserRolesDialog, { data: { user } });
+    ref.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.callApi(user.id, user.status, result.roles);
+    });
   }
 
   protected getRoleColor(role: string): string {

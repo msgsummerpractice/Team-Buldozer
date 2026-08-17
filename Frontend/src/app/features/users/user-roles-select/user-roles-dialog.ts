@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,12 +18,12 @@ export type UserRolesDialogResult = { roles: UserRole[] };
     MatDialogModule,
     MatFormFieldModule,
     MatSelectModule,
-    FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     TranslocoPipe,
   ],
-  templateUrl: './user-roles-select.html',
+  templateUrl: './user-roles-dialog.html',
 })
 export class UserRolesDialog {
   private readonly dialogRef = inject(
@@ -32,10 +32,13 @@ export class UserRolesDialog {
   protected readonly data = inject<UserRolesDialogData>(MAT_DIALOG_DATA);
 
   protected readonly UserRoles = Object.values(UserRoleEnum) as UserRole[];
-  protected selectedRoles: UserRole[] = [...this.data.user.roles];
+  protected readonly rolesControl = new FormControl<UserRole[]>([...this.data.user.roles], {
+    nonNullable: true,
+  });
 
   protected isOnlySelected(role: UserRole): boolean {
-    return this.selectedRoles.length === 1 && this.selectedRoles[0] === role;
+    const current = this.rolesControl.value;
+    return current.length === 1 && current[0] === role;
   }
 
   protected cancel(): void {
@@ -43,6 +46,6 @@ export class UserRolesDialog {
   }
 
   protected save(): void {
-    this.dialogRef.close({ roles: this.selectedRoles });
+    this.dialogRef.close({ roles: this.rolesControl.value });
   }
 }

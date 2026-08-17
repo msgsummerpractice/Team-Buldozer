@@ -122,34 +122,9 @@
               >{{ 'users.manage' | transloco}}</th
             >
             <td mat-cell *matCellDef="let user">
-              <mat-form-field
-                appearance="outline"
-                subscriptSizing="dynamic"
-                class="w-40"
-                style="
-                  --mat-form-field-container-height: 36px;
-                  --mat-form-field-container-vertical-padding: 6px;
-                "
-              >
-                <mat-select
-                  #roleSelect
-                  [value]="user.roles"
-                  multiple
-                  panelClass="roles-select-panel"
-                  [disabled]="isSaving(user.id)"
-                  (selectionChange)="setPendingRoles(user.id, $event.value)"
-                  (closed)="onRolesClose(user, roleSelect.value)"
-                >
-                  <mat-select-trigger>{{ 'users.manage-roles' | transloco }}</mat-select-trigger>
-                  @for (role of UserRoles; track role) {
-                  <mat-option
-                    [value]="role"
-                    [disabled]="isLastRoleInPanel(user.id, user.roles, role)"
-                    >{{ role }}</mat-option
-                  >
-                  }
-                </mat-select>
-              </mat-form-field>
+              <button mat-button [disabled]="isSaving(user.id)" (click)="openRolesDialog(user)">
+                {{ 'users.manage-roles' | transloco }}
+              </button>
             </td>
           </ng-container>
 

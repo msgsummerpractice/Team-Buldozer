@@ -9,7 +9,7 @@
   <div class="py-2 min-w-64">
     <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
       <mat-label>{{ 'users.roles' | transloco }}</mat-label>
-      <mat-select [(ngModel)]="selectedRoles" multiple>
+      <mat-select [formControl]="rolesControl" multiple>
         @for (role of UserRoles; track role) {
         <mat-option [value]="role" [disabled]="isOnlySelected(role)">{{ role }}</mat-option>
         }
