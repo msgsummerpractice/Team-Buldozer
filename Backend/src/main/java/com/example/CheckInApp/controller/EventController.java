@@ -26,7 +26,13 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/{id}")
+    public ResponseEntity<EventResponse> getEventById(@PathVariable Long id) {
+        EventResponse event = eventService.getEventById(id);
+        return ResponseEntity.ok(event);
+    }
+
+    @PatchMapping("/{id}")
     @PreAuthorize("hasRole('MARKETING')")
     public ResponseEntity<EventResponse> updateEvent(
             @PathVariable Long id,

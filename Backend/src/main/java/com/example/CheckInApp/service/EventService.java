@@ -32,6 +32,7 @@ public class EventService {
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
 
+
     @Transactional
     public EventResponse addEvent(EventRequest request, String userEmail) {
         validateDates(request);
@@ -56,6 +57,12 @@ public class EventService {
         return eventMapper.toResponse(saved);
     }
 
+    @Transactional
+    public EventResponse getEventById(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
+        return eventMapper.toResponse(event);
+    } 
     @Transactional
     public EventResponse updateEvent(Long eventId, EventUpdateRequest request, String userEmail) {
         Event existingEvent = eventRepository.findById(eventId)
