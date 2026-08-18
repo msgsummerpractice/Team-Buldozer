@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{ 'event-details.dialog.title' | transloco }}</h2>
 
-<mat-dialog-content class="flex flex-col gap-4 min-w-96 max-w-xl">
+<mat-dialog-content class="flex flex-col gap-4 w-full max-w-xl">
   @if (loading()) {
   <div class="flex justify-center py-8">
     <mat-spinner diameter="40" />
@@ -20,7 +20,7 @@
 
   <mat-divider />
 
-  <div class="grid grid-cols-2 gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div class="flex flex-col gap-1">
       <span class="text-xs font-medium uppercase tracking-wide">
         {{ 'event-details.dialog.start-date' | transloco }}
@@ -35,11 +35,8 @@
     </div>
   </div>
 
-  @if (data.registrationStartDate || data.registrationEndDate) {
-  <div class="grid grid-cols-2 gap-4">
-    <div class="flex flex-col gap-1">
-      <span class="text-xs font-medium uppercase tracking-wide">
-        {{ 'event-details.dialog.registration-start' | transloco }}
+  @if (data.registrationStartDate && data.registrationEndDate) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       </span>
       <span class="text-sm">{{ data.registrationStartDate | date: 'mediumDate' }}</span>
     </div>
@@ -58,7 +55,7 @@
     </span>
     <div class="flex items-center gap-2">
       <mat-icon class="!text-[18px]">location_on</mat-icon>
-      <span class="text-sm">{{ data.location }}</span>
+      <span class="text-sm">{{ locationKey() | transloco }}</span>
     </div>
   </div>
 
@@ -79,7 +76,7 @@
         {{ 'event-details.dialog.status' | transloco }}
       </span>
       <mat-chip-set>
-        <mat-chip [highlighted]="true">{{ statusKey | transloco }}</mat-chip>
+        <mat-chip [highlighted]="true">{{ statusKey() | transloco }}</mat-chip>
       </mat-chip-set>
     </div>
 
@@ -88,7 +85,7 @@
         {{ 'event-details.dialog.type' | transloco }}
       </span>
       <mat-chip-set>
-        <mat-chip>{{ typeKey | transloco }}</mat-chip>
+        <mat-chip>{{ typeKey() | transloco }}</mat-chip>
       </mat-chip-set>
     </div>
 

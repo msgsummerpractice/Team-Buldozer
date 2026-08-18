@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -27,36 +28,46 @@ import { EventResponse } from '@core/events/model/event-response';
 export class EventDetailsDialog {
   private readonly dialogRef = inject(MatDialogRef<EventDetailsDialog>);
   private readonly eventService = inject(EventService);
-  private readonly eventId = inject<number>(MAT_DIALOG_DATA);
+  private readonly dialogData = inject<{ id: number }>(MAT_DIALOG_DATA);
 
   readonly event = signal<EventResponse | null>(null);
   readonly loading = signal(true);
-  readonly error = signal<string | null>(null);
+  readonly errorTranslationKey = signal<string | null>(null);
 
   constructor() {
-    this.eventService.getEventById(this.eventId).subscribe({
-      next: (data) => {
-        this.event.set(data);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set('event-details.dialog.error');
-        this.loading.set(false);
-      },
-    });
+    this.eventService
+      .getEventById(this.dialogData.id)
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: (data) => {
+          this.event.set(data);
+          this.errorTranslationKey.set(null);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.event.set(null);
+          this.errorTranslationKey.set('event-details.dialog.error');
+          this.loading.set(false);
+        },
+      });
   }
 
-  protected get statusKey(): string {
+  protected readonly statusKey = computed(() => {
     const status = this.event()?.status;
     return status ? `event-details.dialog.status-${status.toLowerCase()}` : '';
-  }
+  });
 
-  protected get typeKey(): string {
+  protected readonly typeKey = computed(() => {
     const type = this.event()?.type;
     return type ? `event-details.dialog.type-${type.toLowerCase()}` : '';
-  }
+  });
 
-  close(): void {
+  protected readonly locationKey = computed(() => {
+    const location = this.event()?.location;
+    return location ? `event-details.dialog.location-${location.toLowerCase()}` : '';
+  });
+
+  protected close(): void {
     this.dialogRef.close();
   }
 }
