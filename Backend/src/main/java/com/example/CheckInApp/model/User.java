@@ -50,4 +50,7 @@ public class User {
     @OneToMany(mappedBy = "createdBy")
     private List<Event> events;
 
+    @OneToMany(mappedBy = "user")
+    private List<AttendanceRecord> attendanceRecords;
+
 }
