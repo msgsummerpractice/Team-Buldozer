@@ -68,7 +68,7 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column
     private String checkInCode;
 
 }
