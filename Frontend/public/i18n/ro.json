@@ -201,5 +201,116 @@
     "firstPage": "Prima pagină",
     "lastPage": "Ultima pagină",
     "range": "din"
+  },
+  "events": {
+    "create": {
+      "title": "Adaugă un eveniment nou"
+    },
+    "fields": {
+      "name": {
+        "label": "Nume eveniment",
+        "errors": {
+          "required": "Numele evenimentului este obligatoriu",
+          "min-length": "Lungimea minimă este de 3 caractere",
+          "max-length": "Lungimea maximă este de 256 de caractere"
+        }
+      },
+      "type": {
+        "label": "Tip eveniment",
+        "errors": {
+          "required": "Tipul evenimentului este obligatoriu"
+        }
+      },
+      "location": {
+        "label": "Locație",
+        "errors": {
+          "required": "Locația este obligatorie"
+        }
+      },
+      "start-date-time": {
+        "label": "Data de început",
+        "errors": {
+          "required": "Data de început este obligatorie"
+        }
+      },
+      "start-time": {
+        "label": "Ora de început",
+        "errors": {
+          "required": "Ora de început este obligatorie"
+        }
+      },
+      "end-date-time": {
+        "label": "Data de sfârșit",
+        "errors": {
+          "required": "Data de sfârșit este obligatorie",
+          "invalid-range": "Data și ora de sfârșit trebuie să fie după data și ora de început"
+        }
+      },
+      "end-time": {
+        "label": "Ora de sfârșit",
+        "errors": {
+          "required": "Ora de sfârșit este obligatorie"
+        }
+      },
+      "registration-start-date": {
+        "label": "Data de început a înscrierilor",
+        "errors": {
+          "required": "Data de început a înscrierilor este obligatorie"
+        }
+      },
+      "registration-end-date": {
+        "label": "Data de sfârșit a înscrierilor",
+        "errors": {
+          "required": "Data de sfârșit a înscrierilor este obligatorie",
+          "invalid-range": "Data de sfârșit a înscrierilor trebuie să fie egală sau ulterioară datei de început a înscrierilor"
+        }
+      },
+      "address": {
+        "label": "Adresă",
+        "errors": {
+          "required": "Adresa este obligatorie",
+          "min-length": "Lungimea minimă este de 3 caractere",
+          "max-length": "Lungimea maximă este de 128 de caractere"
+        }
+      },
+      "description": {
+        "label": "Descriere eveniment",
+        "errors": {
+          "required": "Descrierea este obligatorie",
+          "min-length": "Lungimea minimă este de 3 caractere",
+          "max-length": "Lungimea maximă este de 1024 de caractere"
+        }
+      },
+      "food-provided": {
+        "label": "Mâncare asigurată"
+      }
+    },
+    "poster": {
+      "label": "Poster eveniment",
+      "constraints": "Dimensiune maximă fișier: 5MB. Formate acceptate: JPEG, PNG",
+      "actions": {
+        "change": "Schimbă posterul",
+        "upload": "Încarcă posterul"
+      },
+      "errors": {
+        "invalid-format": "Format invalid. Sunt acceptate doar imagini JPEG și PNG.",
+        "size-limit": "Dimensiunea fișierului depășește limita de 5MB."
+      },
+      "cropper": {
+        "title": "Decupează posterul evenimentului",
+        "hint": "Selectează o imagine și trage zona de decupare pentru a o ajusta. Posterul este 21:9.",
+        "select": "Selectează imaginea",
+        "confirm": "Aplică",
+        "cancel": "Anulează"
+      }
+    },
+    "actions": {
+      "cancel": "Anulează",
+      "save": "Salvează evenimentul"
+    },
+    "messages": {
+      "success": "Evenimentul a fost creat cu succes ca ciornă!",
+      "error": "Eroare la crearea evenimentului. Te rugăm să verifici datele introduse."
+    }
   }
 }

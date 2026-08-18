@@ -37,10 +37,10 @@ public class EventService {
 
     @Transactional
     public EventResponse addEvent(EventRequest request, String userEmail) {
-        
+
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
-        validateDates(event); 
+        validateDates(event);
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
         event.setCreatedBy(currentUser);
@@ -56,7 +56,7 @@ public class EventService {
 
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
-        
+
     }
 
     @Transactional(readOnly = true)
@@ -64,7 +64,7 @@ public class EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
         return eventMapper.toResponse(event);
-    } 
+    }
     @Transactional
     public EventResponse updateEvent(Long eventId, EventUpdateRequest request) {
         Event existingEvent = eventRepository.findById(eventId)

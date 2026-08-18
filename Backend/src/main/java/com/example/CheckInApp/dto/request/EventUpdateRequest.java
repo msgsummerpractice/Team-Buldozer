@@ -17,7 +17,7 @@ public class EventUpdateRequest {
 
     @Size(min = 3, max = 256, message = "Name must be between 3 and 256 characters long.")
     private String name;
-    
+
     private EventLocation location;
 
     private LocalDateTime startDateTime;
