@@ -43,7 +43,6 @@ public class EventService {
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
         validateDates(event);
-        validateDates(event);
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
         event.setCreatedBy(currentUser);
