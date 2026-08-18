@@ -1,7 +1,7 @@
 import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EventResponse } from '@core/events/dto/event.response';
+import { EventResponse } from '@core/events/model/event-response';
 import { environment } from '@environments/environment';
 import { EventRequest } from '@core/events/model/event-request';
 

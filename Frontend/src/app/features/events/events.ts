@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { EventService } from '@core/events/services/event-service';
-import { EventResponse } from '@core/events/dto/event.response';
+import { EventResponse } from '@core/events/model/event-response';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
