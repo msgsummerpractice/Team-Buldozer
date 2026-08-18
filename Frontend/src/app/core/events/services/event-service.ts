@@ -13,6 +13,6 @@ export class EventService {
     return this.http.post<EventResponse>(`${environment.apiUrl}/events`, request);
   }
   getEventById(id: number): Observable<EventResponse> {
-    return this.http.get<EventResponse>(`${environment.apiUrl}/api/v1/events/${id}`);
+    return this.http.get<EventResponse>(`${environment.apiUrl}/events/${id}`);
   }
 }
