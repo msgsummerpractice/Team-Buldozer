@@ -52,12 +52,6 @@ public class EventController {
         return ResponseEntity.ok(updatedEvent);
     }
 
-    @PatchMapping("/{id}/publish")
-    @PreAuthorize("hasRole('MARKETING')")
-    public ResponseEntity<EventResponse> publishEvent(@PathVariable Long id) {
-        return ResponseEntity.ok(eventService.publishEvent(id));
-    }
-
     @GetMapping("/{id}/check-in-code")
     @PreAuthorize("hasRole('MARKETING')")
     public ResponseEntity<String> getEventCheckInCode(@PathVariable Long id) {
