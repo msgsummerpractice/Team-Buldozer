@@ -1,6 +1,7 @@
 import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { authenticationInterceptor } from '@core/authentication/interceptors/authentication.interceptor';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -9,6 +10,7 @@ import { provideTransloco } from '@jsverse/transloco';
 import { errorInterceptor } from '@core/interceptors/error-interceptor';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { TranslocoPaginatorIntl } from '@core/i18n/services/transloco-paginator-intl';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,5 +38,6 @@ export const appConfig: ApplicationConfig = {
       provide: MatPaginatorIntl,
       useClass: TranslocoPaginatorIntl,
     },
+    provideNativeDateAdapter(),
   ],
 };

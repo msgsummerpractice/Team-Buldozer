@@ -176,5 +176,116 @@
     "firstPage": "First page",
     "lastPage": "Last page",
     "range": "of"
+  },
+  "events": {
+    "create": {
+      "title": "Add A New Event"
+    },
+    "fields": {
+      "name": {
+        "label": "Event Name",
+        "errors": {
+          "required": "Event name is required",
+          "min-length": "Min length is 3 characters",
+          "max-length": "Max length is 256 characters"
+        }
+      },
+      "type": {
+        "label": "Event Type",
+        "errors": {
+          "required": "Event type is required"
+        }
+      },
+      "location": {
+        "label": "Location",
+        "errors": {
+          "required": "Location is required"
+        }
+      },
+      "start-date-time": {
+        "label": "Start Date",
+        "errors": {
+          "required": "Start date is required"
+        }
+      },
+      "start-time": {
+        "label": "Start Time",
+        "errors": {
+          "required": "Start time is required"
+        }
+      },
+      "end-date-time": {
+        "label": "End Date",
+        "errors": {
+          "required": "End date is required",
+          "invalid-range": "End date & time must be scheduled after start date & time"
+        }
+      },
+      "end-time": {
+        "label": "End Time",
+        "errors": {
+          "required": "End time is required"
+        }
+      },
+      "registration-start-date": {
+        "label": "Registration Start Date",
+        "errors": {
+          "required": "Registration start date is required"
+        }
+      },
+      "registration-end-date": {
+        "label": "Registration End Date",
+        "errors": {
+          "required": "Registration end date is required",
+          "invalid-range": "Registration end date must be on or after registration start date"
+        }
+      },
+      "address": {
+        "label": "Address",
+        "errors": {
+          "required": "Address is required",
+          "min-length": "Min length is 3 characters",
+          "max-length": "Max length is 128 characters"
+        }
+      },
+      "description": {
+        "label": "Event Description",
+        "errors": {
+          "required": "Description is required",
+          "min-length": "Min length is 3 characters",
+          "max-length": "Max length is 1024 characters"
+        }
+      },
+      "food-provided": {
+        "label": "Food Provided"
+      }
+    },
+    "poster": {
+      "label": "Event Poster",
+      "constraints": "Max file size: 5MB. Accepted formats: JPEG, PNG",
+      "actions": {
+        "change": "Change Poster",
+        "upload": "Upload Poster"
+      },
+      "errors": {
+        "invalid-format": "Invalid format. Only JPEG and PNG images are allowed.",
+        "size-limit": "File size exceeds the 5MB limit."
+      },
+      "cropper": {
+        "title": "Crop event poster",
+        "hint": "Select an image and drag the crop area to adjust. The poster is 21:9.",
+        "select": "Select image",
+        "confirm": "Apply",
+        "cancel": "Cancel"
+      }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Save Event"
+    },
+    "messages": {
+      "success": "Event created successfully as Draft!",
+      "error": "Failed to create event. Please verify your inputs."
+    }
   }
 }
