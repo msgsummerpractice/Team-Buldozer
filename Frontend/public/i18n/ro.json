@@ -183,6 +183,37 @@
     "range": "din"
   },
   "events": {
+    "title": "Evenimente",
+    "manage-title": "Gestionează Evenimente",
+    "search": "Caută după nume, status, tip sau locație",
+    "name": "DENUMIRE",
+    "period": "PERIOADĂ",
+    "status": "STATUS",
+    "type": "TIP",
+    "location": "LOCAȚIE",
+    "details-col": "DETALII",
+    "details": "Detalii",
+    "view-details": "Vezi detalii",
+    "no-events": "Niciun eveniment găsit",
+    "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un eveniment potrivit.",
+    "sort-asc": "Sortare: cele mai apropiate primele",
+    "sort-desc": "Sortare: cele mai recente primele",
+    "status-values": {
+      "DRAFT": "Schiță",
+      "PUBLISHED": "Publicat",
+      "COMPLETED": "Finalizat"
+    },
+    "type-values": {
+      "INTERNAL": "Intern",
+      "EXTERNAL": "Extern",
+      "LOCAL": "Local"
+    },
+    "location-values": {
+      "CLUJ": "Cluj",
+      "TIMISOARA": "Timișoara",
+      "MURES": "Târgu Mureș",
+      "ALL": "Toate locațiile"
+    },
     "create": {
       "title": "Adaugă un eveniment nou"
     },
@@ -297,5 +328,6 @@
       "load-error": "Nu s-a putut încărca evenimentul.",
       "error": "Eroare la crearea evenimentului. Te rugăm să verifici datele introduse."
     }
-  }
+  },
+  "toggle-lang": "Schimbă în engleză"
 }

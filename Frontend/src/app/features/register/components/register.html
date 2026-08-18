@@ -1,112 +1,120 @@
 @if (success()) {
-<div
-  class="max-w-md mx-auto mt-16 flex flex-col items-center gap-4 p-8 bg-white rounded-2xl shadow-lg border border-green-200 text-center"
->
-  <h2 class="text-xl font-bold text-gray-800">{{ 'register.success-title' | transloco }}</h2>
-  <p class="text-gray-500 text-sm">{{ 'register.success-subtitle' | transloco }}</p>
-</div>
-} @else{
-<form
-  [formGroup]="registerForm"
-  (ngSubmit)="onSubmit()"
-  class="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg space-y-4"
->
-  <h2 class="text-2xl font-bold text-center text-gray-800">{{ 'register.title' | transloco }}</h2>
-
-  @if (serverErrorKey()) {
-  <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
-    {{ serverErrorKey() | transloco }}
-  </div>
-  }
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>{{ 'register.first-name' | transloco }}</mat-label>
-    <input matInput formControlName="firstName" autocomplete="given-name" />
-    @if (registerForm.controls['firstName'].hasError('required')) {
-    <mat-error>{{ 'register.errors.first-name-required' | transloco }}</mat-error>
-    }
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>{{ 'register.last-name' | transloco }}</mat-label>
-    <input matInput formControlName="lastName" autocomplete="family-name" />
-    @if (registerForm.controls['lastName'].hasError('required')) {
-    <mat-error>{{ 'register.errors.last-name-required' | transloco }}</mat-error>
-    }
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>{{ 'register.email' | transloco }}</mat-label>
-    <input type="email" matInput formControlName="email" autocomplete="email" />
-    @if (emailControl.hasError('email') && !emailControl.hasError('required')) {
-    <mat-error>{{ 'register.errors.email-invalid' | transloco }}</mat-error>
-    } @if (emailControl.hasError('required')) {
-    <mat-error>{{ 'register.errors.email-required' | transloco }}</mat-error>
-    }
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>{{ 'register.password' | transloco }}</mat-label>
-    <input
-      [type]="showPassword() ? 'text' : 'password'"
-      matInput
-      formControlName="password"
-      autocomplete="new-password"
-    />
-    <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
-      <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-    </button>
-    @if (registerForm.controls['password'].hasError('required') ||
-    registerForm.controls['password'].hasError('minlength')) {
-    <mat-error>{{ 'register.errors.password-min-length' | transloco }}</mat-error>
-    }
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>{{ 'register.confirm-password' | transloco }}</mat-label>
-    <input
-      [type]="showConfirmPassword() ? 'text' : 'password'"
-      matInput
-      formControlName="confirmPassword"
-      autocomplete="new-password"
-    />
-    <button
-      mat-icon-button
-      matSuffix
-      type="button"
-      (click)="showConfirmPassword.set(!showConfirmPassword())"
-    >
-      <mat-icon>{{ showConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-    </button>
-    @if (registerForm.controls['confirmPassword'].hasError('required')) {
-    <mat-error>{{ 'register.errors.confirm-password-required' | transloco }}</mat-error>
-    } @if (registerForm.controls['confirmPassword'].hasError('passwordMismatch')) {
-    <mat-error>{{ 'register.errors.password-mismatch' | transloco }}</mat-error>
-    }
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>{{ 'register.location' | transloco }}</mat-label>
-    <mat-select formControlName="location">
-      <mat-option value="" disabled>{{ 'register.select-location' | transloco }}</mat-option>
-      <mat-option value="CLUJ">Cluj</mat-option>
-      <mat-option value="TIMISOARA">Timisoara</mat-option>
-      <mat-option value="MURES">Mures</mat-option>
-    </mat-select>
-    @if (registerForm.controls['location'].hasError('required')) {
-    <mat-error>{{ 'register.errors.location-required' | transloco }}</mat-error>
-    }
-  </mat-form-field>
-
-  <button mat-raised-button color="primary" type="submit" class="w-full">
-    {{ 'register.submit' | transloco }}
-  </button>
-</form>
-
-<p class="mt-4 text-center text-gray-600">
-  {{ 'register.have-account' | transloco }}
-  <a routerLink="/login" class="hover:underline font-medium" style="color: var(--mat-sys-primary)"
-    >{{ 'register.login' | transloco }}</a
+  <div
+    class="max-w-md mx-auto mt-16 flex flex-col items-center gap-4 p-8 bg-white rounded-2xl shadow-lg border border-green-200 text-center"
   >
-</p>
+    <h2 class="text-xl font-bold text-gray-800">{{ 'register.success-title' | transloco }}</h2>
+    <p class="text-gray-500 text-sm">{{ 'register.success-subtitle' | transloco }}</p>
+  </div>
+} @else {
+  <form
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()"
+    class="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg space-y-4"
+  >
+    <h2 class="text-2xl font-bold text-center text-gray-800">{{ 'register.title' | transloco }}</h2>
+
+    @if (serverErrorKey()) {
+      <div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+        {{ serverErrorKey() | transloco }}
+      </div>
+    }
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ 'register.first-name' | transloco }}</mat-label>
+      <input matInput formControlName="firstName" autocomplete="given-name" />
+      @if (registerForm.controls['firstName'].hasError('required')) {
+        <mat-error>{{ 'register.errors.first-name-required' | transloco }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ 'register.last-name' | transloco }}</mat-label>
+      <input matInput formControlName="lastName" autocomplete="family-name" />
+      @if (registerForm.controls['lastName'].hasError('required')) {
+        <mat-error>{{ 'register.errors.last-name-required' | transloco }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ 'register.email' | transloco }}</mat-label>
+      <input type="email" matInput formControlName="email" autocomplete="email" />
+      @if (emailControl.hasError('email') && !emailControl.hasError('required')) {
+        <mat-error>{{ 'register.errors.email-invalid' | transloco }}</mat-error>
+      }
+      @if (emailControl.hasError('required')) {
+        <mat-error>{{ 'register.errors.email-required' | transloco }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ 'register.password' | transloco }}</mat-label>
+      <input
+        [type]="showPassword() ? 'text' : 'password'"
+        matInput
+        formControlName="password"
+        autocomplete="new-password"
+      />
+      <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
+        <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      @if (
+        registerForm.controls['password'].hasError('required') ||
+        registerForm.controls['password'].hasError('minlength')
+      ) {
+        <mat-error>{{ 'register.errors.password-min-length' | transloco }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ 'register.confirm-password' | transloco }}</mat-label>
+      <input
+        [type]="showConfirmPassword() ? 'text' : 'password'"
+        matInput
+        formControlName="confirmPassword"
+        autocomplete="new-password"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="showConfirmPassword.set(!showConfirmPassword())"
+      >
+        <mat-icon>{{ showConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      @if (registerForm.controls['confirmPassword'].hasError('required')) {
+        <mat-error>{{ 'register.errors.confirm-password-required' | transloco }}</mat-error>
+      }
+      @if (registerForm.controls['confirmPassword'].hasError('passwordMismatch')) {
+        <mat-error>{{ 'register.errors.password-mismatch' | transloco }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ 'register.location' | transloco }}</mat-label>
+      <mat-select formControlName="location">
+        <mat-option value="" disabled>{{ 'register.select-location' | transloco }}</mat-option>
+        <mat-option value="CLUJ">Cluj</mat-option>
+        <mat-option value="TIMISOARA">Timisoara</mat-option>
+        <mat-option value="MURES">Mures</mat-option>
+      </mat-select>
+      @if (registerForm.controls['location'].hasError('required')) {
+        <mat-error>{{ 'register.errors.location-required' | transloco }}</mat-error>
+      }
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" class="w-full">
+      {{ 'register.submit' | transloco }}
+    </button>
+  </form>
+
+  <p class="mt-4 text-center text-gray-600">
+    {{ 'register.have-account' | transloco }}
+    <a
+      routerLink="/login"
+      class="hover:underline font-medium"
+      style="color: var(--mat-sys-primary)"
+    >
+      {{ 'register.login' | transloco }}
+    </a>
+  </p>
 }

@@ -438,10 +438,10 @@ export class EventCreate implements OnInit {
           return EMPTY;
         })
       )
-      .subscribe((createdId) => {
+      .subscribe((created) => {
         this.notificationService.showSuccess('events.messages.success');
         this.submitting.set(false);
-        this.router.navigate(['/events', createdId]);
+        this.router.navigate(['events', created.id, 'edit']);
       });
   }
 }

@@ -4,13 +4,14 @@ import { NotFound } from '@features/not-found/components/not-found';
 import { authorizationGuard } from '@core/authorization/guards/authorization.guard';
 import { ownProfileGuard } from '@core/authentication/guards/own-profile.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
+import { authGuard } from '@core/authentication/guards/login-guard';
 import { eventsRoutes } from '@features/events/events.routes';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
     pathMatch: 'full',
+    redirectTo: 'home',
   },
   {
     path: 'home',

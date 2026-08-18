@@ -39,7 +39,7 @@ public class EventService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long addEvent(EventRequest request, String userEmail) {
+    public CreateEventResponse addEvent(EventRequest request, String userEmail) {
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
@@ -59,8 +59,8 @@ public class EventService {
         }
 
         Event saved = eventRepository.save(event);
-        return saved.getId();
 
+        return new CreateEventResponse(saved.getId());
     }
 
     @Transactional(readOnly = true)
@@ -239,6 +239,18 @@ public class EventService {
         return events.stream()
                 .map(eventMapper::toResponse)
                 .toList();
+    }
+
+    public EventResponse publishEvent(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
+
+        if (event.getStatus() != EventStatus.DRAFT) {
+            throw new EventNotEditableException("Only events in DRAFT status can be published.");
+        }
+        event.setStatus(EventStatus.PUBLISHED);
+        Event updatedEvent = eventRepository.save(event);
+        return eventMapper.toResponse(updatedEvent);
     }
 
     @Transactional
