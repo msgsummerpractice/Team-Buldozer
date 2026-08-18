@@ -2,6 +2,7 @@ package com.example.CheckInApp.controller;
 
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
+import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.service.EventService;
 

@@ -2,6 +2,7 @@ package com.example.CheckInApp.controller;
 
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
+import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.model.EventLocation;
 import com.example.CheckInApp.model.EventStatus;
@@ -141,21 +142,15 @@ class EventControllerTest {
                                 "Annual team building event with activities",
                                 true);
 
-                EventResponse response = EventResponse.builder()
-                                .id(1L)
-                                .name("Team Building Event")
-                                .location(EventLocation.CLUJ)
-                                .status(EventStatus.DRAFT)
-                                .build();
-
-                when(eventService.addEvent(any(EventRequest.class), anyString())).thenReturn(1L);
+                when(eventService.addEvent(any(EventRequest.class), anyString()))
+                                .thenReturn(new CreateEventResponse(1L));
 
                 mockMvc.perform(post("/api/v1/events")
                                 .with(user("user@example.com").roles("MARKETING"))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
                                 .andExpect(status().isCreated())
-                                .andExpect(content().string("1"));
+                                .andExpect(jsonPath("$.id", is(1)));
 
                 verify(eventService).addEvent(any(EventRequest.class), anyString());
         }

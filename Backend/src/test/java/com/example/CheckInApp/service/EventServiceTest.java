@@ -3,6 +3,7 @@ package com.example.CheckInApp.service;
 import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
+import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
@@ -63,12 +64,12 @@ class EventServiceTest {
                 .thenReturn(Optional.of(marketingUser()));
         when(eventRepository.save(any(Event.class))).thenReturn(savedEvent);
 
-        Long resultId = eventService.addEvent(request, "user@example.com");
+        CreateEventResponse resultResponse = eventService.addEvent(request, "user@example.com");
 
         ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
         verify(eventRepository).save(captor.capture());
         assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.DRAFT);
-        assertThat(resultId).isEqualTo(1L);
+        assertThat(resultResponse.id()).isEqualTo(1L);
     }
 
     @Test
