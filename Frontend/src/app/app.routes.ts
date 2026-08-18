@@ -30,11 +30,6 @@ export const routes: Routes = [
     loadComponent: () => import('@features/register/components/register').then((m) => m.Register),
   },
   {
-    path: 'users',
-    loadComponent: () => import('@features/users/components/users').then((m) => m.Users),
-    canActivate: [authorizationGuard([UserRoleEnum.ADMIN])],
-  },
-  {
     path: 'events/add',
     loadComponent: () =>
       import('@features/events/event-create/event-create').then((m) => m.EventCreate),

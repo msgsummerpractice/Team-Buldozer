@@ -141,14 +141,7 @@ class EventControllerTest {
                                 "Annual team building event with activities",
                                 true);
 
-                EventResponse response = EventResponse.builder()
-                                .id(1L)
-                                .name("Team Building Event")
-                                .location(EventLocation.CLUJ)
-                                .status(EventStatus.DRAFT)
-                                .build();
-
-                when(eventService.addEvent(any(EventRequest.class), anyString())).thenReturn(response);
+                when(eventService.addEvent(any(EventRequest.class), anyString())).thenReturn(1L);
 
                 mockMvc.perform(post("/api/v1/events")
                                 .with(user("user@example.com").roles("MARKETING"))
@@ -156,9 +149,7 @@ class EventControllerTest {
                                 .content(objectMapper.writeValueAsString(request)))
                                 .andExpect(status().isCreated())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.id", is(1)))
-                                .andExpect(jsonPath("$.name", is("Team Building Event")))
-                                .andExpect(jsonPath("$.location", is("CLUJ")));
+                                .andExpect(jsonPath("$", is(1)));
 
                 verify(eventService).addEvent(any(EventRequest.class), anyString());
         }

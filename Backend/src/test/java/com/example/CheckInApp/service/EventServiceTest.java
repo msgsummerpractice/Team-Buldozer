@@ -62,15 +62,13 @@ class EventServiceTest {
         when(userRepository.findByEmail("user@example.com"))
                 .thenReturn(Optional.of(marketingUser()));
         when(eventRepository.save(any(Event.class))).thenReturn(savedEvent);
-        when(eventMapper.toResponse(savedEvent))
-                .thenReturn(EventResponse.builder().id(1L).status(EventStatus.DRAFT).build());
 
-        EventResponse result = eventService.addEvent(request, "user@example.com");
+        Long result = eventService.addEvent(request, "user@example.com");
 
         ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
         verify(eventRepository).save(captor.capture());
         assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.DRAFT);
-        assertThat(result.getStatus()).isEqualTo(EventStatus.DRAFT);
+        assertThat(result).isEqualTo(1L);
     }
 
     @Test
@@ -91,7 +89,6 @@ class EventServiceTest {
                 .thenReturn(Optional.of(marketingUser()));
         when(eventRepository.save(any(Event.class)))
                 .thenReturn(Event.builder().id(1L).location(EventLocation.ALL).build());
-        when(eventMapper.toResponse(any())).thenReturn(EventResponse.builder().build());
 
         eventService.addEvent(request, "user@example.com");
 
