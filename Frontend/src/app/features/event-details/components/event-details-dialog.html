@@ -12,66 +12,62 @@
   }
 
   <div class="flex flex-col gap-1">
-    <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+    <span class="text-xs font-medium uppercase tracking-wide">
       {{ 'event-details.dialog.description' | transloco }}
     </span>
-    <p class="text-sm text-slate-700">{{ data.description }}</p>
+    <p class="text-sm">{{ data.description }}</p>
   </div>
 
   <mat-divider />
 
   <div class="grid grid-cols-2 gap-4">
     <div class="flex flex-col gap-1">
-      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      <span class="text-xs font-medium uppercase tracking-wide">
         {{ 'event-details.dialog.start-date' | transloco }}
       </span>
-      <span class="text-sm text-slate-700">{{ data.startDateTime | date: 'medium' }}</span>
+      <span class="text-sm">{{ data.startDateTime | date: 'medium' }}</span>
     </div>
     <div class="flex flex-col gap-1">
-      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      <span class="text-xs font-medium uppercase tracking-wide">
         {{ 'event-details.dialog.end-date' | transloco }}
       </span>
-      <span class="text-sm text-slate-700">{{ data.endDateTime | date: 'medium' }}</span>
+      <span class="text-sm">{{ data.endDateTime | date: 'medium' }}</span>
     </div>
   </div>
 
   @if (data.registrationStartDate || data.registrationEndDate) {
   <div class="grid grid-cols-2 gap-4">
     <div class="flex flex-col gap-1">
-      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      <span class="text-xs font-medium uppercase tracking-wide">
         {{ 'event-details.dialog.registration-start' | transloco }}
       </span>
-      <span class="text-sm text-slate-700"
-        >{{ data.registrationStartDate | date: 'mediumDate' }}</span
-      >
+      <span class="text-sm">{{ data.registrationStartDate | date: 'mediumDate' }}</span>
     </div>
     <div class="flex flex-col gap-1">
-      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      <span class="text-xs font-medium uppercase tracking-wide">
         {{ 'event-details.dialog.registration-end' | transloco }}
       </span>
-      <span class="text-sm text-slate-700"
-        >{{ data.registrationEndDate | date: 'mediumDate' }}</span
-      >
+      <span class="text-sm">{{ data.registrationEndDate | date: 'mediumDate' }}</span>
     </div>
   </div>
   }
 
   <div class="flex flex-col gap-1">
-    <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+    <span class="text-xs font-medium uppercase tracking-wide">
       {{ 'event-details.dialog.location' | transloco }}
     </span>
     <div class="flex items-center gap-2">
-      <mat-icon class="text-slate-400 !text-[18px]">location_on</mat-icon>
-      <span class="text-sm text-slate-700">{{ data.location }}</span>
+      <mat-icon class="!text-[18px]">location_on</mat-icon>
+      <span class="text-sm">{{ data.location }}</span>
     </div>
   </div>
 
   @if (data.address) {
   <div class="flex flex-col gap-1">
-    <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+    <span class="text-xs font-medium uppercase tracking-wide">
       {{ 'event-details.dialog.address' | transloco }}
     </span>
-    <span class="text-sm text-slate-700">{{ data.address }}</span>
+    <span class="text-sm">{{ data.address }}</span>
   </div>
   }
 
@@ -79,7 +75,7 @@
 
   <div class="flex items-start gap-6 flex-wrap">
     <div class="flex flex-col gap-2">
-      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      <span class="text-xs font-medium uppercase tracking-wide">
         {{ 'event-details.dialog.status' | transloco }}
       </span>
       <mat-chip-set>
@@ -88,7 +84,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      <span class="text-xs font-medium uppercase tracking-wide">
         {{ 'event-details.dialog.type' | transloco }}
       </span>
       <mat-chip-set>
@@ -97,7 +93,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+      <span class="text-xs font-medium uppercase tracking-wide">
         {{ 'event-details.dialog.food-provided' | transloco }}
       </span>
       <div class="flex items-center gap-1">
@@ -105,8 +101,8 @@
         <mat-icon class="text-green-600 !text-[18px]">check_circle</mat-icon>
         <span class="text-sm text-green-700">{{ 'event-details.dialog.yes' | transloco }}</span>
         } @else {
-        <mat-icon class="text-slate-400 !text-[18px]">cancel</mat-icon>
-        <span class="text-sm text-slate-500">{{ 'event-details.dialog.no' | transloco }}</span>
+        <mat-icon class="!text-[18px]">cancel</mat-icon>
+        <span class="text-sm">{{ 'event-details.dialog.no' | transloco }}</span>
         }
       </div>
     </div>

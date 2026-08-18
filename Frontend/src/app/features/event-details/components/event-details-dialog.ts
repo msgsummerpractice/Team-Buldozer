@@ -7,8 +7,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@core/events/services/event.service';
-import { EventDetails } from '../models/event.details.model';
+import { EventService } from '@core/events/services/event-service';
+import { EventResponse } from '@core/events/model/event-response';
 
 @Component({
   selector: 'app-event-details-dialog',
@@ -29,7 +29,7 @@ export class EventDetailsDialog {
   private readonly eventService = inject(EventService);
   private readonly eventId = inject<number>(MAT_DIALOG_DATA);
 
-  readonly event = signal<EventDetails | null>(null);
+  readonly event = signal<EventResponse | null>(null);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
 
