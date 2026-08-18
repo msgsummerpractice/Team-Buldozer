@@ -7,7 +7,9 @@
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 flex-shrink-0 rounded-full overflow-hidden">
             <app-profile-picture
-              [pictureBase64]="editMode() ? formState.profilePicture : (profile()?.profilePicture ?? null)"
+              [pictureBase64]="
+                editMode() ? formState.profilePicture : (profile()?.profilePicture ?? null)
+              "
               [editMode]="editMode()"
               (pictureChange)="onPictureChange($event)"
             />
@@ -15,200 +17,207 @@
           <div>
             <h1 class="font-bold text-2xl mb-0.4">{{ 'profile.title' | transloco }}</h1>
             @if (fullName()) {
-            <p class="text-[18px] font-medium text-slate-800">{{ fullName() }}</p>
+              <p class="text-[18px] font-medium text-slate-800">{{ fullName() }}</p>
             }
           </div>
         </div>
 
         <div class="flex flex-wrap gap-2">
           @if (!editMode()) {
-          <button matButton="outlined" color="primary" type="button" (click)="enableEditMode()">
-            <mat-icon>edit</mat-icon>
-            {{ 'profile.edit-mode' | transloco }}
-          </button>
+            <button matButton="outlined" color="primary" type="button" (click)="enableEditMode()">
+              <mat-icon>edit</mat-icon>
+              {{ 'profile.edit-mode' | transloco }}
+            </button>
           } @else {
-          <button matButton="outlined" type="button" (click)="cancelEditMode()">
-            <mat-icon>close</mat-icon>
-            {{ 'profile.cancel' | transloco }}
-          </button>
-          <button
-            matButton="filled"
-            color="primary"
-            type="button"
-            [disabled]="saving()"
-            (click)="saveChanges()"
-          >
-            <mat-icon>save</mat-icon>
-            {{ saving() ? ('profile.saving' | transloco) : ('profile.save' | transloco) }}
-          </button>
+            <button matButton="outlined" type="button" (click)="cancelEditMode()">
+              <mat-icon>close</mat-icon>
+              {{ 'profile.cancel' | transloco }}
+            </button>
+            <button
+              matButton="filled"
+              color="primary"
+              type="button"
+              [disabled]="saving()"
+              (click)="saveChanges()"
+            >
+              <mat-icon>save</mat-icon>
+              {{ saving() ? ('profile.saving' | transloco) : ('profile.save' | transloco) }}
+            </button>
           }
         </div>
       </div>
 
       @if (loading()) {
-      <p class="text-slate-600 mt-4">{{ 'profile.loading' | transloco }}</p>
-      } @if (!loading() && profile()) { @if (saveMessage()) {
-      <div
-        class="mt-4 rounded-xl border border-green-200 px-4 py-3 text-sm font-medium text-green-700"
-      >
-        {{ saveMessage() }}
-      </div>
-      } @if (!editMode()) {
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
-        @if (profile(); as profile) {
-        <div class="rounded-xl border border-slate-200 bg-white p-4">
-          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {{ 'profile.first-name' | transloco }}
-          </p>
-          <p class="mt-2 text-base font-medium text-slate-900">{{ profile.firstName }}</p>
-        </div>
-
-        <div class="rounded-xl border border-slate-200 bg-white p-4">
-          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {{ 'profile.last-name' | transloco }}
-          </p>
-          <p class="mt-2 text-base font-medium text-slate-900">{{ profile.lastName }}</p>
-        </div>
-
-        <div class="rounded-xl border border-slate-200 bg-white p-4">
-          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {{ 'profile.email' | transloco }}
-          </p>
-          <p class="mt-2 text-base font-medium text-slate-900 break-all">{{ profile.email }}</p>
-        </div>
-
-        <div class="rounded-xl border border-slate-200 bg-white p-4">
-          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {{ 'profile.location' | transloco }}
-          </p>
-          <mat-chip-set class="mt-2">
-            <mat-chip disableRipple="true">
-              <mat-icon matChipAvatar>place</mat-icon>
-              {{ profile.location }}
-            </mat-chip>
-          </mat-chip-set>
-        </div>
-
-        <div class="rounded-xl border border-slate-200 bg-white p-4">
-          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {{ 'profile.status' | transloco }}
-          </p>
-          <mat-chip-set class="mt-2">
-            @if (profile.status) {
-            <mat-chip disableRipple="true" highlighted="true" color="primary">
-              <mat-icon matChipAvatar>check_circle</mat-icon>
-              {{ 'profile.active' | transloco }}
-            </mat-chip>
-            } @else {
-            <mat-chip disableRipple="true" highlighted="true" color="warn">
-              <mat-icon matChipAvatar>cancel</mat-icon>
-              {{ 'profile.inactive' | transloco }}
-            </mat-chip>
-            }
-          </mat-chip-set>
-        </div>
-
-        <div class="rounded-xl border border-slate-200 bg-white p-4">
-          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {{ 'profile.roles' | transloco }}
-          </p>
-          <mat-chip-set class="mt-2 flex flex-wrap gap-2">
-            @for (role of profile.roles; track role) {
-            <mat-chip disableRipple="true">{{ role }}</mat-chip>
-            }
-          </mat-chip-set>
-        </div>
+        <p class="text-slate-600 mt-4">{{ 'profile.loading' | transloco }}</p>
+      }
+      @if (!loading() && profile()) {
+        @if (saveMessage()) {
+          <div
+            class="mt-4 rounded-xl border border-green-200 px-4 py-3 text-sm font-medium text-green-700"
+          >
+            {{ saveMessage() }}
+          </div>
         }
-      </div>
-      } @else {
-      <form #profileForm="ngForm">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
-          <div class="bg-white rounded-xl">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-              <mat-label>{{ 'profile.first-name' | transloco }}</mat-label>
-              <input
-                matInput
-                name="firstName"
-                [(ngModel)]="formState.firstName"
-                required
-                maxlength="32"
-              />
-            </mat-form-field>
+        @if (!editMode()) {
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+            @if (profile(); as profile) {
+              <div class="rounded-xl border border-slate-200 bg-white p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {{ 'profile.first-name' | transloco }}
+                </p>
+                <p class="mt-2 text-base font-medium text-slate-900">{{ profile.firstName }}</p>
+              </div>
+
+              <div class="rounded-xl border border-slate-200 bg-white p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {{ 'profile.last-name' | transloco }}
+                </p>
+                <p class="mt-2 text-base font-medium text-slate-900">{{ profile.lastName }}</p>
+              </div>
+
+              <div class="rounded-xl border border-slate-200 bg-white p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {{ 'profile.email' | transloco }}
+                </p>
+                <p class="mt-2 text-base font-medium text-slate-900 break-all">
+                  {{ profile.email }}
+                </p>
+              </div>
+
+              <div class="rounded-xl border border-slate-200 bg-white p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {{ 'profile.location' | transloco }}
+                </p>
+                <mat-chip-set class="mt-2">
+                  <mat-chip disableRipple="true">
+                    <mat-icon matChipAvatar>place</mat-icon>
+                    {{ profile.location }}
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
+
+              <div class="rounded-xl border border-slate-200 bg-white p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {{ 'profile.status' | transloco }}
+                </p>
+                <mat-chip-set class="mt-2">
+                  @if (profile.status) {
+                    <mat-chip disableRipple="true" highlighted="true" color="primary">
+                      <mat-icon matChipAvatar>check_circle</mat-icon>
+                      {{ 'profile.active' | transloco }}
+                    </mat-chip>
+                  } @else {
+                    <mat-chip disableRipple="true" highlighted="true" color="warn">
+                      <mat-icon matChipAvatar>cancel</mat-icon>
+                      {{ 'profile.inactive' | transloco }}
+                    </mat-chip>
+                  }
+                </mat-chip-set>
+              </div>
+
+              <div class="rounded-xl border border-slate-200 bg-white p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {{ 'profile.roles' | transloco }}
+                </p>
+                <mat-chip-set class="mt-2 flex flex-wrap gap-2">
+                  @for (role of profile.roles; track role) {
+                    <mat-chip disableRipple="true">{{ role }}</mat-chip>
+                  }
+                </mat-chip-set>
+              </div>
+            }
           </div>
+        } @else {
+          <form #profileForm="ngForm">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+              <div class="bg-white rounded-xl">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+                  <mat-label>{{ 'profile.first-name' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    name="firstName"
+                    [(ngModel)]="formState.firstName"
+                    required
+                    maxlength="32"
+                  />
+                </mat-form-field>
+              </div>
 
-          <div class="bg-white rounded-xl">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-              <mat-label>{{ 'profile.last-name' | transloco }}</mat-label>
-              <input
-                matInput
-                name="lastName"
-                [(ngModel)]="formState.lastName"
-                required
-                maxlength="32"
-              />
-            </mat-form-field>
-          </div>
+              <div class="bg-white rounded-xl">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+                  <mat-label>{{ 'profile.last-name' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    name="lastName"
+                    [(ngModel)]="formState.lastName"
+                    required
+                    maxlength="32"
+                  />
+                </mat-form-field>
+              </div>
 
-          <div class="rounded-xl bg-slate-50">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-              <mat-label>{{ 'profile.email' | transloco }}</mat-label>
-              <input
-                matInput
-                name="email"
-                type="email"
-                class="!text-slate-500"
-                [(ngModel)]="formState.email"
-                readonly
-              />
-            </mat-form-field>
-          </div>
+              <div class="rounded-xl bg-slate-50">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+                  <mat-label>{{ 'profile.email' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    name="email"
+                    type="email"
+                    class="!text-slate-500"
+                    [(ngModel)]="formState.email"
+                    readonly
+                  />
+                </mat-form-field>
+              </div>
 
-          <div class="bg-white rounded-xl">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-              <mat-label>{{ 'profile.location' | transloco }}</mat-label>
-              <mat-select name="location" [(ngModel)]="formState.location" required>
-                @for (location of locationOptions; track location) {
-                <mat-option [value]="location">{{ location }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
+              <div class="bg-white rounded-xl">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+                  <mat-label>{{ 'profile.location' | transloco }}</mat-label>
+                  <mat-select name="location" [(ngModel)]="formState.location" required>
+                    @for (location of locationOptions; track location) {
+                      <mat-option [value]="location">{{ location }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-          @if (profile(); as profile) {
-          <div class="rounded-xl bg-slate-50">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-              <mat-label>{{ 'profile.status' | transloco }}</mat-label>
+              @if (profile(); as profile) {
+                <div class="rounded-xl bg-slate-50">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+                    <mat-label>{{ 'profile.status' | transloco }}</mat-label>
 
-              <input
-                matInput
-                name="status"
-                class="!text-slate-500"
-                [value]="
-                profile.status
-                ? ('profile.active' | transloco)
-                : ('profile.inactive' | transloco)"
-                readonly
-              />
-            </mat-form-field>
-          </div>
+                    <input
+                      matInput
+                      name="status"
+                      class="!text-slate-500"
+                      [value]="
+                        profile.status
+                          ? ('profile.active' | transloco)
+                          : ('profile.inactive' | transloco)
+                      "
+                      readonly
+                    />
+                  </mat-form-field>
+                </div>
 
-          <div class="rounded-xl bg-slate-50">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-              <mat-label>{{ 'profile.roles' | transloco }}</mat-label>
+                <div class="rounded-xl bg-slate-50">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+                    <mat-label>{{ 'profile.roles' | transloco }}</mat-label>
 
-              <input
-                matInput
-                name="roles"
-                class="!text-slate-500"
-                [value]="profile.roles.join(', ')"
-                readonly
-              />
-            </mat-form-field>
-          </div>
-          }
-        </div>
-      </form>
-      } }
+                    <input
+                      matInput
+                      name="roles"
+                      class="!text-slate-500"
+                      [value]="profile.roles.join(', ')"
+                      readonly
+                    />
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+          </form>
+        }
+      }
     </mat-card-content>
   </mat-card>
 </div>

@@ -15,9 +15,10 @@
           [placeholder]="'login.emailPlaceholder' | transloco"
         />
         @if (loginForm.get('email')?.hasError('required')) {
-        <mat-error>{{ 'login.emailRequired' | transloco }}</mat-error>
-        } @if (loginForm.get('email')?.hasError('email')) {
-        <mat-error>{{ 'login.emailInvalid' | transloco }}</mat-error>
+          <mat-error>{{ 'login.emailRequired' | transloco }}</mat-error>
+        }
+        @if (loginForm.get('email')?.hasError('email')) {
+          <mat-error>{{ 'login.emailInvalid' | transloco }}</mat-error>
         }
       </mat-form-field>
 
@@ -34,7 +35,7 @@
           <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         @if (loginForm.get('password')?.hasError('required')) {
-        <mat-error>{{ 'login.passwordRequired' | transloco }}</mat-error>
+          <mat-error>{{ 'login.passwordRequired' | transloco }}</mat-error>
         }
       </mat-form-field>
 
@@ -61,9 +62,9 @@
 
     <p class="mt-3 text-center text-sm text-gray-500">
       {{ 'login.no-account' | transloco }}
-      <a routerLink="/register" class="hover:underline text-(--mat-sys-primary)"
-        >{{ 'login.register' | transloco }}</a
-      >
+      <a routerLink="/register" class="hover:underline text-(--mat-sys-primary)">
+        {{ 'login.register' | transloco }}
+      </a>
     </p>
   </div>
 </div>

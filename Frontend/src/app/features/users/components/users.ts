@@ -12,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { UserLocationEnum } from '@core/users/model/user-location';
@@ -35,6 +36,7 @@ import {
     MatChipsModule,
     MatPaginatorModule,
     MatSlideToggleModule,
+    MatTooltipModule,
     TranslocoPipe,
   ],
   templateUrl: './users.html',
