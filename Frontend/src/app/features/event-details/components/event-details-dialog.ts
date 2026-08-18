@@ -8,8 +8,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@core/events/services/event-service';
-import { EventResponse } from '@core/events/model/event-response';
+import { EventService } from '@features/events/services/event-service';
+import { EventResponse } from '@features/events/model/event-response';
 
 @Component({
   selector: 'app-event-details-dialog',
@@ -32,7 +32,7 @@ export class EventDetailsDialog {
 
   readonly event = signal<EventResponse | null>(null);
   readonly loading = signal(true);
-  readonly errorTranslationKey = signal<string | null>(null);
+  readonly error = signal<string | null>(null);
 
   constructor() {
     this.eventService
@@ -41,12 +41,12 @@ export class EventDetailsDialog {
       .subscribe({
         next: (data) => {
           this.event.set(data);
-          this.errorTranslationKey.set(null);
+          this.error.set(null);
           this.loading.set(false);
         },
         error: () => {
           this.event.set(null);
-          this.errorTranslationKey.set('event-details.dialog.error');
+          this.error.set('event-details.dialog.error');
           this.loading.set(false);
         },
       });
