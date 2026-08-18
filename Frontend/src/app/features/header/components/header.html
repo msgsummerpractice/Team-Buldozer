@@ -8,7 +8,7 @@
       <button *rolesAssigned="'ADMIN'" matButton routerLink="/users">
         {{ 'users.title' | transloco }}
       </button>
-      <button *appAuth matButton routerLink="/events"> {{ 'events.title' | transloco }} </button>
+      <button *appAuth matButton routerLink="/events">{{ 'events.title' | transloco }}</button>
     </div>
 
     <div class="flex items-center gap-3">
@@ -22,17 +22,17 @@
       </button>
 
       @if (!isAuthenticated()) {
-      <button matIconButton routerLink="/login" [matTooltip]="'home.nav.login' | transloco">
-        <mat-icon>login</mat-icon>
-      </button>
+        <button matIconButton routerLink="/login" [matTooltip]="'home.nav.login' | transloco">
+          <mat-icon>login</mat-icon>
+        </button>
       } @else {
-      <button
-        matIconButton
-        [routerLink]="profileLink()"
-        [matTooltip]="'home.nav.profile' | transloco"
-      >
-        <mat-icon>person</mat-icon>
-      </button>
+        <button
+          matIconButton
+          [routerLink]="profileLink()"
+          [matTooltip]="'home.nav.profile' | transloco"
+        >
+          <mat-icon>person</mat-icon>
+        </button>
       }
 
       <button
@@ -41,9 +41,9 @@
         [matTooltip]="activeLang() === 'en' ? 'Schimbă în Română' : 'Switch to English'"
       >
         @if (activeLang() === 'en') {
-        <img src="https://flagcdn.com/gb.svg" alt="English" />
+          <img src="https://flagcdn.com/gb.svg" alt="English" />
         } @else {
-        <img src="https://flagcdn.com/ro.svg" alt="Română" />
+          <img src="https://flagcdn.com/ro.svg" alt="Română" />
         }
       </button>
     </div>
