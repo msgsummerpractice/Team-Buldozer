@@ -3,7 +3,7 @@ package com.example.CheckInApp.controller;
 import com.example.CheckInApp.dto.request.UserProfileRequest;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.service.UserService;
-
+import com.example.CheckInApp.dto.request.UserRequestByAdmin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +41,13 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id, @Valid @RequestBody UserProfileRequest userProfileRequest) {
         UserResponse updatedUserProfile = userService.updateUserProfile(id, userProfileRequest);
         return ResponseEntity.ok(updatedUserProfile);
+    }
+
+    @PatchMapping("/{id}/status-roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponse> updateUserStatusAndRoles(@PathVariable Long id, @Valid @RequestBody UserRequestByAdmin userRequestByAdmin) {
+        UserResponse updatedUser = userService.updateUserStatusAndRoles(id, userRequestByAdmin);
+        return ResponseEntity.ok(updatedUser);
     }
 
 }

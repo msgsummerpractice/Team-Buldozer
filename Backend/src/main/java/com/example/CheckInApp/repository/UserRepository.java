@@ -3,6 +3,7 @@ package com.example.CheckInApp.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.example.CheckInApp.model.User;
+import com.example.CheckInApp.model.UserRole;
 
 import java.util.Optional;
 
@@ -10,4 +11,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
+    long countByRolesContaining(UserRole role);
 }
