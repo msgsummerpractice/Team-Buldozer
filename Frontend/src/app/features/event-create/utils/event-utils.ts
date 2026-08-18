@@ -75,3 +75,34 @@ export const toDateString = (value: Date | null): string => {
 
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}`;
 };
+
+export const parseDateOnly = (value: string | null | undefined): Date | null => {
+  if (!value) {
+    return null;
+  }
+
+  const [datePart] = value.split('T');
+  const [y, m, d] = datePart.split('-').map(Number);
+
+  if (!y || !m || !d) {
+    return null;
+  }
+
+  return new Date(y, m - 1, d);
+};
+
+export const parseDateTime = (value: string | null | undefined): Date | null => {
+  if (!value) {
+    return null;
+  }
+
+  const [datePart, timePart = '00:00'] = value.split('T');
+  const [y, m, d] = datePart.split('-').map(Number);
+  const [hh, mm] = timePart.split(':').map(Number);
+
+  if (!y || !m || !d) {
+    return null;
+  }
+
+  return new Date(y, m - 1, d, hh || 0, mm || 0, 0, 0);
+};

@@ -40,6 +40,11 @@ export const routes: Routes = [
     loadComponent: () => import('@features/event-create/event-create').then((m) => m.EventCreate),
     canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
   },
+  {
+    path: 'events/:id',
+    loadComponent: () => import('@features/event-create/event-create').then((m) => m.EventCreate),
+    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
+  },
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },
 ];

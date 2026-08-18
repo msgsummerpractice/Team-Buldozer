@@ -181,6 +181,9 @@
     "create": {
       "title": "Adaugă un eveniment nou"
     },
+    "edit": {
+      "title": "Editează evenimentul"
+    },
     "fields": {
       "name": {
         "label": "Nume eveniment",
@@ -285,6 +288,8 @@
     },
     "messages": {
       "success": "Evenimentul a fost creat cu succes ca ciornă!",
+      "update-success": "Evenimentul a fost actualizat cu succes!",
+      "load-error": "Nu s-a putut încărca evenimentul.",
       "error": "Eroare la crearea evenimentului. Te rugăm să verifici datele introduse."
     }
   }
