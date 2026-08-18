@@ -4,6 +4,7 @@ import { NotFound } from '@features/not-found/components/not-found';
 import { authorizationGuard } from '@core/authorization/guards/authorization.guard';
 import { ownProfileGuard } from '@core/authentication/guards/own-profile.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
+import { authGuard } from '@core/authentication/guards/login-guard';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,11 @@ export const routes: Routes = [
   {
     path: 'events',
     loadComponent: () => import('@features/events/events').then((m) => m.Events),
+  },
+  {
+    path: 'events/add',
+    loadComponent: () => import('@features/event-create/event-create').then((m) => m.EventCreate),
+    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
   },
   {
     path: 'users',
