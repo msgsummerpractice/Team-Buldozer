@@ -1,9 +1,9 @@
 import { Component, computed, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Location } from '@angular/common';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,8 +17,6 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventDetailsDialog } from '@features/events/event-details/components/event-details-dialog';
-import { RouterLink } from '@angular/router';
-
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
   maxWidth: '1400px',
@@ -39,15 +37,13 @@ const EVENT_DETAILS_DIALOG_CONFIG = {
     MatPaginatorModule,
     MatTooltipModule,
     TranslocoPipe,
-    RouterLink,
   ],
   templateUrl: './events.html',
 })
 export class Events implements OnInit {
   private readonly eventService = inject(EventService);
   private readonly dialog = inject(MatDialog);
-  private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
+  private readonly location = inject(Location);
   private _events = signal<EventResponse[]>([]);
 
   protected readonly searchTerm = signal<string>('');
@@ -92,17 +88,6 @@ export class Events implements OnInit {
   ngOnInit(): void {
     this.loadEvents();
 
-    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const idParam = params.get('id');
-      const id: number | null = idParam ? +idParam : null;
-      if (id) {
-        this.dialog
-          .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
-          .afterClosed()
-          .subscribe(() => this.router.navigate(['/events']));
-      }
-    });
-
     this.searchSubject
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe((term) => {
@@ -143,6 +128,10 @@ export class Events implements OnInit {
   }
 
   protected openDetails(id: number): void {
-    this.router.navigate(['/events/details', id]);
+    this.location.go(`/events/list/details/${id}`);
+    this.dialog
+      .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
+      .afterClosed()
+      .subscribe(() => this.location.replaceState('/events/list'));
   }
 }

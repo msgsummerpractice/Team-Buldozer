@@ -11,7 +11,6 @@
     <p class="text-sm text-red-500">{{ errorTranslationKey() | transloco }}</p>
   } @else if (event(); as data) {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-      <!-- Left column: poster + description -->
       <div class="flex flex-col gap-6">
         @if (posterUrl(); as poster) {
           <img
@@ -35,15 +34,18 @@
         </div>
       </div>
       <div class="flex flex-col gap-6">
-        <!-- Event name + chips row -->
         <div class="flex flex-col gap-3">
           <h3 class="text-xl font-semibold">{{ data.name }}</h3>
           <div class="flex items-center gap-3 flex-wrap">
             <mat-chip-set>
-              <mat-chip [highlighted]="true">{{ statusKey() | transloco }}</mat-chip>
+              <mat-chip [highlighted]="true" disableRipple class="pointer-events-none">
+                {{ statusKey() | transloco }}
+              </mat-chip>
             </mat-chip-set>
             <mat-chip-set>
-              <mat-chip>{{ typeKey() | transloco }}</mat-chip>
+              <mat-chip disableRipple class="pointer-events-none">
+                {{ typeKey() | transloco }}
+              </mat-chip>
             </mat-chip-set>
           </div>
         </div>

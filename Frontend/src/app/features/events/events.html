@@ -134,7 +134,7 @@
               <button
                 matButton="outlined"
                 color="primary"
-                [routerLink]="['/events/details', event.id]"
+                (click)="openDetails(event.id)"
                 [matTooltip]="'events.view-details' | transloco"
               >
                 <mat-icon>info</mat-icon>
