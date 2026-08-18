@@ -3,6 +3,7 @@ package com.example.CheckInApp.service;
 import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
+import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
@@ -63,12 +64,12 @@ class EventServiceTest {
                 .thenReturn(Optional.of(marketingUser()));
         when(eventRepository.save(any(Event.class))).thenReturn(savedEvent);
 
-        Long result = eventService.addEvent(request, "user@example.com");
+        CreateEventResponse resultResponse = eventService.addEvent(request, "user@example.com");
 
         ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
         verify(eventRepository).save(captor.capture());
         assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.DRAFT);
-        assertThat(result).isEqualTo(1L);
+        assertThat(resultResponse.id()).isEqualTo(1L);
     }
 
     @Test
@@ -251,6 +252,63 @@ class EventServiceTest {
         assertThat(result).hasSize(1);
         verify(eventRepository).findByStatusAndLocationInOrderByStartDateTimeDesc(
                 EventStatus.PUBLISHED, List.of(EventLocation.CLUJ, EventLocation.ALL));
+    }
+
+    @Test
+    void completeEvent_throwsResourceNotFoundException_whenEventNotFound() {
+        when(eventRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> eventService.completeEvent(99L))
+                .isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    void completeEvent_throwsEventNotEditableException_whenEventIsAlreadyCompleted() {
+        Event event = Event.builder().id(1L).status(EventStatus.COMPLETED)
+                .endDateTime(LocalDateTime.now().minusDays(1)).build();
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+        assertThatThrownBy(() -> eventService.completeEvent(1L))
+                .isInstanceOf(EventNotEditableException.class);
+    }
+
+    @Test
+    void completeEvent_throwsEventNotEditableException_whenEventIsDraft() {
+        Event event = Event.builder().id(1L).status(EventStatus.DRAFT)
+                .endDateTime(LocalDateTime.now().minusDays(1)).build();
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+        assertThatThrownBy(() -> eventService.completeEvent(1L))
+                .isInstanceOf(EventNotEditableException.class);
+    }
+
+    @Test
+    void completeEvent_throwsInvalidEventDataException_whenEndDateTimeIsInFuture() {
+        Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED)
+                .endDateTime(FUTURE_END).build();
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+        assertThatThrownBy(() -> eventService.completeEvent(1L))
+                .isInstanceOf(InvalidEventDataException.class);
+    }
+
+    @Test
+    void completeEvent_setsStatusToCompleted_whenPublishedAndEndDateInPast() {
+        Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED)
+                .endDateTime(LocalDateTime.now().minusHours(1)).build();
+        Event saved = Event.builder().id(1L).status(EventStatus.COMPLETED).build();
+
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        when(eventRepository.save(any(Event.class))).thenReturn(saved);
+        when(eventMapper.toResponse(saved))
+                .thenReturn(EventResponse.builder().id(1L).status(EventStatus.COMPLETED).build());
+
+        EventResponse result = eventService.completeEvent(1L);
+
+        ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
+        verify(eventRepository).save(captor.capture());
+        assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.COMPLETED);
+        assertThat(result.getStatus()).isEqualTo(EventStatus.COMPLETED);
     }
 
     private EventRequest buildRequest(EventType type, EventLocation location, String poster) {
