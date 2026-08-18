@@ -5,6 +5,7 @@ import { authorizationGuard } from '@core/authorization/guards/authorization.gua
 import { ownProfileGuard } from '@core/authentication/guards/own-profile.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { Users } from '@features/users/components/users';
+import { authGuard } from '@core/authentication/guards/login-guard';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,11 @@ export const routes: Routes = [
     path: 'users',
     loadComponent: () => import('@features/users/components/users').then((m) => m.Users),
     canActivate: [authorizationGuard([UserRoleEnum.ADMIN])],
+  },
+  {
+    path: 'events/add',
+    loadComponent: () => import('@features/event-create/event-create').then((m) => m.EventCreate),
+    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
   },
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },

@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{ 'events.poster.cropper.title' | transloco }}</h2>
+
+<mat-dialog-content class="flex flex-col gap-4 min-w-80">
+  <p class="text-sm mb-2">{{ 'events.poster.cropper.hint' | transloco }}</p>
+
+  <div class="flex items-center gap-3">
+    <button matButton="outlined" color="primary" type="button" (click)="fileInput.click()">
+      <mat-icon>upload</mat-icon>
+      {{ 'events.poster.cropper.select' | transloco }}
+    </button>
+    <input
+      #fileInput
+      type="file"
+      accept="image/*"
+      class="hidden"
+      (change)="fileChangeEvent($event)"
+    />
+  </div>
+
+  @if (imageChangedEvent()) {
+  <div class="rounded-xl overflow-hidden">
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent()"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="21 / 9"
+      [roundCropper]="false"
+      output="base64"
+      format="jpeg"
+      (imageCropped)="onImageCropped($event)"
+      (imageLoaded)="onImageLoaded()"
+      class="block"
+    />
+  </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">
+    {{ 'events.poster.cropper.cancel' | transloco }}
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [disabled]="!croppedBase64()"
+    (click)="confirm()"
+  >
+    {{ 'events.poster.cropper.confirm' | transloco }}
+  </button>
+</mat-dialog-actions>
