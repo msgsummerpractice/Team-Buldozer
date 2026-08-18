@@ -178,6 +178,21 @@
     "range": "din"
   },
   "events": {
+    "title": "Evenimente",
+    "manage-title": "Gestionează Evenimente",
+    "search": "Caută după nume, status, tip sau locație",
+    "name": "DENUMIRE",
+    "period": "PERIOADĂ",
+    "status": "STATUS",
+    "type": "TIP",
+    "location": "LOCAȚIE",
+    "details-col": "DETALII",
+    "details": "Detalii",
+    "view-details": "Vezi detalii",
+    "no-events": "Niciun eveniment găsit",
+    "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un eveniment potrivit.",
+    "sort-asc": "Sortare: cele mai apropiate primele",
+    "sort-desc": "Sortare: cele mai recente primele",
     "create": {
       "title": "Adaugă un eveniment nou"
     },
