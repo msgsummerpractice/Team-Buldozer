@@ -1,4 +1,5 @@
-import { Component, computed, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EventService } from '@core/events/services/event-service';
 import { EventResponse } from '@core/events/model/event-response';
 import { FormsModule } from '@angular/forms';
@@ -31,7 +32,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
   ],
   templateUrl: './events.html',
 })
-export class Events implements OnInit, OnDestroy {
+export class Events implements OnInit {
   private readonly eventService = inject(EventService);
   private _events = signal<EventResponse[]>([]);
 
@@ -43,6 +44,7 @@ export class Events implements OnInit, OnDestroy {
 
   protected readonly displayedColumns = ['name', 'period', 'status', 'type', 'location', 'details'];
 
+  private readonly destroyRef = inject(DestroyRef);
   private searchSubject = new Subject<string>();
 
   readonly filteredEvents = computed(() => {
@@ -55,9 +57,9 @@ export class Events implements OnInit, OnDestroy {
       : allEvents.filter(
           (event) =>
             event.name.toLowerCase().includes(term) ||
-            event.status?.toLowerCase().includes(term) ||
-            event.type?.toLowerCase().includes(term) ||
-            event.location?.toLowerCase().includes(term)
+            event.status.toLowerCase().includes(term) ||
+            event.type.toLowerCase().includes(term) ||
+            event.location.toLowerCase().includes(term)
         );
 
     return filtered.sort((a, b) => {
@@ -76,14 +78,12 @@ export class Events implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadEvents();
 
-    this.searchSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe((term) => {
-      this.searchTerm.set(term);
-      this.pageIndex.set(0);
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.searchSubject.complete();
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((term) => {
+        this.searchTerm.set(term);
+        this.pageIndex.set(0);
+      });
   }
 
   loadEvents(): void {
@@ -110,5 +110,9 @@ export class Events implements OnInit, OnDestroy {
       return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
     };
     return `${fmt(start)} - ${fmt(end)}`;
+  }
+  onClear(): void {
+    this.searchTerm.set('');
+    this.pageIndex.set(0);
   }
 }

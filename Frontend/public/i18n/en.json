@@ -193,6 +193,22 @@
     "adjust": "Try adjusting the search term to find a matching event.",
     "sort-asc": "Sort: soonest first",
     "sort-desc": "Sort: latest first",
+    "status-values": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published",
+      "COMPLETED": "Completed"
+    },
+    "type-values": {
+      "INTERNAL": "Internal",
+      "EXTERNAL": "External",
+      "LOCAL": "Local"
+    },
+    "location-values": {
+      "CLUJ": "Cluj",
+      "TIMISOARA": "Timișoara",
+      "MURES": "Târgu Mureș",
+      "ALL": "All locations"
+    },
     "create": {
       "title": "Add A New Event"
     },

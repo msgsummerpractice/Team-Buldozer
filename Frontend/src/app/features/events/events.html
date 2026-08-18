@@ -21,7 +21,7 @@
           matSuffix
           matIconButton
           aria-label="Clear"
-          (click)="onSearch(''); searchInput.value = ''"
+          (click)="onClear(); searchInput.value = ''"
         >
           <mat-icon>close</mat-icon>
         </button>
@@ -70,14 +70,16 @@
             <td mat-cell *matCellDef="let event">
               @switch (event.status) { @case ('PUBLISHED') {
               <mat-chip disableRipple="true" highlighted="true" color="primary"
-                >{{ event.status }}</mat-chip
+                >{{ 'events.status-values.' + event.status | transloco }}</mat-chip
               >
               } @case ('COMPLETED') {
               <mat-chip disableRipple="true" highlighted="true" color="accent"
-                >{{ event.status }}</mat-chip
+                >{{ 'events.status-values.' + event.status | transloco }}</mat-chip
               >
               } @default {
-              <mat-chip disableRipple="true">{{ event.status }}</mat-chip>
+              <mat-chip disableRipple="true"
+                >{{ 'events.status-values.' + event.status | transloco }}</mat-chip
+              >
               } }
             </td>
           </ng-container>
@@ -91,7 +93,9 @@
               {{ 'events.type' | transloco }}
             </th>
             <td mat-cell *matCellDef="let event">
-              <mat-chip disableRipple="true">{{ event.type }}</mat-chip>
+              <mat-chip disableRipple="true"
+                >{{ 'events.type-values.' + event.type | transloco }}</mat-chip
+              >
             </td>
           </ng-container>
 
@@ -107,7 +111,7 @@
               <mat-chip-set>
                 <mat-chip disableRipple="true">
                   <mat-icon matChipAvatar>place</mat-icon>
-                  {{ event.location }}
+                  {{ 'events.location-values.' + event.location | transloco }}
                 </mat-chip>
               </mat-chip-set>
             </td>

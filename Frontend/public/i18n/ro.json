@@ -193,6 +193,22 @@
     "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un eveniment potrivit.",
     "sort-asc": "Sortare: cele mai apropiate primele",
     "sort-desc": "Sortare: cele mai recente primele",
+    "status-values": {
+      "DRAFT": "Schiță",
+      "PUBLISHED": "Publicat",
+      "COMPLETED": "Finalizat"
+    },
+    "type-values": {
+      "INTERNAL": "Intern",
+      "EXTERNAL": "Extern",
+      "LOCAL": "Local"
+    },
+    "location-values": {
+      "CLUJ": "Cluj",
+      "TIMISOARA": "Timișoara",
+      "MURES": "Târgu Mureș",
+      "ALL": "Toate locațiile"
+    },
     "create": {
       "title": "Adaugă un eveniment nou"
     },
