@@ -1,5 +1,5 @@
-import { EventLocation } from '@core/events/model/event-location';
-import { EventType } from '@core/events/model/event-type';
+import { EventLocation } from '@features/events/model/event-location';
+import { EventType } from '@features/events/model/event-type';
 
 export type EventRequest = {
   name: string;

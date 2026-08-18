@@ -4,8 +4,7 @@ import { NotFound } from '@features/not-found/components/not-found';
 import { authorizationGuard } from '@core/authorization/guards/authorization.guard';
 import { ownProfileGuard } from '@core/authentication/guards/own-profile.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
-import { Users } from '@features/users/components/users';
-import { authGuard } from '@core/authentication/guards/login-guard';
+import { eventsRoutes } from '@features/events/events.routes';
 
 export const routes: Routes = [
   {
@@ -35,11 +34,7 @@ export const routes: Routes = [
     loadComponent: () => import('@features/users/components/users').then((m) => m.Users),
     canActivate: [authorizationGuard([UserRoleEnum.ADMIN])],
   },
-  {
-    path: 'events/add',
-    loadComponent: () => import('@features/event-create/event-create').then((m) => m.EventCreate),
-    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
-  },
+  ...eventsRoutes,
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },
 ];
