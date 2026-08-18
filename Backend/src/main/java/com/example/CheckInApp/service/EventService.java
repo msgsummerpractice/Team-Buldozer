@@ -19,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 
 import javax.management.relation.Role;
 
@@ -35,6 +35,9 @@ public class EventService {
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
     private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
+    private static final String CHECK_IN_CODE_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final int CHECK_IN_CODE_LENGTH = 6;
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
@@ -232,9 +235,17 @@ public class EventService {
         }
 
         event.setStatus(EventStatus.PUBLISHED);
-        event.setCheckInCode(UUID.randomUUID().toString().replace("-", "").substring(0, 6).toUpperCase());
+        event.setCheckInCode(generateCheckInCode());
 
         return eventMapper.toResponse(eventRepository.save(event));
+    }
+
+    private String generateCheckInCode() {
+        StringBuilder code = new StringBuilder(CHECK_IN_CODE_LENGTH);
+        for (int i = 0; i < CHECK_IN_CODE_LENGTH; i++) {
+            code.append(CHECK_IN_CODE_CHARS.charAt(RANDOM.nextInt(CHECK_IN_CODE_CHARS.length())));
+        }
+        return code.toString();
     }
 
     @Transactional(readOnly = true)
