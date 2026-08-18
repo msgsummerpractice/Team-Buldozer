@@ -18,19 +18,19 @@
   </div>
 
   @if (imageChangedEvent()) {
-  <div class="rounded-xl overflow-hidden">
-    <image-cropper
-      [imageChangedEvent]="imageChangedEvent()"
-      [maintainAspectRatio]="true"
-      [aspectRatio]="21 / 9"
-      [roundCropper]="false"
-      output="base64"
-      format="jpeg"
-      (imageCropped)="onImageCropped($event)"
-      (imageLoaded)="onImageLoaded()"
-      class="block"
-    />
-  </div>
+    <div class="rounded-xl overflow-hidden">
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent()"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="21 / 9"
+        [roundCropper]="false"
+        output="base64"
+        format="jpeg"
+        (imageCropped)="onImageCropped($event)"
+        (imageLoaded)="onImageLoaded()"
+        class="block"
+      />
+    </div>
   }
 </mat-dialog-content>
 

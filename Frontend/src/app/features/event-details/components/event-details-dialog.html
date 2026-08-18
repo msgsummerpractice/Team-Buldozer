@@ -2,111 +2,115 @@
 
 <mat-dialog-content class="flex flex-col gap-4 w-full max-w-xl">
   @if (loading()) {
-  <div class="flex justify-center py-8">
-    <mat-spinner diameter="40" />
-  </div>
+    <div class="flex justify-center py-8">
+      <mat-spinner diameter="40" />
+    </div>
   } @else if (error()) {
-  <p class="text-sm text-red-500">{{ error()! | transloco }}</p>
-  } @else if (event(); as data) { @if (data.poster) {
-  <img [src]="data.poster" [alt]="data.name" class="w-full h-48 object-cover rounded-lg" />
-  }
+    <p class="text-sm text-red-500">{{ error()! | transloco }}</p>
+  } @else if (event(); as data) {
+    @if (data.poster) {
+      <img [src]="data.poster" [alt]="data.name" class="w-full h-48 object-cover rounded-lg" />
+    }
 
-  <div class="flex flex-col gap-1">
-    <span class="text-xs font-medium uppercase tracking-wide">
-      {{ 'event-details.dialog.description' | transloco }}
-    </span>
-    <p class="text-sm">{{ data.description }}</p>
-  </div>
-
-  <mat-divider />
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div class="flex flex-col gap-1">
       <span class="text-xs font-medium uppercase tracking-wide">
-        {{ 'event-details.dialog.start-date' | transloco }}
+        {{ 'event-details.dialog.description' | transloco }}
       </span>
-      <span class="text-sm">{{ data.startDateTime | date: 'medium' }}</span>
-    </div>
-    <div class="flex flex-col gap-1">
-      <span class="text-xs font-medium uppercase tracking-wide">
-        {{ 'event-details.dialog.end-date' | transloco }}
-      </span>
-      <span class="text-sm">{{ data.endDateTime | date: 'medium' }}</span>
-    </div>
-  </div>
-
-  @if (data.registrationStartDate && data.registrationEndDate) {
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      </span>
-      <span class="text-sm">{{ data.registrationStartDate | date: 'mediumDate' }}</span>
-    </div>
-    <div class="flex flex-col gap-1">
-      <span class="text-xs font-medium uppercase tracking-wide">
-        {{ 'event-details.dialog.registration-end' | transloco }}
-      </span>
-      <span class="text-sm">{{ data.registrationEndDate | date: 'mediumDate' }}</span>
-    </div>
-  </div>
-  }
-
-  <div class="flex flex-col gap-1">
-    <span class="text-xs font-medium uppercase tracking-wide">
-      {{ 'event-details.dialog.location' | transloco }}
-    </span>
-    <div class="flex items-center gap-2">
-      <mat-icon class="!text-[18px]">location_on</mat-icon>
-      <span class="text-sm">{{ locationKey() | transloco }}</span>
-    </div>
-  </div>
-
-  @if (data.address) {
-  <div class="flex flex-col gap-1">
-    <span class="text-xs font-medium uppercase tracking-wide">
-      {{ 'event-details.dialog.address' | transloco }}
-    </span>
-    <span class="text-sm">{{ data.address }}</span>
-  </div>
-  }
-
-  <mat-divider />
-
-  <div class="flex items-start gap-6 flex-wrap">
-    <div class="flex flex-col gap-2">
-      <span class="text-xs font-medium uppercase tracking-wide">
-        {{ 'event-details.dialog.status' | transloco }}
-      </span>
-      <mat-chip-set>
-        <mat-chip [highlighted]="true">{{ statusKey() | transloco }}</mat-chip>
-      </mat-chip-set>
+      <p class="text-sm">{{ data.description }}</p>
     </div>
 
-    <div class="flex flex-col gap-2">
-      <span class="text-xs font-medium uppercase tracking-wide">
-        {{ 'event-details.dialog.type' | transloco }}
-      </span>
-      <mat-chip-set>
-        <mat-chip>{{ typeKey() | transloco }}</mat-chip>
-      </mat-chip-set>
-    </div>
+    <mat-divider />
 
-    <div class="flex flex-col gap-2">
-      <span class="text-xs font-medium uppercase tracking-wide">
-        {{ 'event-details.dialog.food-provided' | transloco }}
-      </span>
-      <div class="flex items-center gap-1">
-        @if (data.foodProvided) {
-        <mat-icon class="text-green-600 !text-[18px]">check_circle</mat-icon>
-        <span class="text-sm text-green-700">{{ 'event-details.dialog.yes' | transloco }}</span>
-        } @else {
-        <mat-icon class="!text-[18px]">cancel</mat-icon>
-        <span class="text-sm">{{ 'event-details.dialog.no' | transloco }}</span>
-        }
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-medium uppercase tracking-wide">
+          {{ 'event-details.dialog.start-date' | transloco }}
+        </span>
+        <span class="text-sm">{{ data.startDateTime | date: 'medium' }}</span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-medium uppercase tracking-wide">
+          {{ 'event-details.dialog.end-date' | transloco }}
+        </span>
+        <span class="text-sm">{{ data.endDateTime | date: 'medium' }}</span>
       </div>
     </div>
-  </div>
+
+    @if (data.registrationStartDate && data.registrationEndDate) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+          <span class="text-xs font-medium uppercase tracking-wide">
+            {{ 'event-details.dialog.registration-start' | transloco }}
+          </span>
+          <span class="text-sm">{{ data.registrationStartDate | date: 'mediumDate' }}</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <span class="text-xs font-medium uppercase tracking-wide">
+            {{ 'event-details.dialog.registration-end' | transloco }}
+          </span>
+          <span class="text-sm">{{ data.registrationEndDate | date: 'mediumDate' }}</span>
+        </div>
+      </div>
+    }
+
+    <div class="flex flex-col gap-1">
+      <span class="text-xs font-medium uppercase tracking-wide">
+        {{ 'event-details.dialog.location' | transloco }}
+      </span>
+      <div class="flex items-center gap-2">
+        <mat-icon class="!text-[18px]">location_on</mat-icon>
+        <span class="text-sm">{{ locationKey() | transloco }}</span>
+      </div>
+    </div>
+
+    @if (data.address) {
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-medium uppercase tracking-wide">
+          {{ 'event-details.dialog.address' | transloco }}
+        </span>
+        <span class="text-sm">{{ data.address }}</span>
+      </div>
+    }
+
+    <mat-divider />
+
+    <div class="flex items-start gap-6 flex-wrap">
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-medium uppercase tracking-wide">
+          {{ 'event-details.dialog.status' | transloco }}
+        </span>
+        <mat-chip-set>
+          <mat-chip [highlighted]="true">{{ statusKey() | transloco }}</mat-chip>
+        </mat-chip-set>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-medium uppercase tracking-wide">
+          {{ 'event-details.dialog.type' | transloco }}
+        </span>
+        <mat-chip-set>
+          <mat-chip>{{ typeKey() | transloco }}</mat-chip>
+        </mat-chip-set>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-medium uppercase tracking-wide">
+          {{ 'event-details.dialog.food-provided' | transloco }}
+        </span>
+        <div class="flex items-center gap-1">
+          @if (data.foodProvided) {
+            <mat-icon class="text-green-600 !text-[18px]">check_circle</mat-icon>
+            <span class="text-sm text-green-700">{{ 'event-details.dialog.yes' | transloco }}</span>
+          } @else {
+            <mat-icon class="!text-[18px]">cancel</mat-icon>
+            <span class="text-sm">{{ 'event-details.dialog.no' | transloco }}</span>
+          }
+        </div>
+      </div>
+    </div>
   }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="close()"> {{ 'common.close' | transloco }} </button>
+  <button mat-button type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
 </mat-dialog-actions>
