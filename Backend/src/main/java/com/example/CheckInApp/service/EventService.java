@@ -25,8 +25,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-import javax.management.relation.Role;
-
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -251,5 +249,26 @@ public class EventService {
         event.setStatus(EventStatus.PUBLISHED);
         Event updatedEvent = eventRepository.save(event);
         return eventMapper.toResponse(updatedEvent);
+    }
+
+    @Transactional
+    public EventResponse completeEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        if (event.getStatus() == EventStatus.COMPLETED) {
+            throw new EventNotEditableException("Event is already completed.");
+        }
+
+        if (event.getStatus() == EventStatus.DRAFT) {
+            throw new EventNotEditableException("Only published events can be completed.");
+        }
+
+        if (event.getEndDateTime().isAfter(LocalDateTime.now())) {
+            throw new EventNotEditableException("Event cannot be completed before its end time.");
+        }
+
+        event.setStatus(EventStatus.COMPLETED);
+        return eventMapper.toResponse(eventRepository.save(event));
     }
 }
