@@ -5,12 +5,13 @@ import { authorizationGuard } from '@core/authorization/guards/authorization.gua
 import { ownProfileGuard } from '@core/authentication/guards/own-profile.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { authGuard } from '@core/authentication/guards/login-guard';
+import { eventsRoutes } from '@features/events/events.routes';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
     pathMatch: 'full',
+    redirectTo: 'home',
   },
   {
     path: 'home',
@@ -34,22 +35,7 @@ export const routes: Routes = [
     loadComponent: () => import('@features/users/components/users').then((m) => m.Users),
     canActivate: [authorizationGuard([UserRoleEnum.ADMIN])],
   },
-  {
-    path: 'events/add',
-    loadComponent: () =>
-      import('@features/events/event-create/event-create').then((m) => m.EventCreate),
-    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING, UserRoleEnum.HR])],
-  },
-  {
-    path: 'events',
-    loadComponent: () => import('@features/events/events').then((m) => m.Events),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'users',
-    loadComponent: () => import('@features/users/components/users').then((m) => m.Users),
-    canActivate: [authorizationGuard([UserRoleEnum.ADMIN])],
-  },
+  ...eventsRoutes,
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },
 ];

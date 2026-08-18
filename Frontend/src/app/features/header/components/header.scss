@@ -53,3 +53,8 @@
     display: block;
   }
 }
+
+.nav-link-active {
+  background-color: color-mix(in srgb, var(--mat-sys-on-primary) 18%, transparent);
+  border-radius: 8px;
+}

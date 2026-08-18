@@ -75,12 +75,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EventNotEditableException.class)
     public ResponseEntity<ErrorResponse> handleEventNotEditable(EventNotEditableException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_113, ex.getMessage(), request);
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_113, ex.getMessage(), request);
     }
 
     @ExceptionHandler(ForbiddenActionException.class)
     public ResponseEntity<ErrorResponse> handleForbiddenAction(ForbiddenActionException ex, HttpServletRequest request) {
-                return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_114, ex.getMessage(), request);
+        return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_114, ex.getMessage(), request);
 
     }
 
