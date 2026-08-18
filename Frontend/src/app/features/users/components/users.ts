@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { UserLocationEnum } from '@core/users/model/user-location';
 import { NotificationService } from '@core/notification/services/notification.service';
+import { getRoleColor } from '@core/authorization/utils/role-colors';
 import {
   UserRolesDialog,
   UserRolesDialogData,
@@ -129,15 +130,7 @@ export class Users implements OnInit, OnDestroy {
     });
   }
 
-  protected getRoleColor(role: string): string {
-    const colors: Record<string, string> = {
-      ADMIN: 'var(--color-admin)',
-      HR: 'var(--color-hr)',
-      MARKETING: 'var(--color-marketing)',
-      PARTICIPANT: 'var(--color-participant)',
-    };
-    return colors[role] ?? 'var(--color-default)';
-  }
+  protected readonly getRoleColor = getRoleColor;
 
   protected isSaving(userId: number): boolean {
     return this.savingIds().has(userId);
