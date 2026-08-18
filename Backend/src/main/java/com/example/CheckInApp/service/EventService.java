@@ -44,7 +44,6 @@ public class EventService {
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
         validateDates(event);
-        validateDates(event);
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
         event.setCreatedBy(currentUser);
@@ -239,5 +238,17 @@ public class EventService {
         return events.stream()
                 .map(eventMapper::toResponse)
                 .toList();
+    }
+
+    public EventResponse publishEvent(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
+
+        if (event.getStatus() != EventStatus.DRAFT) {
+            throw new EventNotEditableException("Only events in DRAFT status can be published.");
+        }
+        event.setStatus(EventStatus.PUBLISHED);
+        Event updatedEvent = eventRepository.save(event);
+        return eventMapper.toResponse(updatedEvent);
     }
 }
