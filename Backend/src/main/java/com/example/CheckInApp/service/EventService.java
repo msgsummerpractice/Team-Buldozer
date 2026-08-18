@@ -269,15 +269,4 @@ public class EventService {
                 .toList();
     }
 
-    public EventResponse publishEvent(Long id) {
-        Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
-
-        if (event.getStatus() != EventStatus.DRAFT) {
-            throw new EventNotEditableException("Only events in DRAFT status can be published.");
-        }
-        event.setStatus(EventStatus.PUBLISHED);
-        Event updatedEvent = eventRepository.save(event);
-        return eventMapper.toResponse(updatedEvent);
-    }
 }
