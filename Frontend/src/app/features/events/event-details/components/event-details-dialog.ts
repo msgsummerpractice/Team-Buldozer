@@ -62,9 +62,15 @@ export class EventDetailsDialog {
     return type ? `event-details.dialog.type-${type.toLowerCase()}` : '';
   });
 
-  protected readonly locationKey = computed(() => {
-    const location = this.event()?.location;
-    return location ? `event-details.dialog.location-${location.toLowerCase()}` : '';
+  protected readonly posterUrl = computed(() => {
+    const poster = this.event()?.poster;
+    if (!poster) return null;
+    const mime = poster.startsWith('/9j/')
+      ? 'image/jpeg'
+      : poster.startsWith('iVBORw0KGgo')
+        ? 'image/png'
+        : 'image/jpeg';
+    return `data:${mime};base64,${poster}`;
   });
 
   protected close(): void {

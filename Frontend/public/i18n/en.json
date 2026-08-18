@@ -208,6 +208,37 @@
     "range": "of"
   },
   "events": {
+    "title": "View Events",
+    "manage-title": "Manage Events",
+    "search": "Search by name, status, type or location",
+    "name": "NAME",
+    "period": "PERIOD",
+    "status": "STATUS",
+    "type": "TYPE",
+    "location": "LOCATION",
+    "details-col": "DETAILS",
+    "details": "Details",
+    "view-details": "View details",
+    "no-events": "No events found",
+    "adjust": "Try adjusting the search term to find a matching event.",
+    "sort-asc": "Sort: soonest first",
+    "sort-desc": "Sort: latest first",
+    "status-values": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published",
+      "COMPLETED": "Completed"
+    },
+    "type-values": {
+      "INTERNAL": "Internal",
+      "EXTERNAL": "External",
+      "LOCAL": "Local"
+    },
+    "location-values": {
+      "CLUJ": "Cluj",
+      "TIMISOARA": "Timișoara",
+      "MURES": "Târgu Mureș",
+      "ALL": "All locations"
+    },
     "create": {
       "title": "Add A New Event"
     },
