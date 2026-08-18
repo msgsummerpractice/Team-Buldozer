@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EventPosterCropperDialog } from './components/event-poster-cropper-dialog';
-import { EventService } from '@core/events/services/event-service';
+import { EventService } from '@features/events/services/event-service';
 import {
   FormControl,
   FormGroup,
@@ -10,12 +10,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { EventType, EventTypeEnum } from '@core/events/model/event-type';
-import { EventLocation, EventLocationEnum } from '@core/events/model/event-location';
+import { EventType, EventTypeEnum } from '@features/events/model/event-type';
+import { EventLocation, EventLocationEnum } from '@features/events/model/event-location';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { EventRequest } from '@core/events/model/event-request';
-import { EventUpdateRequest } from '@core/events/model/event-update-request';
-import { EventResponse } from '@core/events/model/event-response';
+import { EventRequest } from '@features/events/model/event-request';
+import { EventUpdateRequest } from '@features/events/model/event-update-request';
+import { EventResponse } from '@features/events/model/event-response';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatError, MatFormField, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
@@ -31,13 +31,12 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import {
   combineDateAndTime,
   eventDateRangeValidator,
-  parseDateOnly,
-  parseDateTime,
+  parseDate,
   registrationDateRangeValidator,
   toDateString,
   toDateTimeString,
-} from '@features/event-create/utils/event-utils';
-import { distinctUntilChanged } from 'rxjs';
+} from '@features/events/event-create/utils/event-utils';
+import { catchError, distinctUntilChanged, EMPTY } from 'rxjs';
 
 interface EventFormControls {
   name: FormControl<string>;
@@ -156,18 +155,20 @@ export class EventCreate implements OnInit {
   }
 
   private loadEvent(id: number): void {
-    this.eventService.getEventById(id).subscribe({
-      next: (event) => this.populateForm(event),
-      error: (errorResponse) => {
-        const errorMessage = errorResponse?.error?.message || 'events.messages.load-error';
-        this.notificationService.showError(errorMessage);
-      },
-    });
+    this.eventService
+      .getEventById(id)
+      .pipe(
+        catchError(() => {
+          this.router.navigate(['/events']);
+          return EMPTY;
+        })
+      )
+      .subscribe(this.populateForm.bind(this));
   }
 
   private populateForm(event: EventResponse): void {
-    const startDate = parseDateTime(event.startDateTime);
-    const endDate = parseDateTime(event.endDateTime);
+    const startDate = parseDate(event.startDateTime, true);
+    const endDate = parseDate(event.endDateTime, true);
 
     this.eventForm.patchValue({
       name: event.name,
@@ -177,8 +178,8 @@ export class EventCreate implements OnInit {
       startTime: startDate,
       endDate,
       endTime: endDate,
-      registrationStartDate: parseDateOnly(event.registrationStartDate),
-      registrationEndDate: parseDateOnly(event.registrationEndDate),
+      registrationStartDate: parseDate(event.registrationStartDate),
+      registrationEndDate: parseDate(event.registrationEndDate),
       address: event.address,
       description: event.description,
       foodProvided: event.foodProvided,
@@ -407,18 +408,20 @@ export class EventCreate implements OnInit {
         updateRequest.poster = this.posterBase64() ?? '';
       }
 
-      this.eventService.updateEvent(id, updateRequest).subscribe({
-        next: () => {
+      this.eventService
+        .updateEvent(id, updateRequest)
+        .pipe(
+          catchError(() => {
+            this.submitting.set(false);
+            return EMPTY;
+          })
+        )
+        .subscribe(() => {
           this.notificationService.showSuccess('events.messages.update-success');
           this.submitting.set(false);
           this.posterChanged.set(false);
-        },
-        error: (errorResponse) => {
-          const errorMessage = errorResponse?.error?.message || 'events.messages.error';
-          this.notificationService.showError(errorMessage);
-          this.submitting.set(false);
-        },
-      });
+        });
+
       return;
     }
 
@@ -427,17 +430,18 @@ export class EventCreate implements OnInit {
       poster: this.posterBase64() ?? undefined,
     };
 
-    this.eventService.addEvent(request).subscribe({
-      next: (created) => {
+    this.eventService
+      .addEvent(request)
+      .pipe(
+        catchError(() => {
+          this.submitting.set(false);
+          return EMPTY;
+        })
+      )
+      .subscribe((createdId) => {
         this.notificationService.showSuccess('events.messages.success');
         this.submitting.set(false);
-        this.router.navigate(['/events', created.id]);
-      },
-      error: (errorResponse) => {
-        const errorMessage = errorResponse?.error?.message || 'events.messages.error';
-        this.notificationService.showError(errorMessage);
-        this.submitting.set(false);
-      },
-    });
+        this.router.navigate(['/events', createdId]);
+      });
   }
 }

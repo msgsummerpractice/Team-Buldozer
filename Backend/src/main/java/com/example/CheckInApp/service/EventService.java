@@ -36,7 +36,7 @@ public class EventService {
     private final UserRepository userRepository;
 
     @Transactional
-    public EventResponse addEvent(EventRequest request, String userEmail) {
+    public Long addEvent(EventRequest request, String userEmail) {
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
@@ -55,7 +55,7 @@ public class EventService {
         }
 
         Event saved = eventRepository.save(event);
-        return eventMapper.toResponse(saved);
+        return saved.getId();
 
     }
 

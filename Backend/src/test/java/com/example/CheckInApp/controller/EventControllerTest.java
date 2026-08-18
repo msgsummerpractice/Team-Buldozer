@@ -124,7 +124,7 @@ class EventControllerTest {
     }
 
     @Test
-    void addEvent_returnsCreatedWithEventResponse_whenUserHasMarketingRole() throws Exception {
+    void addEvent_returnsCreatedWithEventId_whenUserHasMarketingRole() throws Exception {
         EventRequest request = new EventRequest(
                 "Team Building Event",
                 EventLocation.CLUJ,
@@ -139,14 +139,7 @@ class EventControllerTest {
                 true
         );
 
-        EventResponse response = EventResponse.builder()
-                .id(1L)
-                .name("Team Building Event")
-                .location(EventLocation.CLUJ)
-                .status(EventStatus.DRAFT)
-                .build();
-
-        when(eventService.addEvent(any(EventRequest.class), anyString())).thenReturn(response);
+        when(eventService.addEvent(any(EventRequest.class), anyString())).thenReturn(1L);
 
         mockMvc.perform(post("/api/v1/events")
                         .with(user("user@example.com").roles("MARKETING"))
@@ -154,9 +147,7 @@ class EventControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("Team Building Event")))
-                .andExpect(jsonPath("$.location", is("CLUJ")));
+                .andExpect(content().string("1"));
 
         verify(eventService).addEvent(any(EventRequest.class), anyString());
     }
