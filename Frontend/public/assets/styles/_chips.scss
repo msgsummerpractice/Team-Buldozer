@@ -1,0 +1,11 @@
+:root {
+  --color-admin: #ff5d00;
+  --color-hr: #9d00ff;
+  --color-marketing: #00820d;
+  --color-participant: #3b82f6;
+  --color-default: #64748b;
+}
+/* overlay panel is rendered outside the component — global styles are required */
+.roles-select-panel {
+  min-width: 200px !important;
+}

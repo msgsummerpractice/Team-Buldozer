@@ -13,8 +13,8 @@
           #searchInput
           matInput
           type="text"
-          [value]="searchTerm()"
-          (input)="onSearch(searchInput.value)"
+          [value]="inputValue()"
+          (input)="onSearchInput(searchInput.value)"
         />
         @if (searchTerm()) {
           <button
@@ -25,6 +25,10 @@
           >
             <mat-icon>close</mat-icon>
           </button>
+        @if (inputValue()) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="onSearchInput('')">
+          <mat-icon>close</mat-icon>
+        </button>
         }
       </mat-form-field>
 
