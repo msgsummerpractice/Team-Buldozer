@@ -9,6 +9,7 @@ import com.example.CheckInApp.model.UserRole;
 import com.example.CheckInApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import com.example.CheckInApp.exception.DataBaseException;
 import com.example.CheckInApp.exception.DuplicateEmailException;
 import com.example.CheckInApp.exception.ForbiddenActionException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
@@ -64,12 +65,12 @@ public class UserService {
 
         boolean userIsAdmin = existingUser.getRoles().contains(UserRole.ADMIN);
         boolean removingAdmin = !request.getRoles().contains(UserRole.ADMIN);
-        boolean deactivatingUser = request.getStatus();
+        boolean activeUser = request.getStatus();
         if (userIsAdmin && removingAdmin && userRepository.countByRolesContaining(UserRole.ADMIN) == 1) {
             throw new ForbiddenActionException("Last admin must remain admin!");
         }
 
-        if(userIsAdmin && deactivatingUser && userRepository.countByRolesContaining(UserRole.ADMIN) == 1) {
+        if(userIsAdmin && !activeUser && userRepository.countByRolesContaining(UserRole.ADMIN) == 1) {
             throw new ForbiddenActionException("Last admin can not be disabled!");
         }
 
@@ -80,7 +81,7 @@ public class UserService {
             User updatedUser = userRepository.save(existingUser);
             return userMapper.toResponse(updatedUser);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error updating user status and roles: " + e.getMessage());
+            throw new DataBaseException("Error updating user status and roles: " + e.getMessage());
         }
     }
 
