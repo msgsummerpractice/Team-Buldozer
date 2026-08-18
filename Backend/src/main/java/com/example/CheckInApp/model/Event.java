@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "events")
@@ -71,8 +70,5 @@ public class Event {
 
     @Column(nullable = false)
     private String checkInCode;
-
-    @OneToMany(mappedBy = "event")
-    private List<AttendanceRecord> attendanceRecords;
 
 }
