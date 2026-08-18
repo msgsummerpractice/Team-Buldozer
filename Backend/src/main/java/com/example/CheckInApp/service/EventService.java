@@ -3,6 +3,7 @@ package com.example.CheckInApp.service;
 import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
+import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
@@ -31,15 +32,15 @@ import javax.management.relation.Role;
 public class EventService {
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
-    private static final byte[] JPEG_SIGNATURE = { (byte) 0xFF, (byte) 0xD8, (byte) 0xFF };
-    private static final byte[] PNG_SIGNATURE = { (byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47 };
+    private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
+    private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
 
     @Transactional
-    public Long addEvent(EventRequest request, String userEmail) {
+    public CreateEventResponse addEvent(EventRequest request, String userEmail) {
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
@@ -58,8 +59,8 @@ public class EventService {
         }
 
         Event saved = eventRepository.save(event);
-        return saved.getId();
 
+        return new CreateEventResponse(saved.getId());
     }
 
     @Transactional(readOnly = true)

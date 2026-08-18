@@ -2,6 +2,7 @@ package com.example.CheckInApp.controller;
 
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
+import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.service.EventService;
 
@@ -31,9 +32,9 @@ public class EventController {
 
     @PostMapping
     @PreAuthorize("hasRole('MARKETING')")
-    public ResponseEntity<Long> addEvent(@Valid @RequestBody EventRequest request, Authentication authentication) {
-        Long createdEventId = eventService.addEvent(request, authentication.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEventId);
+    public ResponseEntity<CreateEventResponse> addEvent(@Valid @RequestBody EventRequest request, Authentication authentication) {
+        CreateEventResponse createdEvent = eventService.addEvent(request, authentication.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
 
     @GetMapping("/{id}")
