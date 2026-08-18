@@ -45,7 +45,6 @@ public class EventService {
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
         validateDates(event);
-        validateDates(event);
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
         event.setCreatedBy(currentUser);
@@ -60,11 +59,8 @@ public class EventService {
         }
 
         Event saved = eventRepository.save(event);
-        CreateEventResponse createEventResponse = CreateEventResponse.builder()
-                .id(saved.getId())
-                .build();
-        
-        return createEventResponse;
+
+        return new CreateEventResponse(saved.getId());
     }
 
     @Transactional(readOnly = true)

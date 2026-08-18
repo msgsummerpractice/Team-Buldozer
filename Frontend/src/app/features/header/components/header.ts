@@ -10,6 +10,7 @@ import { AuthenticationDirective } from '@core/authentication/directives/authent
 import { RolesAssignedDirective } from '@core/authorization/directives/role-assigned.directive';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { UserRoleEnum } from '@core/users/model/user-role';
 
 @Component({
   selector: 'app-header',
@@ -35,6 +36,8 @@ export class Header {
   protected translocoService = inject(TranslocoService);
 
   protected isAuthenticated = this.authService.isAuthenticated;
+
+  readonly roles = UserRoleEnum;
 
   protected profileLink(): UrlTree | null {
     const id = this.authorization.getUserId();

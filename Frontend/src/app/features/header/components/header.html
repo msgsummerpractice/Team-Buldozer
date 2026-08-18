@@ -8,7 +8,7 @@
       {{ 'home.nav.home' | transloco }}
     </button>
     <button
-      *rolesAssigned="'ADMIN'"
+      *rolesAssigned="roles.ADMIN"
       matButton
       routerLinkActive="nav-link-active"
       routerLink="/users"
@@ -16,7 +16,7 @@
       {{ 'users.title' | transloco }}
     </button>
     <button
-      *rolesAssigned="'MARKETING'"
+      *rolesAssigned="roles.MARKETING"
       matButton
       routerLinkActive="nav-link-active"
       routerLink="/events/list"
@@ -44,11 +44,7 @@
       </button>
     }
 
-    <button
-      (click)="toggleLang()"
-      class="lang-flag-btn"
-      [matTooltip]="activeLang() === 'en' ? 'Schimbă în Română' : 'Switch to English'"
-    >
+    <button (click)="toggleLang()" class="lang-flag-btn" [matTooltip]="'toggle-lang' | transloco">
       @if (activeLang() === 'en') {
         <img src="https://flagcdn.com/gb.svg" alt="English" />
       } @else {

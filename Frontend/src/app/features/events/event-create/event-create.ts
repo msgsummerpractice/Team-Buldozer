@@ -441,7 +441,6 @@ export class EventCreate implements OnInit {
       .subscribe((created) => {
         this.notificationService.showSuccess('events.messages.success');
         this.submitting.set(false);
-        console.log(created);
         this.router.navigate(['events', created.id, 'edit']);
       });
   }
