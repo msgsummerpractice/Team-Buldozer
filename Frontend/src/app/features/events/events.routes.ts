@@ -7,7 +7,6 @@ import { draftGuard } from '@features/events/guards/draft-guard';
 export const eventsRoutes: Routes = [
   {
     path: 'events',
-    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
     children: [
       {
         path: 'list',
@@ -17,6 +16,7 @@ export const eventsRoutes: Routes = [
         path: 'add',
         loadComponent: () =>
           import('@features/events/event-create/event-create').then((m) => m.EventCreate),
+        canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
       },
       {
         path: ':id',
@@ -25,11 +25,11 @@ export const eventsRoutes: Routes = [
             path: 'edit',
             loadComponent: () =>
               import('@features/events/event-create/event-create').then((m) => m.EventCreate),
-            canActivate: [draftGuard],
+            canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING]), draftGuard],
           },
           {
             path: 'details',
-            redirectTo: '/events/list',
+            loadComponent: () => import('@features/events/events').then((m) => m.Events),
           },
           {
             path: '**',
