@@ -5,12 +5,13 @@ import { authorizationGuard } from '@core/authorization/guards/authorization.gua
 import { ownProfileGuard } from '@core/authentication/guards/own-profile.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { authGuard } from '@core/authentication/guards/login-guard';
+import { eventsRoutes } from '@features/events/events.routes';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
     pathMatch: 'full',
+    redirectTo: 'home',
   },
   {
     path: 'home',
@@ -28,17 +29,6 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () => import('@features/register/components/register').then((m) => m.Register),
-  },
-  {
-    path: 'events/add',
-    loadComponent: () =>
-      import('@features/events/event-create/event-create').then((m) => m.EventCreate),
-    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
-  },
-  {
-    path: 'events',
-    loadComponent: () => import('@features/events/events').then((m) => m.Events),
-    canActivate: [authGuard],
   },
   {
     path: 'users',

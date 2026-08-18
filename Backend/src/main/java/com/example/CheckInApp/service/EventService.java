@@ -3,6 +3,7 @@ package com.example.CheckInApp.service;
 import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
+import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
@@ -32,19 +33,18 @@ import javax.management.relation.Role;
 public class EventService {
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
-    private static final byte[] JPEG_SIGNATURE = { (byte) 0xFF, (byte) 0xD8, (byte) 0xFF };
-    private static final byte[] PNG_SIGNATURE = { (byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47 };
+    private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
+    private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
 
     @Transactional
-    public Long addEvent(EventRequest request, String userEmail) {
+    public CreateEventResponse addEvent(EventRequest request, String userEmail) {
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
-        validateDates(event);
         validateDates(event);
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
@@ -60,8 +60,8 @@ public class EventService {
         }
 
         Event saved = eventRepository.save(event);
-        return saved.getId();
 
+        return new CreateEventResponse(saved.getId());
     }
 
     @Transactional(readOnly = true)
@@ -267,5 +267,17 @@ public class EventService {
         return events.stream()
                 .map(eventMapper::toResponse)
                 .toList();
+    }
+
+    public EventResponse publishEvent(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
+
+        if (event.getStatus() != EventStatus.DRAFT) {
+            throw new EventNotEditableException("Only events in DRAFT status can be published.");
+        }
+        event.setStatus(EventStatus.PUBLISHED);
+        Event updatedEvent = eventRepository.save(event);
+        return eventMapper.toResponse(updatedEvent);
     }
 }
