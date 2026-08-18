@@ -30,9 +30,12 @@ export class EventDetailsDialog {
   private readonly eventService = inject(EventService);
   private readonly dialogData = inject<{ id: number }>(MAT_DIALOG_DATA);
 
+  // Base64 prefix of a PNG file signature (\x89PNG\r\n\x1a\n)
+  private readonly PNG_BASE64_PREFIX = 'iVBORw0KGgo';
+
   readonly event = signal<EventResponse | null>(null);
   readonly loading = signal(true);
-  readonly error = signal<string | null>(null);
+  readonly errorTranslationKey = signal<string | null>(null);
 
   constructor() {
     this.eventService
@@ -41,12 +44,12 @@ export class EventDetailsDialog {
       .subscribe({
         next: (data) => {
           this.event.set(data);
-          this.error.set(null);
+          this.errorTranslationKey.set(null);
           this.loading.set(false);
         },
         error: () => {
           this.event.set(null);
-          this.error.set('event-details.dialog.error');
+          this.errorTranslationKey.set('event-details.dialog.error');
           this.loading.set(false);
         },
       });
@@ -64,12 +67,11 @@ export class EventDetailsDialog {
 
   protected readonly posterUrl = computed(() => {
     const poster = this.event()?.poster;
-    if (!poster) return null;
-    const mime = poster.startsWith('/9j/')
-      ? 'image/jpeg'
-      : poster.startsWith('iVBORw0KGgo')
-        ? 'image/png'
-        : 'image/jpeg';
+    if (!poster) {
+      return null;
+    }
+
+    const mime = poster.startsWith(this.PNG_BASE64_PREFIX) ? 'image/png' : 'image/jpeg';
     return `data:${mime};base64,${poster}`;
   });
 

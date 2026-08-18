@@ -17,6 +17,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventDetailsDialog } from '@features/events/event-details/components/event-details-dialog';
+import { RouterLink } from '@angular/router';
 
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
@@ -38,6 +39,7 @@ const EVENT_DETAILS_DIALOG_CONFIG = {
     MatPaginatorModule,
     MatTooltipModule,
     TranslocoPipe,
+    RouterLink,
   ],
   templateUrl: './events.html',
 })
@@ -91,10 +93,11 @@ export class Events implements OnInit {
     this.loadEvents();
 
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const id = params.get('id');
+      const idParam = params.get('id');
+      const id: number | null = idParam ? +idParam : null;
       if (id) {
         this.dialog
-          .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id: +id } })
+          .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
           .afterClosed()
           .subscribe(() => this.router.navigate(['/events']));
       }
@@ -108,37 +111,38 @@ export class Events implements OnInit {
       });
   }
 
-  loadEvents(): void {
+  protected loadEvents(): void {
     this.eventService.getAllEvents().subscribe((data) => this._events.set(data));
   }
 
-  onSearch(term: string): void {
+  protected onSearch(term: string): void {
     this.searchSubject.next(term);
   }
 
-  onPage(event: PageEvent): void {
+  protected onPage(event: PageEvent): void {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
   }
 
-  toggleSort(): void {
+  protected toggleSort(): void {
     this.sortDirection.update((d) => (d === 'asc' ? 'desc' : 'asc'));
     this.pageIndex.set(0);
   }
 
-  formatPeriod(start: string, end: string): string {
+  protected formatPeriod(start: string, end: string): string {
     const fmt = (dt: string) => {
       const d = new Date(dt);
       return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
     };
     return `${fmt(start)} - ${fmt(end)}`;
   }
+
   protected onClear(): void {
     this.searchTerm.set('');
     this.pageIndex.set(0);
   }
 
-  openDetails(id: number): void {
+  protected openDetails(id: number): void {
     this.router.navigate(['/events/details', id]);
   }
 }

@@ -16,11 +16,15 @@
           [value]="inputValue()"
           (input)="onSearchInput(searchInput.value)"
         />
-        @if (inputValue()) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="onSearchInput('')">
-            <mat-icon>close</mat-icon>
-          </button>
-        }
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="onSearchInput(''); searchInput.value = ''"
+          [style.display]="inputValue() ? 'inline-flex' : 'none'"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field>
 
       <div class="overflow-auto rounded bg-(--mat-sys-primary)">
@@ -95,13 +99,17 @@
               {{ 'users.status' | transloco }}
             </th>
             <td mat-cell *matCellDef="let user">
-              <mat-slide-toggle
-                class="user-active-slider"
-                [checked]="user.status"
-                [disabled]="isSaving(user.id)"
-                hideIcon
-                (change)="onToggleStatus(user, $event.checked)"
-              ></mat-slide-toggle>
+              @if (user.status) {
+                <mat-chip disableRipple="true" highlighted="true" color="primary">
+                  <mat-icon matChipAvatar>check_circle</mat-icon>
+                  {{ 'users.active' | transloco }}
+                </mat-chip>
+              } @else {
+                <mat-chip disableRipple="true" highlighted="true" color="warn">
+                  <mat-icon matChipAvatar>cancel</mat-icon>
+                  {{ 'users.inactive' | transloco }}
+                </mat-chip>
+              }
             </td>
           </ng-container>
 

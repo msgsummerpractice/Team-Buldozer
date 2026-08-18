@@ -7,15 +7,15 @@
     <div class="flex justify-center items-center h-64">
       <mat-spinner diameter="48" />
     </div>
-  } @else if (error()) {
-    <p class="text-sm text-red-500">{{ error()! | transloco }}</p>
+  } @else if (errorTranslationKey()) {
+    <p class="text-sm text-red-500">{{ errorTranslationKey() | transloco }}</p>
   } @else if (event(); as data) {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
       <!-- Left column: poster + description -->
       <div class="flex flex-col gap-6">
-        @if (posterUrl()) {
+        @if (posterUrl(); as poster) {
           <img
-            [src]="posterUrl()!"
+            [src]="poster"
             [alt]="data.name"
             class="w-full h-72 object-cover rounded-xl shadow"
           />
