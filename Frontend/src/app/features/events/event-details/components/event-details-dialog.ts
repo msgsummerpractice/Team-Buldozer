@@ -52,7 +52,7 @@ export class EventDetailsDialog {
           this.loading.set(false);
         },
         error: (err: HttpErrorResponse) => {
-          if (err.status === 403 || err.status === 401 || err.status === 404) {
+          if ([401, 403, 404].includes(err.status)) {
             this.dialogRef.close();
             this.router.navigate(['/events/list']);
           } else {
