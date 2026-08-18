@@ -353,5 +353,6 @@
       "load-error": "Failed to load event.",
       "error": "Failed to create event. Please verify your inputs."
     }
-  }
+  },
+  "toggle-lang": "Switch to Romanian"
 }

@@ -353,5 +353,6 @@
       "load-error": "Nu s-a putut încărca evenimentul.",
       "error": "Eroare la crearea evenimentului. Te rugăm să verifici datele introduse."
     }
-  }
+  },
+  "toggle-lang": "Schimbă în engleză"
 }

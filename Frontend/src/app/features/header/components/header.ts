@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink, UrlTree } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, UrlTree } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +10,7 @@ import { AuthenticationDirective } from '@core/authentication/directives/authent
 import { RolesAssignedDirective } from '@core/authorization/directives/role-assigned.directive';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { UserRoleEnum } from '@core/users/model/user-role';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     TranslocoPipe,
     AuthenticationDirective,
     RolesAssignedDirective,
+    RouterLinkActive,
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
@@ -34,6 +36,8 @@ export class Header {
   protected translocoService = inject(TranslocoService);
 
   protected isAuthenticated = this.authService.isAuthenticated;
+
+  readonly roles = UserRoleEnum;
 
   protected profileLink(): UrlTree | null {
     const id = this.authorization.getUserId();
