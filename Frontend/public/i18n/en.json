@@ -217,6 +217,9 @@
     "create": {
       "title": "Add A New Event"
     },
+    "edit": {
+      "title": "Edit Event"
+    },
     "fields": {
       "name": {
         "label": "Event Name",
@@ -321,6 +324,8 @@
     },
     "messages": {
       "success": "Event created successfully as Draft!",
+      "update-success": "Event updated successfully!",
+      "load-error": "Failed to load event.",
       "error": "Failed to create event. Please verify your inputs."
     }
   }

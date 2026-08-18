@@ -1,7 +1,9 @@
 <div class="w-full flex justify-center items-start py-10 px-4">
   <mat-card class="w-full max-w-4xl">
     <div class="px-6 pt-6 pb-4">
-      <h2 class="text-3xl font-bold">{{ 'events.create.title' | transloco }}</h2>
+      <h2 class="text-3xl font-bold">
+        {{ (isEditMode() ? 'events.edit.title' : 'events.create.title') | transloco }}
+      </h2>
     </div>
 
     <mat-card-content class="p-6">

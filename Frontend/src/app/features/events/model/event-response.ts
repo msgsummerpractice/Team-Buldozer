@@ -1,6 +1,6 @@
-import { EventLocation } from '@core/events/model/event-location';
-import { EventType } from '@core/events/model/event-type';
-import { EventStatus } from '@core/events/model/event-status';
+import { EventLocation } from '@features/events/model/event-location';
+import { EventType } from '@features/events/model/event-type';
+import { EventStatus } from '@features/events/model/event-status';
 
 export type EventResponse = {
   id: number;

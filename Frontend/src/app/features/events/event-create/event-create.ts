@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EventPosterCropperDialog } from './components/event-poster-cropper-dialog';
-import { EventService } from '@core/events/services/event-service';
+import { EventService } from '@features/events/services/event-service';
 import {
   FormControl,
   FormGroup,
@@ -9,11 +9,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { EventType, EventTypeEnum } from '@core/events/model/event-type';
-import { EventLocation, EventLocationEnum } from '@core/events/model/event-location';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { EventType, EventTypeEnum } from '@features/events/model/event-type';
+import { EventLocation, EventLocationEnum } from '@features/events/model/event-location';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { EventRequest } from '@core/events/model/event-request';
+import { EventRequest } from '@features/events/model/event-request';
+import { EventUpdateRequest } from '@features/events/model/event-update-request';
+import { EventResponse } from '@features/events/model/event-response';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatError, MatFormField, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
@@ -29,11 +31,12 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import {
   combineDateAndTime,
   eventDateRangeValidator,
+  parseDate,
   registrationDateRangeValidator,
   toDateString,
   toDateTimeString,
-} from '@features/event-create/utils/event-utils';
-import { distinctUntilChanged } from 'rxjs';
+} from '@features/events/event-create/utils/event-utils';
+import { catchError, distinctUntilChanged, EMPTY } from 'rxjs';
 
 interface EventFormControls {
   name: FormControl<string>;
@@ -82,12 +85,17 @@ export class EventCreate implements OnInit {
   private readonly notificationService = inject(NotificationService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   readonly selectedFile = signal<File | null>(null);
   readonly posterBase64 = signal<string | null>(null);
   readonly imagePreview = signal<string | null>(null);
   readonly showFoodProvided = signal(true);
   readonly submitting = signal(false);
+  readonly eventId = signal<number | null>(null);
+  readonly isEditMode = signal(false);
+  readonly posterChanged = signal(false);
 
   readonly maxFileSize = 5 * 1024 * 1024;
   readonly allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -134,6 +142,61 @@ export class EventCreate implements OnInit {
     this.setupTypeChangeSubscription();
     this.setupDateRangeRevalidation();
     this.handleTypeChange(this.eventType.LOCAL);
+
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      const id = Number(idParam);
+      if (!Number.isNaN(id)) {
+        this.eventId.set(id);
+        this.isEditMode.set(true);
+        this.loadEvent(id);
+      }
+    }
+  }
+
+  private loadEvent(id: number): void {
+    this.eventService
+      .getEventById(id)
+      .pipe(
+        catchError(() => {
+          this.router.navigate(['/events']);
+          return EMPTY;
+        })
+      )
+      .subscribe(this.populateForm.bind(this));
+  }
+
+  private populateForm(event: EventResponse): void {
+    const startDate = parseDate(event.startDateTime, true);
+    const endDate = parseDate(event.endDateTime, true);
+
+    this.eventForm.patchValue({
+      name: event.name,
+      type: event.type,
+      location: event.location,
+      startDate,
+      startTime: startDate,
+      endDate,
+      endTime: endDate,
+      registrationStartDate: parseDate(event.registrationStartDate),
+      registrationEndDate: parseDate(event.registrationEndDate),
+      address: event.address,
+      description: event.description,
+      foodProvided: event.foodProvided,
+    });
+
+    this.handleTypeChange(event.type);
+
+    if (event.poster) {
+      const dataUrl = event.poster.startsWith('data:')
+        ? event.poster
+        : `data:image/jpeg;base64,${event.poster}`;
+      this.imagePreview.set(dataUrl);
+      this.posterBase64.set(event.poster.replace(/^data:image\/\w+;base64,/, ''));
+      this.selectedFile.set(this.dataUrlToFile(dataUrl, 'poster.jpeg'));
+    }
+
+    this.posterChanged.set(false);
   }
 
   private setupDateRangeRevalidation(): void {
@@ -255,6 +318,7 @@ export class EventCreate implements OnInit {
       this.imagePreview.set(dataUrl);
       this.posterBase64.set(dataUrl.split(',')[1]);
       this.selectedFile.set(file);
+      this.posterChanged.set(true);
     };
     reader.readAsDataURL(file);
   }
@@ -276,6 +340,7 @@ export class EventCreate implements OnInit {
       this.imagePreview.set(dataUrl);
       this.posterBase64.set(raw);
       this.selectedFile.set(this.dataUrlToFile(dataUrl, 'poster.jpeg'));
+      this.posterChanged.set(true);
     });
   }
 
@@ -295,6 +360,7 @@ export class EventCreate implements OnInit {
     this.selectedFile.set(null);
     this.imagePreview.set(null);
     this.posterBase64.set(null);
+    this.posterChanged.set(true);
   }
 
   onSubmit(): void {
@@ -318,7 +384,7 @@ export class EventCreate implements OnInit {
     const start = combineDateAndTime(startDate, startTime);
     const end = combineDateAndTime(endDate, endTime);
 
-    const request: EventRequest = {
+    const basePayload = {
       ...rest,
       startDateTime: toDateTimeString(start),
       endDateTime: toDateTimeString(end),
@@ -326,20 +392,56 @@ export class EventCreate implements OnInit {
       registrationEndDate: toDateString(registrationEndDate),
       location: location || undefined,
       foodProvided: foodProvided ?? undefined,
-      poster: this.posterBase64() ?? undefined,
     };
 
     this.submitting.set(true);
-    this.eventService.addEvent(request).subscribe({
-      next: () => {
+
+    if (this.isEditMode()) {
+      const id = this.eventId();
+      if (id === null) {
+        this.submitting.set(false);
+        return;
+      }
+
+      const updateRequest: EventUpdateRequest = { ...basePayload };
+      if (this.posterChanged()) {
+        updateRequest.poster = this.posterBase64() ?? '';
+      }
+
+      this.eventService
+        .updateEvent(id, updateRequest)
+        .pipe(
+          catchError(() => {
+            this.submitting.set(false);
+            return EMPTY;
+          })
+        )
+        .subscribe(() => {
+          this.notificationService.showSuccess('events.messages.update-success');
+          this.submitting.set(false);
+          this.posterChanged.set(false);
+        });
+
+      return;
+    }
+
+    const request: EventRequest = {
+      ...basePayload,
+      poster: this.posterBase64() ?? undefined,
+    };
+
+    this.eventService
+      .addEvent(request)
+      .pipe(
+        catchError(() => {
+          this.submitting.set(false);
+          return EMPTY;
+        })
+      )
+      .subscribe((createdId) => {
         this.notificationService.showSuccess('events.messages.success');
         this.submitting.set(false);
-      },
-      error: (errorResponse) => {
-        const errorMessage = errorResponse?.error?.message || 'events.messages.error';
-        this.notificationService.showError(errorMessage);
-        this.submitting.set(false);
-      },
-    });
+        this.router.navigate(['/events', createdId]);
+      });
   }
 }
