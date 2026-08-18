@@ -31,8 +31,8 @@ import javax.management.relation.Role;
 public class EventService {
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
-    private static final byte[] JPEG_SIGNATURE = { (byte) 0xFF, (byte) 0xD8, (byte) 0xFF };
-    private static final byte[] PNG_SIGNATURE = { (byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47 };
+    private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
+    private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
@@ -239,5 +239,26 @@ public class EventService {
         return events.stream()
                 .map(eventMapper::toResponse)
                 .toList();
+    }
+
+    @Transactional
+    public EventResponse completeEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        if (event.getStatus() == EventStatus.COMPLETED) {
+            throw new EventNotEditableException("Event is already completed.");
+        }
+
+        if (event.getStatus() == EventStatus.DRAFT) {
+            throw new EventNotEditableException("Only published events can be completed.");
+        }
+
+        if (event.getEndDateTime().isAfter(LocalDateTime.now())) {
+            throw new InvalidEventDataException("Event cannot be completed before its end time.");
+        }
+
+        event.setStatus(EventStatus.COMPLETED);
+        return eventMapper.toResponse(eventRepository.save(event));
     }
 }

@@ -148,17 +148,14 @@ class EventControllerTest {
                                 .status(EventStatus.DRAFT)
                                 .build();
 
-                when(eventService.addEvent(any(EventRequest.class), anyString())).thenReturn(response);
+                when(eventService.addEvent(any(EventRequest.class), anyString())).thenReturn(1L);
 
                 mockMvc.perform(post("/api/v1/events")
                                 .with(user("user@example.com").roles("MARKETING"))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
                                 .andExpect(status().isCreated())
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.id", is(1)))
-                                .andExpect(jsonPath("$.name", is("Team Building Event")))
-                                .andExpect(jsonPath("$.location", is("CLUJ")));
+                                .andExpect(content().string("1"));
 
                 verify(eventService).addEvent(any(EventRequest.class), anyString());
         }
@@ -206,6 +203,33 @@ class EventControllerTest {
                                 .andExpect(jsonPath("$[0].name", is("Team Building Event")));
 
                 verify(eventService).getAllEvents("user@example.com");
+        }
+
+        @Test
+        void completeEvent_returnsOkWithCompletedStatus_whenUserHasMarketingRole() throws Exception {
+                EventResponse response = EventResponse.builder()
+                                .id(1L)
+                                .name("Team Building Event")
+                                .status(EventStatus.COMPLETED)
+                                .build();
+
+                when(eventService.completeEvent(1L)).thenReturn(response);
+
+                mockMvc.perform(patch("/api/v1/events/1/complete")
+                                .with(user("user@example.com").roles("MARKETING")))
+                                .andExpect(status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.id", is(1)))
+                                .andExpect(jsonPath("$.status", is("COMPLETED")));
+
+                verify(eventService).completeEvent(1L);
+        }
+
+        @Test
+        void completeEvent_returnsForbidden_whenUserIsNotMarketing() throws Exception {
+                mockMvc.perform(patch("/api/v1/events/1/complete")
+                                .with(user("user@example.com").roles("PARTICIPANT")))
+                                .andExpect(status().isForbidden());
         }
 
 }

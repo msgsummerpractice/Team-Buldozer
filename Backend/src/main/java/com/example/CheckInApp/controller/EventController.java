@@ -57,4 +57,10 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
+    @PatchMapping("/{id}/complete")
+    @PreAuthorize("hasRole('MARKETING')")
+    public ResponseEntity<EventResponse> completeEvent(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.completeEvent(id));
+    }
+
 }
