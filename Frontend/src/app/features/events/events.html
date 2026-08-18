@@ -16,16 +16,15 @@
           [value]="searchTerm()"
           (input)="onSearch(searchInput.value)"
         />
-        @if (searchTerm()) {
-          <button
-            matSuffix
-            matIconButton
-            aria-label="Clear"
-            (click)="onClear(); searchInput.value = ''"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        }
+        <button
+          matSuffix
+          matIconButton
+          aria-label="Clear"
+          (click)="onClear(); searchInput.value = ''"
+          [style.display]="searchTerm() ? 'inline-flex' : 'none'"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field>
 
       <div class="overflow-auto rounded bg-(--mat-sys-primary)">
@@ -135,6 +134,7 @@
               <button
                 matButton="outlined"
                 color="primary"
+                [routerLink]="['/events', event.id]"
                 [matTooltip]="'events.view-details' | transloco"
               >
                 <mat-icon>info</mat-icon>

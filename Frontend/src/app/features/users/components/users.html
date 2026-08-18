@@ -16,20 +16,15 @@
           [value]="inputValue()"
           (input)="onSearchInput(searchInput.value)"
         />
-        @if (searchTerm()) {
-          <button
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="onSearch(''); searchInput.value = ''"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        @if (inputValue()) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="onSearchInput('')">
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="onSearchInput(''); searchInput.value = ''"
+          [style.display]="inputValue() ? 'inline-flex' : 'none'"
+        >
           <mat-icon>close</mat-icon>
         </button>
-        }
       </mat-form-field>
 
       <div class="overflow-auto rounded bg-(--mat-sys-primary)">

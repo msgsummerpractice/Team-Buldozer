@@ -1,8 +1,9 @@
 import { Component, computed, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { EventService } from '@core/events/services/event-service';
-import { EventResponse } from '@core/events/model/event-response';
+import { EventService } from '@features/events/services/event-service';
+import { EventResponse } from '@features/events/model/event-response';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -29,6 +30,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
     MatPaginatorModule,
     MatTooltipModule,
     TranslocoPipe,
+    RouterLink,
   ],
   templateUrl: './events.html',
 })
@@ -111,7 +113,7 @@ export class Events implements OnInit {
     };
     return `${fmt(start)} - ${fmt(end)}`;
   }
-  onClear(): void {
+  protected onClear(): void {
     this.searchTerm.set('');
     this.pageIndex.set(0);
   }
