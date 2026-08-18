@@ -58,6 +58,7 @@ public class EventService {
 
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
+
     }
     
 
@@ -75,19 +76,6 @@ public class EventService {
 
         return eventMapper.toResponse(event);
     }
-
-    private boolean hasFullAccess(User user) {
-        return user.getRoles().contains(UserRole.MARKETING) || user.getRoles().contains(UserRole.HR);
-    }
-
-    private boolean isEventVisibleTo(Event event, User user) {
-        if (event.getStatus() != EventStatus.PUBLISHED) {
-            return false;
-        }
-        EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
-        return event.getLocation() == EventLocation.ALL || event.getLocation() == userLocation;
-    }
-
     @Transactional
     public EventResponse updateEvent(Long eventId, EventUpdateRequest request) {
         Event existingEvent = eventRepository.findById(eventId)
