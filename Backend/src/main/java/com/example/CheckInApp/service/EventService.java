@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
+import javax.management.relation.Role;
+
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -36,12 +38,12 @@ public class EventService {
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
 
-
     @Transactional
     public EventResponse addEvent(EventRequest request, String userEmail) {
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
+        validateDates(event);
         validateDates(event);
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
@@ -58,8 +60,8 @@ public class EventService {
 
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
+
     }
-    
 
     @Transactional(readOnly = true)
     public EventResponse getEventById(Long id, String userEmail) {
@@ -76,16 +78,14 @@ public class EventService {
         return eventMapper.toResponse(event);
     }
 
-    private boolean hasFullAccess(User user) {
+    public boolean hasFullAccess(User user) {
         return user.getRoles().contains(UserRole.MARKETING) || user.getRoles().contains(UserRole.HR);
     }
 
-    private boolean isEventVisibleTo(Event event, User user) {
-        if (event.getStatus() != EventStatus.PUBLISHED) {
-            return false;
-        }
+    public boolean isEventVisibleTo(Event event, User user) {
         EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
-        return event.getLocation() == EventLocation.ALL || event.getLocation() == userLocation;
+        return event.getStatus() == EventStatus.PUBLISHED &&
+                (event.getLocation() == userLocation || event.getLocation() == EventLocation.ALL);
     }
 
     @Transactional
