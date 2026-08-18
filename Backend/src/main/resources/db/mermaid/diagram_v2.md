@@ -32,6 +32,7 @@ erDiagram
         BIGINT created_by_id FK
         BOOLEAN food_provided
         DATETIME created_at
+        VARCHAR check_in_code UK
     }
 
     USERS ||--o{ USER_ROLES : "has"

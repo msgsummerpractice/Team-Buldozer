@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 import javax.management.relation.Role;
 
@@ -49,6 +50,7 @@ public class EventService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
         event.setCreatedBy(currentUser);
         event.setCreatedAt(LocalDateTime.now());
+        event.setCheckInCode(UUID.randomUUID().toString().replace("-", "").substring(0, 6).toUpperCase());
 
         applyTypeSpecificRules(event, request.getType(), request.getLocation(), request.getFoodProvided());
 
@@ -219,6 +221,18 @@ public class EventService {
         if (request.getRegistrationEndDate().isBefore(request.getRegistrationStartDate())) {
             throw new InvalidEventDataException("Registration end date must be after registration start date.");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public String getEventCheckInCode(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new InvalidEventDataException("Check-in code is only available for published events.");
+        }
+
+        return event.getCheckInCode();
     }
 
     @Transactional(readOnly = true)

@@ -51,6 +51,12 @@ public class EventController {
         return ResponseEntity.ok(updatedEvent);
     }
 
+    @GetMapping("/{id}/check-in-code")
+    @PreAuthorize("hasRole('MARKETING')")
+    public ResponseEntity<String> getEventCheckInCode(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.getEventCheckInCode(id));
+    }
+
     @GetMapping
     public ResponseEntity<List<EventResponse>> getAllEvents(Authentication authentication) {
         List<EventResponse> events = eventService.getAllEvents(authentication.getName());
