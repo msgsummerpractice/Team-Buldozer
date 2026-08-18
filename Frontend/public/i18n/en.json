@@ -7,25 +7,16 @@
       "logout": "Logout",
       "profile": "My profile"
     },
-    "title": "Welcome Home",
-    "subtitle": "This is your application dashboard.",
-    "authenticated-message": "You are currently authenticated.",
-    "unauthenticated-message": "Please log in or register to get started.",
-    "participant": {
-      "title": "Participant Dashboard",
-      "description": "Welcome to the Participant Dashboard. Here you can manage your activities and view your progress."
+    "card": {
+      "title": "msg.Check-In",
+      "subtitle": "Your platform for creating, managing and checking in to company events."
     },
-    "marketing": {
-      "title": "Marketing Dashboard",
-      "description": "Welcome to the Marketing Dashboard. Access campaign tools and analytics here."
-    },
-    "hr": {
-      "title": "HR Dashboard",
-      "description": "Welcome to the HR Dashboard. Manage employee records and resources."
-    },
-    "admin": {
-      "title": "Admin Dashboard",
-      "description": "Welcome to the Admin Dashboard. Full system access and management tools available."
+    "actions": {
+      "create-event": "Create Event",
+      "see-events": "See All Events",
+      "see-users": "See All Users",
+      "login": "Log In",
+      "register": "Register"
     }
   },
   "login": {

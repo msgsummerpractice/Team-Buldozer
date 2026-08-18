@@ -38,7 +38,7 @@ export const routes: Routes = [
     path: 'events/add',
     loadComponent: () =>
       import('@features/events/event-create/event-create').then((m) => m.EventCreate),
-    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
+    canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING, UserRoleEnum.HR])],
   },
   {
     path: 'events',

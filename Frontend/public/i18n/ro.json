@@ -7,25 +7,16 @@
       "logout": "Deconectare",
       "profile": "Profilul meu"
     },
-    "title": "Bine ați venit acasă",
-    "subtitle": "Acesta este tabloul de bord al aplicației dvs.",
-    "authenticated-message": "Sunteți autentificat în prezent.",
-    "unauthenticated-message": "Vă rugăm să vă autentificați sau să vă înregistrați pentru a începe.",
-    "participant": {
-      "title": "Tabloul de bord al participantului",
-      "description": "Bine ați venit în tabloul de bord al participantului. Aici puteți gestiona activitățile și vizualiza progresul."
+    "card": {
+      "title": "msg.Check-In",
+      "subtitle": "Platforma ta pentru crearea, gestionarea și participarea la evenimentele companiei."
     },
-    "marketing": {
-      "title": "Tabloul de bord de marketing",
-      "description": "Bine ați venit în tabloul de bord de marketing. Accesați instrumentele de campanie și analize aici."
-    },
-    "hr": {
-      "title": "Tabloul de bord HR",
-      "description": "Bine ați venit în tabloul de bord HR. Gestionați înregistrările angajaților și resursele."
-    },
-    "admin": {
-      "title": "Tabloul de bord administratorului",
-      "description": "Bine ați venit în tabloul de bord administratorului. Acces complet la sistem și instrumente de management disponibile."
+    "actions": {
+      "create-event": "Creare eveniment",
+      "see-events": "Vezi toate evenimentele",
+      "see-users": "Vezi toți utilizatorii",
+      "login": "Autentificare",
+      "register": "Înregistrare"
     }
   },
   "login": {
