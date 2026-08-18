@@ -58,7 +58,7 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
-    @PatchMapping("/publish/{id}")
+    @PatchMapping("/{id}/publish")
     @PreAuthorize("hasRole('MARKETING')")
     public ResponseEntity<EventResponse> publishEvent(@PathVariable Long id) {
         EventResponse publishedEvent = eventService.publishEvent(id);

@@ -265,7 +265,7 @@ public class EventService {
         }
 
         if (event.getEndDateTime().isAfter(LocalDateTime.now())) {
-            throw new InvalidEventDataException("Event cannot be completed before its end time.");
+            throw new EventNotEditableException("Event cannot be completed before its end time.");
         }
 
         event.setStatus(EventStatus.COMPLETED);
