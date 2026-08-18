@@ -8,6 +8,9 @@ import com.example.CheckInApp.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,8 +37,8 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponse> getEventById(@PathVariable Long id) {
-        EventResponse event = eventService.getEventById(id);
+    public ResponseEntity<EventResponse> getEventById(@PathVariable Long id, Authentication authentication) {
+        EventResponse event = eventService.getEventById(id, authentication.getName());
         return ResponseEntity.ok(event);
     }
 
@@ -46,6 +49,12 @@ public class EventController {
             @Valid @RequestBody EventUpdateRequest request) {
         EventResponse updatedEvent = eventService.updateEvent(id, request);
         return ResponseEntity.ok(updatedEvent);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EventResponse>> getAllEvents(Authentication authentication) {
+        List<EventResponse> events = eventService.getAllEvents(authentication.getName());
+        return ResponseEntity.ok(events);
     }
 
 }

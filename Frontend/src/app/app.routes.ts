@@ -31,7 +31,7 @@ export const routes: Routes = [
   },
   {
     path: 'users',
-    loadComponent: () => import('@features/users/users').then((m) => m.Users),
+    loadComponent: () => import('@features/users/components/users').then((m) => m.Users),
     canActivate: [authorizationGuard([UserRoleEnum.ADMIN])],
   },
   ...eventsRoutes,

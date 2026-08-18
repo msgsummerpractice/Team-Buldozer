@@ -144,11 +144,13 @@
     "logout-successful": "Ați fost deconectat cu succes.",
     "registration-successful": "Înregistrare reușită! Bine ați venit.",
     "profile-updated": "Profilul a fost actualizat cu succes.",
-    "password-changed": "Parola a fost schimbată cu succes."
+    "password-changed": "Parola a fost schimbată cu succes.",
+    "user-updated": "Utilizatorul a fost actualizat cu succes."
   },
   "common": {
     "close": "Închide",
-    "ok": "OK"
+    "ok": "OK",
+    "cancel": "Anulează"
   },
   "users": {
     "title": "Gestionează Utilizatorii",
@@ -167,7 +169,10 @@
     "inactive": "Inactiv",
     "no-users": "Niciun utilizator găsit",
     "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un utilizator potrivit.",
-    "manage-roles": "Gestionează Rolurile"
+    "manage-roles": "Gestionează Rolurile",
+    "save": "Salvează",
+    "saving": "Se salvează...",
+    "unsaved-changes": "Aveți modificări nesalvate care se vor pierde dacă continuați. Doriți să continuați?"
   },
   "paginator": {
     "itemsPerPage": "Elemente pe pagină:",

@@ -144,11 +144,13 @@
     "logout-successful": "You have been logged out successfully.",
     "registration-successful": "Registration successful! Welcome aboard.",
     "profile-updated": "Profile updated successfully.",
-    "password-changed": "Password changed successfully."
+    "password-changed": "Password changed successfully.",
+    "user-updated": "User updated successfully."
   },
   "common": {
     "close": "Close",
-    "ok": "OK"
+    "ok": "OK",
+    "cancel": "Cancel"
   },
   "users": {
     "title": "View Users",
@@ -167,7 +169,10 @@
     "inactive": "Inactive",
     "no-users": "No users found",
     "adjust": "Try adjusting the search term to find a matching user.",
-    "manage-roles": "Manage Roles"
+    "manage-roles": "Manage Roles",
+    "save": "Save",
+    "saving": "Saving...",
+    "unsaved-changes": "You have unsaved changes that will be lost if you proceed. Continue?"
   },
   "paginator": {
     "itemsPerPage": "Items per page:",

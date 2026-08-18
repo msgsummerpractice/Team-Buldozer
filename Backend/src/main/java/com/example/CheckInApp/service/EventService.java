@@ -22,14 +22,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
+
+import javax.management.relation.Role;
 
 @Service
 @RequiredArgsConstructor
 public class EventService {
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
-    private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
-    private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
+    private static final byte[] JPEG_SIGNATURE = { (byte) 0xFF, (byte) 0xD8, (byte) 0xFF };
+    private static final byte[] PNG_SIGNATURE = { (byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47 };
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
@@ -40,6 +43,7 @@ public class EventService {
 
         Event event = eventMapper.toEntity(request);
         event.setStatus(EventStatus.DRAFT);
+        validateDates(event);
         validateDates(event);
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
@@ -60,11 +64,30 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public EventResponse getEventById(Long id) {
+    public EventResponse getEventById(Long id, String userEmail) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
+        if (!hasFullAccess(user) && !isEventVisibleTo(event, user)) {
+            throw new ResourceNotFoundException("Event not found with id " + id);
+        }
+
         return eventMapper.toResponse(event);
     }
+
+    public boolean hasFullAccess(User user) {
+        return user.getRoles().contains(UserRole.MARKETING) || user.getRoles().contains(UserRole.HR);
+    }
+
+    public boolean isEventVisibleTo(Event event, User user) {
+        EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
+        return event.getStatus() == EventStatus.PUBLISHED &&
+                (event.getLocation() == userLocation || event.getLocation() == EventLocation.ALL);
+    }
+
     @Transactional
     public EventResponse updateEvent(Long eventId, EventUpdateRequest request) {
         Event existingEvent = eventRepository.findById(eventId)
@@ -102,7 +125,8 @@ public class EventService {
             applyTypeSpecificRules(existingEvent, request.getType(), request.getLocation(), request.getFoodProvided());
         } else if (request.getLocation() != null || request.getFoodProvided() != null) {
 
-            applyTypeSpecificRules(existingEvent, existingEvent.getType(), request.getLocation(), request.getFoodProvided());
+            applyTypeSpecificRules(existingEvent, existingEvent.getType(), request.getLocation(),
+                    request.getFoodProvided());
         }
 
         if (request.getPoster() != null && !request.getPoster().trim().isEmpty()) {
@@ -138,7 +162,8 @@ public class EventService {
 
     private void validateSpecificCityLocation(EventLocation location, EventType type) {
         if (location == null || location == EventLocation.ALL) {
-            throw new InvalidEventDataException("For type " + type + ", location needs to be: CLUJ, TIMISOARA or MURES.");
+            throw new InvalidEventDataException(
+                    "For type " + type + ", location needs to be: CLUJ, TIMISOARA or MURES.");
         }
     }
 
@@ -169,19 +194,19 @@ public class EventService {
             return false;
         }
 
-        return startsWithSignature(imageBytes, JPEG_SIGNATURE) || 
-               startsWithSignature(imageBytes, PNG_SIGNATURE);
+        return startsWithSignature(imageBytes, JPEG_SIGNATURE) ||
+                startsWithSignature(imageBytes, PNG_SIGNATURE);
     }
 
     private boolean startsWithSignature(byte[] data, byte[] signature) {
         if (data.length < signature.length) {
             return false;
         }
-        
+
         return Arrays.equals(data, 0, signature.length, signature, 0, signature.length);
     }
 
-     private void validateDates(Event request) {
+    private void validateDates(Event request) {
         if (request.getStartDateTime().isBefore(LocalDateTime.now())) {
             throw new InvalidEventDataException("Start date time cannot be in the past.");
         }
@@ -196,4 +221,23 @@ public class EventService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<EventResponse> getAllEvents(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
+        List<Event> events;
+
+        if (hasFullAccess(user)) {
+            events = eventRepository.findAllByOrderByStartDateTimeDesc();
+        } else {
+            EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
+            events = eventRepository.findByStatusAndLocationInOrderByStartDateTimeDesc(
+                    EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL));
+        }
+
+        return events.stream()
+                .map(eventMapper::toResponse)
+                .toList();
+    }
 }
