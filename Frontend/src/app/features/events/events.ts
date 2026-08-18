@@ -2,6 +2,15 @@ import { Component, computed, inject, OnInit, signal, DestroyRef } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
+import { EventStatusEnum } from '@features/events/model/event-status';
+import { AuthorizationService } from '@core/authorization/services/authorization.service';
+import { UserRoleEnum } from '@core/users/model/user-role';
+import { NotificationService } from '@core/notification/services/notification.service';
+import {
+  CompleteEventDialog,
+  CompleteEventDialogData,
+} from '@features/events/components/complete-event-dialog/complete-event-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
@@ -36,6 +45,9 @@ import { TranslocoPipe } from '@jsverse/transloco';
 })
 export class Events implements OnInit {
   private readonly eventService = inject(EventService);
+  private readonly authorization = inject(AuthorizationService);
+  private readonly notification = inject(NotificationService);
+  private readonly dialog = inject(MatDialog);
   private _events = signal<EventResponse[]>([]);
 
   protected readonly searchTerm = signal<string>('');
@@ -44,7 +56,12 @@ export class Events implements OnInit {
   protected readonly pageSizeList = [5, 10, 25, 50];
   protected readonly sortDirection = signal<'asc' | 'desc'>('asc');
 
-  protected readonly displayedColumns = ['name', 'period', 'status', 'type', 'location', 'details'];
+  protected readonly isMarketing = this.authorization.hasAnyRole([UserRoleEnum.MARKETING]);
+
+  protected readonly displayedColumns = computed(() => {
+    const base = ['name', 'period', 'status', 'type', 'location', 'details'];
+    return this.isMarketing ? [...base, 'complete'] : base;
+  });
 
   private readonly destroyRef = inject(DestroyRef);
   private searchSubject = new Subject<string>();
@@ -113,6 +130,40 @@ export class Events implements OnInit {
     };
     return `${fmt(start)} - ${fmt(end)}`;
   }
+
+  protected canComplete(event: EventResponse): boolean {
+    return (
+      event.status === EventStatusEnum.PUBLISHED &&
+      new Date(event.endDateTime).getTime() <= Date.now()
+    );
+  }
+
+  protected onComplete(event: EventResponse): void {
+    if (!this.canComplete(event)) return;
+
+    const dialogRef = this.dialog.open<
+      CompleteEventDialog,
+      CompleteEventDialogData,
+      boolean
+    >(CompleteEventDialog, {
+      data: { eventName: event.name },
+      width: '440px',
+      autoFocus: 'dialog',
+      restoreFocus: true,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) return;
+      this.eventService.completeEvent(event.id).subscribe({
+        next: (updated) => {
+          this._events.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
+          this.notification.showSuccess('events.complete-success');
+        },
+        error: () => this.notification.showError('events.complete-error'),
+      });
+    });
+  }
+
   protected onClear(): void {
     this.searchTerm.set('');
     this.pageIndex.set(0);

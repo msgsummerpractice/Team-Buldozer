@@ -23,6 +23,11 @@ export class EventService {
   updateEvent(id: number, request: EventUpdateRequest): Observable<EventResponse> {
     return this.http.patch<EventResponse>(`${this.eventsUrl}/${id}`, request);
   }
+
+  completeEvent(id: number): Observable<EventResponse> {
+    return this.http.patch<EventResponse>(`${this.eventsUrl}/${id}/complete`, {});
+  }
+
   getAllEvents(): Observable<EventResponse[]> {
     return this.http.get<EventResponse[]>(`${environment.apiUrl}/events`);
   }
