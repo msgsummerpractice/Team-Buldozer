@@ -6,13 +6,17 @@
 @use '@angular/material' as mat;
 @use '../theme-colors' as theme;
 
+:root {
+  --culoarea-noastra-preferata: #8e1239;
+}
+
 html {
   height: 100%;
   @include mat.theme(
     (
       color: (
         primary: theme.$primary-palette,
-        tertiary: theme.$tertiary-palette,
+        tertiary: mat.$blue-palette,
       ),
       typography: Roboto,
       density: 0,
