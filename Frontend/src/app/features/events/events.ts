@@ -25,6 +25,10 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventDetailsDialog } from '@features/events/event-details/components/event-details-dialog';
+import {
+  PublishEventDialog,
+  PublishEventDialogData,
+} from '@features/events/components/publish-event-dialog/publish-event-dialog';
 
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
@@ -157,6 +161,12 @@ export class Events implements OnInit {
     );
   }
 
+  protected canPublish(event: EventResponse): boolean {
+    return (
+      event.status === EventStatusEnum.DRAFT && new Date(event.endDateTime).getTime() > Date.now()
+    );
+  }
+
   protected onComplete(event: EventResponse): void {
     if (!this.canComplete(event)) return;
 
@@ -175,6 +185,28 @@ export class Events implements OnInit {
       this.eventService.completeEvent(event.id).subscribe((updated) => {
         this._events.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
         this.notification.showSuccess('events.complete-success');
+      });
+    });
+  }
+
+  protected onPublish(event: EventResponse): void {
+    if (!this.canPublish(event)) return;
+
+    const dialogRef = this.dialog.open<PublishEventDialog, PublishEventDialogData, boolean>(
+      PublishEventDialog,
+      {
+        data: { eventName: event.name },
+        width: '440px',
+        autoFocus: 'dialog',
+        restoreFocus: true,
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) return;
+      this.eventService.publishEvent(event.id).subscribe((updated) => {
+        this._events.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
+        this.notification.showSuccess('events.publish-success');
       });
     });
   }
