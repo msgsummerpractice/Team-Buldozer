@@ -140,6 +140,7 @@
       "end-date": "End Date",
       "registration-start": "Registration Start",
       "registration-end": "Registration End",
+      "registration-period": "Registration Period",
       "location": "Location",
       "address": "Address",
       "status": "Status",

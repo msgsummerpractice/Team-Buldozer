@@ -29,7 +29,7 @@ import { EventDetailsDialog } from '@features/events/event-details/components/ev
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
   maxWidth: '1400px',
-  minHeight: '85vh',
+  minHeight: '700px',
 };
 
 @Component({
@@ -112,7 +112,13 @@ export class Events implements OnInit {
         this.dialog
           .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
           .afterClosed()
-          .subscribe(() => this.router.navigate(['/events/list']));
+          .subscribe((result?: { action: string }) => {
+            if (result?.action === 'edit') {
+              this.router.navigate(['/events', id, 'edit']);
+            } else {
+              this.router.navigate(['/events/list']);
+            }
+          });
       }
     });
 
