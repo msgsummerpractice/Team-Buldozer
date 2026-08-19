@@ -4,21 +4,31 @@ import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
 import com.example.CheckInApp.dto.response.CreateEventResponse;
+import com.example.CheckInApp.dto.response.EventCodesResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
 import com.example.CheckInApp.exception.InvalidFileException;
 import com.example.CheckInApp.exception.PosterNotReadException;
+import com.example.CheckInApp.exception.QrCodeGenerationException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,6 +45,7 @@ public class EventService {
     private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
     private static final String CHECK_IN_CODE_CHARS = "0123456789";
     private static final int CHECK_IN_CODE_LENGTH = 6;
+    private static final int QR_CODE_SIZE = 300;
     private static final SecureRandom RANDOM = new SecureRandom();
 
     private final EventRepository eventRepository;
@@ -238,16 +249,19 @@ public class EventService {
     }
 
     @Transactional
-    public String generateCheckInCode(Long eventId) {
+    public EventCodesResponse generateCodes(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
 
         if (event.getStatus() != EventStatus.PUBLISHED) {
-            throw new InvalidEventDataException("Check-in code can only be generated for published events.");
+            throw new InvalidEventDataException("Codes can only be generated for published events.");
         }
 
         event.setCheckInCode(generateRandomCode());
-        return eventRepository.save(event).getCheckInCode();
+        event.setQrCode(generateQrCodeImage(event.getId() + "-" + event.getName()));
+
+        Event saved = eventRepository.save(event);
+        return new EventCodesResponse(saved.getCheckInCode(), Base64.getEncoder().encodeToString(saved.getQrCode()));
     }
 
     private String generateRandomCode() {
@@ -268,6 +282,29 @@ public class EventService {
         }
 
         return event.getCheckInCode();
+    }
+
+    private byte[] generateQrCodeImage(String content) {
+        try {
+            BitMatrix bitMatrix = new QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, QR_CODE_SIZE, QR_CODE_SIZE);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
+            return outputStream.toByteArray();
+        } catch (WriterException | IOException e) {
+            throw new QrCodeGenerationException("QR code could not be generated.");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public String getEventQrCode(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new InvalidEventDataException("QR code is only available for published events.");
+        }
+
+        return event.getQrCode() == null ? null : Base64.getEncoder().encodeToString(event.getQrCode());
     }
 
     @Transactional(readOnly = true)

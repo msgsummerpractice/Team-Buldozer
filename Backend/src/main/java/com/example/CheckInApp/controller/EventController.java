@@ -3,6 +3,7 @@ package com.example.CheckInApp.controller;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
 import com.example.CheckInApp.dto.response.CreateEventResponse;
+import com.example.CheckInApp.dto.response.EventCodesResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.service.EventService;
 
@@ -58,10 +59,16 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventCheckInCode(id));
     }
 
-    @PostMapping("/{id}/check-in-codes")
+    @GetMapping("/{id}/qr-code")
     @PreAuthorize("hasRole('MARKETING')")
-    public ResponseEntity<String> generateCheckInCode(@PathVariable Long id) {
-        return ResponseEntity.ok(eventService.generateCheckInCode(id));
+    public ResponseEntity<String> getEventQrCode(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.getEventQrCode(id));
+    }
+
+    @PostMapping("/{id}/generate/codes")
+    @PreAuthorize("hasRole('MARKETING')")
+    public ResponseEntity<EventCodesResponse> generateCodes(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.generateCodes(id));
     }
 
     @GetMapping
