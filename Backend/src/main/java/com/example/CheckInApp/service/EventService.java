@@ -33,7 +33,7 @@ public class EventService {
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
     private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
-    private static final String CHECK_IN_CODE_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String CHECK_IN_CODE_CHARS = "0123456789";
     private static final int CHECK_IN_CODE_LENGTH = 6;
     private static final SecureRandom RANDOM = new SecureRandom();
 
