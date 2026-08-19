@@ -219,6 +219,17 @@
     "details-col": "DETAILS",
     "details": "Details",
     "view-details": "View details",
+    "complete-col": "COMPLETE",
+    "complete": "Complete",
+    "complete-tooltip": "Mark this event as completed",
+    "complete-disabled-tooltip": "Event can only be completed after its end time and while published",
+    "complete-success": "Event marked as completed",
+    "complete-error": "Could not complete event",
+    "complete-dialog": {
+      "title": "Complete event",
+      "message": "Are you sure you want to mark \"{{name}}\" as completed?",
+      "warning": "This action cannot be undone."
+    },
     "no-events": "No events found",
     "adjust": "Try adjusting the search term to find a matching event.",
     "sort-asc": "Sort: soonest first",
@@ -344,6 +355,7 @@
       }
     },
     "actions": {
+      "title": "Actions",
       "cancel": "Cancel",
       "save": "Save Event"
     },
