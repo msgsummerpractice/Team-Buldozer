@@ -53,19 +53,14 @@ public class EventController {
         return ResponseEntity.ok(updatedEvent);
     }
 
-    @GetMapping("/{id}/check-in-code")
+
+    @GetMapping("/{id}/codes")
     @PreAuthorize("hasRole('MARKETING')")
-    public ResponseEntity<String> getEventCheckInCode(@PathVariable Long id) {
-        return ResponseEntity.ok(eventService.getEventCheckInCode(id));
+    public ResponseEntity<EventCodesResponse> getEventCodes(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.getEventCodes(id));
     }
 
-    @GetMapping("/{id}/qr-code")
-    @PreAuthorize("hasRole('MARKETING')")
-    public ResponseEntity<String> getEventQrCode(@PathVariable Long id) {
-        return ResponseEntity.ok(eventService.getEventQrCode(id));
-    }
-
-    @PostMapping("/{id}/generate/codes")
+    @PostMapping("/{id}/codes/generate")
     @PreAuthorize("hasRole('MARKETING')")
     public ResponseEntity<EventCodesResponse> generateCodes(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.generateCodes(id));

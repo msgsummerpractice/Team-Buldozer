@@ -290,22 +290,6 @@ public class EventService {
         return code.toString();
     }
 
-    @Transactional(readOnly = true)
-    public String getEventCheckInCode(Long eventId) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
-
-        if (event.getStatus() != EventStatus.PUBLISHED) {
-            throw new InvalidEventDataException("Check-in code is only available for published events.");
-        }
-
-        if (event.getCheckInCode() == null) {
-            throw new ResourceNotFoundException("Check-in code has not been generated yet for event with id " + eventId);
-        }
-
-        return event.getCheckInCode();
-    }
-
     private byte[] generateQrCodeImage(String content) {
         try {
             BitMatrix bitMatrix = new QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, QR_CODE_SIZE, QR_CODE_SIZE);
@@ -318,19 +302,23 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public String getEventQrCode(Long eventId) {
+    public EventCodesResponse getEventCodes(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
 
         if (event.getStatus() != EventStatus.PUBLISHED) {
-            throw new InvalidEventDataException("QR code is only available for published events.");
+            throw new InvalidEventDataException("Codes are only available for published events.");
+        }
+
+        if (event.getCheckInCode() == null) {
+            throw new ResourceNotFoundException("Check-in code has not been generated yet for event with id " + eventId);
         }
 
         if (event.getQrCode() == null) {
             throw new ResourceNotFoundException("QR code has not been generated yet for event with id " + eventId);
         }
 
-        return Base64.getEncoder().encodeToString(event.getQrCode());
+        return new EventCodesResponse(event.getCheckInCode(), Base64.getEncoder().encodeToString(event.getQrCode()));
     }
 
     @Transactional(readOnly = true)
