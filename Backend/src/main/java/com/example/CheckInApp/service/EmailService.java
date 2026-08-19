@@ -25,14 +25,28 @@ public class EmailService {
 
     @Async
     public void notifyEventPublished(Event event) {
-        List<String> failed = resolveRecipients(event.getLocation()).stream()
-                .filter(recipient -> !trySendEmail(event, recipient))
-                .map(User::getEmail)
-                .toList();
+        List<User> failed = sendToAll(event, resolveRecipients(event.getLocation()));
 
         if (!failed.isEmpty()) {
-            throw new EmailDeliveryException(failed);
+            failed = retryFailed(event, failed, 2);
         }
+
+        if (!failed.isEmpty()) {
+            throw new EmailDeliveryException(failed.stream().map(User::getEmail).toList());
+        }
+    }
+
+    private List<User> sendToAll(Event event, List<User> recipients) {
+        return recipients.stream()
+                .filter(recipient -> !trySendEmail(event, recipient))
+                .toList();
+    }
+
+    private List<User> retryFailed(Event event, List<User> failed, int maxRetries) {
+        for (int i = 0; i < maxRetries && !failed.isEmpty(); i++) {
+            failed = sendToAll(event, failed);
+        }
+        return failed;
     }
 
     private List<User> resolveRecipients(EventLocation eventLocation) {
