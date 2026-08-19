@@ -35,6 +35,7 @@ export const routes: Routes = [
     loadComponent: () => import('@features/users/components/users').then((m) => m.Users),
     canActivate: [authorizationGuard([UserRoleEnum.ADMIN])],
   },
+  ...eventsRoutes,
   { path: '404', component: NotFound },
   { path: '**', redirectTo: '404' },
 ];
