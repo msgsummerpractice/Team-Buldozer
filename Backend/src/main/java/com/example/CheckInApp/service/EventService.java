@@ -233,12 +233,24 @@ public class EventService {
         }
 
         event.setStatus(EventStatus.PUBLISHED);
-        event.setCheckInCode(generateCheckInCode());
 
         return eventMapper.toResponse(eventRepository.save(event));
     }
 
-    private String generateCheckInCode() {
+    @Transactional
+    public String generateCheckInCode(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new InvalidEventDataException("Check-in code can only be generated for published events.");
+        }
+
+        event.setCheckInCode(generateRandomCode());
+        return eventRepository.save(event).getCheckInCode();
+    }
+
+    private String generateRandomCode() {
         StringBuilder code = new StringBuilder(CHECK_IN_CODE_LENGTH);
         for (int i = 0; i < CHECK_IN_CODE_LENGTH; i++) {
             code.append(CHECK_IN_CODE_CHARS.charAt(RANDOM.nextInt(CHECK_IN_CODE_CHARS.length())));
