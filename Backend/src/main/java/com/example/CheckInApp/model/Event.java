@@ -68,7 +68,7 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column
+    @Column(length = 6, unique = true)
     private String checkInCode;
 
     @Basic(fetch = FetchType.LAZY)

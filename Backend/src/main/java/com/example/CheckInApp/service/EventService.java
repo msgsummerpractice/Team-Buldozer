@@ -45,8 +45,6 @@ public class EventService {
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
     private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
-    private static final String CHECK_IN_CODE_CHARS = "0123456789";
-    private static final int CHECK_IN_CODE_LENGTH = 6;
     private static final int MAX_CHECK_IN_CODE_ATTEMPTS = 3;
     private static final int QR_CODE_SIZE = 300;
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -273,21 +271,13 @@ public class EventService {
 
     private String generateUniqueCheckInCode() {
         for (int attempt = 0; attempt < MAX_CHECK_IN_CODE_ATTEMPTS; attempt++) {
-            String candidate = generateRandomCode();
+            String candidate = String.format("%06d", RANDOM.nextInt(1_000_000));
             if (!eventRepository.existsByCheckInCode(candidate)) {
                 return candidate;
             }
         }
         throw new CheckInCodeGenerationException("Could not generate a unique check-in code after "
                 + MAX_CHECK_IN_CODE_ATTEMPTS + " attempts.");
-    }
-
-    private String generateRandomCode() {
-        StringBuilder code = new StringBuilder(CHECK_IN_CODE_LENGTH);
-        for (int i = 0; i < CHECK_IN_CODE_LENGTH; i++) {
-            code.append(CHECK_IN_CODE_CHARS.charAt(RANDOM.nextInt(CHECK_IN_CODE_CHARS.length())));
-        }
-        return code.toString();
     }
 
     private byte[] generateQrCodeImage(String content) {

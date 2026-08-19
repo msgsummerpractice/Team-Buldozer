@@ -60,7 +60,7 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventCodes(id));
     }
 
-    @PostMapping("/{id}/codes/generate")
+    @PostMapping("/{id}/codes")
     @PreAuthorize("hasRole('MARKETING')")
     public ResponseEntity<EventCodesResponse> generateCodes(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.generateCodes(id));
