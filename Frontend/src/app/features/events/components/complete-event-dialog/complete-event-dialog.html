@@ -1,0 +1,22 @@
+<h2 mat-dialog-title class="flex items-center">
+  {{ 'events.complete-dialog.title' | transloco }}
+</h2>
+
+<mat-dialog-content>
+  <p>
+    {{ 'events.complete-dialog.message' | transloco: { name: data.eventName } }}
+  </p>
+  <p class="text-sm mt-2 opacity-80">
+    {{ 'events.complete-dialog.warning' | transloco }}
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton (click)="cancel()">
+    {{ 'common.cancel' | transloco }}
+  </button>
+  <button matButton="filled" color="accent" (click)="confirm()">
+    <mat-icon>check_circle</mat-icon>
+    {{ 'events.complete' | transloco }}
+  </button>
+</mat-dialog-actions>
