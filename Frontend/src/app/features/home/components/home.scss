@@ -1,0 +1,49 @@
+.landing-section {
+  background-image: url('/assets/images/DJI_0318-9.avif');
+  background-position: center 55%;
+
+  @media (max-width: 640px) {
+    background-position: center;
+  }
+}
+
+.landing-card {
+  background: rgba(255, 255, 255, 0.825);
+  border-radius: 8px;
+  padding: 64px 44px;
+  max-width: 520px;
+  box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(8px);
+
+  @media (max-width: 640px) {
+    padding: 32px 24px;
+    max-width: 100%;
+  }
+}
+
+.landing-title {
+  color: var(--mat-sys-on-surface);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.landing-subtitle {
+  color: var(--mat-sys-on-surface-variant, #5c4043);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.landing-btn {
+  min-width: 160px;
+  height: 44px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  @media (max-width: 640px) {
+    min-width: 0;
+    width: 100%;
+  }
+}
