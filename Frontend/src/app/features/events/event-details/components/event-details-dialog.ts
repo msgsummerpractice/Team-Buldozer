@@ -88,4 +88,8 @@ export class EventDetailsDialog {
   protected editEvent(): void {
     this.dialogRef.close({ action: 'edit' });
   }
+
+  protected checkIn(): void {
+    this.dialogRef.close({ action: 'checkin' });
+  }
 }

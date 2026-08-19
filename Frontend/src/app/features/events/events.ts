@@ -25,6 +25,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventDetailsDialog } from '@features/events/event-details/components/event-details-dialog';
+import { CheckInDialog } from '@features/events/check-in/components/check-in-dialog';
 
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
@@ -109,16 +110,28 @@ export class Events implements OnInit {
       const id: number | null = idParam ? +idParam : null;
       console.log('Route param id:', id);
       if (id) {
-        this.dialog
-          .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
-          .afterClosed()
-          .subscribe((result?: { action: string }) => {
-            if (result?.action === 'edit') {
-              this.router.navigate(['/events', id, 'edit']);
-            } else {
+        const routeSegment = this.route.snapshot.url[0]?.path;
+        if (routeSegment === 'checkin') {
+          this.dialog
+            .open(CheckInDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
+            .afterClosed()
+            .subscribe(() => {
               this.router.navigate(['/events/list']);
-            }
-          });
+            });
+        } else {
+          this.dialog
+            .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
+            .afterClosed()
+            .subscribe((result?: { action: string }) => {
+              if (result?.action === 'edit') {
+                this.router.navigate(['/events', id, 'edit']);
+              } else if (result?.action === 'checkin') {
+                this.router.navigate(['/events', id, 'checkin']);
+              } else {
+                this.router.navigate(['/events/list']);
+              }
+            });
+        }
       }
     });
 

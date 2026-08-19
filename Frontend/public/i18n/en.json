@@ -1,4 +1,10 @@
 {
+  "check-in": {
+    "button": "Check In",
+    "dialog": {
+      "title": "Check In"
+    }
+  },
   "home": {
     "nav": {
       "login": "Login",
