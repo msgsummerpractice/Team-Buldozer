@@ -207,4 +207,8 @@ export class Events implements OnInit {
     this.searchTerm.set('');
     this.pageIndex.set(0);
   }
+
+  protected openCheckIn(event: EventResponse): void {
+    this.dialog.open(CheckInDialog, { ...CHECK_IN_DIALOG_CONFIG, data: { id: event.id } });
+  }
 }

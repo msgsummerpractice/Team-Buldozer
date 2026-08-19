@@ -74,7 +74,6 @@ export class CheckInDialog implements OnDestroy {
   protected processCode(rawCode: string): void {
     const code = rawCode.trim();
     const parsed = parseCheckInCode(code);
-    console.log('[QR Scan] raw:', rawCode, '| parsed:', parsed);
     if (!parsed) {
       this.notificationService.showError('check-in.invalid-code');
       return;
