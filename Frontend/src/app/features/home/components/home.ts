@@ -15,5 +15,5 @@ import { UserRoleEnum } from '@core/users/model/user-role';
 })
 export class Home {
   protected auth = inject(AuthenticationService);
-  readonly roles = UserRoleEnum;
+  protected readonly roles = UserRoleEnum;
 }
