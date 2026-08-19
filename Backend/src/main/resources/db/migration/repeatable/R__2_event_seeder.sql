@@ -7,7 +7,7 @@ VALUES (1, 'Summer Tech Meetup', 'CLUJ',
         '2026-08-15', '2026-09-14',
         'Str. Memorandumului 28, Cluj-Napoca',
         'A casual meetup for engineers to share what they''ve been working on this summer.',
-        2, true, '2026-08-14 10:00:00', '000001'),
+        2, true, '2026-08-14 10:00:00', NULL),
        (2, 'Onboarding Day', 'TIMISOARA',
         '2026-10-01 09:00:00', '2026-10-01 17:00:00',
         'INTERNAL', 'DRAFT', NULL,
@@ -21,8 +21,8 @@ VALUES (1, 'Summer Tech Meetup', 'CLUJ',
         '2026-09-01', '2026-11-15',
         'Piata Trandafirilor 1, Targu Mures',
         'A 48-hour hackathon open to students and professionals across all offices.',
-        2, false, '2026-08-14 10:10:00', '000003')
-ON CONFLICT (id) DO UPDATE SET check_in_code = EXCLUDED.check_in_code;
+        2, false, '2026-08-14 10:10:00', NULL)
+ON CONFLICT (id) DO NOTHING;
 
 SELECT setval(pg_get_serial_sequence('events', 'id'), coalesce(max(id), 1))
 FROM events;
