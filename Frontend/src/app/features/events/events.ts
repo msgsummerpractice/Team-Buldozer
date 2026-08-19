@@ -140,8 +140,4 @@ export class Events implements OnInit {
     this.searchTerm.set('');
     this.pageIndex.set(0);
   }
-
-  protected openDetails(id: number): void {
-    this.router.navigate([`/events/${id}/details`]);
-  }
 }

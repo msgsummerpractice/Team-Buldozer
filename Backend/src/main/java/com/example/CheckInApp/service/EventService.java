@@ -36,6 +36,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Transactional
     public CreateEventResponse addEvent(EventRequest request, String userEmail) {
@@ -248,6 +249,9 @@ public class EventService {
         }
         event.setStatus(EventStatus.PUBLISHED);
         Event updatedEvent = eventRepository.save(event);
+
+        emailService.notifyEventPublished(updatedEvent);
+
         return eventMapper.toResponse(updatedEvent);
     }
 

@@ -30,7 +30,8 @@ public enum ErrorCode {
     ERR_112("Event data is invalid"),
     ERR_113("Event is not editable"),
     ERR_114("Last admin can not be disabled or have its role changed ♥"),
-    ERR_115("Database error :(");
+    ERR_115("Database error :("),
+    ERR_116("Email delivery failed");
 
     private final String defaultMessage;
 
