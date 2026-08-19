@@ -1,53 +1,36 @@
-<div class="max-w-4xl mx-auto mt-12 p-6">
-  <h1 class="text-4xl font-bold text-gray-800 mb-4 text-center">
-    {{ 'home.title' | transloco }}
-  </h1>
-  <p class="text-lg text-gray-600 mb-8 text-center">{{ 'home.subtitle' | transloco }}</p>
+<section class="landing-section min-h-[calc(100vh-64px)] bg-cover bg-no-repeat flex items-center px-6 py-8 sm:px-20 sm:py-12">
+  <div class="landing-card flex flex-col gap-5">
+    <h1 class="landing-title">{{ 'home.card.title' | transloco }}</h1>
+    <p class="landing-subtitle">{{ 'home.card.subtitle' | transloco }}</p>
 
-  @if (auth.isAuthenticated()) {
-    <div
-      class="px-4 py-3 rounded-xl mb-8 bg-(--mat-sys-primary-container) border border-(--mat-sys-primary) text-(--mat-sys-on-primary-container)"
-    >
-      <p class="text-center font-medium">{{ 'home.authenticated-message' | transloco }}</p>
-    </div>
+    @if (!auth.isAuthenticated()) {
+      <div class="flex flex-wrap gap-2.5 items-center mt-1 justify-end">
+        <button mat-flat-button routerLink="/login" class="landing-btn">
+          {{ 'home.actions.login' | transloco }}
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+        </button>
+      </div>
+    } @else {
+      <div class="flex flex-wrap gap-2.5 items-center mt-1">
+        <ng-container *rolesAssigned="roles.MARKETING">
+          <button mat-flat-button routerLink="/events/add" class="landing-btn">
+            <mat-icon>add_circle</mat-icon>
+            {{ 'home.actions.create-event' | transloco }}
+          </button>
+        </ng-container>
 
-    <div
-      *rolesAssigned="'participant'"
-      class="p-6 rounded-lg mb-6 text-(--mat-sys-surface-container-low)"
-    >
-      <h2 class="text-2xl font-bold text-gray-800 mb-3">
-        {{ 'home.participant.title' | transloco }}
-      </h2>
-      <p class="text-gray-700">{{ 'home.participant.description' | transloco }}</p>
-    </div>
+        <ng-container *rolesAssigned="roles.ADMIN">
+          <button mat-flat-button routerLink="/users" class="landing-btn">
+            <mat-icon>group</mat-icon>
+            {{ 'home.actions.see-users' | transloco }}
+          </button>
+        </ng-container>
 
-    <div
-      *rolesAssigned="'marketing'"
-      class="p-6 rounded-lg mb-6 text-(--mat-sys-surface-container-low)"
-    >
-      <h2 class="text-2xl font-bold text-gray-800 mb-3">
-        {{ 'home.marketing.title' | transloco }}
-      </h2>
-      <p class="text-gray-700">{{ 'home.marketing.description' | transloco }}</p>
-    </div>
-
-    <div *rolesAssigned="'hr'" class="p-6 rounded-lg mb-6 text-(--mat-sys-surface-container-low)">
-      <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ 'home.hr.title' | transloco }}</h2>
-      <p class="text-gray-700">{{ 'home.hr.description' | transloco }}</p>
-    </div>
-
-    <div
-      *rolesAssigned="'admin'"
-      class="p-6 rounded-lg mb-6 text-(--mat-sys-surface-container-low)"
-    >
-      <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ 'home.admin.title' | transloco }}</h2>
-      <p class="text-gray-700">{{ 'home.admin.description' | transloco }}</p>
-    </div>
-  } @else {
-    <div
-      class="px-4 py-3 rounded-xl bg-(--mat-sys-surface-container) border border-(--mat-sys-outline-variant) text-(--mat-sys-on-surface)"
-    >
-      <p class="text-center font-medium">{{ 'home.unauthenticated-message' | transloco }}</p>
-    </div>
-  }
-</div>
+        <button mat-stroked-button routerLink="/events" class="landing-btn">
+          <mat-icon>event</mat-icon>
+          {{ 'home.actions.see-events' | transloco }}
+        </button>
+      </div>
+    }
+  </div>
+</section>

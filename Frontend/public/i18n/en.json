@@ -1,31 +1,19 @@
 {
   "home": {
     "nav": {
-      "home": "Home",
       "login": "Login",
-      "register": "Register",
       "logout": "Logout",
       "profile": "My profile"
     },
-    "title": "Welcome Home",
-    "subtitle": "This is your application dashboard.",
-    "authenticated-message": "You are currently authenticated.",
-    "unauthenticated-message": "Please log in or register to get started.",
-    "participant": {
-      "title": "Participant Dashboard",
-      "description": "Welcome to the Participant Dashboard. Here you can manage your activities and view your progress."
+    "card": {
+      "title": "msg.Check-In",
+      "subtitle": "Your platform for creating, managing and checking in to company events."
     },
-    "marketing": {
-      "title": "Marketing Dashboard",
-      "description": "Welcome to the Marketing Dashboard. Access campaign tools and analytics here."
-    },
-    "hr": {
-      "title": "HR Dashboard",
-      "description": "Welcome to the HR Dashboard. Manage employee records and resources."
-    },
-    "admin": {
-      "title": "Admin Dashboard",
-      "description": "Welcome to the Admin Dashboard. Full system access and management tools available."
+    "actions": {
+      "create-event": "Create Event",
+      "see-events": "See All Events",
+      "see-users": "See All Users",
+      "login": "Log In"
     }
   },
   "login": {
@@ -41,7 +29,6 @@
     "submit": "Login",
     "loggingIn": "Logging in...",
     "forgotPassword": "Forgot password?",
-    "username": "Username",
     "no-account": "Don't have an account?",
     "register": "Register"
   },
@@ -57,7 +44,6 @@
     "have-account": "Already have an account?",
     "login": "Login",
     "confirm-password": "Confirm Password:",
-    "success": "Account created successfully! Redirecting to login...",
     "success-title": "Account created!",
     "success-subtitle": "You will be redirected to the login page shortly.",
     "errors": {
@@ -85,10 +71,6 @@
     "save": "Save changes",
     "saving": "Saving...",
     "loading": "Loading account details...",
-    "error-title": "Unable to save profile",
-    "account-holder": "Account holder",
-    "editing-hint": "Editing mode is active. Changes are not saved until you click save.",
-    "readonly-hint": "Profile is in read-only mode. Use Edit mode to make changes.",
     "first-name": "First name",
     "last-name": "Last name",
     "email": "Email",
@@ -141,10 +123,6 @@
   },
   "success-messages": {
     "login-successful": "Login successful!",
-    "logout-successful": "You have been logged out successfully.",
-    "registration-successful": "Registration successful! Welcome aboard.",
-    "profile-updated": "Profile updated successfully.",
-    "password-changed": "Password changed successfully.",
     "user-updated": "User updated successfully."
   },
   "common": {
@@ -155,7 +133,7 @@
   "event-details": {
     "dialog": {
       "title": "Event Details",
-      "loading": "Loading event details...",
+
       "error": "Failed to load event details.",
       "description": "Description",
       "start-date": "Start Date",
