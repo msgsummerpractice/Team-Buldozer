@@ -283,13 +283,13 @@ class EventServiceTest {
     }
 
     @Test
-    void completeEvent_throwsInvalidEventDataException_whenEndDateTimeIsInFuture() {
+    void completeEvent_throwsEventNotEditableException_whenEndDateTimeIsInFuture() {
         Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED)
                 .endDateTime(FUTURE_END).build();
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
 
         assertThatThrownBy(() -> eventService.completeEvent(1L))
-                .isInstanceOf(InvalidEventDataException.class);
+                .isInstanceOf(EventNotEditableException.class);
     }
 
     @Test

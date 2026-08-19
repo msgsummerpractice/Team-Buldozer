@@ -299,6 +299,10 @@ public class EventService {
             throw new InvalidEventDataException("Check-in code is only available for published events.");
         }
 
+        if (event.getCheckInCode() == null) {
+            throw new ResourceNotFoundException("Check-in code has not been generated yet for event with id " + eventId);
+        }
+
         return event.getCheckInCode();
     }
 
@@ -322,7 +326,11 @@ public class EventService {
             throw new InvalidEventDataException("QR code is only available for published events.");
         }
 
-        return event.getQrCode() == null ? null : Base64.getEncoder().encodeToString(event.getQrCode());
+        if (event.getQrCode() == null) {
+            throw new ResourceNotFoundException("QR code has not been generated yet for event with id " + eventId);
+        }
+
+        return Base64.getEncoder().encodeToString(event.getQrCode());
     }
 
     @Transactional(readOnly = true)
