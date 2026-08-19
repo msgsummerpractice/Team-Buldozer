@@ -76,6 +76,7 @@ public class EmailService {
                 """.formatted(
                 event.getName(),
                 event.getStartDateTime(),
+                event.getEndDateTime(),
                 event.getLocation(),
                 event.getPoster() != null ? "<img src=\"cid:poster\" alt=\"Event poster\" style=\"max-width:600px;\"/>" : ""
         );
