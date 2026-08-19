@@ -8,7 +8,9 @@ VALUES (1, 'Admin', 'Admin', 'admin@gmail.com', '$2a$12$x/NuM.sSIYNII6GnGh1is.89
        (4, 'Andrei', 'Muresan', 'andrei@gmail.com', '$2a$12$BMNTEt0HP4x1OPwfqW94COKIfwXzPHtbKQTTNm2RgY9rLywfNAWcW',
         'CLUJ', true, NULL),
        (5, 'George', 'Dobre', 'george@gmail.com', '$2a$12$nco8Kg9qDJhieMpHdNBuRebcNfuQFiUr6fqQC8iKh7iV6KZZQt78C',
-        'MURES', true, NULL)
+        'MURES', true, NULL),
+       (6, 'Elena', 'Radu', 'elena@gmail.com', '$2a$12$nco8Kg9qDJhieMpHdNBuRebcNfuQFiUr6fqQC8iKh7iV6KZZQt78C',
+        'CLUJ', true, NULL)
 ON CONFLICT (id) DO NOTHING;
 
 SELECT setval(pg_get_serial_sequence('users', 'id'), coalesce(max(id), 1))
@@ -19,7 +21,8 @@ VALUES (1, 'ADMIN'),
        (2, 'MARKETING'),
        (3, 'HR'),
        (4, 'PARTICIPANT'),
-       (5, 'PARTICIPANT')
+       (5, 'PARTICIPANT'),
+       (6, 'MARKETING')
 ON CONFLICT (user_id, role_name) DO NOTHING;
 
 

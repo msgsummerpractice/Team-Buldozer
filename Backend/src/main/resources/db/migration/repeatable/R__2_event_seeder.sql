@@ -21,7 +21,14 @@ VALUES (1, 'Summer Tech Meetup', 'CLUJ',
         '2026-09-01', '2026-11-15',
         'Piata Trandafirilor 1, Targu Mures',
         'A 48-hour hackathon open to students and professionals across all offices.',
-        2, false, '2026-08-14 10:10:00', '000003')
+        2, false, '2026-08-14 10:10:00', '000003'),
+       (4, 'Product Launch Party', 'CLUJ',
+        '2026-09-25 17:00:00', '2026-09-25 22:00:00',
+        'INTERNAL', 'PUBLISHED', NULL,
+        '2026-08-20', '2026-09-24',
+        'Str. Memorandumului 28, Cluj-Napoca',
+        'Celebration event for the new product launch, organized by the marketing team.',
+        6, true, '2026-08-19 09:00:00', '000004')
 ON CONFLICT (id) DO UPDATE SET check_in_code = EXCLUDED.check_in_code;
 
 SELECT setval(pg_get_serial_sequence('events', 'id'), coalesce(max(id), 1))
