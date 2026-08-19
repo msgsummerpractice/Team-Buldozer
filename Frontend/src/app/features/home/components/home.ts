@@ -5,6 +5,7 @@ import { RolesAssignedDirective } from '@core/authorization/directives/role-assi
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { UserRoleEnum } from '@core/users/model/user-role';
 
 @Component({
   selector: 'app-home',
@@ -14,4 +15,5 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class Home {
   protected auth = inject(AuthenticationService);
+  readonly roles = UserRoleEnum;
 }

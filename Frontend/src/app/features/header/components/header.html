@@ -4,7 +4,7 @@
   </a>
 
   <div class="flex justify-start items-center w-full h-full px-4">
-    <button *rolesAssigned="'ADMIN'" matButton routerLink="/users">
+    <button *rolesAssigned="roles.ADMIN" matButton routerLink="/users">
       {{ 'users.title' | transloco }}
     </button>
     <button *appAuth matButton routerLink="/events">{{ 'events.title' | transloco }}</button>

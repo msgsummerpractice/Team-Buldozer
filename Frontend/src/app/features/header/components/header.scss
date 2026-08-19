@@ -3,7 +3,7 @@
 .app-toolbar {
   @include mat.toolbar-overrides(
     (
-      container-background-color: var(--culoarea-noastra-preferata),
+      container-background-color: var(--header-background-color),
     )
   );
 

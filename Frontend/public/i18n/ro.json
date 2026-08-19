@@ -1,9 +1,7 @@
 {
   "home": {
     "nav": {
-      "home": "Acasă",
       "login": "Autentificare",
-      "register": "Înregistrare",
       "logout": "Deconectare",
       "profile": "Profilul meu"
     },
@@ -15,8 +13,7 @@
       "create-event": "Creare eveniment",
       "see-events": "Vezi toate evenimentele",
       "see-users": "Vezi toți utilizatorii",
-      "login": "Autentificare",
-      "register": "Înregistrare"
+      "login": "Autentificare"
     }
   },
   "login": {
@@ -32,7 +29,6 @@
     "submit": "Autentificare",
     "loggingIn": "Se autentifică...",
     "forgotPassword": "Ați uitat parola?",
-    "username": "Nume de utilizator",
     "no-account": "Nu aveți un cont?",
     "register": "Înregistrare"
   },
@@ -48,7 +44,6 @@
     "have-account": "Aveți deja un cont?",
     "login": "Autentificare",
     "confirm-password": "Confirmare parolă:",
-    "success": "Cont creat cu succes! Redirecționare...",
     "success-title": "Cont creat!",
     "success-subtitle": "Vei fi redirecționat către pagina de autentificare în scurt timp.",
     "errors": {
@@ -76,10 +71,6 @@
     "save": "Salvează modificările",
     "saving": "Se salvează...",
     "loading": "Se încarcă detaliile contului...",
-    "error-title": "Nu se poate salva profilul",
-    "account-holder": "Titularul contului",
-    "editing-hint": "Modul de editare este activ. Modificările nu sunt salvate până când apăsați salvare.",
-    "readonly-hint": "Profilul este în modul doar citire. Folosiți Modul editare pentru modificări.",
     "first-name": "Prenume",
     "last-name": "Nume de familie",
     "email": "Email",
@@ -132,10 +123,6 @@
   },
   "success-messages": {
     "login-successful": "Autentificare reușită!",
-    "logout-successful": "Ați fost deconectat cu succes.",
-    "registration-successful": "Înregistrare reușită! Bine ați venit.",
-    "profile-updated": "Profilul a fost actualizat cu succes.",
-    "password-changed": "Parola a fost schimbată cu succes.",
     "user-updated": "Utilizatorul a fost actualizat cu succes."
   },
   "common": {
@@ -146,7 +133,7 @@
   "event-details": {
     "dialog": {
       "title": "Detalii eveniment",
-      "loading": "Se încarcă detaliile evenimentului...",
+
       "error": "Nu s-au putut încărca detaliile evenimentului.",
       "description": "Descriere",
       "start-date": "Data de început",
