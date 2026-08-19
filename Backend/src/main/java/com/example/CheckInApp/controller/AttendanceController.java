@@ -22,7 +22,7 @@ public class AttendanceController {
     private final AttendanceService attendanceService;
 
     @PatchMapping("/check-in/{checkInCode}")
-    public ResponseEntity<AttendanceResponse> checkIn(
+    public ResponseEntity<AttendanceResponse> checkInCode(
             @PathVariable @Pattern(regexp = "\\d{6}", message = "Check-in code must be 6 digits.") String checkInCode,
             Authentication authentication) {
         AttendanceResponse response = attendanceService.checkIn(checkInCode, authentication.getName());
