@@ -71,4 +71,8 @@ public class Event {
     @Column
     private String checkInCode;
 
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "qr_code")
+    private byte[] qrCode;
+
 }
