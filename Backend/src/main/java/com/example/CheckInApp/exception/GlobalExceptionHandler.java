@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -58,6 +59,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_40, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(PosterNotReadException.class)
     public ResponseEntity<ErrorResponse> handlePosterNotRead(PosterNotReadException ex, HttpServletRequest request) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_110, ex.getMessage(), request);
@@ -87,6 +93,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataBaseException.class)
     public ResponseEntity<ErrorResponse> handleDataBaseException(DataBaseException ex, HttpServletRequest request) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_115, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(EventCheckInClosedException.class)
+    public ResponseEntity<ErrorResponse> handleEventCheckInClosed(EventCheckInClosedException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_116, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(AlreadyCheckedInException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyCheckedIn(AlreadyCheckedInException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_117, ex.getMessage(), request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
