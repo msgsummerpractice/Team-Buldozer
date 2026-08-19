@@ -33,6 +33,11 @@ const EVENT_DETAILS_DIALOG_CONFIG = {
   minHeight: '700px',
 };
 
+const CHECK_IN_DIALOG_CONFIG = {
+  width: '360px',
+  maxWidth: '95vw',
+};
+
 @Component({
   selector: 'app-events',
   imports: [
@@ -113,7 +118,7 @@ export class Events implements OnInit {
         const routeSegment = this.route.snapshot.url[0]?.path;
         if (routeSegment === 'checkin') {
           this.dialog
-            .open(CheckInDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
+            .open(CheckInDialog, { ...CHECK_IN_DIALOG_CONFIG, data: { id } })
             .afterClosed()
             .subscribe(() => {
               this.router.navigate(['/events/list']);

@@ -1,5 +1,66 @@
-<mat-dialog-content class="w-full !p-0 !mt-0 !mb-0"></mat-dialog-content>
+<mat-dialog-content class="w-full pt-4 pb-2">
+  <div class="flex flex-col items-center gap-4">
+    <p class="text-sm font-semibold uppercase tracking-widest opacity-60">
+      {{ 'check-in.scan-qr' | transloco }}
+    </p>
+
+    @if (!scanning()) {
+      <button
+        type="button"
+        class="w-48 h-48 rounded-xl border-2 border-dashed border-(--mat-sys-outline) flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-(--mat-sys-surface-container) transition-colors"
+        (click)="startScan()"
+      >
+        <mat-icon class="text-[56px] opacity-50">qr_code_scanner</mat-icon>
+        <span class="text-xs opacity-60">{{ 'check-in.tap-to-scan' | transloco }}</span>
+      </button>
+    }
+
+    <video
+      #videoEl
+      class="w-full rounded-xl"
+      [class.hidden]="!scanning()"
+      autoplay
+      muted
+      playsinline
+    ></video>
+
+    @if (scanning()) {
+      <button mat-stroked-button type="button" (click)="stopScan()">
+        {{ 'check-in.stop-scan' | transloco }}
+      </button>
+    }
+
+    @if (cameraError()) {
+      <p class="text-xs text-red-500">{{ cameraError()! | transloco }}</p>
+    }
+
+    <div class="flex items-center w-full gap-3">
+      <hr class="flex-1 border-(--mat-sys-outline-variant)" />
+      <span class="text-xs font-semibold uppercase opacity-50">
+        {{ 'check-in.or' | transloco }}
+      </span>
+      <hr class="flex-1 border-(--mat-sys-outline-variant)" />
+    </div>
+
+    <p class="text-sm font-semibold uppercase tracking-widest opacity-60 -mb-2">
+      {{ 'check-in.enter-code' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ 'check-in.code-label' | transloco }}</mat-label>
+      <input matInput [ngModel]="checkInCode()" (ngModelChange)="checkInCode.set($event)" />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
 
 <mat-dialog-actions align="end" class="min-h-0 py-2 px-4">
   <button mat-button type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
+  <button
+    mat-flat-button
+    type="button"
+    [disabled]="submitting() || !checkInCode().trim()"
+    (click)="confirmCode()"
+  >
+    {{ 'check-in.confirm' | transloco }}
+  </button>
 </mat-dialog-actions>
