@@ -1,6 +1,6 @@
-import { Component, computed, inject, OnInit, signal, DestroyRef } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
 import { EventStatusEnum } from '@features/events/model/event-status';
@@ -25,7 +25,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventDetailsDialog } from '@features/events/event-details/components/event-details-dialog';
-import { RouterLink } from '@angular/router';
+
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
   maxWidth: '1400px',
@@ -65,11 +65,10 @@ export class Events implements OnInit {
   protected readonly pageSizeList = [5, 10, 25, 50];
   protected readonly sortDirection = signal<'asc' | 'desc'>('asc');
 
-  protected readonly isMarketing = this.authorization.hasAnyRole([UserRoleEnum.MARKETING]);
+  protected readonly isMarketing = signal(this.authorization.hasAnyRole([UserRoleEnum.MARKETING]));
 
   protected readonly displayedColumns = computed(() => {
-    const base = ['name', 'period', 'status', 'type', 'location', 'details'];
-    return this.isMarketing ? [...base, 'complete'] : base;
+    return ['name', 'period', 'status', 'type', 'location', 'actions'];
   });
 
   private readonly destroyRef = inject(DestroyRef);
@@ -151,7 +150,6 @@ export class Events implements OnInit {
     return `${fmt(start)} - ${fmt(end)}`;
   }
 
-
   protected canComplete(event: EventResponse): boolean {
     return (
       event.status === EventStatusEnum.PUBLISHED &&
@@ -162,25 +160,21 @@ export class Events implements OnInit {
   protected onComplete(event: EventResponse): void {
     if (!this.canComplete(event)) return;
 
-    const dialogRef = this.dialog.open<
+    const dialogRef = this.dialog.open<CompleteEventDialog, CompleteEventDialogData, boolean>(
       CompleteEventDialog,
-      CompleteEventDialogData,
-      boolean
-    >(CompleteEventDialog, {
-      data: { eventName: event.name },
-      width: '440px',
-      autoFocus: 'dialog',
-      restoreFocus: true,
-    });
+      {
+        data: { eventName: event.name },
+        width: '440px',
+        autoFocus: 'dialog',
+        restoreFocus: true,
+      }
+    );
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (!confirmed) return;
-      this.eventService.completeEvent(event.id).subscribe({
-        next: (updated) => {
-          this._events.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
-          this.notification.showSuccess('events.complete-success');
-        },
-        error: () => this.notification.showError('events.complete-error'),
+      this.eventService.completeEvent(event.id).subscribe((updated) => {
+        this._events.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
+        this.notification.showSuccess('events.complete-success');
       });
     });
   }
@@ -188,9 +182,5 @@ export class Events implements OnInit {
   protected onClear(): void {
     this.searchTerm.set('');
     this.pageIndex.set(0);
-  }
-
-  protected openDetails(id: number): void {
-    this.router.navigate([`/events/${id}/details`]);
   }
 }

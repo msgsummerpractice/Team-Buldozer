@@ -10,7 +10,6 @@ export interface CompleteEventDialogData {
 
 @Component({
   selector: 'app-complete-event-dialog',
-  standalone: true,
   imports: [MatButtonModule, MatDialogModule, MatIconModule, TranslocoPipe],
   templateUrl: './complete-event-dialog.html',
 })

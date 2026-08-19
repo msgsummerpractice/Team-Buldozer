@@ -355,6 +355,7 @@
       }
     },
     "actions": {
+      "title": "Actions",
       "cancel": "Cancel",
       "save": "Save Event"
     },

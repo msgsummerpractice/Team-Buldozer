@@ -355,6 +355,7 @@
       }
     },
     "actions": {
+      "title": "Acțiuni",
       "cancel": "Anulează",
       "save": "Salvează evenimentul"
     },

@@ -122,51 +122,42 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="details">
+          <ng-container matColumnDef="actions">
             <th
               mat-header-cell
               *matHeaderCellDef
               class="text-xs font-semibold uppercase tracking-wider"
             >
-              {{ 'events.details-col' | transloco }}
+              {{ 'events.actions.title' | transloco }}
             </th>
             <td mat-cell *matCellDef="let event">
               <button
-                matButton="outlined"
-                color="primary"
+                mat-icon-button
                 [routerLink]="['/events', event.id, 'details']"
                 [matTooltip]="'events.view-details' | transloco"
               >
-                <mat-icon>info</mat-icon>
-                {{ 'events.details' | transloco }}
+                <mat-icon class="text-blue-500!">info</mat-icon>
               </button>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="complete">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="text-xs font-semibold uppercase tracking-wider"
-            >
-              {{ 'events.complete-col' | transloco }}
-            </th>
-            <td mat-cell *matCellDef="let event">
-              <button
-                matButton="outlined"
-                color="accent"
-                [disabled]="!canComplete(event)"
-                (click)="onComplete(event)"
-                [matTooltip]="
-                  (canComplete(event)
-                    ? 'events.complete-tooltip'
-                    : 'events.complete-disabled-tooltip'
-                  ) | transloco
-                "
-              >
-                <mat-icon>check_circle</mat-icon>
-                {{ 'events.complete' | transloco }}
-              </button>
+              @if (this.isMarketing()) {
+                <div
+                  class="inline-block"
+                  [matTooltip]="
+                    (canComplete(event)
+                      ? 'events.complete-tooltip'
+                      : 'events.complete-disabled-tooltip'
+                    ) | transloco
+                  "
+                >
+                  <button
+                    mat-icon-button
+                    color="accent"
+                    [disabled]="!canComplete(event)"
+                    (click)="onComplete(event)"
+                  >
+                    <mat-icon [class.text-green-500!]="canComplete(event)">check_circle</mat-icon>
+                  </button>
+                </div>
+              }
             </td>
           </ng-container>
 
