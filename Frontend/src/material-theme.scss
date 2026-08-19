@@ -12,7 +12,7 @@ html {
     (
       color: (
         primary: theme.$primary-palette,
-        tertiary: mat.$blue-palette,
+        tertiary: theme.$tertiary-palette,
       ),
       typography: Roboto,
       density: 0,
