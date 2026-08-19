@@ -91,7 +91,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(QrCodeGenerationException.class)
     public ResponseEntity<ErrorResponse> handleQrCodeGeneration(QrCodeGenerationException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_116, ex.getMessage(), request);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_216, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(CodesAlreadyGeneratedException.class)
+    public ResponseEntity<ErrorResponse> handleCodesAlreadyGenerated(CodesAlreadyGeneratedException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_217, ex.getMessage(), request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {

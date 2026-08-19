@@ -11,6 +11,7 @@ import com.example.CheckInApp.exception.InvalidEventDataException;
 import com.example.CheckInApp.exception.InvalidFileException;
 import com.example.CheckInApp.exception.PosterNotReadException;
 import com.example.CheckInApp.exception.QrCodeGenerationException;
+import com.example.CheckInApp.exception.CodesAlreadyGeneratedException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.EventRepository;
@@ -255,6 +256,10 @@ public class EventService {
 
         if (event.getStatus() != EventStatus.PUBLISHED) {
             throw new InvalidEventDataException("Codes can only be generated for published events.");
+        }
+
+        if (event.getCheckInCode() != null) {
+            throw new CodesAlreadyGeneratedException("Codes have already been generated for this event.");
         }
 
         event.setCheckInCode(generateRandomCode());
