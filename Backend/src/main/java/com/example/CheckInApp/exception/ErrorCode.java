@@ -32,7 +32,8 @@ public enum ErrorCode {
     ERR_114("Last admin can not be disabled or have its role changed ♥"),
     ERR_115("Database error :("),
     ERR_216("QR code could not be generated"),
-    ERR_217("Codes were already generated for this event");
+    ERR_217("Codes were already generated for this event"),
+    ERR_218("Could not generate a unique check-in code");
 
     private final String defaultMessage;
 

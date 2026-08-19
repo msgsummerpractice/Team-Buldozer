@@ -12,6 +12,7 @@ import com.example.CheckInApp.exception.InvalidFileException;
 import com.example.CheckInApp.exception.PosterNotReadException;
 import com.example.CheckInApp.exception.QrCodeGenerationException;
 import com.example.CheckInApp.exception.CodesAlreadyGeneratedException;
+import com.example.CheckInApp.exception.CheckInCodeGenerationException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.EventRepository;
@@ -46,6 +47,7 @@ public class EventService {
     private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
     private static final String CHECK_IN_CODE_CHARS = "0123456789";
     private static final int CHECK_IN_CODE_LENGTH = 6;
+    private static final int MAX_CHECK_IN_CODE_ATTEMPTS = 3;
     private static final int QR_CODE_SIZE = 300;
     private static final SecureRandom RANDOM = new SecureRandom();
 
@@ -262,11 +264,22 @@ public class EventService {
             throw new CodesAlreadyGeneratedException("Codes have already been generated for this event.");
         }
 
-        event.setCheckInCode(generateRandomCode());
+        event.setCheckInCode(generateUniqueCheckInCode());
         event.setQrCode(generateQrCodeImage(event.getId() + "-" + event.getName()));
 
         Event saved = eventRepository.save(event);
         return new EventCodesResponse(saved.getCheckInCode(), Base64.getEncoder().encodeToString(saved.getQrCode()));
+    }
+
+    private String generateUniqueCheckInCode() {
+        for (int attempt = 0; attempt < MAX_CHECK_IN_CODE_ATTEMPTS; attempt++) {
+            String candidate = generateRandomCode();
+            if (!eventRepository.existsByCheckInCode(candidate)) {
+                return candidate;
+            }
+        }
+        throw new CheckInCodeGenerationException("Could not generate a unique check-in code after "
+                + MAX_CHECK_IN_CODE_ATTEMPTS + " attempts.");
     }
 
     private String generateRandomCode() {
