@@ -197,7 +197,6 @@
     "details-col": "DETAILS",
     "details": "Details",
     "view-details": "View details",
-    "complete-col": "COMPLETE",
     "complete": "Complete",
     "complete-tooltip": "Mark this event as completed",
     "complete-disabled-tooltip": "Event can only be completed after its end time and while published",
@@ -206,6 +205,16 @@
     "complete-dialog": {
       "title": "Complete event",
       "message": "Are you sure you want to mark \"{{name}}\" as completed?",
+      "warning": "This action cannot be undone."
+    },
+    "publish": "Publish",
+    "publish-tooltip": "Publish this event",
+    "publish-disabled-tooltip": "Event can only be published before its end time and while draft",
+    "publish-success": "Event published",
+    "publish-error": "Could not publish event",
+    "publish-dialog": {
+      "title": "Publish event",
+      "message": "Are you sure you want to publish \"{{name}}\"?",
       "warning": "This action cannot be undone."
     },
     "no-events": "No events found",
