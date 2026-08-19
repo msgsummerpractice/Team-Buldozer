@@ -98,19 +98,19 @@ public class EmailService {
         return """
                 <html>
                 <body>
+                  %s
                   <h2>%s</h2>
                   <p><strong>Date:</strong> %s</p>
                   <p><strong>Location:</strong> %s</p>
                   <p><a href="%s">View event details</a></p>
-                  %s
                 </body>
                 </html>
                 """.formatted(
+                event.getPoster() != null ? "<img src=\"cid:poster\" alt=\"Event poster\" style=\"max-width:600px;\"/>" : "",
                 HtmlUtils.htmlEscape(event.getName()),
                 event.getStartDateTime().format(EMAIL_DATE_FORMAT),
                 HtmlUtils.htmlEscape(event.getLocation().toString()),
-                detailsUrl,
-                event.getPoster() != null ? "<img src=\"cid:poster\" alt=\"Event poster\" style=\"max-width:600px;\"/>" : ""
+                detailsUrl
         );
     }
 }
