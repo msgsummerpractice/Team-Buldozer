@@ -4,7 +4,10 @@ import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
 import com.example.CheckInApp.dto.response.CreateEventResponse;
+import com.example.CheckInApp.dto.response.EventCodesResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
+import com.example.CheckInApp.exception.CheckInCodeGenerationException;
+import com.example.CheckInApp.exception.CodesAlreadyGeneratedException;
 import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
 import com.example.CheckInApp.exception.InvalidFileException;
@@ -13,6 +16,10 @@ import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -20,6 +27,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -30,6 +40,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -71,6 +83,13 @@ class EventServiceTest {
                 assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.DRAFT);
                 assertThat(resultResponse.id()).isEqualTo(1L);
         }
+
+        ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
+
+        verify(eventRepository).save(captor.capture());
+        assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.DRAFT);
+        assertThat(resultResponse.getId()).isEqualTo(1L);
+    }
 
         @Test
         void addEvent_throwsResourceNotFoundException_whenUserNotFound() {
@@ -283,12 +302,13 @@ class EventServiceTest {
         }
 
         @Test
-        void completeEvent_throwsEventNotEditableException_whenEndDateTimeIsInFuture() {
+        void completeEvent_throwsInvalidEventDataException_whenEndDateTimeIsInFuture() {
                 Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED)
                                 .endDateTime(FUTURE_END).build();
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
                 assertThatThrownBy(() -> eventService.completeEvent(1L))
-                                .isInstanceOf(EventNotEditableException.class);
+                                .isInstanceOf(InvalidEventDataException.class);
         }
 
         @Test
