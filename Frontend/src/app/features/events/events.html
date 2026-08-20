@@ -170,8 +170,8 @@
                 <button
                   mat-icon-button
                   color="primary"
-                  [matTooltip]="'Check-In'"
-                  (click)="openCheckIn(event)"
+                  [matTooltip]="'events.check-in-tooltip' | transloco"
+                  [routerLink]="['/events', event.id, 'checkin']"
                 >
                   <mat-icon>qr_code_scanner</mat-icon>
                 </button>

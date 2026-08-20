@@ -233,6 +233,7 @@
     "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un eveniment potrivit.",
     "sort-asc": "Sortare: cele mai apropiate primele",
     "sort-desc": "Sortare: cele mai recente primele",
+    "check-in-tooltip": "Check-In",
     "status-values": {
       "DRAFT": "Schiță",
       "PUBLISHED": "Publicat",
