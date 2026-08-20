@@ -12,8 +12,8 @@ import {
   CompleteEventDialogData,
 } from '@features/events/components/complete-event-dialog/complete-event-dialog';
 import { FormsModule } from '@angular/forms';
-import { combineLatest, debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { combineLatest, debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -38,6 +38,11 @@ const CHECK_IN_DIALOG_CONFIG = {
   width: '360px',
   maxWidth: '95vw',
 };
+
+interface RouteDialogState {
+  id: number | null;
+  routeSegment: string | null;
+}
 
 @Component({
   selector: 'app-events',
@@ -80,6 +85,7 @@ export class Events implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private searchSubject = new Subject<string>();
+  private currentDialogRef: MatDialogRef<unknown> | null = null;
 
   readonly filteredEvents = computed(() => {
     const allEvents = this._events();
@@ -113,34 +119,25 @@ export class Events implements OnInit {
     this.loadEvents();
 
     combineLatest([this.route.paramMap, this.route.url])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([params, urlSegments]) => {
-        const idParam = params.get('id');
-        const id: number | null = idParam ? +idParam : null;
-        const routeSegment = urlSegments[0]?.path;
+      .pipe(
+        debounceTime(0),
+        map(([params, urlSegments]): RouteDialogState => ({
+          id: params.get('id') ? +params.get('id')! : null,
+          routeSegment: urlSegments[0]?.path ?? null,
+        })),
+        distinctUntilChanged((a, b) => a.id === b.id && a.routeSegment === b.routeSegment),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(({ id, routeSegment }) => {
+        this.currentDialogRef?.close();
+        this.currentDialogRef = null;
 
-        if (id) {
-          if (routeSegment === 'checkin') {
-            this.dialog
-              .open(CheckInDialog, { ...CHECK_IN_DIALOG_CONFIG, data: { id } })
-              .afterClosed()
-              .subscribe(() => {
-                this.router.navigate(['/events/list']);
-              });
-          } else {
-            this.dialog
-              .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
-              .afterClosed()
-              .subscribe((result?: { action: string }) => {
-                if (result?.action === 'edit') {
-                  this.router.navigate(['/events', id, 'edit']);
-                } else if (result?.action === 'checkin') {
-                  this.router.navigate(['/events', id, 'checkin']);
-                } else {
-                  this.router.navigate(['/events/list']);
-                }
-              });
-          }
+        if (!id) return;
+
+        if (routeSegment === 'checkin') {
+          this.openCheckInDialogForRoute(id);
+        } else {
+          this.openEventDetailsDialogForRoute(id);
         }
       });
 
@@ -150,6 +147,40 @@ export class Events implements OnInit {
         this.searchTerm.set(term);
         this.pageIndex.set(0);
       });
+  }
+
+  private openCheckInDialogForRoute(id: number): void {
+    const ref = this.dialog.open(CheckInDialog, { ...CHECK_IN_DIALOG_CONFIG, data: { id } });
+    this.currentDialogRef = ref;
+
+    ref.afterClosed().subscribe(() => {
+      // only react if this dialog is still the "active" one, i.e. it wasn't
+      // already replaced by a subsequent route emission
+      if (this.currentDialogRef !== ref) return;
+      this.currentDialogRef = null;
+      this.router.navigate(['/events/list']);
+    });
+  }
+
+  private openEventDetailsDialogForRoute(id: number): void {
+    const ref = this.dialog.open(EventDetailsDialog, {
+      ...EVENT_DETAILS_DIALOG_CONFIG,
+      data: { id },
+    });
+    this.currentDialogRef = ref;
+
+    ref.afterClosed().subscribe((result?: { action: string }) => {
+      if (this.currentDialogRef !== ref) return;
+      this.currentDialogRef = null;
+
+      if (result?.action === 'edit') {
+        this.router.navigate(['/events', id, 'edit']);
+      } else if (result?.action === 'checkin') {
+        this.router.navigate(['/events', id, 'checkin']);
+      } else {
+        this.router.navigate(['/events/list']);
+      }
+    });
   }
 
   protected loadEvents(): void {
