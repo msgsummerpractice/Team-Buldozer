@@ -62,7 +62,8 @@ public class AttendanceService {
             throw new CheckInClosedException("Check-in is closed because the event is not published.");
         }
 
-        if (event.getEndDateTime().isBefore(LocalDateTime.now())) {
+        LocalDateTime now = LocalDateTime.now();
+        if (event.getEndDateTime().isBefore(now)) {
             throw new CheckInClosedException("Check-in is closed because the event has already ended.");
         }
 
@@ -71,7 +72,7 @@ public class AttendanceService {
         }
 
         attendanceRecord.setCheckedIn(true);
-        attendanceRecord.setCheckInTime(LocalDateTime.now());
+        attendanceRecord.setCheckInTime(now);
         attendanceRecordRepository.save(attendanceRecord);
 
         return new CheckInResponse(event.getId(), event.getName(), attendanceRecord.getCheckInTime());

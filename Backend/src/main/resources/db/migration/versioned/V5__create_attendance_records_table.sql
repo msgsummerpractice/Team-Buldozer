@@ -4,7 +4,7 @@ CREATE TABLE attendance_records
     event_id         BIGINT    NOT NULL,
     user_id          BIGINT    NOT NULL,
     checked_in       BOOLEAN   NOT NULL DEFAULT FALSE,
-    checked_in_time  TIMESTAMP,
+    checkedintime  TIMESTAMP,
     CONSTRAINT pk_attendance_records PRIMARY KEY (id)
 );
 

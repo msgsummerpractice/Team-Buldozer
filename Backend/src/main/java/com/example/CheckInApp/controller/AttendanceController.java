@@ -8,7 +8,6 @@ import com.example.CheckInApp.service.AttendanceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +22,7 @@ public class AttendanceController {
     private final AttendanceService attendanceService;
 
     @PostMapping
-    public ResponseEntity<CheckInResponse> checkIn(@Valid @RequestBody CheckInRequest request, Authentication authentication) {
+    public ResponseEntity<CheckInResponse> checkInByCode(@Valid @RequestBody CheckInRequest request, Authentication authentication) {
         CheckInResponse response = attendanceService.checkInByCode(request, authentication.getName());
         return ResponseEntity.ok(response);
     }
