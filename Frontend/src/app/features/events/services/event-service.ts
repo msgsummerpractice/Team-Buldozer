@@ -33,6 +33,6 @@ export class EventService {
   }
 
   getAllEvents(): Observable<EventResponse[]> {
-    return this.http.get<EventResponse[]>(`${environment.apiUrl}/events`);
+    return this.http.get<EventResponse[]>(this.eventsUrl);
   }
 }
