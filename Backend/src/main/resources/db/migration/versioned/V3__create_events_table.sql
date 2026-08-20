@@ -13,7 +13,7 @@ CREATE TABLE events
     address                  VARCHAR(128)                            NOT NULL,
     description              VARCHAR(1024)                           NOT NULL,
     created_by_id            BIGINT,
-    food_provided            BOOLEAN                                 NOT NULL,
+    food_provided            BOOLEAN,
     created_at               TIMESTAMP                               NOT NULL,
     CONSTRAINT pk_events PRIMARY KEY (id)
 );
