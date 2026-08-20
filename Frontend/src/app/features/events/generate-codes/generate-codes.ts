@@ -7,6 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { catchError, EMPTY, finalize } from 'rxjs';
 import { EventService } from '@features/events/services/event-service';
 import { EventCodesResponse } from '@features/events/model/event-codes-response';
 
@@ -40,16 +41,14 @@ export class GenerateCodes {
 
     this.eventService
       .generateCodes(id)
-      .pipe(takeUntilDestroyed())
-      .subscribe({
-        next: (data) => {
-          this.codes.set(data);
-          this.loading.set(false);
-        },
-        error: () => {
+      .pipe(
+        takeUntilDestroyed(),
+        catchError(() => {
           this.error.set(true);
-          this.loading.set(false);
-        },
-      });
+          return EMPTY;
+        }),
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe((data) => this.codes.set(data));
   }
 }
