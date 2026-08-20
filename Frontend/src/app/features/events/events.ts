@@ -125,7 +125,7 @@ export class Events implements OnInit {
         map(([params, urlSegments]): RouteDialogState => {
           const id = params.get('id');
           return {
-            id: id ? +id : null,
+            id: id ? Number(id) : null,
             routeSegment: urlSegments[0]?.path ?? null,
           };
         }),
@@ -136,7 +136,9 @@ export class Events implements OnInit {
         this.currentDialogRef?.close();
         this.currentDialogRef = null;
 
-        if (!id) return;
+        if (!id) {
+          return;
+        }
 
         if (routeSegment === 'checkin') {
           this.openCheckInDialogForRoute(id);

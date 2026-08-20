@@ -167,11 +167,14 @@
                 </div>
               }
               @if (event.status === EventStatusEnum.PUBLISHED) {
+                @let checkIn = canCheckIn(event);
+                @let checkInTooltip =
+                  checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
                 <button
                   mat-icon-button
                   color="primary"
-                  [matTooltip]="'events.check-in-tooltip' | transloco"
-                  [disabled]="!canCheckIn(event)"
+                  [matTooltip]="checkInTooltip | transloco"
+                  [disabled]="!checkIn"
                   (click)="onCheckIn(event)"
                 >
                   <mat-icon>how_to_reg</mat-icon>

@@ -10,17 +10,21 @@ import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { EventService } from '@features/events/services/event-service';
 
-export function parseCheckInCode(
-  code: string
-): { eventId: number | null; eventName: string | null } | null {
+type CheckInCodeParseResult = {
+  codeType: 'QR' | 'digits';
+  eventId?: number | null;
+  eventName?: string | null;
+};
+
+function parseCheckInCode(code: string): CheckInCodeParseResult | null {
   const composedMatch = /^(\d+)-(.+)$/.exec(code);
   if (composedMatch) {
-    return { eventId: Number(composedMatch[1]), eventName: composedMatch[2] };
+    return { codeType: 'QR', eventId: Number(composedMatch[1]), eventName: composedMatch[2] };
   }
 
   const simpleMatch = /^\d{6}$/.exec(code);
   if (simpleMatch) {
-    return { eventId: null, eventName: null };
+    return { codeType: 'digits' };
   }
 
   return null;
@@ -90,7 +94,7 @@ export class CheckInDialog implements OnDestroy {
       return;
     }
 
-    if (parsed.eventId !== null && parsed.eventId !== this.dialogData.id) {
+    if (parsed.codeType === 'QR' && parsed.eventId !== this.dialogData.id) {
       this.notificationService.showError('check-in.wrong-event');
       return;
     }
