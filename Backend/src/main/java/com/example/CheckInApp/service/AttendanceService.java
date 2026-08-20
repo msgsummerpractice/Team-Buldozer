@@ -67,11 +67,10 @@ public class AttendanceService {
             throw new CheckInClosedException("Check-in is closed because the event has already ended.");
         }
 
-        if (attendanceRecord.isCheckedIn()) {
+        if (attendanceRecord.getCheckInTime() != null) {
             throw new AlreadyCheckedInException("You are already checked in for this event.");
         }
 
-        attendanceRecord.setCheckedIn(true);
         attendanceRecord.setCheckInTime(now);
         attendanceRecordRepository.save(attendanceRecord);
 
