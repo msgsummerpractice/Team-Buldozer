@@ -322,20 +322,22 @@ public class EventService {
     public EventResponse publishEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
-
+ 
         if (event.getStatus() != EventStatus.DRAFT) {
             throw new EventNotEditableException("Only DRAFT events can be published.");
         }
-
+ 
         event.setStatus(EventStatus.PUBLISHED);
-
+ 
         Event saved = eventRepository.save(event);
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                emailService.notifyEventPublished(saved);
-            }
-        });
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    emailService.notifyEventPublished(saved);
+                }
+            });
+        }
         return eventMapper.toResponse(saved);
     }
 
