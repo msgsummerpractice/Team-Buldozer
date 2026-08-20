@@ -10,10 +10,20 @@ import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { EventService } from '@features/events/services/event-service';
 
-export function parseCheckInCode(code: string): { eventId: number; eventName: string } | null {
-  const match = /^(\d+)-(.+)$/.exec(code);
-  if (!match) return null;
-  return { eventId: Number(match[1]), eventName: match[2] };
+export function parseCheckInCode(
+  code: string
+): { eventId: number | null; eventName: string | null } | null {
+  const composedMatch = /^(\d+)-(.+)$/.exec(code);
+  if (composedMatch) {
+    return { eventId: Number(composedMatch[1]), eventName: composedMatch[2] };
+  }
+
+  const simpleMatch = /^\d{6}$/.exec(code);
+  if (simpleMatch) {
+    return { eventId: null, eventName: null };
+  }
+
+  return null;
 }
 
 @Component({
@@ -74,15 +84,18 @@ export class CheckInDialog implements OnDestroy {
   protected processCode(rawCode: string): void {
     const code = rawCode.trim();
     const parsed = parseCheckInCode(code);
-    if (!parsed) {
+
+    if (parsed === null) {
       this.notificationService.showError('check-in.invalid-code');
       return;
     }
-    if (parsed.eventId !== this.dialogData.id) {
+
+    if (parsed.eventId !== null && parsed.eventId !== this.dialogData.id) {
       this.notificationService.showError('check-in.wrong-event');
       return;
     }
-    this.submit(parsed.eventId, code);
+
+    this.submit(this.dialogData.id, code);
   }
 
   protected confirmCode(): void {
