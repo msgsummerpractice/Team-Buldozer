@@ -71,6 +71,9 @@ public class Event {
     @Column(length = 6, unique = true)
     private String checkInCode;
 
+    /**
+     * Base64 ENCODED STRING REPRESENTATION OF THE QR CODE PNG
+     */
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "qr_code")
     private byte[] qrCode;
