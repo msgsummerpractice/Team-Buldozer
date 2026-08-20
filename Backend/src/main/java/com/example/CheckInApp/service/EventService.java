@@ -25,6 +25,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -328,7 +330,12 @@ public class EventService {
         event.setStatus(EventStatus.PUBLISHED);
 
         Event saved = eventRepository.save(event);
-        emailService.notifyEventPublished(saved);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                emailService.notifyEventPublished(saved);
+            }
+        });
         return eventMapper.toResponse(saved);
     }
 
