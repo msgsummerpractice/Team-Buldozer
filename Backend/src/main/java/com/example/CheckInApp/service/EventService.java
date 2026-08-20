@@ -301,7 +301,7 @@ public class EventService {
         }
 
         if (event.getCheckInCode() == null || event.getQrCode() == null) {
-            throw new ResourceNotFoundException("Check-in code has not been generated yet for event with id " + eventId);
+            throw new ResourceNotFoundException("Check-in codes has not been generated yet for event with id " + eventId);
         }
 
         return new EventCodesResponse(event.getCheckInCode(), Base64.getEncoder().encodeToString(event.getQrCode()));
