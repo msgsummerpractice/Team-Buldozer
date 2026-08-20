@@ -1,7 +1,7 @@
 {
   "check-in": {
     "button": "Check In",
-    "button-ended-tooltip": "Evenimentul s-a încheiat",
+    "button-ended-tooltip": "Check-in nu mai este disponibil",
     "scan-qr": "Scanează codul QR",
     "tap-to-scan": "Apasă pentru a deschide camera",
     "stop-scan": "Oprește scanarea",

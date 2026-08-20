@@ -215,6 +215,17 @@ export class Events implements OnInit {
     );
   }
 
+  protected canCheckIn(event: EventResponse): boolean {
+    return (
+      event.status === EventStatusEnum.PUBLISHED &&
+      new Date(event.endDateTime).getTime() > Date.now()
+    );
+  }
+
+  protected onCheckIn(event: EventResponse): void {
+    this.router.navigate(['/events', event.id, 'checkin']);
+  }
+
   protected onComplete(event: EventResponse): void {
     if (!this.canComplete(event)) return;
 

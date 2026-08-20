@@ -171,7 +171,8 @@
                   mat-icon-button
                   color="primary"
                   [matTooltip]="'events.check-in-tooltip' | transloco"
-                  [routerLink]="['/events', event.id, 'checkin']"
+                  [disabled]="!canCheckIn(event)"
+                  (click)="onCheckIn(event)"
                 >
                   <mat-icon>how_to_reg</mat-icon>
                 </button>
