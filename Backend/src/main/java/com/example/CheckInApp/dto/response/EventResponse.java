@@ -31,4 +31,5 @@ public class EventResponse {
     private Long createdById;
     private Boolean foodProvided;
     private LocalDateTime createdAt;
+    private boolean codesGenerated;
 }

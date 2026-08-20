@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
 import { EventStatusEnum } from '@features/events/model/event-status';
+import { EventCodesDialog } from '@features/events/event-details/components/event-codes-dialog';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { NotificationService } from '@core/notification/services/notification.service';
@@ -70,6 +71,7 @@ export class Events implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private searchSubject = new Subject<string>();
+  private readonly _generatedCodes = signal(new Set<number>());
 
   readonly filteredEvents = computed(() => {
     const allEvents = this._events();
@@ -104,9 +106,21 @@ export class Events implements OnInit {
     this.route.parent!.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const idParam = params.get('id');
       const id: number | null = idParam ? +idParam : null;
-      if (id) {
+      if (!id) return;
+      const currentPath = this.route.snapshot.routeConfig?.path;
+      if (currentPath === 'details') {
         this.dialog
           .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
+          .afterClosed()
+          .subscribe(() => this.router.navigate(['/events/list']));
+      } else if (currentPath === 'codes') {
+        this.dialog
+          .open(EventCodesDialog, {
+            width: '440px',
+            autoFocus: 'dialog',
+            restoreFocus: true,
+            data: { id },
+          })
           .afterClosed()
           .subscribe(() => this.router.navigate(['/events/list']));
       }
@@ -157,6 +171,36 @@ export class Events implements OnInit {
     return (
       event.status === EventStatusEnum.DRAFT && new Date(event.endDateTime).getTime() > Date.now()
     );
+  }
+
+  protected canGenerateCodes(event: EventResponse): boolean {
+    return event.status === EventStatusEnum.PUBLISHED;
+  }
+
+  protected isCodeGenerated(event: EventResponse): boolean {
+    return event.codesGenerated || this._generatedCodes().has(event.id);
+  }
+
+  protected onGenerateCodes(event: EventResponse): void {
+    this.eventService
+      .generateCodes(event.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this._generatedCodes.update((set) => new Set(set).add(event.id));
+          this.notification.showSuccess('events.generate-codes-success');
+          this.onViewCodes(event);
+        },
+      });
+  }
+
+  protected onViewCodes(event: EventResponse): void {
+    this.dialog.open(EventCodesDialog, {
+      width: '440px',
+      autoFocus: 'dialog',
+      restoreFocus: true,
+      data: { id: event.id },
+    });
   }
 
   protected onComplete(event: EventResponse): void {

@@ -129,5 +129,18 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="mt-4">
+  @if (isMarketing && event()) {
+    @if (codesGenerated()) {
+      <button mat-button type="button" (click)="onViewCodes()">
+        <mat-icon>visibility</mat-icon>
+        {{ 'events.view-codes-tooltip' | transloco }}
+      </button>
+    } @else if (canGenerateCodes()) {
+      <button mat-button type="button" (click)="onGenerateCodes()">
+        <mat-icon>qr_code</mat-icon>
+        {{ 'events.generate-codes-tooltip' | transloco }}
+      </button>
+    }
+  }
   <button mat-button type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
 </mat-dialog-actions>
