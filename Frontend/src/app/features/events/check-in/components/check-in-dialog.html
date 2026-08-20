@@ -4,31 +4,27 @@
       {{ 'check-in.scan-qr' | transloco }}
     </p>
 
-    @if (!scanning()) {
-      <button
-        type="button"
-        class="w-48 h-48 rounded-xl border-2 border-dashed border-(--mat-sys-outline) flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-(--mat-sys-surface-container) transition-colors"
-        (click)="startScan()"
-      >
-        <mat-icon class="text-[56px] opacity-50">qr_code_scanner</mat-icon>
-        <span class="text-xs opacity-60">{{ 'check-in.tap-to-scan' | transloco }}</span>
-      </button>
-    }
+    <div class="relative w-full aspect-video rounded-xl overflow-hidden">
+      @if (!scanning()) {
+        <button
+          type="button"
+          class="absolute inset-0 border-2 border-dashed border-(--mat-sys-outline) flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-(--mat-sys-surface-container) transition-colors"
+          (click)="startScan()"
+        >
+          <mat-icon class="text-[56px] opacity-50">qr_code_scanner</mat-icon>
+          <span class="text-xs opacity-60">{{ 'check-in.tap-to-scan' | transloco }}</span>
+        </button>
+      }
 
-    <video
-      #videoEl
-      class="w-full rounded-xl"
-      [class.hidden]="!scanning()"
-      autoplay
-      muted
-      playsinline
-    ></video>
-
-    @if (scanning()) {
-      <button mat-stroked-button type="button" (click)="stopScan()">
-        {{ 'check-in.stop-scan' | transloco }}
-      </button>
-    }
+      <video
+        #videoEl
+        class="w-full h-full object-cover"
+        [class.hidden]="!scanning()"
+        autoplay
+        muted
+        playsinline
+      ></video>
+    </div>
 
     @if (cameraError()) {
       <p class="text-xs text-red-500">{{ cameraError()! | transloco }}</p>
