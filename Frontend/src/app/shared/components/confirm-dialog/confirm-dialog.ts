@@ -4,18 +4,24 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-export interface CompleteEventDialogData {
-  eventName: string;
+export interface ConfirmDialogData {
+  titleKey: string;
+  messageKey: string;
+  messageParams?: Record<string, unknown>;
+  warningKey?: string;
+  confirmLabelKey: string;
+  cancelLabelKey?: string;
+  confirmIcon?: string;
 }
 
 @Component({
-  selector: 'app-complete-event-dialog',
+  selector: 'app-confirm-dialog',
   imports: [MatButtonModule, MatDialogModule, MatIconModule, TranslocoPipe],
-  templateUrl: './complete-event-dialog.html',
+  templateUrl: './confirm-dialog.html',
 })
-export class CompleteEventDialog {
-  private readonly dialogRef = inject(MatDialogRef<CompleteEventDialog, boolean>);
-  protected readonly data = inject<CompleteEventDialogData>(MAT_DIALOG_DATA);
+export class ConfirmDialog {
+  private readonly dialogRef = inject(MatDialogRef<ConfirmDialog, boolean>);
+  protected readonly data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
 
   confirm(): void {
     this.dialogRef.close(true);
