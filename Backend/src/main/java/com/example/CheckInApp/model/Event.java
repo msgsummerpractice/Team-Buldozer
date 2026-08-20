@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 @Builder
 public class Event {
 
+    private static final String CHECKIN_CODE_REGEX = "^[0-9]{6}$";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -69,8 +71,8 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Pattern(regexp = "^[0-9]{6}$")
     @Column(length = 6, unique = true)
+    @Pattern(regexp = CHECKIN_CODE_REGEX)
     private String checkInCode;
 
     /**
