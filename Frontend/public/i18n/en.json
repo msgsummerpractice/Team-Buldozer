@@ -1,6 +1,7 @@
 {
   "check-in": {
     "button": "Check In",
+    "button-ended-tooltip": "Event already ended",
     "dialog": {
       "title": "Check In"
     },

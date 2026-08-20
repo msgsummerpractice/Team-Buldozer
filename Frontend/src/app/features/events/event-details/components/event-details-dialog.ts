@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
@@ -20,6 +21,7 @@ import { UserRoleEnum } from '@core/users/model/user-role';
     MatDialogModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     TranslocoPipe,
   ],
   templateUrl: './event-details-dialog.html',
@@ -69,6 +71,12 @@ export class EventDetailsDialog {
   protected readonly typeKey = computed(() => {
     const type = this.event()?.type;
     return type ? `event-details.dialog.type-${type.toLowerCase()}` : '';
+  });
+
+  protected readonly isCheckInDisabled = computed(() => {
+    const evt = this.event();
+    if (!evt) return true;
+    return evt.status !== 'PUBLISHED' || new Date(evt.endDateTime) < new Date();
   });
 
   protected readonly posterUrl = computed(() => {

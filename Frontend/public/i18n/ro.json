@@ -1,6 +1,7 @@
 {
   "check-in": {
     "button": "Check In",
+    "button-ended-tooltip": "Evenimentul s-a încheiat",
     "dialog": {
       "title": "Check In"
     },

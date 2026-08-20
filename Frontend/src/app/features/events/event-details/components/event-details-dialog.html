@@ -139,11 +139,14 @@
       {{ 'events.edit.title' | transloco }}
     </button>
   }
-  @if (event()?.status === 'PUBLISHED') {
-    <button mat-flat-button type="button" (click)="checkIn()">
-      <mat-icon>how_to_reg</mat-icon>
-      {{ 'check-in.button' | transloco }}
-    </button>
+  @if (event()) {
+    @let checkInTooltip = isCheckInDisabled() ? ('check-in.button-ended-tooltip' | transloco) : '';
+    <span [matTooltip]="checkInTooltip">
+      <button mat-flat-button type="button" (click)="checkIn()" [disabled]="isCheckInDisabled()">
+        <mat-icon>how_to_reg</mat-icon>
+        {{ 'check-in.button' | transloco }}
+      </button>
+    </span>
   }
   <button mat-button type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
 </mat-dialog-actions>
