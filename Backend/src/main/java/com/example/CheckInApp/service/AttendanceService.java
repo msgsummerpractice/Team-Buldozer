@@ -51,6 +51,13 @@ public class AttendanceService {
     }
 
     private CheckInResponse performCheckIn(Event event, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
+        AttendanceRecord attendanceRecord = attendanceRecordRepository
+                .findByEvent_IdAndUser_Id(event.getId(), user.getId())
+                .orElseThrow(() -> new NotRegisteredForEventException("You are not registered for this event."));
+
         if (event.getStatus() != EventStatus.PUBLISHED) {
             throw new CheckInClosedException("Check-in is closed because the event is not published.");
         }
@@ -58,13 +65,6 @@ public class AttendanceService {
         if (event.getEndDateTime().isBefore(LocalDateTime.now())) {
             throw new CheckInClosedException("Check-in is closed because the event has already ended.");
         }
-
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
-
-        AttendanceRecord attendanceRecord = attendanceRecordRepository
-                .findByEvent_IdAndUser_Id(event.getId(), user.getId())
-                .orElseThrow(() -> new NotRegisteredForEventException("You are not registered for this event."));
 
         if (attendanceRecord.isCheckedIn()) {
             throw new AlreadyCheckedInException("You are already checked in for this event.");
