@@ -9,8 +9,8 @@ import { UserRoleEnum } from '@core/users/model/user-role';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { ConfirmDialog, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog';
 import { FormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { combineLatest, debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,12 +22,24 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventDetailsDialog } from '@features/events/event-details/components/event-details-dialog';
+import { CheckInDialog } from '@features/events/check-in/components/check-in-dialog';
 
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
   maxWidth: '1400px',
-  minHeight: '85vh',
+  minHeight: '700px',
+  maxHeight: '85vh',
 };
+
+const CHECK_IN_DIALOG_CONFIG = {
+  width: '360px',
+  maxWidth: '95vw',
+};
+
+interface RouteDialogState {
+  id: number | null;
+  routeSegment: string | null;
+}
 
 @Component({
   selector: 'app-events',
@@ -63,6 +75,7 @@ export class Events implements OnInit {
   protected readonly sortDirection = signal<'asc' | 'desc'>('asc');
 
   protected readonly isMarketing = signal(this.authorization.hasAnyRole([UserRoleEnum.MARKETING]));
+  protected readonly EventStatusEnum = EventStatusEnum;
 
   protected readonly displayedColumns = computed(() => {
     return ['name', 'period', 'status', 'type', 'location', 'actions'];
@@ -70,6 +83,7 @@ export class Events implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private searchSubject = new Subject<string>();
+  private currentDialogRef: MatDialogRef<unknown> | null = null;
 
   readonly filteredEvents = computed(() => {
     const allEvents = this._events();
@@ -101,16 +115,34 @@ export class Events implements OnInit {
 
   ngOnInit(): void {
     this.loadEvents();
-    this.route.parent!.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const idParam = params.get('id');
-      const id: number | null = idParam ? +idParam : null;
-      if (id) {
-        this.dialog
-          .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
-          .afterClosed()
-          .subscribe(() => this.router.navigate(['/events/list']));
-      }
-    });
+
+    combineLatest([this.route.paramMap, this.route.url])
+      .pipe(
+        debounceTime(0),
+        map(([params, urlSegments]): RouteDialogState => {
+          const id = params.get('id');
+          return {
+            id: id ? Number(id) : null,
+            routeSegment: urlSegments[0]?.path ?? null,
+          };
+        }),
+        distinctUntilChanged((a, b) => a.id === b.id && a.routeSegment === b.routeSegment),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(({ id, routeSegment }) => {
+        this.currentDialogRef?.close();
+        this.currentDialogRef = null;
+
+        if (!id) {
+          return;
+        }
+
+        if (routeSegment === 'checkin') {
+          this.openCheckInDialogForRoute(id);
+        } else {
+          this.openEventDetailsDialogForRoute(id);
+        }
+      });
 
     this.searchSubject
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
@@ -118,6 +150,38 @@ export class Events implements OnInit {
         this.searchTerm.set(term);
         this.pageIndex.set(0);
       });
+  }
+
+  private openCheckInDialogForRoute(id: number): void {
+    const ref = this.dialog.open(CheckInDialog, { ...CHECK_IN_DIALOG_CONFIG, data: { id } });
+    this.currentDialogRef = ref;
+
+    ref.afterClosed().subscribe(() => {
+      if (this.currentDialogRef !== ref) return;
+      this.currentDialogRef = null;
+      this.router.navigate(['/events/list']);
+    });
+  }
+
+  private openEventDetailsDialogForRoute(id: number): void {
+    const ref = this.dialog.open(EventDetailsDialog, {
+      ...EVENT_DETAILS_DIALOG_CONFIG,
+      data: { id },
+    });
+    this.currentDialogRef = ref;
+
+    ref.afterClosed().subscribe((result?: { action: string }) => {
+      if (this.currentDialogRef !== ref) return;
+      this.currentDialogRef = null;
+
+      if (result?.action === 'edit') {
+        this.router.navigate(['/events', id, 'edit']);
+      } else if (result?.action === 'checkin') {
+        this.router.navigate(['/events', id, 'checkin']);
+      } else {
+        this.router.navigate(['/events/list']);
+      }
+    });
   }
 
   protected loadEvents(): void {
@@ -151,6 +215,17 @@ export class Events implements OnInit {
       event.status === EventStatusEnum.PUBLISHED &&
       new Date(event.endDateTime).getTime() <= Date.now()
     );
+  }
+
+  protected canCheckIn(event: EventResponse): boolean {
+    return (
+      event.status === EventStatusEnum.PUBLISHED &&
+      new Date(event.endDateTime).getTime() > Date.now()
+    );
+  }
+
+  protected onCheckIn(event: EventResponse): void {
+    this.router.navigate(['/events', event.id, 'checkin']);
   }
 
   protected canPublish(event: EventResponse): boolean {

@@ -1,4 +1,21 @@
 {
+  "check-in": {
+    "button": "Check In",
+    "button-ended-tooltip": "Check-in nu mai este disponibil",
+    "scan-qr": "Scanează codul QR",
+    "tap-to-scan": "Apasă pentru a deschide camera",
+    "stop-scan": "Oprește scanarea",
+    "or": "sau",
+    "enter-code": "Introdu codul de check-in",
+    "code-label": "Cod check-in",
+    "confirm": "Confirmă",
+    "camera-not-supported": "Camera nu este suportată pe acest dispozitiv.",
+    "camera-denied": "Accesul la cameră a fost refuzat.",
+    "invalid-code": "Formatul codului de check-in este invalid.",
+    "wrong-event": "Acest cod aparține unui alt eveniment.",
+    "success": "Check-in realizat cu succes!",
+    "failed": "Check-in eșuat. Vă rugăm să încercați din nou."
+  },
   "home": {
     "nav": {
       "login": "Autentificare",
@@ -140,6 +157,7 @@
       "end-date": "Data de sfârșit",
       "registration-start": "Start înregistrări",
       "registration-end": "Sfârșit înregistrări",
+      "registration-period": "Perioadă înregistrare",
       "location": "Locație",
       "address": "Adresă",
       "status": "Status",
@@ -221,6 +239,7 @@
     "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un eveniment potrivit.",
     "sort-asc": "Sortare: cele mai apropiate primele",
     "sort-desc": "Sortare: cele mai recente primele",
+    "check-in-tooltip": "Check-In",
     "status-values": {
       "DRAFT": "Schiță",
       "PUBLISHED": "Publicat",

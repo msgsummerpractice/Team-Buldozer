@@ -32,6 +32,10 @@ export const eventsRoutes: Routes = [
             loadComponent: () => import('@features/events/events').then((m) => m.Events),
           },
           {
+            path: 'checkin',
+            loadComponent: () => import('@features/events/events').then((m) => m.Events),
+          },
+          {
             path: '**',
             redirectTo: '/events/list',
           },
