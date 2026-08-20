@@ -11,6 +11,7 @@ import com.example.CheckInApp.exception.NotRegisteredForEventException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.AttendanceRecord;
 import com.example.CheckInApp.model.Event;
+import com.example.CheckInApp.model.EventStatus;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.AttendanceRecordRepository;
 import com.example.CheckInApp.repository.EventRepository;
@@ -50,6 +51,10 @@ public class AttendanceService {
     }
 
     private CheckInResponse performCheckIn(Event event, String userEmail) {
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new CheckInClosedException("Check-in is closed because the event is not published.");
+        }
+
         if (event.getEndDateTime().isBefore(LocalDateTime.now())) {
             throw new CheckInClosedException("Check-in is closed because the event has already ended.");
         }
