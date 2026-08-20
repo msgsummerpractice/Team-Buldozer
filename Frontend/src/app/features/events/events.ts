@@ -154,8 +154,6 @@ export class Events implements OnInit {
     this.currentDialogRef = ref;
 
     ref.afterClosed().subscribe(() => {
-      // only react if this dialog is still the "active" one, i.e. it wasn't
-      // already replaced by a subsequent route emission
       if (this.currentDialogRef !== ref) return;
       this.currentDialogRef = null;
       this.router.navigate(['/events/list']);
@@ -241,9 +239,5 @@ export class Events implements OnInit {
   protected onClear(): void {
     this.searchTerm.set('');
     this.pageIndex.set(0);
-  }
-
-  protected openCheckIn(event: EventResponse): void {
-    this.dialog.open(CheckInDialog, { ...CHECK_IN_DIALOG_CONFIG, data: { id: event.id } });
   }
 }
