@@ -10,12 +10,28 @@
     <div
       class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 via-30% to-transparent to-55% flex items-end p-4"
     >
-      <h3 class="text-2xl font-bold text-white drop-shadow-lg">{{ data.name }}</h3>
+      <h1 class="text-3xl font-bold text-white drop-shadow-lg">{{ data.name }}</h1>
     </div>
   </div>
   <mat-dialog-content class="w-full !p-0 !mt-0 !mb-0">
     <div class="p-6 flex flex-col gap-5">
-      <p class="text-base leading-relaxed break-words">{{ data.description }}</p>
+      @if (data.description) {
+        <div class="text-base leading-relaxed break-words">
+          {{
+            descriptionExpanded()
+              ? data.description
+              : data.description.slice(0, 220) + (data.description.length > 220 ? '...' : '')
+          }}
+          @if (data.description.length > 220) {
+            <button
+              class="ml-1 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-base font-medium"
+              (click)="descriptionExpanded.set(!descriptionExpanded())"
+            >
+              {{ descriptionExpanded() ? 'See less' : 'See more' }}
+            </button>
+          }
+        </div>
+      }
 
       <div class="grid grid-cols-2 gap-3">
         <div class="flex flex-col gap-1 p-4 rounded-xl bg-(--mat-sys-surface-container)">
@@ -132,7 +148,8 @@
   </mat-dialog-content>
 }
 
-<mat-dialog-actions align="end" class="min-h-0 py-2 px-4">
+<mat-dialog-actions align="end" class="gap-2">
+  <button mat-button type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
   @if (isMarketing() && event()?.status === 'DRAFT') {
     <button mat-stroked-button type="button" (click)="editEvent()">
       <mat-icon>edit</mat-icon>
@@ -148,5 +165,4 @@
       </button>
     </span>
   }
-  <button mat-button type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
 </mat-dialog-actions>

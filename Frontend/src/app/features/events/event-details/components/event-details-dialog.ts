@@ -40,6 +40,7 @@ export class EventDetailsDialog {
   readonly event = signal<EventResponse | null>(null);
   readonly loading = signal(true);
   readonly errorTranslationKey = signal<string | null>(null);
+  readonly descriptionExpanded = signal(false);
 
   constructor() {
     this.eventService
