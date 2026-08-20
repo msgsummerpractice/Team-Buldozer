@@ -327,7 +327,9 @@ public class EventService {
 
         event.setStatus(EventStatus.PUBLISHED);
 
-        return eventMapper.toResponse(eventRepository.save(event));
+        Event saved = eventRepository.save(event);
+        emailService.notifyEventPublished(saved);
+        return eventMapper.toResponse(saved);
     }
 
     @Transactional
