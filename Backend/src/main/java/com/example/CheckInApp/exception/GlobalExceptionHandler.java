@@ -89,6 +89,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_115, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(EmailDeliveryException.class)
+    public ResponseEntity<ErrorResponse> handleEmailDelivery(EmailDeliveryException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_116, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(QrCodeGenerationException.class)
     public ResponseEntity<ErrorResponse> handleQrCodeGeneration(QrCodeGenerationException ex, HttpServletRequest request) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_216, ex.getMessage(), request);

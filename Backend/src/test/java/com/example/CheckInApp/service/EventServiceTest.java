@@ -1,5 +1,25 @@
 package com.example.CheckInApp.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
@@ -13,7 +33,13 @@ import com.example.CheckInApp.exception.InvalidEventDataException;
 import com.example.CheckInApp.exception.InvalidFileException;
 import com.example.CheckInApp.exception.PosterNotReadException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
-import com.example.CheckInApp.model.*;
+import com.example.CheckInApp.model.Event;
+import com.example.CheckInApp.model.EventLocation;
+import com.example.CheckInApp.model.EventStatus;
+import com.example.CheckInApp.model.EventType;
+import com.example.CheckInApp.model.User;
+import com.example.CheckInApp.model.UserLocation;
+import com.example.CheckInApp.model.UserRole;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
 import com.google.zxing.BinaryBitmap;
@@ -56,6 +82,9 @@ class EventServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     private EventService eventService;
