@@ -1,0 +1,26 @@
+<h2 mat-dialog-title class="flex items-center">
+  {{ data.titleKey | transloco }}
+</h2>
+
+<mat-dialog-content>
+  <p>
+    {{ data.messageKey | transloco: data.messageParams }}
+  </p>
+  @if (data.warningKey) {
+    <p class="text-sm mt-2 opacity-80">
+      {{ data.warningKey | transloco }}
+    </p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton (click)="cancel()">
+    {{ (data.cancelLabelKey ?? 'common.cancel') | transloco }}
+  </button>
+  <button matButton="filled" color="accent" (click)="confirm()">
+    @if (data.confirmIcon) {
+      <mat-icon>{{ data.confirmIcon }}</mat-icon>
+    }
+    {{ data.confirmLabelKey | transloco }}
+  </button>
+</mat-dialog-actions>
