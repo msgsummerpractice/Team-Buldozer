@@ -1,6 +1,7 @@
 package com.example.CheckInApp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class Event {
+
+    private static final String CHECKIN_CODE_REGEX = "^[0-9]{6}$";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,5 +70,16 @@ public class Event {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(length = 6, unique = true)
+    @Pattern(regexp = CHECKIN_CODE_REGEX)
+    private String checkInCode;
+
+    /**
+     * Base64 encoded string representation of the QR code PNG image for the event.
+     */
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "qr_code")
+    private byte[] qrCode;
 
 }
