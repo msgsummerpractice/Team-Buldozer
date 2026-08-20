@@ -4,21 +4,36 @@ import com.example.CheckInApp.dto.mapper.EventMapper;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
 import com.example.CheckInApp.dto.response.CreateEventResponse;
+import com.example.CheckInApp.dto.response.EventCodesResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
 import com.example.CheckInApp.exception.InvalidFileException;
 import com.example.CheckInApp.exception.PosterNotReadException;
+import com.example.CheckInApp.exception.QrCodeGenerationException;
+import com.example.CheckInApp.exception.CodesAlreadyGeneratedException;
+import com.example.CheckInApp.exception.CheckInCodeGenerationException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -32,6 +47,9 @@ public class EventService {
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
     private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
+    private static final int MAX_CHECK_IN_CODE_ATTEMPTS = 3;
+    private static final int QR_CODE_SIZE = 300;
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
@@ -220,6 +238,66 @@ public class EventService {
         }
     }
 
+    
+
+    @Transactional
+    public EventCodesResponse generateCodes(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new InvalidEventDataException("Codes can only be generated for published events.");
+        }
+
+        if (event.getCheckInCode() != null) {
+            throw new CodesAlreadyGeneratedException("Codes have already been generated for this event.");
+        }
+
+        event.setCheckInCode(generateUniqueCheckInCode());
+        event.setQrCode(generateQrCodeImage(event.getId() + "-" + event.getName()));
+
+        Event saved = eventRepository.save(event);
+        return new EventCodesResponse(saved.getCheckInCode(), Base64.getEncoder().encodeToString(saved.getQrCode()));
+    }
+
+    private String generateUniqueCheckInCode() {
+        for (int attempt = 0; attempt < MAX_CHECK_IN_CODE_ATTEMPTS; attempt++) {
+            String candidate = String.format("%06d", RANDOM.nextInt(1_000_000));
+            if (!eventRepository.existsByCheckInCode(candidate)) {
+                return candidate;
+            }
+        }
+        throw new CheckInCodeGenerationException("Could not generate a unique check-in code after "
+                + MAX_CHECK_IN_CODE_ATTEMPTS + " attempts.");
+    }
+
+    private byte[] generateQrCodeImage(String content) {
+        try {
+            BitMatrix bitMatrix = new QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, QR_CODE_SIZE, QR_CODE_SIZE);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
+            return outputStream.toByteArray();
+        } catch (WriterException | IOException e) {
+            throw new QrCodeGenerationException("QR code could not be generated.");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public EventCodesResponse getEventCodes(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new InvalidEventDataException("Codes are only available for published events.");
+        }
+
+        if (event.getCheckInCode() == null || event.getQrCode() == null) {
+            throw new ResourceNotFoundException("Check-in codes have not been generated yet for event with id " + eventId);
+        }
+
+        return new EventCodesResponse(event.getCheckInCode(), Base64.getEncoder().encodeToString(event.getQrCode()));
+    }
+
     @Transactional(readOnly = true)
     public List<EventResponse> getAllEvents(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
@@ -239,20 +317,26 @@ public class EventService {
                 .map(eventMapper::toResponse)
                 .toList();
     }
-
-    public EventResponse publishEvent(Long id) {
-        Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
+    
+    @Transactional
+    public EventResponse publishEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
 
         if (event.getStatus() != EventStatus.DRAFT) {
-            throw new EventNotEditableException("Only events in DRAFT status can be published.");
+            throw new EventNotEditableException("Only DRAFT events can be published.");
         }
+
         event.setStatus(EventStatus.PUBLISHED);
-        Event updatedEvent = eventRepository.save(event);
 
-        emailService.notifyEventPublished(updatedEvent);
-
-        return eventMapper.toResponse(updatedEvent);
+        Event saved = eventRepository.save(event);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                emailService.notifyEventPublished(saved);
+            }
+        });
+        return eventMapper.toResponse(saved);
     }
 
     @Transactional

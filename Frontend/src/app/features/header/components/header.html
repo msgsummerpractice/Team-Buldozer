@@ -3,21 +3,11 @@
     <img src="assets/images/msg_logo.png" alt="logo" class="h-8 logo-white" />
   </a>
 
-  <div class="flex items-center px-4">
-    <button matButton routerLinkActive="nav-link-active" routerLink="/home">
-      {{ 'home.nav.home' | transloco }}
-    </button>
-    <button
-      *rolesAssigned="roles.ADMIN"
-      matButton
-      routerLinkActive="nav-link-active"
-      routerLink="/users"
-    >
+  <div class="flex justify-start items-center w-full h-full px-4">
+    <button *rolesAssigned="roles.ADMIN" matButton routerLink="/users">
       {{ 'users.title' | transloco }}
     </button>
-    <button matButton routerLinkActive="nav-link-active" routerLink="/events/list">
-      {{ 'events.title' | transloco }}
-    </button>
+    <button *appAuth matButton routerLink="/events">{{ 'events.title' | transloco }}</button>
   </div>
 
   <div class="flex items-center gap-3">

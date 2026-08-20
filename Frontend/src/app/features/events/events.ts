@@ -101,10 +101,9 @@ export class Events implements OnInit {
 
   ngOnInit(): void {
     this.loadEvents();
-    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+    this.route.parent!.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const idParam = params.get('id');
       const id: number | null = idParam ? +idParam : null;
-      console.log('Route param id:', id);
       if (id) {
         this.dialog
           .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })

@@ -5,11 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateEventResponse {
-    private Long id;
+public class EventCodesResponse {
+    private String checkInCode;
+    private String qrCode;
 }
