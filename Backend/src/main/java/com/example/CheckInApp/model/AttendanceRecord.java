@@ -33,7 +33,7 @@ public class AttendanceRecord {
     @Column(name = "checked_in", nullable = false)
     private boolean checkedIn;
 
-    @Column(name = "checkedintime")
+    @Column(name = "checked_in_time")
     private LocalDateTime checkInTime;
 
 }
