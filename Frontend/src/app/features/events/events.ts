@@ -122,10 +122,13 @@ export class Events implements OnInit {
     combineLatest([this.route.paramMap, this.route.url])
       .pipe(
         debounceTime(0),
-        map(([params, urlSegments]): RouteDialogState => ({
-          id: params.get('id') ? +params.get('id')! : null,
-          routeSegment: urlSegments[0]?.path ?? null,
-        })),
+        map(([params, urlSegments]): RouteDialogState => {
+          const id = params.get('id');
+          return {
+            id: id ? +id : null,
+            routeSegment: urlSegments[0]?.path ?? null,
+          };
+        }),
         distinctUntilChanged((a, b) => a.id === b.id && a.routeSegment === b.routeSegment),
         takeUntilDestroyed(this.destroyRef)
       )
