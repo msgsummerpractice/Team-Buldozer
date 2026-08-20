@@ -32,7 +32,7 @@ public class AttendanceService {
 
     @Transactional
     public CheckInResponse checkInByCode(CheckInRequest request, String userEmail) {
-        Event event = eventRepository.findByCheckInCode(request.getCheckInCode())
+        Event event = eventRepository.findByCheckInCode(request.checkInCode())
                 .orElseThrow(() -> new InvalidCheckInCodeException("Invalid check-in code."));
 
         return performCheckIn(event, userEmail);
@@ -40,10 +40,10 @@ public class AttendanceService {
 
     @Transactional
     public CheckInResponse checkInByQrCode(QrCodeCheckInRequest request, String userEmail) {
-        Event event = eventRepository.findById(request.getEventId())
+        Event event = eventRepository.findById(request.eventId())
                 .orElseThrow(() -> new InvalidQrCodeCheckInException("Invalid QR code."));
 
-        if (!event.getName().equalsIgnoreCase(request.getEventName())) {
+        if (!event.getName().equalsIgnoreCase(request.eventName())) {
             throw new InvalidQrCodeCheckInException("Invalid QR code.");
         }
 
@@ -55,7 +55,7 @@ public class AttendanceService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
 
         AttendanceRecord attendanceRecord = attendanceRecordRepository
-                .findByEvent_IdAndUser_Id(event.getId(), user.getId())
+                .findByEventIdAndUserId(event.getId(), user.getId())
                 .orElseThrow(() -> new NotRegisteredForEventException("You are not registered for this event."));
 
         if (event.getStatus() != EventStatus.PUBLISHED) {
@@ -71,6 +71,7 @@ public class AttendanceService {
         }
 
         attendanceRecord.setCheckedIn(true);
+        attendanceRecord.setCheckInTime(LocalDateTime.now());
         attendanceRecordRepository.save(attendanceRecord);
 
         return new CheckInResponse(event.getId(), event.getName(), LocalDateTime.now());
