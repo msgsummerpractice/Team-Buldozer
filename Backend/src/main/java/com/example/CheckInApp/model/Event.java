@@ -1,6 +1,7 @@
 package com.example.CheckInApp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -68,6 +69,7 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Pattern(regexp = "^[0-9]{6}$")
     @Column(length = 6, unique = true)
     private String checkInCode;
 
