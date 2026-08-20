@@ -6,6 +6,7 @@ import com.example.CheckInApp.dto.request.EventUpdateRequest;
 import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventCodesResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
+import com.example.CheckInApp.exception.CheckInCodeGenerationException;
 import com.example.CheckInApp.exception.CodesAlreadyGeneratedException;
 import com.example.CheckInApp.exception.EventNotEditableException;
 import com.example.CheckInApp.exception.InvalidEventDataException;
@@ -15,6 +16,10 @@ import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,6 +27,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -33,6 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -391,6 +400,51 @@ class EventServiceTest {
         assertThat(captor.getValue().getQrCode()).isNotEmpty();
         assertThat(result.getCheckInCode()).isEqualTo(captor.getValue().getCheckInCode());
         assertThat(result.getQrCode()).isNotBlank();
+    }
+
+    @Test
+    void generateCodes_retriesAndSucceeds_whenFirstGeneratedCodeAlreadyExists() {
+        Event event = Event.builder().id(1L).name("Event").status(EventStatus.PUBLISHED).build();
+
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        when(eventRepository.existsByCheckInCode(anyString())).thenReturn(true, false);
+        when(eventRepository.save(any(Event.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        EventCodesResponse result = eventService.generateCodes(1L);
+
+        verify(eventRepository, times(2)).existsByCheckInCode(anyString());
+        assertThat(result.getCheckInCode()).isNotBlank();
+    }
+
+    @Test
+    void generateCodes_throwsCheckInCodeGenerationException_whenAllAttemptsCollide() {
+        Event event = Event.builder().id(1L).name("Event").status(EventStatus.PUBLISHED).build();
+
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        when(eventRepository.existsByCheckInCode(anyString())).thenReturn(true);
+
+        assertThatThrownBy(() -> eventService.generateCodes(1L))
+                .isInstanceOf(CheckInCodeGenerationException.class);
+
+        verify(eventRepository, times(3)).existsByCheckInCode(anyString());
+    }
+
+    @Test
+    void generateCodes_generatesQrCodeThatDecodesToEventIdAndName() throws Exception {
+        Event event = Event.builder().id(1L).name("Team Building Event").status(EventStatus.PUBLISHED).build();
+
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        when(eventRepository.existsByCheckInCode(anyString())).thenReturn(false);
+        when(eventRepository.save(any(Event.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        EventCodesResponse result = eventService.generateCodes(1L);
+
+        byte[] qrCodeBytes = Base64.getDecoder().decode(result.getQrCode());
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(qrCodeBytes));
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(image)));
+        com.google.zxing.Result decodedResult = new MultiFormatReader().decode(binaryBitmap);
+
+        assertThat(decodedResult.getText()).isEqualTo(event.getId() + "-" + event.getName());
     }
 
     @Test
