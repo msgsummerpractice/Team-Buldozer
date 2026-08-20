@@ -23,14 +23,12 @@ public class AttendanceController {
     private final AttendanceService attendanceService;
 
     @PostMapping
-    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('MARKETING') or hasRole('ADMIN') or hasRole('HR')")
     public ResponseEntity<CheckInResponse> checkIn(@Valid @RequestBody CheckInRequest request, Authentication authentication) {
         CheckInResponse response = attendanceService.checkIn(request, authentication.getName());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/qr-code")
-    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('MARKETING') or hasRole('ADMIN') or hasRole('HR')")
     public ResponseEntity<CheckInResponse> checkInByQrCode(@Valid @RequestBody QrCodeCheckInRequest request, Authentication authentication) {
         CheckInResponse response = attendanceService.checkInByQrCode(request, authentication.getName());
         return ResponseEntity.ok(response);

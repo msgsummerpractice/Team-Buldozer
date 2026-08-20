@@ -111,7 +111,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidCheckInCodeException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCheckInCode(InvalidCheckInCodeException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.NOT_FOUND, ErrorCode.ERR_219, ex.getMessage(), request);
+        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_219, ex.getMessage(), request);
     }
 
     @ExceptionHandler(NotRegisteredForEventException.class)
@@ -126,7 +126,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidQrCodeCheckInException.class)
     public ResponseEntity<ErrorResponse> handleInvalidQrCodeCheckIn(InvalidQrCodeCheckInException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.NOT_FOUND, ErrorCode.ERR_222, ex.getMessage(), request);
+        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_222, ex.getMessage(), request);
     }
 
     @ExceptionHandler(AlreadyCheckedInException.class)
