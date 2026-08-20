@@ -2,9 +2,6 @@
   "check-in": {
     "button": "Check In",
     "button-ended-tooltip": "Event already ended",
-    "dialog": {
-      "title": "Check In"
-    },
     "scan-qr": "Scan QR Code",
     "tap-to-scan": "Tap to open camera",
     "stop-scan": "Stop scanning",
