@@ -72,7 +72,7 @@ public class Event {
     private String checkInCode;
 
     /**
-     * Base64 ENCODED STRING REPRESENTATION OF THE QR CODE PNG
+     * Base64 encoded string representation of the QR code PNG image for the event.
      */
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "qr_code")
