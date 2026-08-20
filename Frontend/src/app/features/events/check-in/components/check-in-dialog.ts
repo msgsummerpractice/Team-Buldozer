@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
 import { NotificationService } from '@core/notification/services/notification.service';
-import { EventService } from '@features/events/services/event-service';
+import { AttendanceService } from '@features/events/check-in/services/attendance-service';
 
 type CheckInCodeParseResult = {
   codeType: 'QR' | 'digits';
@@ -48,7 +48,7 @@ export class CheckInDialog implements OnDestroy {
 
   private readonly dialogRef = inject(MatDialogRef<CheckInDialog>);
   readonly dialogData = inject<{ id: number }>(MAT_DIALOG_DATA);
-  private readonly eventService = inject(EventService);
+  private readonly attendanceService = inject(AttendanceService);
   private readonly notificationService = inject(NotificationService);
 
   protected checkInCode = signal('');
@@ -94,30 +94,41 @@ export class CheckInDialog implements OnDestroy {
       return;
     }
 
-    if (parsed.codeType === 'QR' && parsed.eventId !== this.dialogData.id) {
-      this.notificationService.showError('check-in.wrong-event');
+    if (parsed.codeType === 'QR') {
+      if (parsed.eventId !== this.dialogData.id) {
+        this.notificationService.showError('check-in.wrong-event');
+        return;
+      }
+      this.submitQrCode(parsed.eventId!, parsed.eventName!);
       return;
     }
 
-    this.submit(this.dialogData.id, code);
+    this.submitCode(code);
   }
 
   protected confirmCode(): void {
     this.processCode(this.checkInCode());
   }
 
-  private submit(eventId: number, code: string): void {
+  private submitCode(checkInCode: string): void {
     this.submitting.set(true);
-    this.eventService.checkInEvent(eventId, code).subscribe({
-      next: () => {
-        this.notificationService.showSuccess('check-in.success');
-        this.dialogRef.close(true);
-      },
-      error: () => {
-        this.notificationService.showError('check-in.failed');
-        this.submitting.set(false);
-      },
+    this.attendanceService.checkInByCode(checkInCode).subscribe({
+      next: () => this.onCheckInSuccess(),
+      error: () => this.submitting.set(false),
     });
+  }
+
+  private submitQrCode(eventId: number, eventName: string): void {
+    this.submitting.set(true);
+    this.attendanceService.checkInByQrCode(eventId, eventName).subscribe({
+      next: () => this.onCheckInSuccess(),
+      error: () => this.submitting.set(false),
+    });
+  }
+
+  private onCheckInSuccess(): void {
+    this.notificationService.showSuccess('check-in.success');
+    this.dialogRef.close(true);
   }
 
   protected close(): void {

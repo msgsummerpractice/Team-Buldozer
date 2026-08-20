@@ -137,9 +137,21 @@
     "ERR-51": "Database error. Please try again later.",
     "ERR-52": "Service is temporarily unavailable. Please try again later.",
     "ERR-99": "An unknown error occurred. Please try again.",
+    "ERR-110": "Poster could not be read.",
+    "ERR-111": "File is invalid.",
+    "ERR-112": "Event data is invalid.",
+    "ERR-113": "This event cannot be edited or changed right now.",
+    "ERR-114": "Last admin cannot be disabled or have its role changed.",
+    "ERR-115": "Database error. Please try again later.",
+    "ERR-116": "Email delivery failed.",
     "ERR-216": "QR code could not be generated.",
     "ERR-217": "Check-in codes have already been generated for this event.",
-    "ERR-218": "Could not generate a unique check-in code."
+    "ERR-218": "Could not generate a unique check-in code.",
+    "ERR-219": "Invalid check-in code.",
+    "ERR-220": "You are not registered for this event.",
+    "ERR-221": "Check-in is closed for this event.",
+    "ERR-222": "Invalid QR code.",
+    "ERR-223": "You are already checked in for this event."
   },
   "success-messages": {
     "login-successful": "Login successful!",

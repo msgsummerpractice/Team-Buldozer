@@ -137,9 +137,21 @@
     "ERR-51": "Eroare de bază de date. Încercați din nou mai târziu.",
     "ERR-52": "Serviciul este temporar indisponibil. Încercați din nou mai târziu.",
     "ERR-99": "A apărut o eroare necunoscută. Încercați din nou.",
+    "ERR-110": "Afișul nu a putut fi citit.",
+    "ERR-111": "Fișierul este invalid.",
+    "ERR-112": "Datele evenimentului sunt invalide.",
+    "ERR-113": "Acest eveniment nu poate fi editat sau modificat acum.",
+    "ERR-114": "Ultimul admin nu poate fi dezactivat sau i se poate schimba rolul.",
+    "ERR-115": "Eroare de bază de date. Încercați din nou mai târziu.",
+    "ERR-116": "Trimiterea emailului a eșuat.",
     "ERR-216": "Codul QR nu a putut fi generat.",
     "ERR-217": "Codurile de check-in au fost deja generate pentru acest eveniment.",
-    "ERR-218": "Nu s-a putut genera un cod de check-in unic."
+    "ERR-218": "Nu s-a putut genera un cod de check-in unic.",
+    "ERR-219": "Cod de check-in invalid.",
+    "ERR-220": "Nu sunteți înregistrat la acest eveniment.",
+    "ERR-221": "Check-in-ul este închis pentru acest eveniment.",
+    "ERR-222": "Cod QR invalid.",
+    "ERR-223": "Sunteți deja înregistrat (check-in) la acest eveniment."
   },
   "success-messages": {
     "login-successful": "Autentificare reușită!",
