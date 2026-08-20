@@ -119,7 +119,8 @@
     "ERR-50": "Internal server error. Please try again later.",
     "ERR-51": "Database error. Please try again later.",
     "ERR-52": "Service is temporarily unavailable. Please try again later.",
-    "ERR-99": "An unknown error occurred. Please try again."
+    "ERR-99": "An unknown error occurred. Please try again.",
+    "ERR-217": "Check-in codes have already been generated for this event."
   },
   "success-messages": {
     "login-successful": "Login successful!",
@@ -129,6 +130,14 @@
     "close": "Close",
     "ok": "OK",
     "cancel": "Cancel"
+  },
+  "event-codes": {
+    "dialog": {
+      "title": "Check-in Codes",
+      "check-in-code": "Check-in Code",
+      "qr-code": "QR Code",
+      "error": "Failed to load check-in codes."
+    }
   },
   "event-details": {
     "dialog": {
@@ -216,6 +225,17 @@
       "title": "Publish event",
       "message": "Are you sure you want to publish \"{{name}}\"?",
       "warning": "This action cannot be undone."
+    },
+    "generate-codes-tooltip": "Generate check-in codes",
+    "generate-codes-disabled-tooltip": "Codes can only be generated for published events",
+    "generate-codes-success": "Check-in codes generated successfully",
+    "view-codes-tooltip": "View check-in codes",
+    "generate-codes": {
+      "title": "Generate Codes",
+      "check-in-code": "Check-in Code",
+      "qr-code": "QR Code",
+      "error": "Failed to generate codes. The event may not be published or codes were already generated.",
+      "back": "Back to Events"
     },
     "no-events": "No events found",
     "adjust": "Try adjusting the search term to find a matching event.",
