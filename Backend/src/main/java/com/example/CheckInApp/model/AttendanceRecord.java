@@ -30,7 +30,10 @@ public class AttendanceRecord {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    @Column(name = "checked_in", nullable = false)
+    private boolean checkedIn;
+
     @Column(name = "checked_in_time")
-    private LocalDateTime checkInTime;
+    private LocalDateTime checkedInTime;
 
 }

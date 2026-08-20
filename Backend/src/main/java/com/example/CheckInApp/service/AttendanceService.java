@@ -67,14 +67,15 @@ public class AttendanceService {
             throw new CheckInClosedException("Check-in is closed because the event has already ended.");
         }
 
-        if (attendanceRecord.getCheckInTime() != null) {
+        if (attendanceRecord.isCheckedIn()) {
             throw new AlreadyCheckedInException("You are already checked in for this event.");
         }
 
-        attendanceRecord.setCheckInTime(now);
+        attendanceRecord.setCheckedIn(true);
+        attendanceRecord.setCheckedInTime(now);
         attendanceRecordRepository.save(attendanceRecord);
 
-        return new CheckInResponse(event.getId(), event.getName(), attendanceRecord.getCheckInTime());
+        return new CheckInResponse(event.getId(), event.getName(), attendanceRecord.getCheckedInTime());
     }
 
 }
