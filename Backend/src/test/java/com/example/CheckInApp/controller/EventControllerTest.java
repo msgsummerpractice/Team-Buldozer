@@ -3,6 +3,7 @@ package com.example.CheckInApp.controller;
 import com.example.CheckInApp.dto.request.EventRequest;
 import com.example.CheckInApp.dto.request.EventUpdateRequest;
 import com.example.CheckInApp.dto.response.CreateEventResponse;
+import com.example.CheckInApp.dto.response.EventCodesResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.model.EventLocation;
 import com.example.CheckInApp.model.EventStatus;
@@ -224,6 +225,79 @@ class EventControllerTest {
     @Test
     void completeEvent_returnsForbidden_whenUserIsNotMarketing() throws Exception {
         mockMvc.perform(patch("/api/v1/events/1/complete")
+                        .with(user("user@example.com").roles("PARTICIPANT")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void publishEvent_returnsOkWithPublishedStatus_whenUserHasMarketingRole() throws Exception {
+        EventResponse response = EventResponse.builder()
+                .id(1L)
+                .name("Team Building Event")
+                .status(EventStatus.PUBLISHED)
+                .build();
+
+        when(eventService.publishEvent(1L)).thenReturn(response);
+
+        mockMvc.perform(patch("/api/v1/events/1/publish")
+                        .with(user("user@example.com").roles("MARKETING")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.status", is("PUBLISHED")));
+
+        verify(eventService).publishEvent(1L);
+    }
+
+    @Test
+    void publishEvent_returnsForbidden_whenUserIsNotMarketing() throws Exception {
+        mockMvc.perform(patch("/api/v1/events/1/publish")
+                        .with(user("user@example.com").roles("PARTICIPANT")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void generateCodes_returnsOkWithCodes_whenUserHasMarketingRole() throws Exception {
+        EventCodesResponse response = new EventCodesResponse("123456", "base64qr");
+
+        when(eventService.generateCodes(1L)).thenReturn(response);
+
+        mockMvc.perform(post("/api/v1/events/1/codes")
+                        .with(user("user@example.com").roles("MARKETING")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.checkInCode", is("123456")))
+                .andExpect(jsonPath("$.qrCode", is("base64qr")));
+
+        verify(eventService).generateCodes(1L);
+    }
+
+    @Test
+    void generateCodes_returnsForbidden_whenUserIsNotMarketing() throws Exception {
+        mockMvc.perform(post("/api/v1/events/1/codes")
+                        .with(user("user@example.com").roles("PARTICIPANT")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void getEventCodes_returnsOkWithCodes_whenUserHasMarketingRole() throws Exception {
+        EventCodesResponse response = new EventCodesResponse("123456", "base64qr");
+
+        when(eventService.getEventCodes(1L)).thenReturn(response);
+
+        mockMvc.perform(get("/api/v1/events/1/codes")
+                        .with(user("user@example.com").roles("MARKETING")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.checkInCode", is("123456")))
+                .andExpect(jsonPath("$.qrCode", is("base64qr")));
+
+        verify(eventService).getEventCodes(1L);
+    }
+
+    @Test
+    void getEventCodes_returnsForbidden_whenUserIsNotMarketing() throws Exception {
+        mockMvc.perform(get("/api/v1/events/1/codes")
                         .with(user("user@example.com").roles("PARTICIPANT")))
                 .andExpect(status().isForbidden());
     }

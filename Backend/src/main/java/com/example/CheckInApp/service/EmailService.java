@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.util.HtmlUtils;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,7 @@ public class EmailService {
     private static final int MAX_EMAIL_RETRIES = 2;
     private static final byte[] PNG_MAGIC = {(byte) 0x89, 0x50, 0x4E, 0x47};
     private static final DateTimeFormatter EMAIL_DATE_FORMAT = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy, HH:mm", Locale.ENGLISH);
+    private static final DateTimeFormatter TIME_ONLY_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
     private final String frontendUrl;
     private final JavaMailSender mailSender;
@@ -95,6 +97,18 @@ public class EmailService {
         }
     }
 
+    private String formatDateRange(Event event) {
+        LocalDateTime start = event.getStartDateTime();
+        LocalDateTime end = event.getEndDateTime();
+        if (end == null) {
+            return start.format(EMAIL_DATE_FORMAT);
+        }
+        if (start.toLocalDate().equals(end.toLocalDate())) {
+            return start.format(EMAIL_DATE_FORMAT) + " – " + end.format(TIME_ONLY_FORMAT);
+        }
+        return start.format(EMAIL_DATE_FORMAT) + " – " + end.format(EMAIL_DATE_FORMAT);
+    }
+
     private static String detectMimeType(byte[] data) {
         return data.length >= 4 && Arrays.equals(data, 0, 4, PNG_MAGIC, 0, 4) ? "image/png" : "image/jpeg";
     }
@@ -106,7 +120,7 @@ public class EmailService {
                 <body>
                   %s
                   <h2>%s</h2>
-                  <p><strong>Date:</strong> %s</p>
+                  <p><strong>When:</strong> %s</p>
                   <p><strong>Location:</strong> %s</p>
                   <p><a href="%s">View event details</a></p>
                 </body>
@@ -114,7 +128,7 @@ public class EmailService {
                 """.formatted(
                 event.getPoster() != null ? "<img src=\"cid:poster\" alt=\"Event poster\" style=\"max-width:600px;\"/>" : "",
                 HtmlUtils.htmlEscape(event.getName()),
-                event.getStartDateTime().format(EMAIL_DATE_FORMAT),
+                formatDateRange(event),
                 HtmlUtils.htmlEscape(event.getLocation().toString()),
                 detailsUrl
         );

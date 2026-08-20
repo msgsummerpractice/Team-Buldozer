@@ -15,4 +15,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findAllByOrderByStartDateTimeDesc();
 
+    boolean existsByCheckInCode(String checkInCode);
+
 }
