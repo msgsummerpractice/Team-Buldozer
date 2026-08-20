@@ -530,8 +530,8 @@ class EventServiceTest {
         return User.builder().email("user@example.com").roles(Set.of(UserRole.MARKETING)).build();
     }
 
-    private User participantUser(UserLocation location) {
-        return User.builder().email("user@example.com")
-                .roles(Set.of(UserRole.PARTICIPANT)).location(location).build();
-    }
+        private User participantUser(UserLocation location) {
+                return User.builder().email("user@example.com")
+                                .roles(Set.of(UserRole.PARTICIPANT)).location(location).build();
+        }
 }

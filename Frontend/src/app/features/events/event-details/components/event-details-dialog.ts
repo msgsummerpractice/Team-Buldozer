@@ -1,29 +1,28 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
-import { Router } from '@angular/router';
+import { EventStatusEnum } from '@features/events/model/event-status';
+import { AuthorizationService } from '@core/authorization/services/authorization.service';
+import { UserRoleEnum } from '@core/users/model/user-role';
 
 @Component({
   selector: 'app-event-details-dialog',
   imports: [
     DatePipe,
     MatButtonModule,
-    MatChipsModule,
     MatDialogModule,
-    MatDividerModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     TranslocoPipe,
   ],
   templateUrl: './event-details-dialog.html',
@@ -32,7 +31,10 @@ export class EventDetailsDialog {
   private readonly dialogRef = inject(MatDialogRef<EventDetailsDialog>);
   private readonly eventService = inject(EventService);
   private readonly dialogData = inject<{ id: number }>(MAT_DIALOG_DATA);
-  private readonly router = inject(Router);
+  private readonly authorization = inject(AuthorizationService);
+
+  readonly isMarketing = signal(this.authorization.hasAnyRole([UserRoleEnum.MARKETING]));
+  protected readonly EventStatusEnum = EventStatusEnum;
 
   // Base64 prefix of a PNG file signature (\x89PNG\r\n\x1a\n)
   private readonly PNG_BASE64_PREFIX = 'iVBORw0KGgo';
@@ -40,6 +42,7 @@ export class EventDetailsDialog {
   readonly event = signal<EventResponse | null>(null);
   readonly loading = signal(true);
   readonly errorTranslationKey = signal<string | null>(null);
+  readonly descriptionExpanded = signal(false);
 
   constructor() {
     this.eventService
@@ -54,7 +57,6 @@ export class EventDetailsDialog {
         error: (err: HttpErrorResponse) => {
           if ([401, 403, 404].includes(err.status)) {
             this.dialogRef.close();
-            this.router.navigate(['/events/list']);
           } else {
             this.event.set(null);
             this.errorTranslationKey.set('event-details.dialog.error');
@@ -74,6 +76,12 @@ export class EventDetailsDialog {
     return type ? `event-details.dialog.type-${type.toLowerCase()}` : '';
   });
 
+  protected readonly isCheckInDisabled = computed(() => {
+    const evt = this.event();
+    if (!evt) return true;
+    return evt.status !== EventStatusEnum.PUBLISHED || new Date(evt.endDateTime) < new Date();
+  });
+
   protected readonly posterUrl = computed(() => {
     const poster = this.event()?.poster;
     if (!poster) {
@@ -86,5 +94,13 @@ export class EventDetailsDialog {
 
   protected close(): void {
     this.dialogRef.close();
+  }
+
+  protected editEvent(): void {
+    this.dialogRef.close({ action: 'edit' });
+  }
+
+  protected checkIn(): void {
+    this.dialogRef.close({ action: 'checkin' });
   }
 }
