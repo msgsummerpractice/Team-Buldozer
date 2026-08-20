@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "attendance_records")
 @NoArgsConstructor
@@ -30,5 +32,8 @@ public class AttendanceRecord {
 
     @Column(name = "checked_in", nullable = false)
     private boolean checkedIn;
+
+    @Column(name = "checked_in_time")
+    private LocalDateTime checkInTime;
 
 }

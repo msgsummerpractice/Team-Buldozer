@@ -74,7 +74,7 @@ public class AttendanceService {
         attendanceRecord.setCheckInTime(LocalDateTime.now());
         attendanceRecordRepository.save(attendanceRecord);
 
-        return new CheckInResponse(event.getId(), event.getName(), LocalDateTime.now());
+        return new CheckInResponse(event.getId(), event.getName(), attendanceRecord.getCheckInTime());
     }
 
 }
