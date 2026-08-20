@@ -81,15 +81,8 @@ class EventServiceTest {
                 ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
                 verify(eventRepository).save(captor.capture());
                 assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.DRAFT);
-                assertThat(resultResponse.id()).isEqualTo(1L);
+                assertThat(resultResponse.getId()).isEqualTo(1L);
         }
-
-        ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
-
-        verify(eventRepository).save(captor.capture());
-        assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.DRAFT);
-        assertThat(resultResponse.getId()).isEqualTo(1L);
-    }
 
         @Test
         void addEvent_throwsResourceNotFoundException_whenUserNotFound() {
@@ -302,13 +295,13 @@ class EventServiceTest {
         }
 
         @Test
-        void completeEvent_throwsInvalidEventDataException_whenEndDateTimeIsInFuture() {
+        void completeEvent_throwsEventNotEditableException_whenEndDateTimeIsInFuture() {
                 Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED)
                                 .endDateTime(FUTURE_END).build();
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
 
                 assertThatThrownBy(() -> eventService.completeEvent(1L))
-                                .isInstanceOf(InvalidEventDataException.class);
+                                .isInstanceOf(EventNotEditableException.class);
         }
 
         @Test
@@ -328,6 +321,169 @@ class EventServiceTest {
                 verify(eventRepository).save(captor.capture());
                 assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.COMPLETED);
                 assertThat(result.getStatus()).isEqualTo(EventStatus.COMPLETED);
+        }
+
+        @Test
+        void publishEvent_throwsResourceNotFoundException_whenEventNotFound() {
+                when(eventRepository.findById(99L)).thenReturn(Optional.empty());
+
+                assertThatThrownBy(() -> eventService.publishEvent(99L))
+                                .isInstanceOf(ResourceNotFoundException.class);
+        }
+
+        @Test
+        void publishEvent_throwsEventNotEditableException_whenEventIsNotDraft() {
+                Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED).build();
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+                assertThatThrownBy(() -> eventService.publishEvent(1L))
+                                .isInstanceOf(EventNotEditableException.class);
+        }
+
+        @Test
+        void publishEvent_setsStatusToPublished_whenDraft() {
+                Event event = Event.builder().id(1L).status(EventStatus.DRAFT).build();
+                Event saved = Event.builder().id(1L).status(EventStatus.PUBLISHED).build();
+
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+                when(eventRepository.save(any(Event.class))).thenReturn(saved);
+                when(eventMapper.toResponse(saved))
+                                .thenReturn(EventResponse.builder().id(1L).status(EventStatus.PUBLISHED).build());
+
+                EventResponse result = eventService.publishEvent(1L);
+
+                ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
+                verify(eventRepository).save(captor.capture());
+                assertThat(captor.getValue().getStatus()).isEqualTo(EventStatus.PUBLISHED);
+                assertThat(result.getStatus()).isEqualTo(EventStatus.PUBLISHED);
+        }
+
+        @Test
+        void generateCodes_throwsResourceNotFoundException_whenEventNotFound() {
+                when(eventRepository.findById(99L)).thenReturn(Optional.empty());
+
+                assertThatThrownBy(() -> eventService.generateCodes(99L))
+                                .isInstanceOf(ResourceNotFoundException.class);
+        }
+
+        @Test
+        void generateCodes_throwsInvalidEventDataException_whenEventIsNotPublished() {
+                Event event = Event.builder().id(1L).status(EventStatus.DRAFT).build();
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+                assertThatThrownBy(() -> eventService.generateCodes(1L))
+                                .isInstanceOf(InvalidEventDataException.class);
+        }
+
+        @Test
+        void generateCodes_throwsCodesAlreadyGeneratedException_whenCheckInCodeAlreadyExists() {
+                Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED).checkInCode("123456").build();
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+                assertThatThrownBy(() -> eventService.generateCodes(1L))
+                                .isInstanceOf(CodesAlreadyGeneratedException.class);
+        }
+
+        @Test
+        void generateCodes_generatesAndSavesCodes_whenPublishedAndNoCodesYet() {
+                Event event = Event.builder().id(1L).name("Event").status(EventStatus.PUBLISHED).build();
+
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+                when(eventRepository.existsByCheckInCode(anyString())).thenReturn(false);
+                when(eventRepository.save(any(Event.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+                EventCodesResponse result = eventService.generateCodes(1L);
+
+                ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
+                verify(eventRepository).save(captor.capture());
+                assertThat(captor.getValue().getCheckInCode()).isNotBlank();
+                assertThat(captor.getValue().getQrCode()).isNotEmpty();
+                assertThat(result.getCheckInCode()).isEqualTo(captor.getValue().getCheckInCode());
+                assertThat(result.getQrCode()).isNotBlank();
+        }
+
+        @Test
+        void generateCodes_retriesAndSucceeds_whenFirstGeneratedCodeAlreadyExists() {
+                Event event = Event.builder().id(1L).name("Event").status(EventStatus.PUBLISHED).build();
+
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+                when(eventRepository.existsByCheckInCode(anyString())).thenReturn(true, false);
+                when(eventRepository.save(any(Event.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+                EventCodesResponse result = eventService.generateCodes(1L);
+
+                verify(eventRepository, times(2)).existsByCheckInCode(anyString());
+                assertThat(result.getCheckInCode()).isNotBlank();
+        }
+
+        @Test
+        void generateCodes_throwsCheckInCodeGenerationException_whenAllAttemptsCollide() {
+                Event event = Event.builder().id(1L).name("Event").status(EventStatus.PUBLISHED).build();
+
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+                when(eventRepository.existsByCheckInCode(anyString())).thenReturn(true);
+
+                assertThatThrownBy(() -> eventService.generateCodes(1L))
+                                .isInstanceOf(CheckInCodeGenerationException.class);
+
+                verify(eventRepository, times(3)).existsByCheckInCode(anyString());
+        }
+
+        @Test
+        void generateCodes_generatesQrCodeThatDecodesToEventIdAndName() throws Exception {
+                Event event = Event.builder().id(1L).name("Team Building Event").status(EventStatus.PUBLISHED).build();
+
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+                when(eventRepository.existsByCheckInCode(anyString())).thenReturn(false);
+                when(eventRepository.save(any(Event.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+                EventCodesResponse result = eventService.generateCodes(1L);
+
+                byte[] qrCodeBytes = Base64.getDecoder().decode(result.getQrCode());
+                BufferedImage image = ImageIO.read(new ByteArrayInputStream(qrCodeBytes));
+                BinaryBitmap binaryBitmap = new BinaryBitmap(
+                                new HybridBinarizer(new BufferedImageLuminanceSource(image)));
+                com.google.zxing.Result decodedResult = new MultiFormatReader().decode(binaryBitmap);
+
+                assertThat(decodedResult.getText()).isEqualTo(event.getId() + "-" + event.getName());
+        }
+
+        @Test
+        void getEventCodes_throwsResourceNotFoundException_whenEventNotFound() {
+                when(eventRepository.findById(99L)).thenReturn(Optional.empty());
+
+                assertThatThrownBy(() -> eventService.getEventCodes(99L))
+                                .isInstanceOf(ResourceNotFoundException.class);
+        }
+
+        @Test
+        void getEventCodes_throwsInvalidEventDataException_whenEventIsNotPublished() {
+                Event event = Event.builder().id(1L).status(EventStatus.DRAFT).build();
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+                assertThatThrownBy(() -> eventService.getEventCodes(1L))
+                                .isInstanceOf(InvalidEventDataException.class);
+        }
+
+        @Test
+        void getEventCodes_throwsResourceNotFoundException_whenCodesNotYetGenerated() {
+                Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED).build();
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+                assertThatThrownBy(() -> eventService.getEventCodes(1L))
+                                .isInstanceOf(ResourceNotFoundException.class);
+        }
+
+        @Test
+        void getEventCodes_returnsCodes_whenAlreadyGenerated() {
+                Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED)
+                                .checkInCode("123456").qrCode("qr".getBytes()).build();
+                when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+                EventCodesResponse result = eventService.getEventCodes(1L);
+
+                assertThat(result.getCheckInCode()).isEqualTo("123456");
+                assertThat(result.getQrCode()).isEqualTo(Base64.getEncoder().encodeToString("qr".getBytes()));
         }
 
         private EventRequest buildRequest(EventType type, EventLocation location, String poster) {
