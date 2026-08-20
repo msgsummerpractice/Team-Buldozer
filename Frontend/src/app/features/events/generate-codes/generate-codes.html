@@ -1,15 +1,11 @@
 <div class="p-6 mx-auto max-w-2xl mt-8">
   <h1 class="font-bold text-3xl mb-6">{{ 'events.generate-codes.title' | transloco }}</h1>
 
-  @if (loading()) {
-    <div class="flex justify-center items-center h-64">
-      <mat-spinner diameter="48" />
-    </div>
-  } @else if (error()) {
+  @if (error()) {
     <div class="flex flex-col items-center gap-4 py-12 text-center">
       <mat-icon class="!text-[48px] text-red-500">error_outline</mat-icon>
       <p>{{ 'events.generate-codes.error' | transloco }}</p>
-      <button mat-button [routerLink]="['/events/list']">
+      <button matButton="text" [routerLink]="['/events/list']">
         <mat-icon>arrow_back</mat-icon>
         {{ 'events.generate-codes.back' | transloco }}
       </button>
@@ -36,7 +32,7 @@
         </mat-card-content>
       </mat-card>
 
-      <button mat-button [routerLink]="['/events/list']">
+      <button matButton="text" [routerLink]="['/events/list']">
         <mat-icon>arrow_back</mat-icon>
         {{ 'events.generate-codes.back' | transloco }}
       </button>

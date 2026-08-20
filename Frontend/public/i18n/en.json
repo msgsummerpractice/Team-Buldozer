@@ -1,4 +1,21 @@
 {
+  "check-in": {
+    "button": "Check In",
+    "button-ended-tooltip": "Check-in no longer available",
+    "scan-qr": "Scan QR Code",
+    "tap-to-scan": "Tap to open camera",
+    "stop-scan": "Stop scanning",
+    "or": "or",
+    "enter-code": "Enter check-in code",
+    "code-label": "Check-in code",
+    "confirm": "Confirm",
+    "camera-not-supported": "Camera is not supported on this device.",
+    "camera-denied": "Camera access was denied.",
+    "invalid-code": "Invalid check-in code format.",
+    "wrong-event": "This code belongs to a different event.",
+    "success": "Check-in successful!",
+    "failed": "Check-in failed. Please try again."
+  },
   "home": {
     "nav": {
       "login": "Login",
@@ -120,7 +137,9 @@
     "ERR-51": "Database error. Please try again later.",
     "ERR-52": "Service is temporarily unavailable. Please try again later.",
     "ERR-99": "An unknown error occurred. Please try again.",
-    "ERR-217": "Check-in codes have already been generated for this event."
+    "ERR-216": "QR code could not be generated.",
+    "ERR-217": "Check-in codes have already been generated for this event.",
+    "ERR-218": "Could not generate a unique check-in code."
   },
   "success-messages": {
     "login-successful": "Login successful!",
@@ -133,9 +152,9 @@
   },
   "event-codes": {
     "dialog": {
-      "title": "Check-in Codes",
-      "check-in-code": "Check-in Code",
-      "qr-code": "QR Code",
+      "title": "Check-in codes",
+      "check-in-code": "Check-in code",
+      "qr-code": "QR code",
       "error": "Failed to load check-in codes."
     }
   },
@@ -145,10 +164,11 @@
 
       "error": "Failed to load event details.",
       "description": "Description",
-      "start-date": "Start Date",
+      "start-date": "Start ate",
       "end-date": "End Date",
-      "registration-start": "Registration Start",
-      "registration-end": "Registration End",
+      "registration-start": "Registration start",
+      "registration-end": "Registration end",
+      "registration-period": "Registration period",
       "location": "Location",
       "address": "Address",
       "status": "Status",
@@ -241,6 +261,7 @@
     "adjust": "Try adjusting the search term to find a matching event.",
     "sort-asc": "Sort: soonest first",
     "sort-desc": "Sort: latest first",
+    "check-in-tooltip": "Check-In",
     "status-values": {
       "DRAFT": "Draft",
       "PUBLISHED": "Published",

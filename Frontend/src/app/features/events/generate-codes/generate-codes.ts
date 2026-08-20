@@ -1,13 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { catchError, EMPTY, finalize } from 'rxjs';
+import { catchError, EMPTY } from 'rxjs';
 import { EventService } from '@features/events/services/event-service';
 import { EventCodesResponse } from '@features/events/model/event-codes-response';
 
@@ -18,7 +16,6 @@ import { EventCodesResponse } from '@features/events/model/event-codes-response'
     MatCardModule,
     MatDividerModule,
     MatIconModule,
-    MatProgressSpinnerModule,
     TranslocoPipe,
     RouterLink,
   ],
@@ -29,7 +26,6 @@ export class GenerateCodes {
   private readonly eventService = inject(EventService);
 
   readonly codes = signal<EventCodesResponse | null>(null);
-  readonly loading = signal(true);
   readonly error = signal(false);
   protected readonly qrCodeSrc = computed(() => {
     const qr = this.codes()?.qrCode;
@@ -37,17 +33,15 @@ export class GenerateCodes {
   });
 
   constructor() {
-    const id = +this.route.snapshot.paramMap.get('id')!;
+    const id = Number(this.route.snapshot.paramMap.get('id'));
 
     this.eventService
       .generateCodes(id)
       .pipe(
-        takeUntilDestroyed(),
         catchError(() => {
           this.error.set(true);
           return EMPTY;
-        }),
-        finalize(() => this.loading.set(false))
+        })
       )
       .subscribe((data) => this.codes.set(data));
   }

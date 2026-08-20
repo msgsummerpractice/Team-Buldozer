@@ -330,14 +330,17 @@ public class EventService {
         event.setStatus(EventStatus.PUBLISHED);
 
         Event saved = eventRepository.save(event);
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                emailService.notifyEventPublished(saved);
-            }
-        });
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    emailService.notifyEventPublished(saved);
+                }
+            });
+        }
         return eventMapper.toResponse(saved);
     }
+    
 
     @Transactional
     public EventResponse completeEvent(Long eventId) {

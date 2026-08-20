@@ -1,18 +1,15 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@features/events/services/event-service';
@@ -20,21 +17,20 @@ import { EventResponse } from '@features/events/model/event-response';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { NotificationService } from '@core/notification/services/notification.service';
-import { EventCodesDialog } from './event-codes-dialog';
-import { Router } from '@angular/router';
+import { EventCodesDialog, EventCodesDialogData } from './event-codes-dialog';
+import { EventStatusEnum } from '@features/events/model/event-status';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { catchError } from 'rxjs/internal/operators/catchError';
+
+export type EventDetailsDialogData = { id: number };
 
 @Component({
   selector: 'app-event-details-dialog',
   imports: [
     DatePipe,
     MatButtonModule,
-    MatChipsModule,
     MatDialogModule,
-    MatDividerModule,
     MatIconModule,
-    MatProgressSpinnerModule,
     MatTooltipModule,
     TranslocoPipe,
   ],
@@ -43,20 +39,21 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 export class EventDetailsDialog {
   private readonly dialogRef = inject(MatDialogRef<EventDetailsDialog>);
   private readonly eventService = inject(EventService);
-  private readonly dialogData = inject<{ id: number }>(MAT_DIALOG_DATA);
-  private readonly router = inject(Router);
-  private readonly dialog = inject(MatDialog);
+  private readonly dialogData = inject<EventDetailsDialogData>(MAT_DIALOG_DATA);
   private readonly authorization = inject(AuthorizationService);
+
+  readonly isMarketing = signal(this.authorization.hasAnyRole([UserRoleEnum.MARKETING]));
+  protected readonly EventStatusEnum = EventStatusEnum;
+  private readonly dialog = inject(MatDialog);
   private readonly notification = inject(NotificationService);
   // Base64 prefix of a PNG file signature (\x89PNG\r\n\x1a\n)
   private readonly PNG_BASE64_PREFIX = 'iVBORw0KGgo';
 
   readonly event = signal<EventResponse | null>(null);
-  readonly loading = signal(true);
   readonly errorTranslationKey = signal<string | null>(null);
   readonly codesGenerated = signal(false);
 
-  protected readonly isMarketing = this.authorization.hasAnyRole([UserRoleEnum.MARKETING]);
+  readonly descriptionExpanded = signal(false);
 
   constructor() {
     this.eventService
@@ -65,23 +62,18 @@ export class EventDetailsDialog {
         catchError((err: HttpErrorResponse) => {
           if ([401, 403, 404].includes(err.status)) {
             this.dialogRef.close();
-            this.router.navigate(['/events/list']);
           } else {
             this.event.set(null);
             this.errorTranslationKey.set('event-details.dialog.error');
-            this.loading.set(false);
           }
           return EMPTY;
         }),
         takeUntilDestroyed()
       )
-      .subscribe({
-        next: (data) => {
-          this.event.set(data);
-          this.codesGenerated.set(data.codesGenerated);
-          this.errorTranslationKey.set(null);
-          this.loading.set(false);
-        },
+      .subscribe((data) => {
+        this.event.set(data);
+        this.codesGenerated.set(data.codesGenerated);
+        this.errorTranslationKey.set(null);
       });
   }
 
@@ -93,6 +85,12 @@ export class EventDetailsDialog {
   protected readonly typeKey = computed(() => {
     const type = this.event()?.type;
     return type ? `event-details.dialog.type-${type.toLowerCase()}` : '';
+  });
+
+  protected readonly isCheckInDisabled = computed(() => {
+    const evt = this.event();
+    if (!evt) return true;
+    return evt.status !== EventStatusEnum.PUBLISHED || new Date(evt.endDateTime) < new Date();
   });
 
   protected readonly posterUrl = computed(() => {
@@ -111,32 +109,35 @@ export class EventDetailsDialog {
 
   protected canGenerateCodes(): boolean {
     const event = this.event();
-    return !!event && event.status === 'PUBLISHED' && !this.codesGenerated();
+    return !!event && event.status === EventStatusEnum.PUBLISHED && !this.codesGenerated();
   }
 
   protected onGenerateCodes(): void {
     const event = this.event();
     if (!event) return;
-    this.eventService
-      .generateCodes(event.id)
-      .pipe(takeUntilDestroyed())
-      .subscribe({
-        next: () => {
-          this.codesGenerated.set(true);
-          this.notification.showSuccess('events.generate-codes-success');
-          this.onViewCodes();
-        },
-      });
+    this.eventService.generateCodes(event.id).subscribe(() => {
+      this.codesGenerated.set(true);
+      this.notification.showSuccess('events.generate-codes-success');
+      this.onViewCodes();
+    });
   }
 
   protected onViewCodes(): void {
     const event = this.event();
     if (!event) return;
-    this.dialog.open(EventCodesDialog, {
+    this.dialog.open<EventCodesDialog, EventCodesDialogData>(EventCodesDialog, {
       width: '440px',
       autoFocus: 'dialog',
       restoreFocus: true,
       data: { id: event.id },
     });
+  }
+
+  protected editEvent(): void {
+    this.dialogRef.close({ action: 'edit' });
+  }
+
+  protected checkIn(): void {
+    this.dialogRef.close({ action: 'checkin' });
   }
 }

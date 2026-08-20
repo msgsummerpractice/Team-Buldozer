@@ -43,6 +43,10 @@ export const eventsRoutes: Routes = [
             canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
           },
           {
+            path: 'checkin',
+            loadComponent: () => import('@features/events/events').then((m) => m.Events),
+          },
+          {
             path: '**',
             redirectTo: '/events/list',
           },
