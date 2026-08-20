@@ -197,7 +197,6 @@
     "details-col": "DETALII",
     "details": "Detalii",
     "view-details": "Vezi detalii",
-    "complete-col": "FINALIZEAZĂ",
     "complete": "Finalizează",
     "complete-tooltip": "Marchează evenimentul ca finalizat",
     "complete-disabled-tooltip": "Evenimentul poate fi finalizat doar după data de sfârșit și dacă este publicat",
@@ -207,6 +206,16 @@
       "title": "Finalizează eveniment",
       "message": "Sigur dorești să marchezi „{{name}}” ca finalizat?",
       "warning": "Această acțiune nu poate fi anulată."
+    },
+    "publish": "Publică",
+    "publish-tooltip": "Publică acest eveniment",
+    "publish-disabled-tooltip": "Evenimentul poate fi publicat doar înainte de ora de încheiere și cât timp este în stadiul de ciornă",
+    "publish-success": "Eveniment publicat cu succes",
+    "publish-error": "Evenimentul nu a putut fi publicat",
+    "publish-dialog": {
+      "title": "Publicare eveniment",
+      "message": "Sigur dorești să publici „{{name}}”?",
+      "warning": "Această acțiune este ireversibilă."
     },
     "no-events": "Niciun eveniment găsit",
     "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un eveniment potrivit.",

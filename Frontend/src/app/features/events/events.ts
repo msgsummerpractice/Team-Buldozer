@@ -7,10 +7,7 @@ import { EventStatusEnum } from '@features/events/model/event-status';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { NotificationService } from '@core/notification/services/notification.service';
-import {
-  CompleteEventDialog,
-  CompleteEventDialogData,
-} from '@features/events/components/complete-event-dialog/complete-event-dialog';
+import { ConfirmDialog, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -156,18 +153,23 @@ export class Events implements OnInit {
     );
   }
 
+  protected canPublish(event: EventResponse): boolean {
+    return (
+      event.status === EventStatusEnum.DRAFT && new Date(event.endDateTime).getTime() > Date.now()
+    );
+  }
+
   protected onComplete(event: EventResponse): void {
     if (!this.canComplete(event)) return;
 
-    const dialogRef = this.dialog.open<CompleteEventDialog, CompleteEventDialogData, boolean>(
-      CompleteEventDialog,
-      {
-        data: { eventName: event.name },
-        width: '440px',
-        autoFocus: 'dialog',
-        restoreFocus: true,
-      }
-    );
+    const dialogRef = this.openConfirmDialog({
+      titleKey: 'events.complete-dialog.title',
+      messageKey: 'events.complete-dialog.message',
+      messageParams: { name: event.name },
+      warningKey: 'events.complete-dialog.warning',
+      confirmLabelKey: 'events.complete',
+      confirmIcon: 'check_circle',
+    });
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (!confirmed) return;
@@ -175,6 +177,36 @@ export class Events implements OnInit {
         this._events.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
         this.notification.showSuccess('events.complete-success');
       });
+    });
+  }
+
+  protected onPublish(event: EventResponse): void {
+    if (!this.canPublish(event)) return;
+
+    const dialogRef = this.openConfirmDialog({
+      titleKey: 'events.publish-dialog.title',
+      messageKey: 'events.publish-dialog.message',
+      messageParams: { name: event.name },
+      warningKey: 'events.publish-dialog.warning',
+      confirmLabelKey: 'events.publish',
+      confirmIcon: 'check_circle',
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) return;
+      this.eventService.publishEvent(event.id).subscribe((updated) => {
+        this._events.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
+        this.notification.showSuccess('events.publish-success');
+      });
+    });
+  }
+
+  private openConfirmDialog(data: ConfirmDialogData) {
+    return this.dialog.open<ConfirmDialog, ConfirmDialogData, boolean>(ConfirmDialog, {
+      data,
+      width: '440px',
+      autoFocus: 'dialog',
+      restoreFocus: true,
     });
   }
 
