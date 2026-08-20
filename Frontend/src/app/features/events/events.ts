@@ -103,7 +103,7 @@ export class Events implements OnInit {
 
   ngOnInit(): void {
     this.loadEvents();
-    this.route.parent!.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+    this.route.parent!.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
       const idParam = params.get('id');
       const id: number | null = idParam ? +idParam : null;
       if (!id) return;

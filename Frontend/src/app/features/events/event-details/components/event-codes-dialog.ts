@@ -9,6 +9,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@features/events/services/event-service';
 import { EventCodesResponse } from '@features/events/model/event-codes-response';
 import { finalize } from 'rxjs/internal/operators/finalize';
+import { EMPTY } from 'rxjs/internal/observable/empty';
+import { catchError } from 'rxjs/internal/operators/catchError';
 
 @Component({
   selector: 'app-event-codes-dialog',
@@ -39,13 +41,14 @@ export class EventCodesDialog {
     this.eventService
       .getEventCodes(this.dialogData.id)
       .pipe(
-        takeUntilDestroyed(),
-        finalize(() => this.loading.set(false))
+        catchError(() => {
+          this.errorKey.set('event-codes.dialog.error');
+          return EMPTY;
+        }),
+        finalize(() => this.loading.set(false)),
+        takeUntilDestroyed()
       )
-      .subscribe({
-        next: (data) => this.codes.set(data),
-        error: () => this.errorKey.set('event-codes.dialog.error'),
-      });
+      .subscribe((data) => this.codes.set(data));
   }
 
   protected close(): void {

@@ -22,6 +22,8 @@ import { UserRoleEnum } from '@core/users/model/user-role';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { EventCodesDialog } from './event-codes-dialog';
 import { Router } from '@angular/router';
+import { EMPTY } from 'rxjs/internal/observable/empty';
+import { catchError } from 'rxjs/internal/operators/catchError';
 
 @Component({
   selector: 'app-event-details-dialog',
@@ -46,8 +48,6 @@ export class EventDetailsDialog {
   private readonly dialog = inject(MatDialog);
   private readonly authorization = inject(AuthorizationService);
   private readonly notification = inject(NotificationService);
-  private readonly destroyRef = inject(DestroyRef);
-
   // Base64 prefix of a PNG file signature (\x89PNG\r\n\x1a\n)
   private readonly PNG_BASE64_PREFIX = 'iVBORw0KGgo';
 
@@ -61,15 +61,8 @@ export class EventDetailsDialog {
   constructor() {
     this.eventService
       .getEventById(this.dialogData.id)
-      .pipe(takeUntilDestroyed())
-      .subscribe({
-        next: (data) => {
-          this.event.set(data);
-          this.codesGenerated.set(data.codesGenerated);
-          this.errorTranslationKey.set(null);
-          this.loading.set(false);
-        },
-        error: (err: HttpErrorResponse) => {
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
           if ([401, 403, 404].includes(err.status)) {
             this.dialogRef.close();
             this.router.navigate(['/events/list']);
@@ -78,6 +71,16 @@ export class EventDetailsDialog {
             this.errorTranslationKey.set('event-details.dialog.error');
             this.loading.set(false);
           }
+          return EMPTY;
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe({
+        next: (data) => {
+          this.event.set(data);
+          this.codesGenerated.set(data.codesGenerated);
+          this.errorTranslationKey.set(null);
+          this.loading.set(false);
         },
       });
   }
@@ -116,7 +119,7 @@ export class EventDetailsDialog {
     if (!event) return;
     this.eventService
       .generateCodes(event.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed())
       .subscribe({
         next: () => {
           this.codesGenerated.set(true);
