@@ -47,10 +47,7 @@
         </div>
       </div>
 
-      @if (loading()) {
-        <p class="text-slate-600 mt-4">{{ 'profile.loading' | transloco }}</p>
-      }
-      @if (!loading() && profile()) {
+      @if (!profile()) {
         @if (saveMessage()) {
           <div
             class="mt-4 rounded-xl border border-green-200 px-4 py-3 text-sm font-medium text-green-700"

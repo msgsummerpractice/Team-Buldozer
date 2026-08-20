@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>{{ 'event-codes.dialog.title' | transloco }}</h1>
+
+<mat-dialog-content>
+  @if (errorKey()) {
+    <div class="flex flex-col items-center gap-3 py-8 text-center">
+      <mat-icon class="!text-[40px] text-red-500">error_outline</mat-icon>
+      <p class="text-sm text-red-500">{{ errorKey() | transloco }}</p>
+    </div>
+  } @else if (codes()) {
+    <div class="flex flex-col items-center gap-6 py-4">
+      <div class="flex flex-col items-center gap-2">
+        <span class="text-xs font-semibold uppercase tracking-widest opacity-60">
+          {{ 'event-codes.dialog.qr-code' | transloco }}
+        </span>
+        <img [src]="qrCodeSrc()" alt="QR Code" class="w-48 h-48 rounded-xl shadow" />
+      </div>
+
+      <mat-divider class="w-full" />
+
+      <div class="flex flex-col items-center gap-2">
+        <span class="text-xs font-semibold uppercase tracking-widest opacity-60">
+          {{ 'event-codes.dialog.check-in-code' | transloco }}
+        </span>
+        <span class="text-5xl font-bold tracking-widest font-mono">{{ codes()?.checkInCode }}</span>
+      </div>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton="text" type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
+</mat-dialog-actions>

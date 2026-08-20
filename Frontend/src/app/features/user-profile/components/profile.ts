@@ -47,7 +47,6 @@ export class Profile {
   private readonly apiUrl = environment.apiUrl;
 
   readonly profile = signal<UserProfile | null>(null);
-  readonly loading = signal<boolean>(true);
   readonly error = signal<string>('');
   readonly saving = signal<boolean>(false);
   readonly saveMessage = signal<string>('');
@@ -70,7 +69,6 @@ export class Profile {
     const userId = this.resolveUserId();
 
     if (!userId) {
-      this.loading.set(false);
       this.error.set(
         'Could not determine the account id. Open this page with /info/:id or /info?id=yourId.'
       );
@@ -81,11 +79,9 @@ export class Profile {
       next: (userProfile: UserProfile) => {
         this.profile.set(userProfile);
         this.syncFormFromProfile(userProfile);
-        this.loading.set(false);
       },
       error: () => {
         this.error.set('Could not load account details right now. Please try again.');
-        this.loading.set(false);
       },
     });
   }

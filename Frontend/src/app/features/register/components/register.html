@@ -54,7 +54,7 @@
         formControlName="password"
         autocomplete="new-password"
       />
-      <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
+      <button matIconButton matSuffix type="button" (click)="showPassword.set(!showPassword())">
         <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
       @if (
@@ -74,7 +74,7 @@
         autocomplete="new-password"
       />
       <button
-        mat-icon-button
+        matIconButton
         matSuffix
         type="button"
         (click)="showConfirmPassword.set(!showConfirmPassword())"
@@ -102,7 +102,7 @@
       }
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit" class="w-full">
+    <button matButton="elevated" color="primary" type="submit" class="w-full">
       {{ 'register.submit' | transloco }}
     </button>
   </form>

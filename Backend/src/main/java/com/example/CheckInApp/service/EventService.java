@@ -340,6 +340,7 @@ public class EventService {
         }
         return eventMapper.toResponse(saved);
     }
+    
 
     @Transactional
     public EventResponse completeEvent(Long eventId) {
