@@ -15,7 +15,8 @@ import org.hibernate.annotations.OnDeleteAction;
 public class AttendanceRecord {
 
     @Id
-    private Float id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
