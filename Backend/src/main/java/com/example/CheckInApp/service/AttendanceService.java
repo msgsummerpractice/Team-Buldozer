@@ -71,9 +71,9 @@ public class AttendanceService {
         }
 
         attendanceRecord.setCheckedIn(true);
-        AttendanceRecord saved = attendanceRecordRepository.save(attendanceRecord);
+        attendanceRecordRepository.save(attendanceRecord);
 
-        return new CheckInResponse(event.getId(), saved.isCheckedIn());
+        return new CheckInResponse(event.getId(), event.getName(), LocalDateTime.now());
     }
 
 }
