@@ -31,6 +31,7 @@ const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
   maxWidth: '1400px',
   minHeight: '700px',
+  maxHeight: '85vh',
 };
 
 const CHECK_IN_DIALOG_CONFIG = {

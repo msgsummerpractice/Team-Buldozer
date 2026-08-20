@@ -1,28 +1,19 @@
-<mat-dialog-content class="w-full !p-0 !mt-0 !mb-0">
-  @if (loading()) {
-    <div class="flex justify-center items-center h-64">
-      <mat-spinner diameter="48" />
-    </div>
-  } @else if (errorTranslationKey()) {
-    <p class="text-sm text-red-500 p-6">{{ errorTranslationKey() | transloco }}</p>
-  } @else if (event(); as data) {
-    <div class="relative w-full h-72">
-      @if (posterUrl(); as poster) {
-        <img [src]="poster" [alt]="data.name" class="w-full h-full object-cover" />
-      } @else {
-        <div
-          class="w-full h-full flex items-center justify-center bg-(--mat-sys-surface-container)"
-        >
-          <mat-icon class="!text-[72px] opacity-30">image_not_supported</mat-icon>
-        </div>
-      }
-      <div
-        class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 via-30% to-transparent to-55% flex items-end p-4"
-      >
-        <h3 class="text-2xl font-bold text-white drop-shadow-lg">{{ data.name }}</h3>
+@if (event(); as data) {
+  <div class="relative w-full h-72 flex-shrink-0">
+    @if (posterUrl(); as poster) {
+      <img [src]="poster" [alt]="data.name" class="w-full h-full object-cover" />
+    } @else {
+      <div class="w-full h-full flex items-center justify-center bg-(--mat-sys-surface-container)">
+        <mat-icon class="text-[72px] opacity-30">image_not_supported</mat-icon>
       </div>
+    }
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 via-30% to-transparent to-55% flex items-end p-4"
+    >
+      <h3 class="text-2xl font-bold text-white drop-shadow-lg">{{ data.name }}</h3>
     </div>
-
+  </div>
+  <mat-dialog-content class="w-full !p-0 !mt-0 !mb-0">
     <div class="p-6 flex flex-col gap-5">
       <p class="text-base leading-relaxed break-words">{{ data.description }}</p>
 
@@ -32,7 +23,7 @@
             {{ 'event-details.dialog.start-date' | transloco }}
           </span>
           <div class="flex items-center gap-2">
-            <mat-icon class="!text-[16px] opacity-70">calendar_today</mat-icon>
+            <mat-icon class="text-[16px] opacity-70">calendar_today</mat-icon>
             <span class="text-sm font-medium">{{ data.startDateTime | date: 'medium' }}</span>
           </div>
         </div>
@@ -41,7 +32,7 @@
             {{ 'event-details.dialog.end-date' | transloco }}
           </span>
           <div class="flex items-center gap-2">
-            <mat-icon class="!text-[16px] opacity-70">calendar_today</mat-icon>
+            <mat-icon class="text-[16px] opacity-70">calendar_today</mat-icon>
             <span class="text-sm font-medium">{{ data.endDateTime | date: 'medium' }}</span>
           </div>
         </div>
@@ -102,7 +93,7 @@
           </span>
           <div class="flex items-center gap-2">
             @if (data.foodProvided) {
-              <mat-icon class="text-green-600 !text-[20px]">check_circle</mat-icon>
+              <mat-icon class="text-green-600 text-[20px]">check_circle</mat-icon>
               <span class="text-sm font-medium text-green-700">
                 {{ 'event-details.dialog.yes' | transloco }}
               </span>
@@ -128,8 +119,18 @@
         </div>
       </div>
     </div>
-  }
-</mat-dialog-content>
+  </mat-dialog-content>
+} @else {
+  <mat-dialog-content class="w-full !p-0 !mt-0 !mb-0">
+    @if (loading()) {
+      <div class="flex justify-center items-center h-64">
+        <mat-spinner diameter="48" />
+      </div>
+    } @else if (errorTranslationKey()) {
+      <p class="text-sm text-red-500 p-6">{{ errorTranslationKey() | transloco }}</p>
+    }
+  </mat-dialog-content>
+}
 
 <mat-dialog-actions align="end" class="min-h-0 py-2 px-4">
   @if (isMarketing() && event()?.status === 'DRAFT') {
