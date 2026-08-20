@@ -16,9 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
     long countByRolesContaining(UserRole role);
-    List<User> findByStatusTrue();
-    List<User> findByLocationAndStatusTrue(UserLocation location);
-
     @Query("SELECT u.email FROM User u WHERE u.status = true")
     List<String> findActiveEmails();
 

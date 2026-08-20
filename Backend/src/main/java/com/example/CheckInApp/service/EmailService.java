@@ -7,7 +7,6 @@ import com.example.CheckInApp.model.UserLocation;
 import com.example.CheckInApp.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,24 +14,31 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.util.HtmlUtils;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @Service
-@RequiredArgsConstructor
 public class EmailService {
 
     private static final int MAX_EMAIL_RETRIES = 2;
     private static final byte[] PNG_MAGIC = {(byte) 0x89, 0x50, 0x4E, 0x47};
-    private static final DateTimeFormatter EMAIL_DATE_FORMAT = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy, HH:mm");
+    private static final DateTimeFormatter EMAIL_DATE_FORMAT = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy, HH:mm", Locale.ENGLISH);
 
-    @Value("${app.frontend-url}")
-    private String frontendUrl;
-
+    private final String frontendUrl;
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
+
+    public EmailService(@Value("${app.frontend-url}") String frontendUrl,
+                        JavaMailSender mailSender,
+                        UserRepository userRepository) {
+        this.frontendUrl = frontendUrl;
+        this.mailSender = mailSender;
+        this.userRepository = userRepository;
+    }
 
     @Async
     public void notifyEventPublished(Event event) {
@@ -79,7 +85,7 @@ public class EmailService {
 
             if (event.getPoster() != null) {
                 byte[] poster = event.getPoster();
-                helper.addInline("poster", new org.springframework.core.io.ByteArrayResource(poster), detectMimeType(poster));
+                helper.addInline("poster", new ByteArrayResource(poster), detectMimeType(poster));
             }
 
             mailSender.send(message);
