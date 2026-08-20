@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
+import { EventStatusEnum } from '@features/events/model/event-status';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { UserRoleEnum } from '@core/users/model/user-role';
 
@@ -33,6 +34,7 @@ export class EventDetailsDialog {
   private readonly authorization = inject(AuthorizationService);
 
   readonly isMarketing = signal(this.authorization.hasAnyRole([UserRoleEnum.MARKETING]));
+  protected readonly EventStatusEnum = EventStatusEnum;
 
   // Base64 prefix of a PNG file signature (\x89PNG\r\n\x1a\n)
   private readonly PNG_BASE64_PREFIX = 'iVBORw0KGgo';
@@ -77,7 +79,7 @@ export class EventDetailsDialog {
   protected readonly isCheckInDisabled = computed(() => {
     const evt = this.event();
     if (!evt) return true;
-    return evt.status !== 'PUBLISHED' || new Date(evt.endDateTime) < new Date();
+    return evt.status !== EventStatusEnum.PUBLISHED || new Date(evt.endDateTime) < new Date();
   });
 
   protected readonly posterUrl = computed(() => {

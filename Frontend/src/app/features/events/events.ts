@@ -78,6 +78,7 @@ export class Events implements OnInit {
   protected readonly sortDirection = signal<'asc' | 'desc'>('asc');
 
   protected readonly isMarketing = signal(this.authorization.hasAnyRole([UserRoleEnum.MARKETING]));
+  protected readonly EventStatusEnum = EventStatusEnum;
 
   protected readonly displayedColumns = computed(() => {
     return ['name', 'period', 'status', 'type', 'location', 'actions'];

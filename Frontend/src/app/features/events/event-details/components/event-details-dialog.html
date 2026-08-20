@@ -162,7 +162,7 @@
 
 <mat-dialog-actions align="end" class="gap-2">
   <button mat-button type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
-  @if (isMarketing() && event()?.status === 'DRAFT') {
+  @if (isMarketing() && event()?.status === EventStatusEnum.DRAFT) {
     <button mat-stroked-button type="button" (click)="editEvent()">
       <mat-icon>edit</mat-icon>
       {{ 'events.edit.title' | transloco }}
