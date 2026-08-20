@@ -124,6 +124,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, ErrorCode.ERR_222, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(AlreadyCheckedInException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyCheckedIn(AlreadyCheckedInException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_223, ex.getMessage(), request);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())

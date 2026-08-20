@@ -3,6 +3,7 @@ package com.example.CheckInApp.service;
 import com.example.CheckInApp.dto.request.QrCodeCheckInRequest;
 import com.example.CheckInApp.dto.request.CheckInRequest;
 import com.example.CheckInApp.dto.response.CheckInResponse;
+import com.example.CheckInApp.exception.AlreadyCheckedInException;
 import com.example.CheckInApp.exception.CheckInClosedException;
 import com.example.CheckInApp.exception.InvalidCheckInCodeException;
 import com.example.CheckInApp.exception.InvalidQrCodeCheckInException;
@@ -36,7 +37,6 @@ public class AttendanceService {
         return performCheckIn(event, userEmail);
     }
 
-    // eventId and eventName are decoded from the scanned QR code payload (see EventService#generateQrCodeImage)
     @Transactional
     public CheckInResponse checkInByQrCode(QrCodeCheckInRequest request, String userEmail) {
         Event event = eventRepository.findById(request.getEventId())
@@ -60,6 +60,10 @@ public class AttendanceService {
         AttendanceRecord attendanceRecord = attendanceRecordRepository
                 .findByEvent_IdAndUser_Id(event.getId(), user.getId())
                 .orElseThrow(() -> new NotRegisteredForEventException("You are not registered for this event."));
+
+        if (attendanceRecord.isCheckedIn()) {
+            throw new AlreadyCheckedInException("You are already checked in for this event.");
+        }
 
         attendanceRecord.setCheckedIn(true);
         AttendanceRecord saved = attendanceRecordRepository.save(attendanceRecord);
