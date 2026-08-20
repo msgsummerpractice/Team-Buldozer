@@ -119,6 +119,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_221, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(InvalidQrCodeCheckInException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidQrCodeCheckIn(InvalidQrCodeCheckInException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.NOT_FOUND, ErrorCode.ERR_222, ex.getMessage(), request);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())

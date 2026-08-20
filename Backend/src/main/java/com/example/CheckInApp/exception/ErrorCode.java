@@ -36,7 +36,8 @@ public enum ErrorCode {
     ERR_218("Could not generate a unique check-in code"),
     ERR_219("Invalid check-in code"),
     ERR_220("Not registered for this event"),
-    ERR_221("Check-in is closed for this event");
+    ERR_221("Check-in is closed for this event"),
+    ERR_222("Invalid QR code check-in");
 
     private final String defaultMessage;
 
