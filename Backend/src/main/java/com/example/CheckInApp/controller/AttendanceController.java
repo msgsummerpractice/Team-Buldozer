@@ -24,7 +24,7 @@ public class AttendanceController {
 
     @PostMapping
     public ResponseEntity<CheckInResponse> checkIn(@Valid @RequestBody CheckInRequest request, Authentication authentication) {
-        CheckInResponse response = attendanceService.checkIn(request, authentication.getName());
+        CheckInResponse response = attendanceService.checkInByCode(request, authentication.getName());
         return ResponseEntity.ok(response);
     }
 

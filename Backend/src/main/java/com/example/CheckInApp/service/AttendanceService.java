@@ -31,7 +31,7 @@ public class AttendanceService {
     private final UserRepository userRepository;
 
     @Transactional
-    public CheckInResponse checkIn(CheckInRequest request, String userEmail) {
+    public CheckInResponse checkInByCode(CheckInRequest request, String userEmail) {
         Event event = eventRepository.findByCheckInCode(request.getCheckInCode())
                 .orElseThrow(() -> new InvalidCheckInCodeException("Invalid check-in code."));
 
