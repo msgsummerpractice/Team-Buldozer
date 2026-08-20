@@ -12,7 +12,7 @@ import {
   CompleteEventDialogData,
 } from '@features/events/components/complete-event-dialog/complete-event-dialog';
 import { FormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -110,35 +110,38 @@ export class Events implements OnInit {
 
   ngOnInit(): void {
     this.loadEvents();
-    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const idParam = params.get('id');
-      const id: number | null = idParam ? +idParam : null;
-      console.log('Route param id:', id);
-      if (id) {
-        const routeSegment = this.route.snapshot.url[0]?.path;
-        if (routeSegment === 'checkin') {
-          this.dialog
-            .open(CheckInDialog, { ...CHECK_IN_DIALOG_CONFIG, data: { id } })
-            .afterClosed()
-            .subscribe(() => {
-              this.router.navigate(['/events/list']);
-            });
-        } else {
-          this.dialog
-            .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
-            .afterClosed()
-            .subscribe((result?: { action: string }) => {
-              if (result?.action === 'edit') {
-                this.router.navigate(['/events', id, 'edit']);
-              } else if (result?.action === 'checkin') {
-                this.router.navigate(['/events', id, 'checkin']);
-              } else {
+
+    combineLatest([this.route.paramMap, this.route.url])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([params, urlSegments]) => {
+        const idParam = params.get('id');
+        const id: number | null = idParam ? +idParam : null;
+        const routeSegment = urlSegments[0]?.path;
+
+        if (id) {
+          if (routeSegment === 'checkin') {
+            this.dialog
+              .open(CheckInDialog, { ...CHECK_IN_DIALOG_CONFIG, data: { id } })
+              .afterClosed()
+              .subscribe(() => {
                 this.router.navigate(['/events/list']);
-              }
-            });
+              });
+          } else {
+            this.dialog
+              .open(EventDetailsDialog, { ...EVENT_DETAILS_DIALOG_CONFIG, data: { id } })
+              .afterClosed()
+              .subscribe((result?: { action: string }) => {
+                if (result?.action === 'edit') {
+                  this.router.navigate(['/events', id, 'edit']);
+                } else if (result?.action === 'checkin') {
+                  this.router.navigate(['/events', id, 'checkin']);
+                } else {
+                  this.router.navigate(['/events/list']);
+                }
+              });
+          }
         }
-      }
-    });
+      });
 
     this.searchSubject
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
