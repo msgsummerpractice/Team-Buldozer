@@ -7,10 +7,7 @@ import { EventStatusEnum } from '@features/events/model/event-status';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { NotificationService } from '@core/notification/services/notification.service';
-import {
-  ConfirmDialog,
-  ConfirmDialogData,
-} from '@features/events/components/confirm-dialog/confirm-dialog';
+import { ConfirmDialog, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
