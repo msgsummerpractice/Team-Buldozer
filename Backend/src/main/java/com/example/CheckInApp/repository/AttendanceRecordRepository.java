@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AttendanceRecordRepository extends JpaRepository<AttendanceRecord, Long> {
 
-    Optional<AttendanceRecord> findByEvent_IdAndUser_Id(Long eventId, Long userId);
+    Optional<AttendanceRecord> findByEventIdAndUserId(Long eventId, Long userId);
 
 }
