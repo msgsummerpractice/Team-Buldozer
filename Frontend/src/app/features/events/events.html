@@ -142,24 +142,6 @@
                 <div
                   class="inline-block"
                   [matTooltip]="
-                    (canPublish(event)
-                      ? 'events.publish-tooltip'
-                      : 'events.publish-disabled-tooltip'
-                    ) | transloco
-                  "
-                >
-                  <button
-                    mat-icon-button
-                    color="accent"
-                    [disabled]="!canPublish(event)"
-                    (click)="onPublish(event)"
-                  >
-                    <mat-icon [class.text-green-500!]="canPublish(event)">publish</mat-icon>
-                  </button>
-                </div>
-                <div
-                  class="inline-block"
-                  [matTooltip]="
                     (canComplete(event)
                       ? 'events.complete-tooltip'
                       : 'events.complete-disabled-tooltip'

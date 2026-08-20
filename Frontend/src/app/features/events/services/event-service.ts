@@ -31,8 +31,4 @@ export class EventService {
   getAllEvents(): Observable<EventResponse[]> {
     return this.http.get<EventResponse[]>(`${environment.apiUrl}/events`);
   }
-
-  publishEvent(id: number): Observable<EventResponse> {
-    return this.http.patch<EventResponse>(`${this.eventsUrl}/${id}/publish`, null);
-  }
 }
