@@ -16,21 +16,33 @@
   <mat-dialog-content class="w-full !p-0 !mt-0 !mb-0">
     <div class="p-6 flex flex-col gap-5">
       @if (data.description) {
-        <div class="text-base leading-relaxed break-words">
-          {{
-            descriptionExpanded()
-              ? data.description
-              : data.description.slice(0, 220) + (data.description.length > 220 ? '...' : '')
-          }}
-          @if (data.description.length > 220) {
-            <button
-              class="ml-1 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-base font-medium"
-              (click)="descriptionExpanded.set(!descriptionExpanded())"
-            >
-              {{ descriptionExpanded() ? 'See less' : 'See more' }}
-            </button>
-          }
-        </div>
+        @if (!descriptionExpanded()) {
+          <div class="relative">
+            <p class="text-base leading-relaxed break-words pr-20 line-clamp-4">
+              {{ data.description }}
+            </p>
+            @if (data.description.length > 280) {
+              <button
+                class="absolute bottom-0 right-0 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-base font-medium"
+                (click)="descriptionExpanded.set(true)"
+              >
+                See more
+              </button>
+            }
+          </div>
+        } @else {
+          <div class="text-base leading-relaxed break-words">
+            {{ data.description }}
+            @if (data.description.length > 280) {
+              <button
+                class="ml-1 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-base font-medium"
+                (click)="descriptionExpanded.set(false)"
+              >
+                See less
+              </button>
+            }
+          </div>
+        }
       }
 
       <div class="grid grid-cols-2 gap-3">
