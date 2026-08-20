@@ -300,8 +300,12 @@ public class EventService {
             throw new InvalidEventDataException("Codes are only available for published events.");
         }
 
-        if (event.getCheckInCode() == null || event.getQrCode() == null) {
+        if (event.getCheckInCode() == null) {
             throw new ResourceNotFoundException("Check-in code has not been generated yet for event with id " + eventId);
+        }
+
+        if (event.getQrCode() == null) {
+            throw new ResourceNotFoundException("QR code has not been generated yet for event with id " + eventId);
         }
 
         return new EventCodesResponse(event.getCheckInCode(), Base64.getEncoder().encodeToString(event.getQrCode()));
