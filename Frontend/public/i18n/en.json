@@ -13,8 +13,7 @@
     "camera-denied": "Camera access was denied.",
     "invalid-code": "Invalid check-in code format.",
     "wrong-event": "This code belongs to a different event.",
-    "success": "Check-in successful!",
-    "failed": "Check-in failed. Please try again."
+    "success": "Check-in successful!"
   },
   "home": {
     "nav": {
@@ -139,7 +138,6 @@
     "ERR-99": "An unknown error occurred. Please try again.",
     "ERR-110": "Poster could not be read.",
     "ERR-111": "File is invalid.",
-    "ERR-112": "Event data is invalid.",
     "ERR-113": "This event cannot be edited or changed right now.",
     "ERR-114": "Last admin cannot be disabled or have its role changed.",
     "ERR-115": "Database error. Please try again later.",
@@ -176,7 +174,7 @@
 
       "error": "Failed to load event details.",
       "description": "Description",
-      "start-date": "Start ate",
+      "start-date": "Start Date",
       "end-date": "End Date",
       "registration-start": "Registration start",
       "registration-end": "Registration end",

@@ -7,14 +7,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
+import { EMPTY, catchError } from 'rxjs';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { AttendanceService } from '@features/events/check-in/services/attendance-service';
 
-type CheckInCodeParseResult = {
-  codeType: 'QR' | 'digits';
-  eventId?: number | null;
-  eventName?: string | null;
-};
+type CheckInCodeParseResult =
+  | {
+      codeType: 'QR';
+      eventId: number;
+      eventName: string;
+    }
+  | {
+      codeType: 'digits';
+    };
 
 function parseCheckInCode(code: string): CheckInCodeParseResult | null {
   const composedMatch = /^(\d+)-(.+)$/.exec(code);
@@ -99,7 +104,7 @@ export class CheckInDialog implements OnDestroy {
         this.notificationService.showError('check-in.wrong-event');
         return;
       }
-      this.submitQrCode(parsed.eventId!, parsed.eventName!);
+      this.submitQrCode(parsed.eventId, parsed.eventName);
       return;
     }
 
@@ -112,18 +117,28 @@ export class CheckInDialog implements OnDestroy {
 
   private submitCode(checkInCode: string): void {
     this.submitting.set(true);
-    this.attendanceService.checkInByCode(checkInCode).subscribe({
-      next: () => this.onCheckInSuccess(),
-      error: () => this.submitting.set(false),
-    });
+    this.attendanceService
+      .checkInByCode(checkInCode)
+      .pipe(
+        catchError(() => {
+          this.submitting.set(false);
+          return EMPTY;
+        })
+      )
+      .subscribe(() => this.onCheckInSuccess());
   }
 
   private submitQrCode(eventId: number, eventName: string): void {
     this.submitting.set(true);
-    this.attendanceService.checkInByQrCode(eventId, eventName).subscribe({
-      next: () => this.onCheckInSuccess(),
-      error: () => this.submitting.set(false),
-    });
+    this.attendanceService
+      .checkInByQrCode(eventId, eventName)
+      .pipe(
+        catchError(() => {
+          this.submitting.set(false);
+          return EMPTY;
+        })
+      )
+      .subscribe(() => this.onCheckInSuccess());
   }
 
   private onCheckInSuccess(): void {

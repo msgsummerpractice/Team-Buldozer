@@ -13,8 +13,7 @@
     "camera-denied": "Accesul la cameră a fost refuzat.",
     "invalid-code": "Formatul codului de check-in este invalid.",
     "wrong-event": "Acest cod aparține unui alt eveniment.",
-    "success": "Check-in realizat cu succes!",
-    "failed": "Check-in eșuat. Vă rugăm să încercați din nou."
+    "success": "Check-in realizat cu succes!"
   },
   "home": {
     "nav": {
@@ -139,7 +138,6 @@
     "ERR-99": "A apărut o eroare necunoscută. Încercați din nou.",
     "ERR-110": "Afișul nu a putut fi citit.",
     "ERR-111": "Fișierul este invalid.",
-    "ERR-112": "Datele evenimentului sunt invalide.",
     "ERR-113": "Acest eveniment nu poate fi editat sau modificat acum.",
     "ERR-114": "Ultimul admin nu poate fi dezactivat sau i se poate schimba rolul.",
     "ERR-115": "Eroare de bază de date. Încercați din nou mai târziu.",

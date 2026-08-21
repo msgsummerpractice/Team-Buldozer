@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidEventDataException.class)
     public ResponseEntity<ErrorResponse> handleInvalidEventData(InvalidEventDataException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_112, ex.getMessage(), request);
+        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_51, ex.getMessage(), request);
     }
 
     @ExceptionHandler(EventNotEditableException.class)
