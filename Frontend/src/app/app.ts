@@ -14,6 +14,6 @@ export class App {
   private readonly loadingService = inject(LoadingService);
 
   protected get isLoading() {
-    return this.loadingService.isLoading();
+    return this.loadingService.isLoading;
   }
 }
