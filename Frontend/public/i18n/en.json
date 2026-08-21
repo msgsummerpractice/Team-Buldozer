@@ -164,7 +164,7 @@
 
       "error": "Failed to load event details.",
       "description": "Description",
-      "start-date": "Start ate",
+      "start-date": "Start Date",
       "end-date": "End Date",
       "registration-start": "Registration start",
       "registration-end": "Registration end",
