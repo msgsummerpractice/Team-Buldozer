@@ -217,7 +217,11 @@
     "manage-roles": "Gestionează Rolurile",
     "save": "Salvează",
     "saving": "Se salvează...",
-    "unsaved-changes": "Aveți modificări nesalvate care se vor pierde dacă continuați. Doriți să continuați?"
+    "unsaved-changes": "Aveți modificări nesalvate care se vor pierde dacă continuați. Doriți să continuați?",
+    "confirm-roles-dialog": {
+      "title": "Confirmă modificarea rolurilor",
+      "message": "Sigur dorești să actualizezi rolurile pentru „{{name}}”?"
+    }
   },
   "paginator": {
     "itemsPerPage": "Elemente pe pagină:",
