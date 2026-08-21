@@ -140,7 +140,6 @@
     "ERR-111": "File is invalid.",
     "ERR-113": "This event cannot be edited or changed right now.",
     "ERR-114": "Last admin cannot be disabled or have its role changed.",
-    "ERR-115": "Database error. Please try again later.",
     "ERR-116": "Email delivery failed.",
     "ERR-216": "QR code could not be generated.",
     "ERR-217": "Check-in codes have already been generated for this event.",

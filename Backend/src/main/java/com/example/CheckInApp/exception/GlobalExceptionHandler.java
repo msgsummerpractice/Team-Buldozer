@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataBaseException.class)
     public ResponseEntity<ErrorResponse> handleDataBaseException(DataBaseException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_115, ex.getMessage(), request);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_51, ex.getMessage(), request);
     }
 
     @ExceptionHandler(EmailDeliveryException.class)

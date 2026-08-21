@@ -140,7 +140,6 @@
     "ERR-111": "Fișierul este invalid.",
     "ERR-113": "Acest eveniment nu poate fi editat sau modificat acum.",
     "ERR-114": "Ultimul admin nu poate fi dezactivat sau i se poate schimba rolul.",
-    "ERR-115": "Eroare de bază de date. Încercați din nou mai târziu.",
     "ERR-116": "Trimiterea emailului a eșuat.",
     "ERR-216": "Codul QR nu a putut fi generat.",
     "ERR-217": "Codurile de check-in au fost deja generate pentru acest eveniment.",
