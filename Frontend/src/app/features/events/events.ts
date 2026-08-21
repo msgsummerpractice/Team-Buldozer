@@ -4,6 +4,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
 import { EventStatusEnum } from '@features/events/model/event-status';
+import {
+  EventCodesDialog,
+  EventCodesDialogData,
+} from '@features/events/event-details/components/event-codes-dialog';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { NotificationService } from '@core/notification/services/notification.service';
@@ -21,7 +25,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { EventDetailsDialog } from '@features/events/event-details/components/event-details-dialog';
+import {
+  EventDetailsDialog,
+  EventDetailsDialogData,
+} from '@features/events/event-details/components/event-details-dialog';
 import { CheckInDialog } from '@features/events/check-in/components/check-in-dialog';
 
 const EVENT_DETAILS_DIALOG_CONFIG = {
@@ -118,7 +125,6 @@ export class Events implements OnInit {
 
     combineLatest([this.route.paramMap, this.route.url])
       .pipe(
-        debounceTime(0),
         map(([params, urlSegments]): RouteDialogState => {
           const id = params.get('id');
           return {
@@ -164,7 +170,7 @@ export class Events implements OnInit {
   }
 
   private openEventDetailsDialogForRoute(id: number): void {
-    const ref = this.dialog.open(EventDetailsDialog, {
+    const ref = this.dialog.open<EventDetailsDialog, EventDetailsDialogData>(EventDetailsDialog, {
       ...EVENT_DETAILS_DIALOG_CONFIG,
       data: { id },
     });
@@ -232,6 +238,38 @@ export class Events implements OnInit {
     return (
       event.status === EventStatusEnum.DRAFT && new Date(event.endDateTime).getTime() > Date.now()
     );
+  }
+
+  protected canGenerateCodes(event: EventResponse): boolean {
+    return event.status === EventStatusEnum.PUBLISHED;
+  }
+
+  protected isCodeGenerated(event: EventResponse): boolean {
+    return event.codesGenerated;
+  }
+
+  protected onGenerateCodes(event: EventResponse): void {
+    this.eventService
+      .generateCodes(event.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this._events.update((list) =>
+            list.map((e) => (e.id === event.id ? { ...e, codesGenerated: true } : e))
+          );
+          this.notification.showSuccess('events.generate-codes-success');
+          this.onViewCodes(event);
+        },
+      });
+  }
+
+  protected onViewCodes(event: EventResponse): void {
+    this.dialog.open<EventCodesDialog, EventCodesDialogData>(EventCodesDialog, {
+      width: '440px',
+      autoFocus: 'dialog',
+      restoreFocus: true,
+      data: { id: event.id },
+    });
   }
 
   protected onComplete(event: EventResponse): void {

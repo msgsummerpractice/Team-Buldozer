@@ -17,7 +17,7 @@
           (input)="onSearchInput(searchInput.value)"
         />
         @if (inputValue()) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="onSearchInput('')">
+          <button matSuffix matIconButton aria-label="Clear" (click)="onSearchInput('')">
             <mat-icon>close</mat-icon>
           </button>
         }
@@ -137,7 +137,11 @@
               {{ 'users.manage' | transloco }}
             </th>
             <td mat-cell *matCellDef="let user">
-              <button mat-button [disabled]="isSaving(user.id)" (click)="openRolesDialog(user)">
+              <button
+                matButton="text"
+                [disabled]="isSaving(user.id)"
+                (click)="openRolesDialog(user)"
+              >
                 {{ 'users.manage-roles' | transloco }}
               </button>
             </td>

@@ -136,7 +136,10 @@
     "ERR-50": "Eroare internă de server. Încercați din nou mai târziu.",
     "ERR-51": "Eroare de bază de date. Încercați din nou mai târziu.",
     "ERR-52": "Serviciul este temporar indisponibil. Încercați din nou mai târziu.",
-    "ERR-99": "A apărut o eroare necunoscută. Încercați din nou."
+    "ERR-99": "A apărut o eroare necunoscută. Încercați din nou.",
+    "ERR-216": "Codul QR nu a putut fi generat.",
+    "ERR-217": "Codurile de check-in au fost deja generate pentru acest eveniment.",
+    "ERR-218": "Nu s-a putut genera un cod de check-in unic."
   },
   "success-messages": {
     "login-successful": "Autentificare reușită!",
@@ -146,6 +149,14 @@
     "close": "Închide",
     "ok": "OK",
     "cancel": "Anulează"
+  },
+  "event-codes": {
+    "dialog": {
+      "title": "Coduri de Check-in",
+      "check-in-code": "Cod de Check-in",
+      "qr-code": "Cod QR",
+      "error": "Nu s-au putut încărca codurile de check-in."
+    }
   },
   "event-details": {
     "dialog": {
@@ -234,6 +245,17 @@
       "title": "Publicare eveniment",
       "message": "Sigur dorești să publici „{{name}}”?",
       "warning": "Această acțiune este ireversibilă."
+    },
+    "generate-codes-tooltip": "Generează coduri de check-in",
+    "generate-codes-disabled-tooltip": "Codurile pot fi generate doar pentru evenimentele publicate",
+    "generate-codes-success": "Codurile de check-in au fost generate cu succes",
+    "view-codes-tooltip": "Vezi codurile de check-in",
+    "generate-codes": {
+      "title": "Generează Coduri",
+      "check-in-code": "Cod de Check-in",
+      "qr-code": "Cod QR",
+      "error": "Generarea codurilor a eșuat. Evenimentul poate să nu fie publicat sau codurile au fost deja generate.",
+      "back": "Înapoi la Evenimente"
     },
     "no-events": "Niciun eveniment găsit",
     "adjust": "Încearcă să ajustezi termenul de căutare pentru a găsi un eveniment potrivit.",

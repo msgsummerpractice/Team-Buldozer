@@ -18,4 +18,5 @@ export type EventResponse = {
   createdAt: string;
   poster?: string;
   createdById?: number;
+  codesGenerated: boolean;
 };
