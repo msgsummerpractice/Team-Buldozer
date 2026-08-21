@@ -25,12 +25,12 @@ public enum ErrorCode {
     ERR_41("Required parameter missing"),
     ERR_99("Unknown error"),
 
-    ERR_51("Event data is invalid"),
-
     ERR_110("Poster could not be read"),
     ERR_111("File is invalid"),
+    ERR_112("Event data is invalid"),
     ERR_113("Event is not editable"),
     ERR_114("Last admin can not be disabled or have its role changed ♥"),
+    ERR_115("Database error :("),
     ERR_116("Email delivery failed"),
     ERR_216("QR code could not be generated"),
     ERR_217("Codes were already generated for this event"),
