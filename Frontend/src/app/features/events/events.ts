@@ -125,7 +125,6 @@ export class Events implements OnInit {
 
     combineLatest([this.route.paramMap, this.route.url])
       .pipe(
-        debounceTime(0),
         map(([params, urlSegments]): RouteDialogState => {
           const id = params.get('id');
           return {

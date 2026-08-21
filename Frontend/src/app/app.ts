@@ -11,5 +11,9 @@ import { LoadingService } from '@core/loading/services/loading.service';
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly loadingService = inject(LoadingService);
+  private readonly loadingService = inject(LoadingService);
+
+  protected get isLoading() {
+    return this.loadingService.isLoading();
+  }
 }
