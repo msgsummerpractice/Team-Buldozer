@@ -21,7 +21,8 @@
     "nav": {
       "login": "Autentificare",
       "logout": "Deconectare",
-      "profile": "Profilul meu"
+      "profile": "Profilul meu",
+      "menu": "Meniu"
     },
     "card": {
       "title": "msg.Check-In",

@@ -4,6 +4,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import { AuthenticationDirective } from '@core/authentication/directives/authentication.directive';
@@ -21,6 +23,8 @@ import { UserRoleEnum } from '@core/users/model/user-role';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    MatMenuModule,
+    MatDividerModule,
     TranslocoPipe,
     AuthenticationDirective,
     RolesAssignedDirective,

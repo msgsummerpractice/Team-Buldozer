@@ -5,7 +5,8 @@
     </a>
   </div>
 
-  <div class="flex items-center px-4">
+  <!-- Desktop navigation -->
+  <div class="hidden md:flex items-center px-4">
     <button routerLinkActive="nav-link-active" routerLink="/home" matButton>
       {{ 'home.title' | transloco }}
     </button>
@@ -22,7 +23,8 @@
     </button>
   </div>
 
-  <div class="flex items-center gap-3">
+  <!-- Desktop actions -->
+  <div class="hidden md:flex items-center gap-3">
     <button *appAuth matIconButton (click)="logout()" [matTooltip]="'home.nav.logout' | transloco">
       <mat-icon>logout</mat-icon>
     </button>
@@ -48,5 +50,56 @@
         <img src="https://flagcdn.com/ro.svg" alt="Română" />
       }
     </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="md:hidden">
+    <button
+      matIconButton
+      [matMenuTriggerFor]="mobileMenu"
+      [attr.aria-label]="'home.nav.menu' | transloco"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #mobileMenu="matMenu">
+      <button mat-menu-item routerLink="/home">
+        <mat-icon>home</mat-icon>
+        <span>{{ 'home.title' | transloco }}</span>
+      </button>
+      <button *rolesAssigned="roles.ADMIN" mat-menu-item routerLink="/users">
+        <mat-icon>group</mat-icon>
+        <span>{{ 'users.title' | transloco }}</span>
+      </button>
+      <button *appAuth mat-menu-item routerLink="/events">
+        <mat-icon>event</mat-icon>
+        <span>{{ 'events.title' | transloco }}</span>
+      </button>
+
+      <mat-divider></mat-divider>
+
+      @if (!isAuthenticated()) {
+        <button mat-menu-item routerLink="/login">
+          <mat-icon>login</mat-icon>
+          <span>{{ 'home.nav.login' | transloco }}</span>
+        </button>
+      } @else {
+        <button mat-menu-item [routerLink]="profileLink()">
+          <mat-icon>person</mat-icon>
+          <span>{{ 'home.nav.profile' | transloco }}</span>
+        </button>
+      }
+      <button *appAuth mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>{{ 'home.nav.logout' | transloco }}</span>
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <button mat-menu-item (click)="toggleLang()">
+        <mat-icon>language</mat-icon>
+        <span>{{ 'toggle-lang' | transloco }}</span>
+      </button>
+    </mat-menu>
   </div>
 </mat-toolbar>
