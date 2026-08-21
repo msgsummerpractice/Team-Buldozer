@@ -1,9 +1,11 @@
 package com.example.CheckInApp.security;
 
+import com.example.CheckInApp.dto.request.ForgotPasswordRequest;
 import com.example.CheckInApp.dto.request.LoginRequest;
 import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.dto.response.LoginResponse;
 import com.example.CheckInApp.dto.response.UserResponse;
+import com.example.CheckInApp.service.PasswordResetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
@@ -30,6 +33,12 @@ public class AuthController {
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest request) {
         UserResponse response = authService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        passwordResetService.requestPasswordReset(request.getEmail());
+        return ResponseEntity.ok().build();
     }
 
 }

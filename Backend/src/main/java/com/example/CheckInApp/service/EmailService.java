@@ -113,6 +113,39 @@ public class EmailService {
         return data.length >= 4 && Arrays.equals(data, 0, 4, PNG_MAGIC, 0, 4) ? "image/png" : "image/jpeg";
     }
 
+    @Async
+    public void sendPasswordResetEmail(String email, String token) {
+        String resetUrl = frontendUrl + "/reset-password?token=" + token;
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(email);
+            helper.setSubject("Reset your password");
+            helper.setText(buildPasswordResetHtml(resetUrl), true);
+
+            mailSender.send(message);
+        } catch (MessagingException | MailException e) {
+            throw new EmailDeliveryException(List.of(email));
+        }
+    }
+
+    private String buildPasswordResetHtml(String resetUrl) {
+        return """
+                <html>
+                <body style="font-family: Arial, sans-serif;">
+                  <h2>Password Reset Request</h2>
+                  <p>We received a request to reset your password.</p>
+                  <p>Click the link below to set a new password. This link will expire in 15 minutes.</p>
+                  <p><a href="%s" style="display:inline-block;padding:10px 20px;background-color:#1976d2;color:#ffffff;text-decoration:none;border-radius:4px;">Reset Password</a></p>
+                  <p><a href="%s">%s</a></p>
+                  <p>If you didn't request a password reset, you can safely ignore this email.</p>
+                </body>
+                </html>
+                """.formatted(resetUrl, resetUrl, HtmlUtils.htmlEscape(resetUrl));
+    }
+
     private String buildHtmlBody(Event event) {
         String detailsUrl = frontendUrl + "/events/" + event.getId() + "/details";
         return """
