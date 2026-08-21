@@ -109,6 +109,31 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_218, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(InvalidCheckInCodeException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCheckInCode(InvalidCheckInCodeException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_219, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(NotRegisteredForEventException.class)
+    public ResponseEntity<ErrorResponse> handleNotRegisteredForEvent(NotRegisteredForEventException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_220, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(CheckInClosedException.class)
+    public ResponseEntity<ErrorResponse> handleCheckInClosed(CheckInClosedException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_221, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(InvalidQrCodeCheckInException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidQrCodeCheckIn(InvalidQrCodeCheckInException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_222, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(AlreadyCheckedInException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyCheckedIn(AlreadyCheckedInException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_223, ex.getMessage(), request);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
