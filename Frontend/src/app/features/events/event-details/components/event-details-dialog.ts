@@ -3,16 +3,26 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
-import { EventStatusEnum } from '@features/events/model/event-status';
 import { AuthorizationService } from '@core/authorization/services/authorization.service';
 import { UserRoleEnum } from '@core/users/model/user-role';
+import { NotificationService } from '@core/notification/services/notification.service';
+import { EventCodesDialog, EventCodesDialogData } from './event-codes-dialog';
+import { EventStatusEnum } from '@features/events/model/event-status';
+import { EMPTY } from 'rxjs/internal/observable/empty';
+import { catchError } from 'rxjs/internal/operators/catchError';
+
+export type EventDetailsDialogData = { id: number };
 
 @Component({
   selector: 'app-event-details-dialog',
@@ -21,7 +31,6 @@ import { UserRoleEnum } from '@core/users/model/user-role';
     MatButtonModule,
     MatDialogModule,
     MatIconModule,
-    MatProgressSpinnerModule,
     MatTooltipModule,
     TranslocoPipe,
   ],
@@ -30,39 +39,41 @@ import { UserRoleEnum } from '@core/users/model/user-role';
 export class EventDetailsDialog {
   private readonly dialogRef = inject(MatDialogRef<EventDetailsDialog>);
   private readonly eventService = inject(EventService);
-  private readonly dialogData = inject<{ id: number }>(MAT_DIALOG_DATA);
+  private readonly dialogData = inject<EventDetailsDialogData>(MAT_DIALOG_DATA);
   private readonly authorization = inject(AuthorizationService);
 
   readonly isMarketing = signal(this.authorization.hasAnyRole([UserRoleEnum.MARKETING]));
   protected readonly EventStatusEnum = EventStatusEnum;
-
+  private readonly dialog = inject(MatDialog);
+  private readonly notification = inject(NotificationService);
   // Base64 prefix of a PNG file signature (\x89PNG\r\n\x1a\n)
   private readonly PNG_BASE64_PREFIX = 'iVBORw0KGgo';
 
   readonly event = signal<EventResponse | null>(null);
-  readonly loading = signal(true);
   readonly errorTranslationKey = signal<string | null>(null);
+  readonly codesGenerated = signal(false);
+
   readonly descriptionExpanded = signal(false);
 
   constructor() {
     this.eventService
       .getEventById(this.dialogData.id)
-      .pipe(takeUntilDestroyed())
-      .subscribe({
-        next: (data) => {
-          this.event.set(data);
-          this.errorTranslationKey.set(null);
-          this.loading.set(false);
-        },
-        error: (err: HttpErrorResponse) => {
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
           if ([401, 403, 404].includes(err.status)) {
             this.dialogRef.close();
           } else {
             this.event.set(null);
             this.errorTranslationKey.set('event-details.dialog.error');
-            this.loading.set(false);
           }
-        },
+          return EMPTY;
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe((data) => {
+        this.event.set(data);
+        this.codesGenerated.set(data.codesGenerated);
+        this.errorTranslationKey.set(null);
       });
   }
 
@@ -94,6 +105,32 @@ export class EventDetailsDialog {
 
   protected close(): void {
     this.dialogRef.close();
+  }
+
+  protected canGenerateCodes(): boolean {
+    const event = this.event();
+    return !!event && event.status === EventStatusEnum.PUBLISHED && !this.codesGenerated();
+  }
+
+  protected onGenerateCodes(): void {
+    const event = this.event();
+    if (!event) return;
+    this.eventService.generateCodes(event.id).subscribe(() => {
+      this.codesGenerated.set(true);
+      this.notification.showSuccess('events.generate-codes-success');
+      this.onViewCodes();
+    });
+  }
+
+  protected onViewCodes(): void {
+    const event = this.event();
+    if (!event) return;
+    this.dialog.open<EventCodesDialog, EventCodesDialogData>(EventCodesDialog, {
+      width: '440px',
+      autoFocus: 'dialog',
+      restoreFocus: true,
+      data: { id: event.id },
+    });
   }
 
   protected editEvent(): void {

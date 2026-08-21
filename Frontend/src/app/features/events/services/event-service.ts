@@ -6,6 +6,7 @@ import { environment } from '@environments/environment';
 import { EventRequest } from '@features/events/model/event-request';
 import { EventUpdateRequest } from '@features/events/model/event-update-request';
 import { CreateEventResponse } from '@features/events/model/create-event-response';
+import { EventCodesResponse } from '@features/events/model/event-codes-response';
 
 @Service()
 export class EventService {
@@ -38,5 +39,13 @@ export class EventService {
 
   publishEvent(id: number): Observable<EventResponse> {
     return this.http.patch<EventResponse>(`${this.eventsUrl}/${id}/publish`, null);
+  }
+
+  generateCodes(id: number): Observable<EventCodesResponse> {
+    return this.http.post<EventCodesResponse>(`${this.eventsUrl}/${id}/codes`, null);
+  }
+
+  getEventCodes(id: number): Observable<EventCodesResponse> {
+    return this.http.get<EventCodesResponse>(`${this.eventsUrl}/${id}/codes`);
   }
 }

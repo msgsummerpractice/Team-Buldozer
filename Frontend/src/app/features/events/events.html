@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between mb-4">
     <h1 class="font-bold text-3xl">{{ 'events.manage-title' | transloco }}</h1>
     @if (isMarketing()) {
-      <button mat-flat-button color="primary" routerLink="/events/add">
+      <button matButton="filled" color="primary" routerLink="/events/add">
         <mat-icon>add</mat-icon>
         {{ 'events.create.title' | transloco }}
       </button>
@@ -140,7 +140,7 @@
             </th>
             <td mat-cell *matCellDef="let event" class="text-center">
               <button
-                mat-icon-button
+                matIconButton
                 [routerLink]="['/events', event.id, 'details']"
                 [matTooltip]="'events.view-details' | transloco"
               >
@@ -157,7 +157,7 @@
                   "
                 >
                   <button
-                    mat-icon-button
+                    matIconButton
                     color="accent"
                     [disabled]="!canPublish(event)"
                     (click)="onPublish(event)"
@@ -175,7 +175,7 @@
                   "
                 >
                   <button
-                    mat-icon-button
+                    matIconButton
                     color="accent"
                     [disabled]="!canComplete(event)"
                     (click)="onComplete(event)"
@@ -189,7 +189,7 @@
                 @let checkInTooltip =
                   checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
                 <button
-                  mat-icon-button
+                  matIconButton
                   color="primary"
                   [matTooltip]="checkInTooltip | transloco"
                   [disabled]="!checkIn"

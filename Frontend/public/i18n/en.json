@@ -136,7 +136,10 @@
     "ERR-50": "Internal server error. Please try again later.",
     "ERR-51": "Database error. Please try again later.",
     "ERR-52": "Service is temporarily unavailable. Please try again later.",
-    "ERR-99": "An unknown error occurred. Please try again."
+    "ERR-99": "An unknown error occurred. Please try again.",
+    "ERR-216": "QR code could not be generated.",
+    "ERR-217": "Check-in codes have already been generated for this event.",
+    "ERR-218": "Could not generate a unique check-in code."
   },
   "success-messages": {
     "login-successful": "Login successful!",
@@ -147,6 +150,14 @@
     "ok": "OK",
     "cancel": "Cancel"
   },
+  "event-codes": {
+    "dialog": {
+      "title": "Check-in codes",
+      "check-in-code": "Check-in code",
+      "qr-code": "QR code",
+      "error": "Failed to load check-in codes."
+    }
+  },
   "event-details": {
     "dialog": {
       "title": "Event Details",
@@ -155,9 +166,9 @@
       "description": "Description",
       "start-date": "Start Date",
       "end-date": "End Date",
-      "registration-start": "Registration Start",
-      "registration-end": "Registration End",
-      "registration-period": "Registration Period",
+      "registration-start": "Registration start",
+      "registration-end": "Registration end",
+      "registration-period": "Registration period",
       "location": "Location",
       "address": "Address",
       "status": "Status",
@@ -234,6 +245,17 @@
       "title": "Publish event",
       "message": "Are you sure you want to publish \"{{name}}\"?",
       "warning": "This action cannot be undone."
+    },
+    "generate-codes-tooltip": "Generate check-in codes",
+    "generate-codes-disabled-tooltip": "Codes can only be generated for published events",
+    "generate-codes-success": "Check-in codes generated successfully",
+    "view-codes-tooltip": "View check-in codes",
+    "generate-codes": {
+      "title": "Generate Codes",
+      "check-in-code": "Check-in Code",
+      "qr-code": "QR Code",
+      "error": "Failed to generate codes. The event may not be published or codes were already generated.",
+      "back": "Back to Events"
     },
     "no-events": "No events found",
     "adjust": "Try adjusting the search term to find a matching event.",

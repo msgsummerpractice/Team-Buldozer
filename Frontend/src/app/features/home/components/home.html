@@ -1,11 +1,13 @@
-<section class="landing-section min-h-[calc(100vh-64px)] bg-cover bg-no-repeat flex items-center px-6 py-8 sm:px-20 sm:py-12">
+<section
+  class="landing-section min-h-[calc(100vh-64px)] bg-cover bg-no-repeat flex items-center px-6 py-8 sm:px-20 sm:py-12"
+>
   <div class="landing-card flex flex-col gap-5">
     <h1 class="landing-title">{{ 'home.card.title' | transloco }}</h1>
     <p class="landing-subtitle">{{ 'home.card.subtitle' | transloco }}</p>
 
     @if (!auth.isAuthenticated()) {
       <div class="flex flex-wrap gap-2.5 items-center mt-1 justify-end">
-        <button mat-flat-button routerLink="/login" class="landing-btn">
+        <button matButton="filled" routerLink="/login" class="landing-btn">
           {{ 'home.actions.login' | transloco }}
           <mat-icon iconPositionEnd>arrow_forward</mat-icon>
         </button>
@@ -13,20 +15,20 @@
     } @else {
       <div class="flex flex-wrap gap-2.5 items-center mt-1">
         <ng-container *rolesAssigned="roles.MARKETING">
-          <button mat-flat-button routerLink="/events/add" class="landing-btn">
+          <button matButton="filled" routerLink="/events/add" class="landing-btn">
             <mat-icon>add_circle</mat-icon>
             {{ 'home.actions.create-event' | transloco }}
           </button>
         </ng-container>
 
         <ng-container *rolesAssigned="roles.ADMIN">
-          <button mat-flat-button routerLink="/users" class="landing-btn">
+          <button matButton="filled" routerLink="/users" class="landing-btn">
             <mat-icon>group</mat-icon>
             {{ 'home.actions.see-users' | transloco }}
           </button>
         </ng-container>
 
-        <button mat-stroked-button routerLink="/events" class="landing-btn">
+        <button matButton="outlined" routerLink="/events" class="landing-btn">
           <mat-icon>event</mat-icon>
           {{ 'home.actions.see-events' | transloco }}
         </button>

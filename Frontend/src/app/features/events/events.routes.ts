@@ -32,6 +32,17 @@ export const eventsRoutes: Routes = [
             loadComponent: () => import('@features/events/events').then((m) => m.Events),
           },
           {
+            path: 'codes',
+            loadComponent: () => import('@features/events/events').then((m) => m.Events),
+            canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
+          },
+          {
+            path: 'generate-codes',
+            loadComponent: () =>
+              import('@features/events/generate-codes/generate-codes').then((m) => m.GenerateCodes),
+            canActivate: [authGuard, authorizationGuard([UserRoleEnum.MARKETING])],
+          },
+          {
             path: 'checkin',
             loadComponent: () => import('@features/events/events').then((m) => m.Events),
           },

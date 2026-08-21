@@ -150,20 +150,29 @@
   </mat-dialog-content>
 } @else {
   <mat-dialog-content class="w-full !p-0 !mt-0 !mb-0">
-    @if (loading()) {
-      <div class="flex justify-center items-center h-64">
-        <mat-spinner diameter="48" />
-      </div>
-    } @else if (errorTranslationKey()) {
+    @if (errorTranslationKey()) {
       <p class="text-sm text-red-500 p-6">{{ errorTranslationKey() | transloco }}</p>
     }
   </mat-dialog-content>
 }
 
-<mat-dialog-actions align="end" class="gap-2">
-  <button mat-button type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
+<mat-dialog-actions align="end" class="mt-4">
+  @if (isMarketing() && event()) {
+    @if (codesGenerated()) {
+      <button matButton="text" type="button" (click)="onViewCodes()">
+        <mat-icon>visibility</mat-icon>
+        {{ 'events.view-codes-tooltip' | transloco }}
+      </button>
+    } @else if (canGenerateCodes()) {
+      <button matButton="text" type="button" (click)="onGenerateCodes()">
+        <mat-icon>qr_code</mat-icon>
+        {{ 'events.generate-codes-tooltip' | transloco }}
+      </button>
+    }
+  }
+  <button matButton="text" type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
   @if (isMarketing() && event()?.status === EventStatusEnum.DRAFT) {
-    <button mat-stroked-button type="button" (click)="editEvent()">
+    <button matButton="outlined" type="button" (click)="editEvent()">
       <mat-icon>edit</mat-icon>
       {{ 'events.edit.title' | transloco }}
     </button>
@@ -171,7 +180,7 @@
   @if (event()) {
     @let checkInTooltip = isCheckInDisabled() ? ('check-in.button-ended-tooltip' | transloco) : '';
     <span [matTooltip]="checkInTooltip">
-      <button mat-flat-button type="button" (click)="checkIn()" [disabled]="isCheckInDisabled()">
+      <button matButton="filled" type="button" (click)="checkIn()" [disabled]="isCheckInDisabled()">
         <mat-icon>how_to_reg</mat-icon>
         {{ 'check-in.button' | transloco }}
       </button>

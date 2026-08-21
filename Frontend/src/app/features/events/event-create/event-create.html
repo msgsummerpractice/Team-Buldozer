@@ -240,7 +240,7 @@
                 class="max-w-[420px] w-full aspect-[21/9] rounded-xl object-cover border border-slate-200 shadow-sm"
               />
               <button
-                mat-mini-fab
+                matMiniFab
                 color="warn"
                 type="button"
                 (click)="removePoster()"
@@ -255,11 +255,11 @@
     </mat-card-content>
 
     <div class="flex justify-end items-center gap-3 p-6 pt-0">
-      <button mat-button type="button" routerLink="/events" class="text-slate-600">
+      <button matButton="text" type="button" routerLink="/events" class="text-slate-600">
         {{ 'events.actions.cancel' | transloco }}
       </button>
       <button
-        matButton
+        matButton="filled"
         color="primary"
         type="submit"
         form="eventCreateForm"

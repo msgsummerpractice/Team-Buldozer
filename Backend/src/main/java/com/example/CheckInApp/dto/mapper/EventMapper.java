@@ -46,6 +46,7 @@ public class EventMapper {
                 .createdById(event.getCreatedBy() != null ? event.getCreatedBy().getId() : null)
                 .foodProvided(event.getFoodProvided())
                 .createdAt(event.getCreatedAt())
+                .codesGenerated(event.getCheckInCode() != null)
                 .build();
     }
 
