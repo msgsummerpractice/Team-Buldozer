@@ -17,6 +17,7 @@
     "failed": "Check-in failed. Please try again."
   },
   "home": {
+    "title": "Home",
     "nav": {
       "login": "Login",
       "logout": "Logout",

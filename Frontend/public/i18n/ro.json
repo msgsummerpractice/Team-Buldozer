@@ -17,6 +17,7 @@
     "failed": "Check-in eșuat. Vă rugăm să încercați din nou."
   },
   "home": {
+    "title": "Acasă",
     "nav": {
       "login": "Autentificare",
       "logout": "Deconectare",

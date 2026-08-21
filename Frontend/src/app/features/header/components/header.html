@@ -1,13 +1,25 @@
-<mat-toolbar class="app-toolbar justify-between sticky top-0 z-50 px-4">
-  <a routerLink="/" class="no-underline">
-    <img src="assets/images/msg_logo.png" alt="logo" class="h-8 logo-white" />
-  </a>
+<mat-toolbar class="app-toolbar justify-between sticky top-0 z-50 px-6">
+  <div class="logo-container">
+    <a routerLink="/" class="no-underline">
+      <img src="assets/images/msg_logo.png" alt="logo" class="object-contain logo-white" />
+    </a>
+  </div>
 
-  <div class="flex justify-start items-center w-full h-full px-4">
-    <button *rolesAssigned="roles.ADMIN" matButton routerLink="/users">
+  <div class="flex items-center px-4">
+    <button routerLinkActive="nav-link-active" routerLink="/home" matButton>
+      {{ 'home.title' | transloco }}
+    </button>
+    <button
+      routerLinkActive="nav-link-active"
+      *rolesAssigned="roles.ADMIN"
+      matButton
+      routerLink="/users"
+    >
       {{ 'users.title' | transloco }}
     </button>
-    <button *appAuth matButton routerLink="/events">{{ 'events.title' | transloco }}</button>
+    <button routerLinkActive="nav-link-active" *appAuth matButton routerLink="/events">
+      {{ 'events.title' | transloco }}
+    </button>
   </div>
 
   <div class="flex items-center gap-3">

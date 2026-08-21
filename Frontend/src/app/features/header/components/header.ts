@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink, UrlTree } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, UrlTree } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,6 +24,7 @@ import { UserRoleEnum } from '@core/users/model/user-role';
     TranslocoPipe,
     AuthenticationDirective,
     RolesAssignedDirective,
+    RouterLinkActive,
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
