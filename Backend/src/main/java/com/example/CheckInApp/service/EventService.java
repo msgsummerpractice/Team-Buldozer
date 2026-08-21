@@ -45,8 +45,8 @@ import java.util.List;
 public class EventService {
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
-    private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
-    private static final byte[] PNG_SIGNATURE = {(byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47};
+    private static final byte[] JPEG_SIGNATURE = { (byte) 0xFF, (byte) 0xD8, (byte) 0xFF };
+    private static final byte[] PNG_SIGNATURE = { (byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47 };
     private static final int MAX_CHECK_IN_CODE_ATTEMPTS = 3;
     private static final int QR_CODE_SIZE = 300;
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -102,7 +102,8 @@ public class EventService {
     public boolean isEventVisibleTo(Event event, User user) {
         EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
         return event.getStatus() == EventStatus.PUBLISHED &&
-                (event.getLocation() == userLocation || event.getLocation() == EventLocation.ALL);
+                (event.getLocation() == userLocation || event.getLocation() == EventLocation.ALL) &&
+                !event.getRegistrationEndDate().isBefore(LocalDate.now());
     }
 
     @Transactional
@@ -238,8 +239,6 @@ public class EventService {
         }
     }
 
-    
-
     @Transactional
     public EventCodesResponse generateCodes(Long eventId) {
         Event event = eventRepository.findById(eventId)
@@ -292,7 +291,8 @@ public class EventService {
         }
 
         if (event.getCheckInCode() == null || event.getQrCode() == null) {
-            throw new ResourceNotFoundException("Check-in codes have not been generated yet for event with id " + eventId);
+            throw new ResourceNotFoundException(
+                    "Check-in codes have not been generated yet for event with id " + eventId);
         }
 
         return new EventCodesResponse(event.getCheckInCode(), Base64.getEncoder().encodeToString(event.getQrCode()));
@@ -317,18 +317,18 @@ public class EventService {
                 .map(eventMapper::toResponse)
                 .toList();
     }
-    
+
     @Transactional
     public EventResponse publishEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
- 
+
         if (event.getStatus() != EventStatus.DRAFT) {
             throw new EventNotEditableException("Only DRAFT events can be published.");
         }
- 
+
         event.setStatus(EventStatus.PUBLISHED);
- 
+
         Event saved = eventRepository.save(event);
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
