@@ -25,6 +25,11 @@
   filter: brightness(0) invert(1);
 }
 
+.logo-container {
+  width: clamp(4rem, 8vw, 5.5rem);
+  flex-shrink: 0;
+}
+
 .lang-flag-btn {
   width: 36px;
   height: 36px;

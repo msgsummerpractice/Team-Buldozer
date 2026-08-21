@@ -13,14 +13,15 @@
     "camera-denied": "Camera access was denied.",
     "invalid-code": "Invalid check-in code format.",
     "wrong-event": "This code belongs to a different event.",
-    "success": "Check-in successful!",
-    "failed": "Check-in failed. Please try again."
+    "success": "Check-in successful!"
   },
   "home": {
+    "title": "Home",
     "nav": {
       "login": "Login",
       "logout": "Logout",
-      "profile": "My profile"
+      "profile": "My profile",
+      "menu": "Menu"
     },
     "card": {
       "title": "msg.Check-In",
@@ -137,9 +138,21 @@
     "ERR-51": "Database error. Please try again later.",
     "ERR-52": "Service is temporarily unavailable. Please try again later.",
     "ERR-99": "An unknown error occurred. Please try again.",
+    "ERR-110": "Poster could not be read.",
+    "ERR-111": "File is invalid.",
+    "ERR-112": "Event data is invalid.",
+    "ERR-113": "This event cannot be edited or changed right now.",
+    "ERR-114": "Last admin cannot be disabled or have its role changed.",
+    "ERR-115": "Database error. Please try again later.",
+    "ERR-116": "Email delivery failed.",
     "ERR-216": "QR code could not be generated.",
     "ERR-217": "Check-in codes have already been generated for this event.",
-    "ERR-218": "Could not generate a unique check-in code."
+    "ERR-218": "Could not generate a unique check-in code.",
+    "ERR-219": "Invalid check-in code.",
+    "ERR-220": "You are not registered for this event.",
+    "ERR-221": "Check-in is closed for this event.",
+    "ERR-222": "Invalid QR code.",
+    "ERR-223": "You are already checked in for this event."
   },
   "success-messages": {
     "login-successful": "Login successful!",
@@ -308,20 +321,24 @@
       "start-date-time": {
         "label": "Start Date",
         "errors": {
-          "required": "Start date is required"
+          "required": "Start date is required",
+          "in-past": "Start date & time must be in the future",
+          "max-year": "Start date must be within the current year"
         }
       },
       "start-time": {
         "label": "Start Time",
         "errors": {
-          "required": "Start time is required"
+          "required": "Start time is required",
+          "in-past": "Start date & time must be in the future"
         }
       },
       "end-date-time": {
         "label": "End Date",
         "errors": {
           "required": "End date is required",
-          "invalid-range": "End date & time must be scheduled after start date & time"
+          "invalid-range": "End date & time must be after start date & time",
+          "max-year": "End date must be within the current year"
         }
       },
       "end-time": {
@@ -333,14 +350,17 @@
       "registration-start-date": {
         "label": "Registration Start Date",
         "errors": {
-          "required": "Registration start date is required"
+          "required": "Registration start date is required",
+          "in-past": "Registration start date cannot be in the past",
+          "max-year": "Registration start date must be within the current year"
         }
       },
       "registration-end-date": {
         "label": "Registration End Date",
         "errors": {
           "required": "Registration end date is required",
-          "invalid-range": "Registration end date must be on or after registration start date"
+          "invalid-range": "Registration end date must be on or after registration start date",
+          "max-year": "Registration end date must be within the current year"
         }
       },
       "address": {
@@ -384,6 +404,7 @@
     },
     "actions": {
       "title": "Actions",
+      "back": "Back",
       "cancel": "Cancel",
       "save": "Save Event"
     },
