@@ -1,6 +1,6 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Service, computed, signal } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class LoadingService {
   private readonly activeRequests = signal(0);
   readonly isLoading = computed(() => this.activeRequests() > 0);
