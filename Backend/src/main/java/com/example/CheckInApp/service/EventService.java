@@ -309,8 +309,9 @@ public class EventService {
             events = eventRepository.findAllByOrderByStartDateTimeDesc();
         } else {
             EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
-            events = eventRepository.findByStatusAndLocationInOrderByStartDateTimeDesc(
-                    EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL));
+            events = eventRepository
+                    .findByStatusAndLocationInAndRegistrationEndDateGreaterThanEqualOrderByStartDateTimeDesc(
+                            EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), LocalDate.now());
         }
 
         return events.stream()
