@@ -28,7 +28,14 @@ VALUES (1, 'Summer Tech Meetup', 'CLUJ',
         '2026-08-20', '2026-09-20',
         'Str. Memorandumului 28, Cluj-Napoca',
         'Celebrating the launch of our newest product with the whole team.',
-        6, true, '2026-08-15 09:00:00', NULL)
+        6, true, '2026-08-15 09:00:00', NULL),
+       (5, 'Q2 Retrospective', 'ALL',
+        '2026-01-01 14:00:00', '2026-01-02 16:00:00',
+        'INTERNAL', 'PUBLISHED', NULL,
+        '2026-07-01', '2026-08-01',
+        'Bd. Michelangelo 2, Timisoara',
+        'Team retrospective for Q2 results and lessons learned.',
+        2, false, '2026-07-01 08:00:00', NULL)
 ON CONFLICT (id) DO NOTHING;
 
 SELECT setval(pg_get_serial_sequence('events', 'id'), coalesce(max(id), 1))

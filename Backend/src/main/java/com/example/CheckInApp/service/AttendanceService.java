@@ -78,4 +78,15 @@ public class AttendanceService {
         return new CheckInResponse(event.getId(), event.getName(), attendanceRecord.getCheckedInTime());
     }
 
+    @Transactional(readOnly = true)
+    public boolean getAttendanceStatus(Long eventId, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
+        AttendanceRecord record = attendanceRecordRepository.findByEventIdAndUserId(eventId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User is not registered for event " + eventId));
+
+        return record.isCheckedIn();
+    }
+
 }
