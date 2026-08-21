@@ -29,10 +29,6 @@ export class EventService {
     return this.http.patch<EventResponse>(`${this.eventsUrl}/${id}/complete`, null);
   }
 
-  checkInEvent(eventId: number, code: string): Observable<void> {
-    return this.http.post<void>(`${this.eventsUrl}/${eventId}/checkin`, { code });
-  }
-
   getAllEvents(): Observable<EventResponse[]> {
     return this.http.get<EventResponse[]>(this.eventsUrl);
   }

@@ -1,17 +1,26 @@
-<div class="w-full flex justify-center items-start py-10 px-4">
-  <mat-card class="w-full max-w-4xl">
-    <div class="px-6 pt-6 pb-4">
+<div class="w-full h-[calc(100dvh-64px)] flex justify-center pt-4 pb-4 px-4 overflow-hidden">
+  <mat-card class="w-full max-w-4xl h-full flex flex-col overflow-hidden">
+    <div class="px-6 pt-6 pb-4 flex items-center gap-3 shrink-0">
+      <button
+        matIconButton
+        type="button"
+        (click)="goBack()"
+        [matTooltip]="'events.actions.back' | transloco"
+        [attr.aria-label]="'events.actions.back' | transloco"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
       <h2 class="text-3xl font-bold">
         {{ (isEditMode() ? 'events.edit.title' : 'events.create.title') | transloco }}
       </h2>
     </div>
 
-    <mat-card-content class="p-6">
+    <mat-card-content class="p-6 flex-1 overflow-y-auto min-h-0">
       <form
         id="eventCreateForm"
         [formGroup]="eventForm"
         (ngSubmit)="onSubmit()"
-        class="grid grid-cols-1 md:grid-cols-2 gap-4"
+        class="grid grid-cols-1 md:grid-cols-2 gap-5"
       >
         <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full">
           <mat-label>{{ 'events.fields.name.label' | transloco }}</mat-label>
@@ -58,12 +67,31 @@
         <div class="col-span-1 grid grid-cols-2 gap-2">
           <mat-form-field appearance="outline">
             <mat-label>{{ 'events.fields.start-date-time.label' | transloco }}</mat-label>
-            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" />
+            <input
+              matInput
+              [matDatepicker]="startDatePicker"
+              [min]="today"
+              [max]="maxDate"
+              formControlName="startDate"
+            />
             <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #startDatePicker></mat-datepicker>
             @if (eventForm.get('startDate')?.hasError('required')) {
               <mat-error>
                 {{ 'events.fields.start-date-time.errors.required' | transloco }}
+              </mat-error>
+            }
+            @if (
+              eventForm.get('startDate')?.hasError('eventStartInPast') ||
+              eventForm.get('startDate')?.hasError('matDatepickerMin')
+            ) {
+              <mat-error>
+                {{ 'events.fields.start-date-time.errors.in-past' | transloco }}
+              </mat-error>
+            }
+            @if (eventForm.get('startDate')?.hasError('matDatepickerMax')) {
+              <mat-error>
+                {{ 'events.fields.start-date-time.errors.max-year' | transloco }}
               </mat-error>
             }
           </mat-form-field>
@@ -75,13 +103,22 @@
             @if (eventForm.get('startTime')?.hasError('required')) {
               <mat-error>{{ 'events.fields.start-time.errors.required' | transloco }}</mat-error>
             }
+            @if (eventForm.get('startTime')?.hasError('eventStartInPast')) {
+              <mat-error>{{ 'events.fields.start-time.errors.in-past' | transloco }}</mat-error>
+            }
           </mat-form-field>
         </div>
 
         <div class="col-span-1 grid grid-cols-2 gap-2">
           <mat-form-field appearance="outline">
             <mat-label>{{ 'events.fields.end-date-time.label' | transloco }}</mat-label>
-            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" />
+            <input
+              matInput
+              [matDatepicker]="endDatePicker"
+              [min]="today"
+              [max]="maxDate"
+              formControlName="endDate"
+            />
             <mat-datepicker-toggle matIconSuffix [for]="endDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #endDatePicker></mat-datepicker>
             @if (eventForm.get('endDate')?.hasError('required')) {
@@ -93,6 +130,11 @@
             ) {
               <mat-error>
                 {{ 'events.fields.end-date-time.errors.invalid-range' | transloco }}
+              </mat-error>
+            }
+            @if (eventForm.get('endDate')?.hasError('matDatepickerMax')) {
+              <mat-error>
+                {{ 'events.fields.end-date-time.errors.max-year' | transloco }}
               </mat-error>
             }
           </mat-form-field>
@@ -112,6 +154,8 @@
           <input
             matInput
             [matDatepicker]="registrationStartPicker"
+            [min]="today"
+            [max]="maxDate"
             formControlName="registrationStartDate"
           />
           <mat-datepicker-toggle
@@ -124,6 +168,19 @@
               {{ 'events.fields.registration-start-date.errors.required' | transloco }}
             </mat-error>
           }
+          @if (
+            eventForm.get('registrationStartDate')?.hasError('registrationStartInPast') ||
+            eventForm.get('registrationStartDate')?.hasError('matDatepickerMin')
+          ) {
+            <mat-error>
+              {{ 'events.fields.registration-start-date.errors.in-past' | transloco }}
+            </mat-error>
+          }
+          @if (eventForm.get('registrationStartDate')?.hasError('matDatepickerMax')) {
+            <mat-error>
+              {{ 'events.fields.registration-start-date.errors.max-year' | transloco }}
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-span-1 w-full">
@@ -131,6 +188,8 @@
           <input
             matInput
             [matDatepicker]="registrationEndPicker"
+            [min]="today"
+            [max]="maxDate"
             formControlName="registrationEndDate"
           />
           <mat-datepicker-toggle
@@ -149,6 +208,11 @@
           ) {
             <mat-error>
               {{ 'events.fields.registration-end-date.errors.invalid-range' | transloco }}
+            </mat-error>
+          }
+          @if (eventForm.get('registrationEndDate')?.hasError('matDatepickerMax')) {
+            <mat-error>
+              {{ 'events.fields.registration-end-date.errors.max-year' | transloco }}
             </mat-error>
           }
         </mat-form-field>
@@ -254,7 +318,7 @@
       </form>
     </mat-card-content>
 
-    <div class="flex justify-end items-center gap-3 p-6 pt-0">
+    <div class="flex justify-end items-center gap-3 p-6 pt-4 shrink-0 border-t border-slate-200">
       <button matButton="text" type="button" routerLink="/events" class="text-slate-600">
         {{ 'events.actions.cancel' | transloco }}
       </button>

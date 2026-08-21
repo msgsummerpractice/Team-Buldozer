@@ -156,7 +156,7 @@
   </mat-dialog-content>
 }
 
-<mat-dialog-actions align="end" class="mt-4">
+<mat-dialog-actions align="end" class="mt-4 gap-3">
   @if (isMarketing() && event()) {
     @if (codesGenerated()) {
       <button matButton="text" type="button" (click)="onViewCodes()">
@@ -170,7 +170,6 @@
       </button>
     }
   }
-  <button matButton="text" type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
   @if (isMarketing() && event()?.status === EventStatusEnum.DRAFT) {
     <button matButton="outlined" type="button" (click)="editEvent()">
       <mat-icon>edit</mat-icon>

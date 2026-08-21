@@ -10,6 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 import { EventType, EventTypeEnum } from '@features/events/model/event-type';
 import { EventLocation, EventLocationEnum } from '@features/events/model/event-location';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -23,7 +24,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDivider } from '@angular/material/list';
-import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
@@ -31,6 +33,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import {
   combineDateAndTime,
   eventDateRangeValidator,
+  futureEventStartValidator,
+  futureRegistrationStartValidator,
   parseDate,
   registrationDateRangeValidator,
   toDateString,
@@ -69,6 +73,8 @@ interface EventFormControls {
     MatDivider,
     ReactiveFormsModule,
     MatMiniFabButton,
+    MatIconButton,
+    MatTooltip,
     MatInput,
     MatButton,
     MatDatepickerModule,
@@ -87,6 +93,7 @@ export class EventCreate implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
   readonly selectedFile = signal<File | null>(null);
   readonly posterBase64 = signal<string | null>(null);
@@ -99,6 +106,8 @@ export class EventCreate implements OnInit {
 
   readonly maxFileSize = 5 * 1024 * 1024;
   readonly allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  readonly today = new Date();
+  readonly maxDate = new Date(new Date().getFullYear(), 11, 31);
 
   readonly eventTypes: EventType[] = Object.values(EventTypeEnum);
   readonly eventType = EventTypeEnum;
@@ -116,11 +125,20 @@ export class EventCreate implements OnInit {
     ]),
     type: this.fb.control<EventType>(EventTypeEnum.LOCAL, Validators.required),
     location: this.fb.control<EventLocation>(EventLocationEnum.CLUJ, Validators.required),
-    startDate: this.fb.control<Date | null>(null, Validators.required),
-    startTime: this.fb.control<Date | null>(null, Validators.required),
+    startDate: this.fb.control<Date | null>(null, [
+      Validators.required,
+      futureEventStartValidator,
+    ]),
+    startTime: this.fb.control<Date | null>(null, [
+      Validators.required,
+      futureEventStartValidator,
+    ]),
     endDate: this.fb.control<Date | null>(null, [Validators.required, eventDateRangeValidator]),
     endTime: this.fb.control<Date | null>(null, [Validators.required, eventDateRangeValidator]),
-    registrationStartDate: this.fb.control<Date | null>(null, Validators.required),
+    registrationStartDate: this.fb.control<Date | null>(null, [
+      Validators.required,
+      futureRegistrationStartValidator,
+    ]),
     registrationEndDate: this.fb.control<Date | null>(null, [
       Validators.required,
       registrationDateRangeValidator,
@@ -200,6 +218,8 @@ export class EventCreate implements OnInit {
   }
 
   private setupDateRangeRevalidation(): void {
+    const startDate = this.eventForm.get('startDate');
+    const startTime = this.eventForm.get('startTime');
     const endDate = this.eventForm.get('endDate');
     const endTime = this.eventForm.get('endTime');
     const registrationEndDate = this.eventForm.get('registrationEndDate');
@@ -209,6 +229,12 @@ export class EventCreate implements OnInit {
         .get(name)
         ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
+          if (name !== 'startDate') {
+            startDate?.updateValueAndValidity({ emitEvent: false });
+          }
+          if (name !== 'startTime') {
+            startTime?.updateValueAndValidity({ emitEvent: false });
+          }
           if (name !== 'endDate') {
             endDate?.updateValueAndValidity({ emitEvent: false });
           }
@@ -361,6 +387,10 @@ export class EventCreate implements OnInit {
     this.imagePreview.set(null);
     this.posterBase64.set(null);
     this.posterChanged.set(true);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   onSubmit(): void {

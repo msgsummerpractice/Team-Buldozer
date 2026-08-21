@@ -35,7 +35,7 @@
         </button>
       </mat-form-field>
 
-      <div class="overflow-auto rounded bg-(--mat-sys-primary)">
+      <div class="hidden md:block overflow-auto rounded bg-(--mat-sys-primary)">
         <table mat-table [dataSource]="paginatedEvents()" class="w-full app-table">
           <ng-container matColumnDef="name">
             <th
@@ -188,15 +188,16 @@
                 @let checkIn = canCheckIn(event);
                 @let checkInTooltip =
                   checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
-                <button
-                  matIconButton
-                  color="primary"
-                  [matTooltip]="checkInTooltip | transloco"
-                  [disabled]="!checkIn"
-                  (click)="onCheckIn(event)"
-                >
-                  <mat-icon>how_to_reg</mat-icon>
-                </button>
+                <span [matTooltip]="checkInTooltip | transloco">
+                  <button
+                    matIconButton
+                    color="primary"
+                    [disabled]="!checkIn"
+                    (click)="onCheckIn(event)"
+                  >
+                    <mat-icon>qr_code</mat-icon>
+                  </button>
+                </span>
               }
             </td>
           </ng-container>
@@ -218,6 +219,130 @@
             </td>
           </tr>
         </table>
+      </div>
+
+      <div class="md:hidden flex flex-col gap-5">
+        <div class="flex justify-end">
+          <button matButton="text" (click)="toggleSort()">
+            <mat-icon>
+              {{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+            </mat-icon>
+            {{ (sortDirection() === 'asc' ? 'events.sort-desc' : 'events.sort-asc') | transloco }}
+          </button>
+        </div>
+
+        @for (event of paginatedEvents(); track event.id) {
+          <mat-card appearance="outlined">
+            <mat-card-header>
+              <mat-card-title class="py-2">{{ event.name }}</mat-card-title>
+              <mat-card-subtitle>
+                <span class="flex items-center gap-2">
+                  <mat-icon>calendar_month</mat-icon>
+                  {{ formatPeriod(event.startDateTime, event.endDateTime) }}
+                </span>
+              </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="!pt-4 !pb-4">
+              <mat-chip-set>
+                @switch (event.status) {
+                  @case (EventStatusEnum.PUBLISHED) {
+                    <mat-chip disableRipple="true" highlighted="true" color="primary">
+                      {{ 'events.status-values.' + event.status | transloco }}
+                    </mat-chip>
+                  }
+                  @case (EventStatusEnum.COMPLETED) {
+                    <mat-chip disableRipple="true" highlighted="true" color="accent">
+                      {{ 'events.status-values.' + event.status | transloco }}
+                    </mat-chip>
+                  }
+                  @default {
+                    <mat-chip disableRipple="true">
+                      {{ 'events.status-values.' + event.status | transloco }}
+                    </mat-chip>
+                  }
+                }
+                <mat-chip disableRipple="true">
+                  {{ 'events.type-values.' + event.type | transloco }}
+                </mat-chip>
+                <mat-chip disableRipple="true">
+                  <mat-icon matChipAvatar>place</mat-icon>
+                  {{ 'events.location-values.' + event.location | transloco }}
+                </mat-chip>
+              </mat-chip-set>
+            </mat-card-content>
+
+            <mat-card-actions align="end" class="gap-2 border-t border-(--mat-sys-outline-variant)">
+              <button
+                matIconButton
+                [routerLink]="['/events', event.id, 'details']"
+                [matTooltip]="'events.view-details' | transloco"
+              >
+                <mat-icon style="color: var(--mat-sys-primary)">info</mat-icon>
+              </button>
+              @if (this.isMarketing()) {
+                <div
+                  class="inline-block"
+                  [matTooltip]="
+                    (canPublish(event)
+                      ? 'events.publish-tooltip'
+                      : 'events.publish-disabled-tooltip'
+                    ) | transloco
+                  "
+                >
+                  <button
+                    matIconButton
+                    color="accent"
+                    [disabled]="!canPublish(event)"
+                    (click)="onPublish(event)"
+                  >
+                    <mat-icon [class.text-green-500!]="canPublish(event)">publish</mat-icon>
+                  </button>
+                </div>
+                <div
+                  class="inline-block"
+                  [matTooltip]="
+                    (canComplete(event)
+                      ? 'events.complete-tooltip'
+                      : 'events.complete-disabled-tooltip'
+                    ) | transloco
+                  "
+                >
+                  <button
+                    matIconButton
+                    color="accent"
+                    [disabled]="!canComplete(event)"
+                    (click)="onComplete(event)"
+                  >
+                    <mat-icon [class.text-green-500!]="canComplete(event)">check_circle</mat-icon>
+                  </button>
+                </div>
+              }
+              @if (event.status === EventStatusEnum.PUBLISHED) {
+                @let checkIn = canCheckIn(event);
+                @let checkInTooltip =
+                  checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
+                <button
+                  matIconButton
+                  color="primary"
+                  [matTooltip]="checkInTooltip | transloco"
+                  [disabled]="!checkIn"
+                  (click)="onCheckIn(event)"
+                >
+                  <mat-icon>how_to_reg</mat-icon>
+                </button>
+              }
+            </mat-card-actions>
+          </mat-card>
+        } @empty {
+          <div class="text-center py-12">
+            <mat-icon class="text-5xl w-12 h-12 text-slate-400">event_busy</mat-icon>
+            <h3 class="mt-3 font-semibold text-slate-900">
+              {{ 'events.no-events' | transloco }}
+            </h3>
+            <p class="mt-1 text-sm text-slate-500">{{ 'events.adjust' | transloco }}</p>
+          </div>
+        }
       </div>
 
       @if (filteredEvents().length) {
