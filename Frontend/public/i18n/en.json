@@ -308,20 +308,24 @@
       "start-date-time": {
         "label": "Start Date",
         "errors": {
-          "required": "Start date is required"
+          "required": "Start date is required",
+          "in-past": "Start date & time must be in the future",
+          "max-year": "Start date must be within the current year"
         }
       },
       "start-time": {
         "label": "Start Time",
         "errors": {
-          "required": "Start time is required"
+          "required": "Start time is required",
+          "in-past": "Start date & time must be in the future"
         }
       },
       "end-date-time": {
         "label": "End Date",
         "errors": {
           "required": "End date is required",
-          "invalid-range": "End date & time must be scheduled after start date & time"
+          "invalid-range": "End date & time must be after start date & time",
+          "max-year": "End date must be within the current year"
         }
       },
       "end-time": {
@@ -333,14 +337,17 @@
       "registration-start-date": {
         "label": "Registration Start Date",
         "errors": {
-          "required": "Registration start date is required"
+          "required": "Registration start date is required",
+          "in-past": "Registration start date cannot be in the past",
+          "max-year": "Registration start date must be within the current year"
         }
       },
       "registration-end-date": {
         "label": "Registration End Date",
         "errors": {
           "required": "Registration end date is required",
-          "invalid-range": "Registration end date must be on or after registration start date"
+          "invalid-range": "Registration end date must be on or after registration start date",
+          "max-year": "Registration end date must be within the current year"
         }
       },
       "address": {
@@ -384,6 +391,7 @@
     },
     "actions": {
       "title": "Actions",
+      "back": "Back",
       "cancel": "Cancel",
       "save": "Save Event"
     },

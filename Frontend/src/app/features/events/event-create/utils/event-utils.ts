@@ -15,6 +15,46 @@ export const combineDateAndTime = (date: Date | null, time: Date | null): Date |
   return merged;
 };
 
+export const futureEventStartValidator = (control: AbstractControl): ValidationErrors | null => {
+  const parent = control.parent;
+  if (!parent) {
+    return null;
+  }
+
+  const startDate = parent.get('startDate')?.value as Date | null;
+  const startTime = parent.get('startTime')?.value as Date | null;
+
+  if (!startDate || !startTime) {
+    return null;
+  }
+
+  const start = combineDateAndTime(startDate, startTime);
+
+  if (start && start <= new Date()) {
+    return { eventStartInPast: true };
+  }
+
+  return null;
+};
+
+export const futureRegistrationStartValidator = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  const value = control.value as Date | null;
+  if (!value) {
+    return null;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (new Date(value) < today) {
+    return { registrationStartInPast: true };
+  }
+
+  return null;
+};
+
 export const eventDateRangeValidator = (control: AbstractControl): ValidationErrors | null => {
   const parent = control.parent;
   if (!parent) {
