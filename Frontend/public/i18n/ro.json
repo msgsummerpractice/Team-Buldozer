@@ -158,6 +158,28 @@
     "login-successful": "Autentificare reușită!",
     "user-updated": "Utilizatorul a fost actualizat cu succes."
   },
+  "password-reset": {
+    "forgotTitle": "Parolă uitată",
+    "forgotSubtitle": "Introduceți adresa de email și vă vom trimite un link pentru resetarea parolei.",
+    "email": "Email",
+    "emailPlaceholder": "Introduceți emailul",
+    "emailRequired": "Email este obligatoriu",
+    "emailInvalid": "Vă rugăm să introduceți o adresă de email validă",
+    "sendLink": "Trimite link de resetare",
+    "emailSent": "Dacă există un cont cu acest email, un link de resetare a fost trimis.",
+    "resetTitle": "Setează parolă nouă",
+    "newPassword": "Parolă nouă",
+    "newPasswordPlaceholder": "Introduceți parola nouă",
+    "confirmPassword": "Confirmă parola",
+    "confirmPasswordPlaceholder": "Reintroduceți parola nouă",
+    "passwordRequired": "Parola este obligatorie",
+    "passwordMinLength": "Parola trebuie să conțină cel puțin 8 caractere",
+    "confirmPasswordRequired": "Vă rugăm să confirmați parola",
+    "passwordMismatch": "Parolele nu se potrivesc",
+    "resetButton": "Resetează parola",
+    "resetSuccess": "Parola a fost resetată cu succes!",
+    "backToLogin": "Înapoi la autentificare"
+  },
   "common": {
     "close": "Închide",
     "ok": "OK",

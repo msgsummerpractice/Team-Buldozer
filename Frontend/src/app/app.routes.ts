@@ -31,6 +31,16 @@ export const routes: Routes = [
     loadComponent: () => import('@features/register/components/register').then((m) => m.Register),
   },
   {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('@features/password-reset/components/password-reset').then((m) => m.PasswordReset),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('@features/password-reset/components/password-reset').then((m) => m.PasswordReset),
+  },
+  {
     path: 'users',
     loadComponent: () => import('@features/users/components/users').then((m) => m.Users),
     canActivate: [authorizationGuard([UserRoleEnum.ADMIN])],

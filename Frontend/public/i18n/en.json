@@ -158,6 +158,28 @@
     "login-successful": "Login successful!",
     "user-updated": "User updated successfully."
   },
+  "password-reset": {
+    "forgotTitle": "Forgot Password",
+    "forgotSubtitle": "Enter your email address and we'll send you a link to reset your password.",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
+    "sendLink": "Send Reset Link",
+    "emailSent": "If an account with that email exists, a reset link has been sent.",
+    "resetTitle": "Set New Password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter new password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordMismatch": "Passwords do not match",
+    "resetButton": "Reset Password",
+    "resetSuccess": "Password has been reset successfully!",
+    "backToLogin": "Back to Login"
+  },
   "common": {
     "close": "Close",
     "ok": "OK",
