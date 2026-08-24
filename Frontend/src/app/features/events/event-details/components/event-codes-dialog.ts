@@ -7,6 +7,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { catchError } from 'rxjs/internal/operators/catchError';
 
+import { NotificationService } from '@core/notification/services/notification.service';
 import { EventService } from '@features/events/services/event-service';
 import { EventQrPdfService } from '@features/events/services/event-qr-pdf-service';
 import { EventCodesResponse } from '@features/events/model/event-codes-response';
@@ -20,12 +21,14 @@ export type EventCodesDialogData = {
 @Component({
   selector: 'app-event-codes-dialog',
   imports: [MatButtonModule, MatDialogModule, MatDividerModule, MatIconModule, TranslocoPipe],
+  providers: [EventQrPdfService],
   templateUrl: './event-codes-dialog.html',
 })
 export class EventCodesDialog {
   private readonly dialogRef = inject(MatDialogRef<EventCodesDialog>);
   private readonly eventService = inject(EventService);
   private readonly eventQrPdfService = inject(EventQrPdfService);
+  private readonly notificationService = inject(NotificationService);
   private readonly dialogData = inject<EventCodesDialogData>(MAT_DIALOG_DATA);
 
   readonly codes = signal<EventCodesResponse | null>(null);
@@ -60,7 +63,11 @@ export class EventCodesDialog {
 
     const { id, eventName, startDateTime } = this.dialogData;
 
-    await this.eventQrPdfService.download({ id, codes, eventName, startDateTime });
+    try {
+      await this.eventQrPdfService.download({ id, codes, eventName, startDateTime });
+    } catch {
+      this.notificationService.showError('event-codes.dialog.download-error');
+    }
   }
 
   protected close(): void {

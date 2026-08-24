@@ -169,7 +169,14 @@
       "check-in-code": "Check-in code",
       "qr-code": "QR code",
       "error": "Failed to load check-in codes.",
+      "download-error": "Failed to generate the QR PDF.",
       "download-qr": "Download QR"
+    },
+    "pdf": {
+      "scan-qr": "Please scan the QR code",
+      "or": "OR",
+      "enter-code": "Enter the following code",
+      "powered-by": "Powered by msg Check-In"
     }
   },
   "event-details": {

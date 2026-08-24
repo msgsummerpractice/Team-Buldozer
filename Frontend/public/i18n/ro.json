@@ -169,7 +169,14 @@
       "check-in-code": "Cod de Check-in",
       "qr-code": "Cod QR",
       "error": "Nu s-au putut încărca codurile de check-in.",
+      "download-error": "Nu s-a putut genera PDF-ul cu codul QR.",
       "download-qr": "Descarcă QR"
+    },
+    "pdf": {
+      "scan-qr": "Scaneaza codul QR",
+      "or": "SAU",
+      "enter-code": "Introdu urmatorul cod",
+      "powered-by": "Realizat de msg Check-In"
     }
   },
   "event-details": {

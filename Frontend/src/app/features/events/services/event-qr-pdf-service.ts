@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { jsPDF } from 'jspdf';
 
 import { EventCodesResponse } from '@features/events/model/event-codes-response';
@@ -10,8 +11,10 @@ export type EventQrPdfData = {
   startDateTime?: string;
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class EventQrPdfService {
+  private readonly transloco = inject(TranslocoService);
+
   async download({ id, codes, eventName, startDateTime }: EventQrPdfData): Promise<void> {
     const doc = new jsPDF({
       orientation: 'portrait',
@@ -63,7 +66,9 @@ export class EventQrPdfService {
 
     const scanTextY = currentY;
 
-    doc.text('Please scan the QR code', centerX, scanTextY, { align: 'center' });
+    doc.text(this.transloco.translate('event-codes.pdf.scan-qr'), centerX, scanTextY, {
+      align: 'center',
+    });
 
     const trimmedQr = await this.trimQrWhitespace(codes.qrCode);
 
@@ -78,11 +83,15 @@ export class EventQrPdfService {
     doc.setFontSize(18);
     doc.setTextColor(20, 20, 20);
 
-    doc.text('OR', centerX, currentY, { align: 'center' });
+    doc.text(this.transloco.translate('event-codes.pdf.or'), centerX, currentY, {
+      align: 'center',
+    });
 
     currentY += 12;
 
-    doc.text('Enter the following code', centerX, currentY, { align: 'center' });
+    doc.text(this.transloco.translate('event-codes.pdf.enter-code'), centerX, currentY, {
+      align: 'center',
+    });
 
     currentY += 18;
 
@@ -96,7 +105,9 @@ export class EventQrPdfService {
     doc.setFontSize(9);
     doc.setTextColor(160, 160, 160);
 
-    doc.text('Powered by msg Check-In', centerX, pageHeight - 8, { align: 'center' });
+    doc.text(this.transloco.translate('event-codes.pdf.powered-by'), centerX, pageHeight - 8, {
+      align: 'center',
+    });
 
     doc.save(`check-in-qr-${id}.pdf`);
   }
