@@ -8,6 +8,7 @@ import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.model.EventLocation;
 import com.example.CheckInApp.model.EventStatus;
 import com.example.CheckInApp.model.EventType;
+import com.example.CheckInApp.repository.UserRepository;
 import com.example.CheckInApp.security.JwtUtil;
 import com.example.CheckInApp.service.EventService;
 import com.example.CheckInApp.config.SecurityConfig;
@@ -58,6 +59,9 @@ class EventControllerTest {
 
     @MockitoBean
     private UserDetailsService userDetailsService;
+
+    @MockitoBean
+    private UserRepository userRepository;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
