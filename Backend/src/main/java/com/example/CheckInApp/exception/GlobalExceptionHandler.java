@@ -134,6 +134,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_223, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(TooManyRequestsException.class)
+    public ResponseEntity<ErrorResponse> handleTooManyRequests(TooManyRequestsException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.TOO_MANY_REQUESTS, ErrorCode.ERR_224, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(InvalidRegistrationDataException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRegistrationData(InvalidRegistrationDataException ex, HttpServletRequest request) {
         return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_224, ex.getMessage(), request);
