@@ -217,7 +217,11 @@
     "manage-roles": "Manage Roles",
     "save": "Save",
     "saving": "Saving...",
-    "unsaved-changes": "You have unsaved changes that will be lost if you proceed. Continue?"
+    "unsaved-changes": "You have unsaved changes that will be lost if you proceed. Continue?",
+    "confirm-roles-dialog": {
+      "title": "Confirm role changes",
+      "message": "Are you sure you want to update the roles for \"{{name}}\"?"
+    }
   },
   "paginator": {
     "itemsPerPage": "Items per page:",

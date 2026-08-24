@@ -2,7 +2,7 @@ import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular
 import { UserService } from '@core/users/services/user-service';
 import { UserResponse } from '@core/users/dto/user.response';
 import { UserRole } from '@core/users/model/user-role';
-import { debounceTime, Subject } from 'rxjs';
+import { catchError, debounceTime, EMPTY, Subject } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,13 +11,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { UserLocationEnum } from '@core/users/model/user-location';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { getRoleColor } from '@core/authorization/utils/role-colors';
+import { ConfirmDialog, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog';
 import {
   UserRolesDialog,
   UserRolesDialogData,
@@ -116,8 +117,10 @@ export class Users implements OnInit, OnDestroy {
     this.pageSize.set(event.pageSize);
   }
 
-  protected onToggleStatus(user: UserResponse, status: boolean): void {
-    this.callApi(user.id, status, user.roles);
+  protected onToggleStatus(user: UserResponse, event: MatSlideToggleChange): void {
+    this.triggerStatusAndRolesUpdate(user.id, event.checked, user.roles, () => {
+      event.source.checked = user.status;
+    });
   }
 
   protected openRolesDialog(user: UserResponse): void {
@@ -128,7 +131,7 @@ export class Users implements OnInit, OnDestroy {
     >(UserRolesDialog, { data: { user } });
     ref.afterClosed().subscribe((result) => {
       if (!result) return;
-      this.callApi(user.id, user.status, result.roles);
+      this.triggerStatusAndRolesUpdate(user.id, user.status, result.roles);
     });
   }
 
@@ -138,24 +141,33 @@ export class Users implements OnInit, OnDestroy {
     return this.savingIds().has(userId);
   }
 
-  private callApi(id: number, status: boolean, roles: UserRole[]): void {
+  private triggerStatusAndRolesUpdate(
+    id: number,
+    status: boolean,
+    roles: UserRole[],
+    onError?: () => void
+  ): void {
     const saving = new Set(this.savingIds());
     saving.add(id);
     this.savingIds.set(saving);
 
-    this.userService.updateUserStatusAndRoles(id, status, roles).subscribe({
-      next: (updated) => {
+    this.userService
+      .updateUserStatusAndRoles(id, status, roles)
+      .pipe(
+        catchError(() => {
+          const ids = new Set(this.savingIds());
+          ids.delete(id);
+          this.savingIds.set(ids);
+          onError?.();
+          return EMPTY;
+        })
+      )
+      .subscribe((updated) => {
         this._users.update((users) => users.map((u) => (u.id === id ? updated : u)));
         const ids = new Set(this.savingIds());
         ids.delete(id);
         this.savingIds.set(ids);
         this.notificationService.showSuccess('success-messages.user-updated');
-      },
-      error: () => {
-        const ids = new Set(this.savingIds());
-        ids.delete(id);
-        this.savingIds.set(ids);
-      },
-    });
+      });
   }
 }
