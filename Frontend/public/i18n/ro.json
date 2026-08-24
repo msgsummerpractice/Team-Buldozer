@@ -246,9 +246,15 @@
     "status": "STATUS",
     "roles": "ROLURI",
     "manage": "GESTIONEAZĂ",
-    "cluj": "CLUJ",
-    "timisoara": "TIMIȘOARA",
-    "mures": "TÂRGU MUREȘ",
+    "cluj": "Cluj",
+    "timisoara": "Timișoara",
+    "mures": "Târgu Mureș",
+    "role-values": {
+      "ADMIN": "Admin",
+      "HR": "HR",
+      "MARKETING": "Marketing",
+      "PARTICIPANT": "Participant"
+    },
     "active": "Activ",
     "inactive": "Inactiv",
     "no-users": "Niciun utilizator găsit",
