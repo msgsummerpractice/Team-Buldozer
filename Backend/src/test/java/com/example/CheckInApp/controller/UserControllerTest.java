@@ -14,6 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -44,6 +47,10 @@ class UserControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         objectMapper = new ObjectMapper();
+    }
+
+    private Authentication authenticationFor(String email, String role) {
+        return new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority(role)));
     }
 
     @Test
@@ -97,16 +104,33 @@ class UserControllerTest {
                 .id(1L).firstName("John").lastName("Doe").email("john@example.com")
                 .location(UserLocation.CLUJ).status(true).roles(Set.of(UserRole.PARTICIPANT)).build();
 
-        when(userService.getUserById(1L)).thenReturn(user);
+        when(userService.getUserById(1L, "john@example.com", false)).thenReturn(user);
 
-        mockMvc.perform(get("/api/v1/users/1"))
+        mockMvc.perform(get("/api/v1/users/1")
+                        .principal(authenticationFor("john@example.com", "ROLE_PARTICIPANT")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.firstName", is("John")))
                 .andExpect(jsonPath("$.email", is("john@example.com")));
 
-        verify(userService).getUserById(1L);
+        verify(userService).getUserById(1L, "john@example.com", false);
+    }
+
+    @Test
+    void getUserById_returnsOkWithUser_whenAdminAccessesAnotherUsersProfile() throws Exception {
+        UserResponse user = UserResponse.builder()
+                .id(1L).firstName("John").lastName("Doe").email("john@example.com")
+                .location(UserLocation.CLUJ).status(true).roles(Set.of(UserRole.PARTICIPANT)).build();
+
+        when(userService.getUserById(1L, "admin@example.com", true)).thenReturn(user);
+
+        mockMvc.perform(get("/api/v1/users/1")
+                        .principal(authenticationFor("admin@example.com", "ROLE_ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)));
+
+        verify(userService).getUserById(1L, "admin@example.com", true);
     }
 
     @Test
@@ -118,9 +142,11 @@ class UserControllerTest {
                 .id(1L).firstName("John").lastName("Updated").email("john.updated@example.com")
                 .location(UserLocation.CLUJ).status(true).roles(Set.of(UserRole.PARTICIPANT)).build();
 
-        when(userService.updateUserProfile(eq(1L), any(UserProfileRequest.class))).thenReturn(updatedUser);
+        when(userService.updateUserProfile(eq(1L), any(UserProfileRequest.class), eq("john@example.com"), eq(false)))
+                .thenReturn(updatedUser);
 
         mockMvc.perform(patch("/api/v1/users/profile/1")
+                        .principal(authenticationFor("john@example.com", "ROLE_PARTICIPANT"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -129,7 +155,29 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.lastName", is("Updated")))
                 .andExpect(jsonPath("$.email", is("john.updated@example.com")));
 
-        verify(userService).updateUserProfile(eq(1L), any(UserProfileRequest.class));
+        verify(userService).updateUserProfile(eq(1L), any(UserProfileRequest.class), eq("john@example.com"), eq(false));
+    }
+
+    @Test
+    void updateUserProfile_returnsOkWithUpdatedUser_whenAdminUpdatesAnotherUsersProfile() throws Exception {
+        UserProfileRequest request = UserProfileRequest.builder()
+                .firstName("John").lastName("Updated").email("john.updated@example.com")
+                .location(UserLocation.CLUJ).build();
+        UserResponse updatedUser = UserResponse.builder()
+                .id(1L).firstName("John").lastName("Updated").email("john.updated@example.com")
+                .location(UserLocation.CLUJ).status(true).roles(Set.of(UserRole.PARTICIPANT)).build();
+
+        when(userService.updateUserProfile(eq(1L), any(UserProfileRequest.class), eq("admin@example.com"), eq(true)))
+                .thenReturn(updatedUser);
+
+        mockMvc.perform(patch("/api/v1/users/profile/1")
+                        .principal(authenticationFor("admin@example.com", "ROLE_ADMIN"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)));
+
+        verify(userService).updateUserProfile(eq(1L), any(UserProfileRequest.class), eq("admin@example.com"), eq(true));
     }
 
     @Test

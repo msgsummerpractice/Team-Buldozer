@@ -34,13 +34,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id, Authentication authentication) {
-        UserResponse user = userService.getUserById(id, authentication.getName());
+        UserResponse user = userService.getUserById(id, authentication.getName(), isAdmin(authentication));
         return ResponseEntity.ok(user);
     }
 
     @PatchMapping("/profile/{id}")
     public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id, @Valid @RequestBody UserProfileRequest userProfileRequest, Authentication authentication) {
-        UserResponse updatedUserProfile = userService.updateUserProfile(id, userProfileRequest, authentication.getName());
+        UserResponse updatedUserProfile = userService.updateUserProfile(id, userProfileRequest, authentication.getName(), isAdmin(authentication));
         return ResponseEntity.ok(updatedUserProfile);
     }
 
@@ -49,6 +49,11 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUserStatusAndRoles(@PathVariable Long id, @Valid @RequestBody UserRequestByAdmin userRequestByAdmin) {
         UserResponse updatedUser = userService.updateUserStatusAndRoles(id, userRequestByAdmin);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
     }
 
 }
