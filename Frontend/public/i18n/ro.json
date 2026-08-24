@@ -168,7 +168,8 @@
       "title": "Coduri de Check-in",
       "check-in-code": "Cod de Check-in",
       "qr-code": "Cod QR",
-      "error": "Nu s-au putut încărca codurile de check-in."
+      "error": "Nu s-au putut încărca codurile de check-in.",
+      "download-qr": "Descarcă QR"
     }
   },
   "event-details": {

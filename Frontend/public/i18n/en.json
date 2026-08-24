@@ -168,7 +168,8 @@
       "title": "Check-in codes",
       "check-in-code": "Check-in code",
       "qr-code": "QR code",
-      "error": "Failed to load check-in codes."
+      "error": "Failed to load check-in codes.",
+      "download-qr": "Download QR"
     }
   },
   "event-details": {

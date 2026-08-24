@@ -28,5 +28,9 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
+  <button matButton="tonal" type="button" [disabled]="!codes()" (click)="downloadQr()">
+    <mat-icon>download</mat-icon>
+    {{ 'event-codes.dialog.download-qr' | transloco }}
+  </button>
   <button matButton="text" type="button" (click)="close()">{{ 'common.close' | transloco }}</button>
 </mat-dialog-actions>

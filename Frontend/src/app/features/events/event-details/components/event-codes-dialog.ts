@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { jsPDF } from 'jspdf';
 import { EventService } from '@features/events/services/event-service';
 import { EventCodesResponse } from '@features/events/model/event-codes-response';
 import { EMPTY } from 'rxjs/internal/observable/empty';
@@ -38,6 +39,17 @@ export class EventCodesDialog {
         })
       )
       .subscribe((data) => this.codes.set(data));
+  }
+
+  protected downloadQr(): void {
+    const codes = this.codes();
+    if (!codes) return;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const qrSize = 80;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const x = (pageWidth - qrSize) / 2;
+    doc.addImage(`data:image/png;base64,${codes.qrCode}`, 'PNG', x, 20, qrSize, qrSize);
+    doc.save(`check-in-qr-${this.dialogData.id}.pdf`);
   }
 
   protected close(): void {
