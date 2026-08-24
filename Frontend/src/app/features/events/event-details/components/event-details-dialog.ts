@@ -129,7 +129,12 @@ export class EventDetailsDialog {
       width: '440px',
       autoFocus: 'dialog',
       restoreFocus: true,
-      data: { id: event.id },
+      data: {
+        id: event.id,
+        eventName: event.name,
+        startDateTime: event.startDateTime,
+        poster: event.poster,
+      },
     });
   }
 
