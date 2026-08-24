@@ -84,6 +84,7 @@
   },
   "profile": {
     "title": "Profilul meu",
+    "subtitle": "Vizualizează și actualizează informațiile personale, locația și poza de profil.",
     "edit-mode": "Editează",
     "cancel": "Anulează",
     "save": "Salvează modificările",
@@ -236,6 +237,7 @@
   },
   "users": {
     "title": "Gestionează Utilizatorii",
+    "subtitle": "Gestionează conturile utilizatorilor, rolurile și accesul pe platformă.",
     "search": "Caută după nume, email, locație sau rol",
     "first-name": "PRENUME",
     "last-name": "NUME",
@@ -271,6 +273,7 @@
   "events": {
     "title": "Vezi Evenimente",
     "manage-title": "Gestionează Evenimente",
+    "subtitle": "Răsfoiește, publică și gestionează toate evenimentele msg într-un singur loc.",
     "search": "Caută după nume, status, tip sau locație",
     "name": "DENUMIRE",
     "period": "PERIOADĂ",

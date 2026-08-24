@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { UserLocation, UserProfile } from '../models/userProfile.model';
 import { ProfilePicture } from './profile-picture/profile-picture';
+import { PageLayout } from '@shared/components/page-layout/page-layout';
 import { environment } from '@environments/environment';
 
 interface ProfileFormState {
@@ -38,6 +39,7 @@ interface ProfileFormState {
     MatSelectModule,
     TranslocoPipe,
     ProfilePicture,
+    PageLayout,
   ],
   templateUrl: './profile.html',
 })

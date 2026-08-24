@@ -30,6 +30,8 @@ import {
   EventDetailsDialogData,
 } from '@features/events/event-details/components/event-details-dialog';
 import { CheckInDialog } from '@features/events/check-in/components/check-in-dialog';
+import { getChipColor, getTypeChipColor, getLocationChipColor, getTypeIcon, withAlpha } from '@shared/chip-color';
+import { PageLayout } from '@shared/components/page-layout/page-layout';
 
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
@@ -63,6 +65,7 @@ interface RouteDialogState {
     MatTooltipModule,
     TranslocoPipe,
     RouterLink,
+    PageLayout,
   ],
   templateUrl: './events.html',
 })
@@ -328,4 +331,10 @@ export class Events implements OnInit {
     this.searchTerm.set('');
     this.pageIndex.set(0);
   }
+
+  protected readonly withAlpha = withAlpha;
+  protected readonly getChipColor = getChipColor;
+  protected readonly getTypeChipColor = getTypeChipColor;
+  protected readonly getTypeIcon = getTypeIcon;
+  protected readonly getLocationChipColor = getLocationChipColor;
 }

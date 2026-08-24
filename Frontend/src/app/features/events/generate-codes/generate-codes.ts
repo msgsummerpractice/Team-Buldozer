@@ -8,6 +8,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { catchError, EMPTY } from 'rxjs';
 import { EventService } from '@features/events/services/event-service';
 import { EventCodesResponse } from '@features/events/model/event-codes-response';
+import { PageLayout } from '@shared/components/page-layout/page-layout';
 
 @Component({
   selector: 'app-generate-codes',
@@ -18,6 +19,7 @@ import { EventCodesResponse } from '@features/events/model/event-codes-response'
     MatIconModule,
     TranslocoPipe,
     RouterLink,
+    PageLayout,
   ],
   templateUrl: './generate-codes.html',
 })
