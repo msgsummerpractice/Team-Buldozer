@@ -84,6 +84,7 @@
   },
   "profile": {
     "title": "My Profile",
+    "subtitle": "View and update your personal information, location and profile picture.",
     "edit-mode": "Edit",
     "cancel": "Cancel",
     "save": "Save changes",
@@ -199,6 +200,7 @@
   },
   "users": {
     "title": "View Users",
+    "subtitle": "Manage user accounts, roles and access across the platform.",
     "search": "Search by name, email, location or role",
     "first-name": "FIRST NAME",
     "last-name": "LAST NAME",
@@ -234,6 +236,7 @@
   "events": {
     "title": "View Events",
     "manage-title": "Manage Events",
+    "subtitle": "Browse, publish and manage all msg events in one place.",
     "search": "Search by name, status, type or location",
     "name": "NAME",
     "period": "PERIOD",
@@ -296,7 +299,7 @@
       "ALL": "All locations"
     },
     "create": {
-      "title": "Add A New Event"
+      "title": "Add Event"
     },
     "edit": {
       "title": "Edit Event"

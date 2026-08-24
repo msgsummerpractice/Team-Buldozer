@@ -1,5 +1,4 @@
-<div class="p-6 mx-auto max-w-7xl rounded-2xl! mt-8">
-  <h1 class="font-bold text-3xl mb-4">{{ 'users.title' | transloco }}</h1>
+<app-page-layout [title]="'users.title' | transloco" [subtitle]="'users.subtitle' | transloco">
   <mat-card appearance="raised">
     <mat-card-content>
       <mat-form-field
@@ -178,4 +177,4 @@
       }
     </mat-card-content>
   </mat-card>
-</div>
+</app-page-layout>

@@ -1,4 +1,4 @@
-<div class="p-6 mx-auto max-w-7xl mt-8">
+<app-page-layout [title]="'profile.title' | transloco" [subtitle]="'profile.subtitle' | transloco">
   <mat-card appearance="outlined">
     <mat-card-content>
       <div
@@ -15,13 +15,14 @@
             />
           </div>
           <div>
-            <h1 class="font-bold text-2xl mb-0.4">{{ 'profile.title' | transloco }}</h1>
             @if (fullName()) {
-              <p class="text-[18px] font-medium text-slate-800">{{ fullName() }}</p>
+              <h2 class="font-bold text-2xl">{{ fullName() }}</h2>
+            }
+            @if (profile()?.email) {
+              <p class="text-sm text-slate-600">{{ profile()?.email }}</p>
             }
           </div>
         </div>
-
         <div class="flex flex-wrap gap-2">
           @if (!editMode()) {
             <button matButton="outlined" color="primary" type="button" (click)="enableEditMode()">
@@ -217,4 +218,4 @@
       }
     </mat-card-content>
   </mat-card>
-</div>
+</app-page-layout>

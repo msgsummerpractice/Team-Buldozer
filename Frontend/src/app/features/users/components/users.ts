@@ -23,6 +23,7 @@ import {
   UserRolesDialogResult,
 } from '../user-roles-select/user-roles-dialog';
 import { getChipColor } from '@shared/chip-color';
+import { PageLayout } from '@shared/components/page-layout/page-layout';
 
 @Component({
   selector: 'app-users',
@@ -38,6 +39,7 @@ import { getChipColor } from '@shared/chip-color';
     MatSlideToggleModule,
     MatTooltipModule,
     TranslocoPipe,
+    PageLayout,
   ],
   templateUrl: './users.html',
   styleUrl: './users.scss',

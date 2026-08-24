@@ -1,11 +1,15 @@
-<div class="p-6 mx-auto max-w-7xl rounded-2xl mt-8">
-  <div class="flex items-center justify-between mb-4">
-    <h1 class="font-bold text-3xl">{{ 'events.manage-title' | transloco }}</h1>
+<app-page-layout
+  [title]="'events.manage-title' | transloco"
+  [subtitle]="'events.subtitle' | transloco"
+>
+  <div sidebar-actions>
     @if (isMarketing()) {
-      <button matButton="filled" color="primary" routerLink="/events/add">
-        <mat-icon>add</mat-icon>
-        {{ 'events.create.title' | transloco }}
-      </button>
+      <div class="mt-5">
+        <button matButton="filled" color="primary" routerLink="/events/add">
+          <mat-icon>add</mat-icon>
+          {{ 'events.create.title' | transloco }}
+        </button>
+      </div>
     }
   </div>
   <mat-card appearance="raised">
@@ -384,4 +388,4 @@
       }
     </mat-card-content>
   </mat-card>
-</div>
+</app-page-layout>
