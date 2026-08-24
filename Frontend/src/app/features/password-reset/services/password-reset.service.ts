@@ -11,6 +11,10 @@ export class PasswordResetService {
     return this.http.post<void>(`${environment.apiUrl}/auth/forgot-password`, { email });
   }
 
+  validateToken(token: string): Observable<void> {
+    return this.http.get<void>(`${environment.apiUrl}/auth/validate-token`, { params: { token } });
+  }
+
   resetPassword(
     token: string,
     newPassword: string,

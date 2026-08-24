@@ -154,6 +154,16 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_226, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(ExpiredResetTokenException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredResetToken(ExpiredResetTokenException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.GONE, ErrorCode.ERR_228, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(UsedResetTokenException.class)
+    public ResponseEntity<ErrorResponse> handleUsedResetToken(UsedResetTokenException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_229, ex.getMessage(), request);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())

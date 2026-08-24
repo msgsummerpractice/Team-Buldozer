@@ -156,7 +156,9 @@
     "ERR-224": "Too many requests. Please wait before trying again.",
     "ERR-225": "Registration data is invalid.",
     "ERR-226": "Registration is closed for this event.",
-    "ERR-227": "Already registered for this event."
+    "ERR-227": "Already registered for this event.",
+    "ERR-228": "This reset link has expired. Please request a new one.",
+    "ERR-229": "This reset link has already been used. Please request a new one."
   },
   "success-messages": {
     "login-successful": "Login successful!",

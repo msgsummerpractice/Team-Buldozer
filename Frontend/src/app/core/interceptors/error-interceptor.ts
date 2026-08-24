@@ -8,6 +8,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      if (req.url.endsWith('/auth/reset-password')) {
+        return throwError(() => error);
+      }
+
       let errorMessage: string = 'error-interceptor.default';
 
       if (error.error?.code) {

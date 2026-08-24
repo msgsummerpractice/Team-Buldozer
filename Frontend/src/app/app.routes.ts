@@ -33,12 +33,12 @@ export const routes: Routes = [
   {
     path: 'forgot-password',
     loadComponent: () =>
-      import('@features/password-reset/components/password-reset').then((m) => m.PasswordReset),
+      import('@features/password-reset/components/forgot-password').then((m) => m.ForgotPassword),
   },
   {
     path: 'reset-password',
     loadComponent: () =>
-      import('@features/password-reset/components/password-reset').then((m) => m.PasswordReset),
+      import('@features/password-reset/components/reset-password').then((m) => m.ResetPassword),
   },
   {
     path: 'users',

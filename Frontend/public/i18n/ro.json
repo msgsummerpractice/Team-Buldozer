@@ -156,7 +156,9 @@
     "ERR-224": "Prea multe cereri. Vă rugăm să așteptați înainte de a încerca din nou.",
     "ERR-225": "Datele de înregistrare sunt invalide.",
     "ERR-226": "Înregistrarea este închisă pentru acest eveniment.",
-    "ERR-227": "Sunteți deja înregistrat pentru acest eveniment."
+    "ERR-227": "Sunteți deja înregistrat pentru acest eveniment.",
+    "ERR-228": "Acest link de resetare a expirat. Vă rugăm să solicitați unul nou.",
+    "ERR-229": "Acest link de resetare a fost deja folosit. Vă rugăm să solicitați unul nou."
   },
   "success-messages": {
     "login-successful": "Autentificare reușită!",

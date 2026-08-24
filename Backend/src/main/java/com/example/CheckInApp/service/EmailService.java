@@ -156,7 +156,7 @@ public class EmailService {
                   appearance: none;">
                   Reset Password
                 </button>
-              </a>
+                </a>
                   <p>If you didn't request a password reset, you can safely ignore this email.</p>
                 </body>
                 </html>
@@ -167,29 +167,28 @@ public class EmailService {
         String detailsUrl = frontendUrl + "/events/" + event.getId() + "/details";
         return """
                 <html>
-                <body>
-                  %s
-                  <h2>%s</h2>
-                  <p><strong>When:</strong> %s</p>
-                  <p><strong>Location:</strong> %s</p>
+                <body style="font-family: Arial, sans-serif;">
+                  <h2>Password Reset Request</h2>
+                  <p>We received a request to reset your password.</p>
+                  <p>Click the link below to set a new password. This link will expire in 15 minutes.</p>
                   <a href="%s" target="_blank" style="text-decoration: none; display: inline-block; margin-top: 15px;">
-                    <button type="button" style="
-                     background-color: #8e1239;\s
-                     color: #ffffff;\s
-                     font-family: Arial, sans-serif;\s
-                     font-size: 16px;\s
-                     font-weight: bold;\s
-                     padding: 12px 24px;\s
-                     border: none;\s
-                     border-radius: 6px;\s
-                     cursor: pointer;\s
-                     display: inline-block;
-                     -webkit-appearance: none;
-                     -moz-appearance: none;
-                     appearance: none;">
-                     View Event
-                    </button>
-                   </a>
+                  <button type="button" style="
+                  background-color: #8e1239;\s
+                  color: #ffffff;\s
+                  font-family: Arial, sans-serif;\s
+                  font-size: 16px;\s
+                  font-weight: bold;\s
+                  padding: 12px 24px;\s
+                  border: none;\s
+                  border-radius: 6px;\s
+                  cursor: pointer;\s
+                  display: inline-block;
+                  -webkit-appearance: none;
+                  -moz-appearance: none;
+                  appearance: none;">
+                  Reset Password
+                </button>
+              </a>
                 </body>
                 </html>
                 """.formatted(
