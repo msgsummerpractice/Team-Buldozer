@@ -26,6 +26,10 @@ public class EventMapper {
     }
 
     public EventResponse toResponse(Event event) {
+        return toResponse(event, false);
+    }
+
+    public EventResponse toResponse(Event event, boolean isUserRegistered) {
         if (event == null) {
             return null;
         }
@@ -47,6 +51,7 @@ public class EventMapper {
                 .foodProvided(event.getFoodProvided())
                 .createdAt(event.getCreatedAt())
                 .codesGenerated(event.getCheckInCode() != null)
+                .isUserRegistered(isUserRegistered)
                 .build();
     }
 

@@ -40,6 +40,7 @@ import com.example.CheckInApp.model.EventType;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.model.UserLocation;
 import com.example.CheckInApp.model.UserRole;
+import com.example.CheckInApp.repository.AttendanceRecordRepository;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
 import com.google.zxing.BinaryBitmap;
@@ -69,6 +70,9 @@ class EventServiceTest {
 
         @Mock
         private EmailService emailService;
+
+        @Mock
+        private AttendanceRecordRepository attendanceRecordRepository;
 
         @InjectMocks
         private EventService eventService;
@@ -268,7 +272,8 @@ class EventServiceTest {
                 when(userRepository.findByEmail("user@example.com"))
                                 .thenReturn(Optional.of(marketingUser()));
                 when(eventRepository.findAllByOrderByStartDateTimeDesc()).thenReturn(List.of(event));
-                when(eventMapper.toResponse(event)).thenReturn(EventResponse.builder().id(1L).build());
+                when(attendanceRecordRepository.findEventIdsByUserIdAndEventIdIn(any(), any())).thenReturn(Set.of());
+                when(eventMapper.toResponse(event, false)).thenReturn(EventResponse.builder().id(1L).build());
 
                 List<EventResponse> result = eventService.getAllEvents("user@example.com");
 
@@ -287,7 +292,8 @@ class EventServiceTest {
                                                 eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
                                                 any(LocalDate.class)))
                                 .thenReturn(List.of(event));
-                when(eventMapper.toResponse(event)).thenReturn(EventResponse.builder().id(1L).build());
+                when(attendanceRecordRepository.findEventIdsByUserIdAndEventIdIn(any(), any())).thenReturn(Set.of());
+                when(eventMapper.toResponse(event, false)).thenReturn(EventResponse.builder().id(1L).build());
 
                 List<EventResponse> result = eventService.getAllEvents("user@example.com");
 
@@ -297,6 +303,21 @@ class EventServiceTest {
                                                 eq(EventStatus.PUBLISHED),
                                                 eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
                                                 any(LocalDate.class));
+        }
+
+        @Test
+        void getAllEvents_marksEventAsRegistered_whenUserHasAttendanceRecordForEvent() {
+                Event event = Event.builder().id(1L).build();
+                when(userRepository.findByEmail("user@example.com"))
+                                .thenReturn(Optional.of(marketingUser()));
+                when(eventRepository.findAllByOrderByStartDateTimeDesc()).thenReturn(List.of(event));
+                when(attendanceRecordRepository.findEventIdsByUserIdAndEventIdIn(any(), any())).thenReturn(Set.of(1L));
+                when(eventMapper.toResponse(event, true))
+                                .thenReturn(EventResponse.builder().id(1L).isUserRegistered(true).build());
+
+                List<EventResponse> result = eventService.getAllEvents("user@example.com");
+
+                assertThat(result.get(0).isUserRegistered()).isTrue();
         }
 
         @Test

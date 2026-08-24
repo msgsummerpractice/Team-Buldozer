@@ -15,6 +15,7 @@ import com.example.CheckInApp.exception.CodesAlreadyGeneratedException;
 import com.example.CheckInApp.exception.CheckInCodeGenerationException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
+import com.example.CheckInApp.repository.AttendanceRecordRepository;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
 
@@ -39,6 +40,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +57,7 @@ public class EventService {
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final AttendanceRecordRepository attendanceRecordRepository;
 
     @Transactional
     public CreateEventResponse addEvent(EventRequest request, String userEmail) {
@@ -314,8 +317,11 @@ public class EventService {
                             EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), LocalDate.now());
         }
 
+        List<Long> eventIds = events.stream().map(Event::getId).toList();
+        Set<Long> registeredEventIds = attendanceRecordRepository.findEventIdsByUserIdAndEventIdIn(user.getId(), eventIds);
+
         return events.stream()
-                .map(eventMapper::toResponse)
+                .map(event -> eventMapper.toResponse(event, registeredEventIds.contains(event.getId())))
                 .toList();
     }
 
