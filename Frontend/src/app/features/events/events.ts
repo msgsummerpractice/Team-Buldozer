@@ -30,6 +30,10 @@ import {
   EventDetailsDialogData,
 } from '@features/events/event-details/components/event-details-dialog';
 import { CheckInDialog } from '@features/events/check-in/components/check-in-dialog';
+import {
+  RegisterToEvent,
+  RegisterToEventDialogData,
+} from '@features/events/components/register-to-event/register-to-event';
 
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
@@ -41,6 +45,13 @@ const EVENT_DETAILS_DIALOG_CONFIG = {
 const CHECK_IN_DIALOG_CONFIG = {
   width: '360px',
   maxWidth: '95vw',
+};
+
+const REGISTER_TO_EVENT_DIALOG_CONFIG = {
+  width: '480px',
+  maxWidth: '95vw',
+  autoFocus: 'dialog' as const,
+  restoreFocus: true,
 };
 
 interface RouteDialogState {
@@ -233,6 +244,18 @@ export class Events implements OnInit {
 
   protected onCheckIn(event: EventResponse): void {
     this.router.navigate(['/events', event.id, 'checkin']);
+  }
+
+  protected onRegister(event: EventResponse): void {
+    const ref = this.dialog.open<RegisterToEvent, RegisterToEventDialogData, boolean>(
+      RegisterToEvent,
+      { ...REGISTER_TO_EVENT_DIALOG_CONFIG, data: { event } }
+    );
+
+    ref.afterClosed().subscribe((registered) => {
+      if (!registered) return;
+      this.loadEvents();
+    });
   }
 
   protected canPublish(event: EventResponse): boolean {

@@ -26,10 +26,14 @@ public class EventMapper {
     }
 
     public EventResponse toResponse(Event event) {
-        return toResponse(event, false);
+        return toResponse(event, false, false);
     }
 
     public EventResponse toResponse(Event event, boolean isUserRegistered) {
+        return toResponse(event, isUserRegistered, false);
+    }
+
+    public EventResponse toResponse(Event event, boolean isUserRegistered, boolean isUserCheckedIn) {
         if (event == null) {
             return null;
         }
@@ -52,6 +56,7 @@ public class EventMapper {
                 .createdAt(event.getCreatedAt())
                 .codesGenerated(event.getCheckInCode() != null)
                 .isUserRegistered(isUserRegistered)
+                .isUserCheckedIn(isUserCheckedIn)
                 .build();
     }
 

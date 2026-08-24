@@ -306,22 +306,23 @@ public class EventService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
 
+        Set<Long> registeredEventIds = attendanceRecordRepository.findEventIdsByUserId(user.getId());
+        Set<Long> checkedInEventIds = attendanceRecordRepository.findCheckedInEventIdsByUserId(user.getId());
+
         List<Event> events;
 
         if (hasFullAccess(user)) {
             events = eventRepository.findAllByOrderByStartDateTimeDesc();
         } else {
             EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
-            events = eventRepository
-                    .findByStatusAndLocationInAndRegistrationEndDateGreaterThanEqualOrderByStartDateTimeDesc(
-                            EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), LocalDate.now());
+            events = eventRepository.findEligibleOrRegisteredEvents(
+                    EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), LocalDate.now(),
+                    registeredEventIds);
         }
 
-        List<Long> eventIds = events.stream().map(Event::getId).toList();
-        Set<Long> registeredEventIds = attendanceRecordRepository.findEventIdsByUserIdAndEventIdIn(user.getId(), eventIds);
-
         return events.stream()
-                .map(event -> eventMapper.toResponse(event, registeredEventIds.contains(event.getId())))
+                .map(event -> eventMapper.toResponse(event, registeredEventIds.contains(event.getId()),
+                        checkedInEventIds.contains(event.getId())))
                 .toList();
     }
 

@@ -33,4 +33,5 @@ public class EventResponse {
     private LocalDateTime createdAt;
     private boolean codesGenerated;
     private boolean isUserRegistered;
+    private boolean isUserCheckedIn;
 }

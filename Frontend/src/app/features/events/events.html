@@ -185,19 +185,36 @@
                 </div>
               }
               @if (event.status === EventStatusEnum.PUBLISHED) {
-                @let checkIn = canCheckIn(event);
-                @let checkInTooltip =
-                  checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
-                <span [matTooltip]="checkInTooltip | transloco">
+                @if (event.userCheckedIn) {
+                  <span [matTooltip]="'events.checked-in-tooltip' | transloco">
+                    <button matIconButton disabled>
+                      <mat-icon class="text-green-600!">how_to_reg</mat-icon>
+                    </button>
+                  </span>
+                } @else if (event.userRegistered) {
+                  @let checkIn = canCheckIn(event);
+                  @let checkInTooltip =
+                    checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
+                  <span [matTooltip]="checkInTooltip | transloco">
+                    <button
+                      matIconButton
+                      color="primary"
+                      [disabled]="!checkIn"
+                      (click)="onCheckIn(event)"
+                    >
+                      <mat-icon>qr_code</mat-icon>
+                    </button>
+                  </span>
+                } @else {
                   <button
                     matIconButton
                     color="primary"
-                    [disabled]="!checkIn"
-                    (click)="onCheckIn(event)"
+                    [matTooltip]="'events.register-tooltip' | transloco"
+                    (click)="onRegister(event)"
                   >
-                    <mat-icon>qr_code</mat-icon>
+                    <mat-icon>app_registration</mat-icon>
                   </button>
-                </span>
+                }
               }
             </td>
           </ng-container>
@@ -319,18 +336,35 @@
                 </div>
               }
               @if (event.status === EventStatusEnum.PUBLISHED) {
-                @let checkIn = canCheckIn(event);
-                @let checkInTooltip =
-                  checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
-                <button
-                  matIconButton
-                  color="primary"
-                  [matTooltip]="checkInTooltip | transloco"
-                  [disabled]="!checkIn"
-                  (click)="onCheckIn(event)"
-                >
-                  <mat-icon>how_to_reg</mat-icon>
-                </button>
+                @if (event.userCheckedIn) {
+                  <span [matTooltip]="'events.checked-in-tooltip' | transloco">
+                    <button matIconButton disabled>
+                      <mat-icon class="text-green-600!">how_to_reg</mat-icon>
+                    </button>
+                  </span>
+                } @else if (event.userRegistered) {
+                  @let checkIn = canCheckIn(event);
+                  @let checkInTooltip =
+                    checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
+                  <button
+                    matIconButton
+                    color="primary"
+                    [matTooltip]="checkInTooltip | transloco"
+                    [disabled]="!checkIn"
+                    (click)="onCheckIn(event)"
+                  >
+                    <mat-icon>qr_code</mat-icon>
+                  </button>
+                } @else {
+                  <button
+                    matIconButton
+                    color="primary"
+                    [matTooltip]="'events.register-tooltip' | transloco"
+                    (click)="onRegister(event)"
+                  >
+                    <mat-icon>app_registration</mat-icon>
+                  </button>
+                }
               }
             </mat-card-actions>
           </mat-card>
