@@ -32,6 +32,6 @@ public class EventResponse {
     private Boolean foodProvided;
     private LocalDateTime createdAt;
     private boolean codesGenerated;
-    private boolean isUserRegistered;
-    private boolean isUserCheckedIn;
+    private boolean userRegistered;
+    private boolean userCheckedIn;
 }

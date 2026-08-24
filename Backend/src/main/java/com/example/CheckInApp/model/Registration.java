@@ -48,7 +48,7 @@ public class Registration {
     @Column(length = 64)
     private String driverName;
 
-    @Column(length = 12)
+    @Column(length = 16)
     @Pattern(
             regexp = "^(\\+40|0)[7][0-9]{8}$",
             message = "Phone Number is not a valid romanian phone number (ex: 0722123456 or +40722123456)"

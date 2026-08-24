@@ -55,8 +55,8 @@ public class EventMapper {
                 .foodProvided(event.getFoodProvided())
                 .createdAt(event.getCreatedAt())
                 .codesGenerated(event.getCheckInCode() != null)
-                .isUserRegistered(isUserRegistered)
-                .isUserCheckedIn(isUserCheckedIn)
+                .userRegistered(isUserRegistered)
+                .userCheckedIn(isUserCheckedIn)
                 .build();
     }
 

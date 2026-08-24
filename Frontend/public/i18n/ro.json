@@ -329,6 +329,7 @@
     "check-in-tooltip": "Check-In",
     "checked-in-tooltip": "Deja înregistrat la eveniment",
     "register-tooltip": "Înscrie-te la acest eveniment",
+    "register-disabled-tooltip": "Înscrierea la acest eveniment s-a închis",
     "status-values": {
       "DRAFT": "Schiță",
       "PUBLISHED": "Publicat",

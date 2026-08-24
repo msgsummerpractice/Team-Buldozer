@@ -251,6 +251,11 @@ export class Events implements OnInit {
     );
   }
 
+  protected canRegister(event: EventResponse): boolean {
+    const today = new Date().toISOString().slice(0, 10);
+    return event.registrationEndDate >= today;
+  }
+
   protected onCheckIn(event: EventResponse): void {
     this.router.navigate(['/events', event.id, 'checkin']);
   }

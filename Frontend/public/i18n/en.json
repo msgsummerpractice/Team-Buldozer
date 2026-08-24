@@ -329,6 +329,7 @@
     "check-in-tooltip": "Check-In",
     "checked-in-tooltip": "Already checked in",
     "register-tooltip": "Register for this event",
+    "register-disabled-tooltip": "Registration has closed for this event",
     "status-values": {
       "DRAFT": "Draft",
       "PUBLISHED": "Published",

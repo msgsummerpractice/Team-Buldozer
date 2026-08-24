@@ -322,7 +322,7 @@ class EventServiceTest {
                                 eq(Set.of(1L))))
                                 .thenReturn(List.of(event));
                 when(eventMapper.toResponse(event, true, false))
-                                .thenReturn(EventResponse.builder().id(1L).isUserRegistered(true).build());
+                                .thenReturn(EventResponse.builder().id(1L).userRegistered(true).build());
 
                 List<EventResponse> result = eventService.getAllEvents("user@example.com");
 
@@ -339,7 +339,7 @@ class EventServiceTest {
                 when(attendanceRecordRepository.findCheckedInEventIdsByUserId(any())).thenReturn(Set.of());
                 when(eventRepository.findAllByOrderByStartDateTimeDesc()).thenReturn(List.of(event));
                 when(eventMapper.toResponse(event, true, false))
-                                .thenReturn(EventResponse.builder().id(1L).isUserRegistered(true).build());
+                                .thenReturn(EventResponse.builder().id(1L).userRegistered(true).build());
 
                 List<EventResponse> result = eventService.getAllEvents("user@example.com");
 
@@ -355,7 +355,7 @@ class EventServiceTest {
                 when(attendanceRecordRepository.findCheckedInEventIdsByUserId(any())).thenReturn(Set.of(1L));
                 when(eventRepository.findAllByOrderByStartDateTimeDesc()).thenReturn(List.of(event));
                 when(eventMapper.toResponse(event, true, true))
-                                .thenReturn(EventResponse.builder().id(1L).isUserRegistered(true).isUserCheckedIn(true).build());
+                                .thenReturn(EventResponse.builder().id(1L).userRegistered(true).userCheckedIn(true).build());
 
                 List<EventResponse> result = eventService.getAllEvents("user@example.com");
 
