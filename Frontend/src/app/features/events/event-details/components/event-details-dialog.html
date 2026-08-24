@@ -51,7 +51,9 @@
             {{ 'event-details.dialog.start-date' | transloco }}
           </span>
           <div class="flex items-center gap-2">
-            <mat-icon class="text-[16px] opacity-70">calendar_today</mat-icon>
+            <mat-icon class="!text-[16px] !w-4 !h-4 flex-shrink-0 opacity-70">
+              calendar_today
+            </mat-icon>
             <span class="text-sm font-medium">{{ data.startDateTime | date: 'medium' }}</span>
           </div>
         </div>
@@ -60,7 +62,9 @@
             {{ 'event-details.dialog.end-date' | transloco }}
           </span>
           <div class="flex items-center gap-2">
-            <mat-icon class="text-[16px] opacity-70">calendar_today</mat-icon>
+            <mat-icon class="!text-[16px] !w-4 !h-4 flex-shrink-0 opacity-70">
+              calendar_today
+            </mat-icon>
             <span class="text-sm font-medium">{{ data.endDateTime | date: 'medium' }}</span>
           </div>
         </div>
@@ -71,7 +75,7 @@
               {{ 'event-details.dialog.registration-period' | transloco }}
             </span>
             <div class="flex items-center gap-2">
-              <mat-icon class="text-[16px] opacity-70">schedule</mat-icon>
+              <mat-icon class="!text-[16px] !w-4 !h-4 flex-shrink-0 opacity-70">schedule</mat-icon>
               <span class="text-sm font-medium">
                 {{ data.registrationStartDate | date: 'mediumDate' }} –
                 {{ data.registrationEndDate | date: 'mediumDate' }}
@@ -83,7 +87,9 @@
               {{ 'event-details.dialog.location' | transloco }}
             </span>
             <div class="flex items-center gap-2">
-              <mat-icon class="text-[16px] opacity-70">location_on</mat-icon>
+              <mat-icon class="!text-[16px] !w-4 !h-4 flex-shrink-0 opacity-70">
+                location_on
+              </mat-icon>
               <span class="text-sm font-medium">
                 {{ 'events.location-values.' + data.location | transloco }}
               </span>
@@ -97,7 +103,9 @@
               {{ 'event-details.dialog.location' | transloco }}
             </span>
             <div class="flex items-center gap-2">
-              <mat-icon class="text-[16px] opacity-70">location_on</mat-icon>
+              <mat-icon class="!text-[16px] !w-4 !h-4 flex-shrink-0 opacity-70">
+                location_on
+              </mat-icon>
               <span class="text-sm font-medium">
                 {{ 'events.location-values.' + data.location | transloco }}
               </span>
@@ -110,7 +118,7 @@
             {{ 'event-details.dialog.address' | transloco }}
           </span>
           <div class="flex items-center gap-2">
-            <mat-icon class="text-[16px] opacity-70">place</mat-icon>
+            <mat-icon class="!text-[16px] !w-4 !h-4 flex-shrink-0 opacity-70">place</mat-icon>
             <span class="text-sm font-medium">{{ data.address || '—' }}</span>
           </div>
         </div>
@@ -157,6 +165,10 @@
 }
 
 <mat-dialog-actions align="end" class="mt-4 gap-3">
+  <button matButton="outlined" type="button" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+    {{ 'common.close' | transloco }}
+  </button>
   @if (isMarketing() && event()) {
     @if (codesGenerated()) {
       <button matButton="text" type="button" (click)="onViewCodes()">
