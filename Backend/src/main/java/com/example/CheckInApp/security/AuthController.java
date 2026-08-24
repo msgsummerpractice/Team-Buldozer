@@ -1,11 +1,14 @@
 package com.example.CheckInApp.security;
 
 import com.example.CheckInApp.dto.request.ForgotPasswordRequest;
+import com.example.CheckInApp.dto.request.ForgotPasswordRequest;
 import com.example.CheckInApp.dto.request.LoginRequest;
+import com.example.CheckInApp.dto.request.ResetPasswordRequest;
 import com.example.CheckInApp.dto.request.ResetPasswordRequest;
 import com.example.CheckInApp.dto.request.UserRequest;
 import com.example.CheckInApp.dto.response.LoginResponse;
 import com.example.CheckInApp.dto.response.UserResponse;
+import com.example.CheckInApp.service.PasswordResetService;
 import com.example.CheckInApp.service.PasswordResetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
     private final PasswordResetService passwordResetService;
 
     @PostMapping("/login")
@@ -44,6 +48,9 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        if (!request.getNewPassword().equals(request.getNewPasswordConfirmation())) {
+            throw new IllegalArgumentException("Passwords do not match.");
+        }
         passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
         return ResponseEntity.ok().build();
     }

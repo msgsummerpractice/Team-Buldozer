@@ -100,7 +100,7 @@
                 [checked]="user.status"
                 [disabled]="isSaving(user.id)"
                 hideIcon
-                (change)="onToggleStatus(user, $event.checked)"
+                (change)="onToggleStatus(user, $event)"
               ></mat-slide-toggle>
             </td>
           </ng-container>

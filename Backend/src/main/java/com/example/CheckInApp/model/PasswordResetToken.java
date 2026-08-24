@@ -21,11 +21,14 @@ public class PasswordResetToken {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String token;
+    private String tokenHash;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime expiresAt;
@@ -36,11 +39,13 @@ public class PasswordResetToken {
         return LocalDateTime.now().isAfter(expiresAt);
     }
 
-    public static PasswordResetToken create(User user, String token) {
+    public static PasswordResetToken create(User user, String tokenHash) {
+        LocalDateTime now = LocalDateTime.now();
         return PasswordResetToken.builder()
-                .token(token)
+                .tokenHash(tokenHash)
                 .user(user)
-                .expiresAt(LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES))
+                .createdAt(now)
+                .expiresAt(now.plusMinutes(EXPIRATION_MINUTES))
                 .used(false)
                 .build();
     }
