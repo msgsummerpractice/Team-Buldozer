@@ -136,17 +136,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidRegistrationDataException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRegistrationData(InvalidRegistrationDataException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_222, ex.getMessage(), request);
+        return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_224, ex.getMessage(), request);
     }
 
     @ExceptionHandler(RegistrationClosedException.class)
     public ResponseEntity<ErrorResponse> handleRegistrationClosed(RegistrationClosedException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_223, ex.getMessage(), request);
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_225, ex.getMessage(), request);
     }
 
     @ExceptionHandler(AlreadyRegisteredException.class)
     public ResponseEntity<ErrorResponse> handleAlreadyRegistered(AlreadyRegisteredException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_224, ex.getMessage(), request);
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_226, ex.getMessage(), request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {

@@ -1,6 +1,8 @@
 package com.example.CheckInApp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -21,12 +23,12 @@ public class Registration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Event event;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
@@ -46,7 +48,12 @@ public class Registration {
     @Column(length = 64)
     private String driverName;
 
-    @Column(length = 16)
+    @Column(length = 12)
+    @NotBlank(message = "Driver Phone Number is required.")
+    @Pattern(
+            regexp = "^(\\+40|0)[7][0-9]{8}$",
+            message = "Phone Number is not a valid romanian phone number (ex: 0722123456 or +40722123456)"
+    )
     private String driverPhoneNumber;
 
     private Boolean accommodationNeeded;
