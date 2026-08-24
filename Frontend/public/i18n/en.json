@@ -152,7 +152,11 @@
     "ERR-220": "You are not registered for this event.",
     "ERR-221": "Check-in is closed for this event.",
     "ERR-222": "Invalid QR code.",
-    "ERR-223": "You are already checked in for this event."
+    "ERR-223": "You are already checked in for this event.",
+    "ERR-224": "Too many requests. Please wait before trying again.",
+    "ERR-225": "Registration data is invalid.",
+    "ERR-226": "Registration is closed for this event.",
+    "ERR-227": "Already registered for this event."
   },
   "success-messages": {
     "login-successful": "Login successful!",
