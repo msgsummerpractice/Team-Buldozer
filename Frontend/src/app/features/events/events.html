@@ -160,7 +160,7 @@
                 [routerLink]="['/events', event.id, 'details']"
                 [matTooltip]="'events.view-details' | transloco"
               >
-                <mat-icon style="color: var(--mat-sys-primary)">info</mat-icon>
+                <mat-icon style="color: var(--color-msg-blue)">info</mat-icon>
               </button>
               @if (this.isMarketing()) {
                 <div
@@ -172,13 +172,14 @@
                     ) | transloco
                   "
                 >
-                  <button
-                    matIconButton
-                    color="accent"
-                    [disabled]="!canPublish(event)"
-                    (click)="onPublish(event)"
-                  >
-                    <mat-icon [class.text-green-500!]="canPublish(event)">publish</mat-icon>
+                  <button matIconButton [disabled]="!canPublish(event)" (click)="onPublish(event)">
+                    <mat-icon
+                      [style.color]="
+                        canPublish(event) ? 'var(--color-msg-blue)' : 'var(--color-msg-grey)'
+                      "
+                    >
+                      publish
+                    </mat-icon>
                   </button>
                 </div>
                 <div
@@ -192,11 +193,16 @@
                 >
                   <button
                     matIconButton
-                    color="accent"
                     [disabled]="!canComplete(event)"
                     (click)="onComplete(event)"
                   >
-                    <mat-icon [class.text-green-500!]="canComplete(event)">check_circle</mat-icon>
+                    <mat-icon
+                      [style.color]="
+                        canComplete(event) ? 'var(--color-msg-green)' : 'var(--color-msg-grey)'
+                      "
+                    >
+                      check_circle
+                    </mat-icon>
                   </button>
                 </div>
               }
@@ -307,7 +313,7 @@
                 [routerLink]="['/events', event.id, 'details']"
                 [matTooltip]="'events.view-details' | transloco"
               >
-                <mat-icon style="color: var(--mat-sys-primary)">info</mat-icon>
+                <mat-icon style="color: var(--color-msg-purple)">info</mat-icon>
               </button>
               @if (this.isMarketing()) {
                 <div
@@ -319,13 +325,14 @@
                     ) | transloco
                   "
                 >
-                  <button
-                    matIconButton
-                    color="accent"
-                    [disabled]="!canPublish(event)"
-                    (click)="onPublish(event)"
-                  >
-                    <mat-icon [class.text-green-500!]="canPublish(event)">publish</mat-icon>
+                  <button matIconButton [disabled]="!canPublish(event)" (click)="onPublish(event)">
+                    <mat-icon
+                      [style.color]="
+                        canPublish(event) ? 'var(--color-msg-blue)' : 'var(--color-msg-grey)'
+                      "
+                    >
+                      publish
+                    </mat-icon>
                   </button>
                 </div>
                 <div
@@ -339,11 +346,16 @@
                 >
                   <button
                     matIconButton
-                    color="accent"
                     [disabled]="!canComplete(event)"
                     (click)="onComplete(event)"
                   >
-                    <mat-icon [class.text-green-500!]="canComplete(event)">check_circle</mat-icon>
+                    <mat-icon
+                      [style.color]="
+                        canComplete(event) ? 'var(--color-msg-green)' : 'var(--color-msg-grey)'
+                      "
+                    >
+                      check_circle
+                    </mat-icon>
                   </button>
                 </div>
               }
