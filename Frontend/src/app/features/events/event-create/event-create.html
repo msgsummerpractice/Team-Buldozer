@@ -20,9 +20,9 @@
         id="eventCreateForm"
         [formGroup]="eventForm"
         (ngSubmit)="onSubmit()"
-        class="grid grid-cols-1 md:grid-cols-2 gap-5"
+        class="grid grid-cols-1 md:grid-cols-2 gap-5 py-1"
       >
-        <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full pt-1">
+        <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full">
           <mat-label>{{ 'events.fields.name.label' | transloco }}</mat-label>
           <input matInput formControlName="name" />
           <mat-icon matSuffix>badge</mat-icon>
