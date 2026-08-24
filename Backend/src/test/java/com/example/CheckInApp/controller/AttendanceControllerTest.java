@@ -10,6 +10,7 @@ import com.example.CheckInApp.exception.InvalidCheckInCodeException;
 import com.example.CheckInApp.exception.InvalidQrCodeCheckInException;
 import com.example.CheckInApp.exception.NotRegisteredForEventException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
+import com.example.CheckInApp.repository.UserRepository;
 import com.example.CheckInApp.security.JwtUtil;
 import com.example.CheckInApp.service.AttendanceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +54,9 @@ class AttendanceControllerTest {
 
     @MockitoBean
     private UserDetailsService userDetailsService;
+
+    @MockitoBean
+    private UserRepository userRepository;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
