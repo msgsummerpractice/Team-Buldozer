@@ -32,17 +32,23 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponse getUserById(Long id) {
+    public UserResponse getUserById(Long id, String authenticatedUserEmail, boolean isAdmin) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+        if (!isAdmin && !authenticatedUserEmail.equalsIgnoreCase(user.getEmail())) {
+            throw new ForbiddenActionException("You can only access your own profile.");
+        }
         return userMapper.toResponse(user);
     }
 
     @Transactional
-    public UserResponse updateUserProfile(Long id, UserProfileRequest userProfileRequest) {
+    public UserResponse updateUserProfile(Long id, UserProfileRequest userProfileRequest, String authenticatedUserEmail, boolean isAdmin) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
 
+        if (!isAdmin && !authenticatedUserEmail.equalsIgnoreCase(existingUser.getEmail())) {
+            throw new ForbiddenActionException("You can only update your own profile.");
+        }
         if (userProfileRequest.getEmail() != null
                 && !userProfileRequest.getEmail().equalsIgnoreCase(existingUser.getEmail())
                 && userRepository.existsByEmail(userProfileRequest.getEmail())) {
@@ -53,7 +59,7 @@ public class UserService {
             User updatedUser = userRepository.save(existingUser);
             return userMapper.toResponse(updatedUser);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error updating user profile: " + e.getMessage());
+            throw new DataBaseException("Error updating user profile: " + e.getMessage());
         }
 
     }

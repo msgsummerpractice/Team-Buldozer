@@ -1,11 +1,15 @@
-<div class="p-6 mx-auto max-w-7xl rounded-2xl mt-8">
-  <div class="flex items-center justify-between mb-4">
-    <h1 class="font-bold text-3xl">{{ 'events.manage-title' | transloco }}</h1>
+<app-page-layout
+  [title]="'events.manage-title' | transloco"
+  [subtitle]="'events.subtitle' | transloco"
+>
+  <div sidebar-actions>
     @if (isMarketing()) {
-      <button matButton="filled" color="primary" routerLink="/events/add">
-        <mat-icon>add</mat-icon>
-        {{ 'events.create.title' | transloco }}
-      </button>
+      <div class="mt-5">
+        <button matButton="filled" color="primary" routerLink="/events/add">
+          <mat-icon>add</mat-icon>
+          {{ 'events.create.title' | transloco }}
+        </button>
+      </div>
     }
   </div>
   <mat-card appearance="raised">
@@ -77,23 +81,16 @@
               {{ 'events.status' | transloco }}
             </th>
             <td mat-cell *matCellDef="let event">
-              @switch (event.status) {
-                @case (EventStatusEnum.PUBLISHED) {
-                  <mat-chip disableRipple="true" highlighted="true" color="primary">
-                    {{ 'events.status-values.' + event.status | transloco }}
-                  </mat-chip>
-                }
-                @case (EventStatusEnum.COMPLETED) {
-                  <mat-chip disableRipple="true" highlighted="true" color="accent">
-                    {{ 'events.status-values.' + event.status | transloco }}
-                  </mat-chip>
-                }
-                @default {
-                  <mat-chip disableRipple="true">
-                    {{ 'events.status-values.' + event.status | transloco }}
-                  </mat-chip>
-                }
-              }
+              <mat-chip
+                highlighted="true"
+                [style.--mat-chip-elevated-selected-container-color]="
+                  withAlpha(getChipColor(event.status))
+                "
+                [style.--mat-chip-selected-label-text-color]="'white'"
+                [style.--mat-chip-selected-hover-state-layer-color]="'white'"
+              >
+                {{ 'events.status-values.' + event.status | transloco }}
+              </mat-chip>
             </td>
           </ng-container>
 
@@ -106,7 +103,17 @@
               {{ 'events.type' | transloco }}
             </th>
             <td mat-cell *matCellDef="let event">
-              <mat-chip disableRipple="true">
+              <mat-chip
+                disableRipple="true"
+                class="font-semibold"
+                [style.--mat-chip-outline-width]="'2px'"
+                [style.--mat-chip-outline-color]="getTypeChipColor(event.type)"
+                [style.--mat-chip-label-text-color]="getTypeChipColor(event.type)"
+                [style.--mat-chip-hover-state-layer-color]="getTypeChipColor(event.type)"
+              >
+                <mat-icon matChipAvatar [style.color]="getTypeChipColor(event.type)">
+                  {{ getTypeIcon(event.type) }}
+                </mat-icon>
                 {{ 'events.type-values.' + event.type | transloco }}
               </mat-chip>
             </td>
@@ -122,8 +129,17 @@
             </th>
             <td mat-cell *matCellDef="let event">
               <mat-chip-set>
-                <mat-chip disableRipple="true">
-                  <mat-icon matChipAvatar>place</mat-icon>
+                <mat-chip
+                  disableRipple="true"
+                  class="font-semibold"
+                  [style.--mat-chip-outline-width]="'2px'"
+                  [style.--mat-chip-outline-color]="getLocationChipColor(event.location)"
+                  [style.--mat-chip-label-text-color]="getLocationChipColor(event.location)"
+                  [style.--mat-chip-hover-state-layer-color]="getLocationChipColor(event.location)"
+                >
+                  <mat-icon matChipAvatar [style.color]="getLocationChipColor(event.location)">
+                    place
+                  </mat-icon>
                   {{ 'events.location-values.' + event.location | transloco }}
                 </mat-chip>
               </mat-chip-set>
@@ -144,7 +160,7 @@
                 [routerLink]="['/events', event.id, 'details']"
                 [matTooltip]="'events.view-details' | transloco"
               >
-                <mat-icon style="color: var(--mat-sys-primary)">info</mat-icon>
+                <mat-icon style="color: var(--color-msg-blue)">info</mat-icon>
               </button>
               @if (this.isMarketing()) {
                 <div
@@ -156,13 +172,14 @@
                     ) | transloco
                   "
                 >
-                  <button
-                    matIconButton
-                    color="accent"
-                    [disabled]="!canPublish(event)"
-                    (click)="onPublish(event)"
-                  >
-                    <mat-icon [class.text-green-500!]="canPublish(event)">publish</mat-icon>
+                  <button matIconButton [disabled]="!canPublish(event)" (click)="onPublish(event)">
+                    <mat-icon
+                      [style.color]="
+                        canPublish(event) ? 'var(--color-msg-blue)' : 'var(--color-msg-grey)'
+                      "
+                    >
+                      publish
+                    </mat-icon>
                   </button>
                 </div>
                 <div
@@ -176,11 +193,16 @@
                 >
                   <button
                     matIconButton
-                    color="accent"
                     [disabled]="!canComplete(event)"
                     (click)="onComplete(event)"
                   >
-                    <mat-icon [class.text-green-500!]="canComplete(event)">check_circle</mat-icon>
+                    <mat-icon
+                      [style.color]="
+                        canComplete(event) ? 'var(--color-msg-green)' : 'var(--color-msg-grey)'
+                      "
+                    >
+                      check_circle
+                    </mat-icon>
                   </button>
                 </div>
               }
@@ -262,28 +284,41 @@
 
             <mat-card-content class="!pt-4 !pb-4">
               <mat-chip-set>
-                @switch (event.status) {
-                  @case (EventStatusEnum.PUBLISHED) {
-                    <mat-chip disableRipple="true" highlighted="true" color="primary">
-                      {{ 'events.status-values.' + event.status | transloco }}
-                    </mat-chip>
-                  }
-                  @case (EventStatusEnum.COMPLETED) {
-                    <mat-chip disableRipple="true" highlighted="true" color="accent">
-                      {{ 'events.status-values.' + event.status | transloco }}
-                    </mat-chip>
-                  }
-                  @default {
-                    <mat-chip disableRipple="true">
-                      {{ 'events.status-values.' + event.status | transloco }}
-                    </mat-chip>
-                  }
-                }
-                <mat-chip disableRipple="true">
+                <mat-chip
+                  disableRipple="true"
+                  highlighted="true"
+                  [style.--mat-chip-elevated-selected-container-color]="
+                    withAlpha(getChipColor(event.status))
+                  "
+                  [style.--mat-chip-selected-label-text-color]="'white'"
+                  [style.--mat-chip-selected-hover-state-layer-color]="'white'"
+                >
+                  {{ 'events.status-values.' + event.status | transloco }}
+                </mat-chip>
+                <mat-chip
+                  disableRipple="true"
+                  class="font-semibold"
+                  [style.--mat-chip-outline-width]="'2px'"
+                  [style.--mat-chip-outline-color]="getTypeChipColor(event.type)"
+                  [style.--mat-chip-label-text-color]="getTypeChipColor(event.type)"
+                  [style.--mat-chip-hover-state-layer-color]="getTypeChipColor(event.type)"
+                >
+                  <mat-icon matChipAvatar [style.color]="getTypeChipColor(event.type)">
+                    {{ getTypeIcon(event.type) }}
+                  </mat-icon>
                   {{ 'events.type-values.' + event.type | transloco }}
                 </mat-chip>
-                <mat-chip disableRipple="true">
-                  <mat-icon matChipAvatar>place</mat-icon>
+                <mat-chip
+                  disableRipple="true"
+                  class="font-semibold"
+                  [style.--mat-chip-outline-width]="'2px'"
+                  [style.--mat-chip-outline-color]="getLocationChipColor(event.location)"
+                  [style.--mat-chip-label-text-color]="getLocationChipColor(event.location)"
+                  [style.--mat-chip-hover-state-layer-color]="getLocationChipColor(event.location)"
+                >
+                  <mat-icon matChipAvatar [style.color]="getLocationChipColor(event.location)">
+                    place
+                  </mat-icon>
                   {{ 'events.location-values.' + event.location | transloco }}
                 </mat-chip>
               </mat-chip-set>
@@ -295,7 +330,7 @@
                 [routerLink]="['/events', event.id, 'details']"
                 [matTooltip]="'events.view-details' | transloco"
               >
-                <mat-icon style="color: var(--mat-sys-primary)">info</mat-icon>
+                <mat-icon style="color: var(--color-msg-purple)">info</mat-icon>
               </button>
               @if (this.isMarketing()) {
                 <div
@@ -307,13 +342,14 @@
                     ) | transloco
                   "
                 >
-                  <button
-                    matIconButton
-                    color="accent"
-                    [disabled]="!canPublish(event)"
-                    (click)="onPublish(event)"
-                  >
-                    <mat-icon [class.text-green-500!]="canPublish(event)">publish</mat-icon>
+                  <button matIconButton [disabled]="!canPublish(event)" (click)="onPublish(event)">
+                    <mat-icon
+                      [style.color]="
+                        canPublish(event) ? 'var(--color-msg-blue)' : 'var(--color-msg-grey)'
+                      "
+                    >
+                      publish
+                    </mat-icon>
                   </button>
                 </div>
                 <div
@@ -327,11 +363,16 @@
                 >
                   <button
                     matIconButton
-                    color="accent"
                     [disabled]="!canComplete(event)"
                     (click)="onComplete(event)"
                   >
-                    <mat-icon [class.text-green-500!]="canComplete(event)">check_circle</mat-icon>
+                    <mat-icon
+                      [style.color]="
+                        canComplete(event) ? 'var(--color-msg-green)' : 'var(--color-msg-grey)'
+                      "
+                    >
+                      check_circle
+                    </mat-icon>
                   </button>
                 </div>
               }
@@ -393,4 +434,4 @@
       }
     </mat-card-content>
   </mat-card>
-</div>
+</app-page-layout>

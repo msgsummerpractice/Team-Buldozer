@@ -4,6 +4,7 @@ import com.example.CheckInApp.dto.request.ForgotPasswordRequest;
 import com.example.CheckInApp.dto.request.LoginRequest;
 import com.example.CheckInApp.dto.request.ResetPasswordRequest;
 import com.example.CheckInApp.dto.request.UserRequest;
+import com.example.CheckInApp.dto.request.ValidateTokenRequest;
 import com.example.CheckInApp.dto.response.LoginResponse;
 import com.example.CheckInApp.dto.response.UserResponse;
 import com.example.CheckInApp.service.PasswordResetService;
@@ -34,6 +35,12 @@ public class AuthController {
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest request) {
         UserResponse response = authService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/validate-token")
+    public ResponseEntity<Void> validateToken(@Valid @RequestBody ValidateTokenRequest request) {
+        passwordResetService.validateToken(request.getToken());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/forgot-password")

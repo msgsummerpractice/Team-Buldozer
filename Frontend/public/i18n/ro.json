@@ -84,6 +84,7 @@
   },
   "profile": {
     "title": "Profilul meu",
+    "subtitle": "Vizualizează și actualizează informațiile personale, locația și poza de profil.",
     "edit-mode": "Editează",
     "cancel": "Anulează",
     "save": "Salvează modificările",
@@ -152,11 +153,40 @@
     "ERR-220": "Nu sunteți înregistrat la acest eveniment.",
     "ERR-221": "Check-in-ul este închis pentru acest eveniment.",
     "ERR-222": "Cod QR invalid.",
-    "ERR-223": "Sunteți deja înregistrat (check-in) la acest eveniment."
+    "ERR-223": "Sunteți deja înregistrat (check-in) la acest eveniment.",
+    "ERR-224": "Prea multe cereri. Vă rugăm să așteptați înainte de a încerca din nou.",
+    "ERR-225": "Datele de înregistrare sunt invalide.",
+    "ERR-226": "Înregistrarea este închisă pentru acest eveniment.",
+    "ERR-227": "Sunteți deja înregistrat pentru acest eveniment.",
+    "ERR-228": "Acest link de resetare a expirat. Vă rugăm să solicitați unul nou.",
+    "ERR-229": "Acest link de resetare a fost deja folosit. Vă rugăm să solicitați unul nou."
   },
   "success-messages": {
     "login-successful": "Autentificare reușită!",
     "user-updated": "Utilizatorul a fost actualizat cu succes."
+  },
+  "password-reset": {
+    "forgotTitle": "Parolă uitată",
+    "forgotSubtitle": "Introduceți adresa de email și vă vom trimite un link pentru resetarea parolei.",
+    "email": "Email",
+    "emailPlaceholder": "Introduceți emailul",
+    "emailRequired": "Email este obligatoriu",
+    "emailInvalid": "Vă rugăm să introduceți o adresă de email validă",
+    "sendLink": "Trimite link de resetare",
+    "emailSent": "Dacă există un cont cu acest email, un link de resetare a fost trimis.",
+    "resetTitle": "Setează parolă nouă",
+    "newPassword": "Parolă nouă",
+    "newPasswordPlaceholder": "Introduceți parola nouă",
+    "confirmPassword": "Confirmă parola",
+    "confirmPasswordPlaceholder": "Reintroduceți parola nouă",
+    "passwordRequired": "Parola este obligatorie",
+    "passwordMinLength": "Parola trebuie să conțină cel puțin 8 caractere",
+    "passwordMaxLength": "Parola trebuie să conțină cel mult 128 de caractere",
+    "confirmPasswordRequired": "Vă rugăm să confirmați parola",
+    "passwordMismatch": "Parolele nu se potrivesc",
+    "resetButton": "Resetează parola",
+    "resetSuccess": "Parola a fost resetată cu succes!",
+    "backToLogin": "Înapoi la autentificare"
   },
   "common": {
     "close": "Închide",
@@ -170,7 +200,15 @@
       "title": "Coduri de Check-in",
       "check-in-code": "Cod de Check-in",
       "qr-code": "Cod QR",
-      "error": "Nu s-au putut încărca codurile de check-in."
+      "error": "Nu s-au putut încărca codurile de check-in.",
+      "download-error": "Nu s-a putut genera PDF-ul cu codul QR.",
+      "download-qr": "Descarcă QR"
+    },
+    "pdf": {
+      "scan-qr": "Scaneaza codul QR",
+      "or": "SAU",
+      "enter-code": "Introdu urmatorul cod",
+      "powered-by": "Realizat de msg Check-In"
     }
   },
   "event-details": {
@@ -201,6 +239,7 @@
   },
   "users": {
     "title": "Gestionează Utilizatorii",
+    "subtitle": "Gestionează conturile utilizatorilor, rolurile și accesul pe platformă.",
     "search": "Caută după nume, email, locație sau rol",
     "first-name": "PRENUME",
     "last-name": "NUME",
@@ -209,9 +248,15 @@
     "status": "STATUS",
     "roles": "ROLURI",
     "manage": "GESTIONEAZĂ",
-    "cluj": "CLUJ",
-    "timisoara": "TIMIȘOARA",
-    "mures": "TÂRGU MUREȘ",
+    "cluj": "Cluj",
+    "timisoara": "Timișoara",
+    "mures": "Târgu Mureș",
+    "role-values": {
+      "ADMIN": "Admin",
+      "HR": "HR",
+      "MARKETING": "Marketing",
+      "PARTICIPANT": "Participant"
+    },
     "active": "Activ",
     "inactive": "Inactiv",
     "no-users": "Niciun utilizator găsit",
@@ -234,8 +279,9 @@
     "range": "din"
   },
   "events": {
-    "title": "Evenimente",
+    "title": "Vezi Evenimente",
     "manage-title": "Gestionează Evenimente",
+    "subtitle": "Răsfoiește, publică și gestionează toate evenimentele msg într-un singur loc.",
     "search": "Caută după nume, status, tip sau locație",
     "name": "DENUMIRE",
     "period": "PERIOADĂ",

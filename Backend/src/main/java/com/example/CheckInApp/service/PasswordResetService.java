@@ -1,6 +1,8 @@
 package com.example.CheckInApp.service;
 
+import com.example.CheckInApp.exception.ExpiredResetTokenException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
+import com.example.CheckInApp.exception.UsedResetTokenException;
 import com.example.CheckInApp.model.PasswordResetToken;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.PasswordResetTokenRepository;
@@ -51,14 +53,13 @@ public class PasswordResetService {
         });
     }
 
+    public void validateToken(String token) {
+        findValidToken(token);
+    }
+
     @Transactional
     public void resetPassword(String token, String newPassword) {
-        PasswordResetToken resetToken = tokenRepository.findByTokenHash(hashToken(token))
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid or expired reset link."));
-
-        if (resetToken.isUsed() || resetToken.isExpired()) {
-            throw new ResourceNotFoundException("Invalid or expired reset link.");
-        }
+        PasswordResetToken resetToken = findValidToken(token);
 
         User user = resetToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -67,6 +68,16 @@ public class PasswordResetService {
 
         resetToken.setUsed(true);
         tokenRepository.save(resetToken);
+    }
+
+    private PasswordResetToken findValidToken(String token) {
+        PasswordResetToken resetToken = tokenRepository.findByTokenHash(hashToken(token))
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid or expired reset link."));
+
+        if (resetToken.isUsed()) throw new UsedResetTokenException("This reset link has already been used.");
+        if (resetToken.isExpired()) throw new ExpiredResetTokenException("This reset link has expired.");
+
+        return resetToken;
     }
 
     private static String hashToken(String token) {
