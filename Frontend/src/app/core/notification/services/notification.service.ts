@@ -24,12 +24,12 @@ export class NotificationService {
     };
 
     if (hasDuration) {
-      config.duration = 3000;
+      config.duration = 5000;
     }
 
     this.snackBar.openFromComponent(Notifications, {
       data: { messageTranslationKey, action },
-      duration: hasDuration ? 3000 : undefined,
+      duration: hasDuration ? 5000 : undefined,
       panelClass: [panelClass],
     });
   }

@@ -41,8 +41,11 @@ export class PasswordReset {
   });
 
   protected readonly resetForm = this.fb.group({
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(128)]],
+    confirmPassword: [
+      '',
+      [Validators.required, Validators.minLength(8), Validators.maxLength(128)],
+    ],
   });
 
   protected onForgotSubmit(): void {
@@ -65,7 +68,7 @@ export class PasswordReset {
     }
 
     const token = this.route.snapshot.queryParamMap.get('token')!;
-    this.passwordResetService.resetPassword(token, password).subscribe(() => {
+    this.passwordResetService.resetPassword(token, password, confirmPassword).subscribe(() => {
       this.notification.showSuccess('password-reset.resetSuccess');
       this.router.navigate(['/login']);
     });

@@ -139,7 +139,24 @@ public class EmailService {
                   <h2>Password Reset Request</h2>
                   <p>We received a request to reset your password.</p>
                   <p>Click the link below to set a new password. This link will expire in 15 minutes.</p>
-                  <p><a href="%s" style="display:inline-block;padding:10px 20px;background-color:#1976d2;color:#ffffff;text-decoration:none;border-radius:4px;">Reset Password</a></p>
+                  <a href="%s" target="_blank" style="text-decoration: none; display: inline-block; margin-top: 15px;">
+                  <button type="button" style="
+                  background-color: #8e1239;\s
+                  color: #ffffff;\s
+                  font-family: Arial, sans-serif;\s
+                  font-size: 16px;\s
+                  font-weight: bold;\s
+                  padding: 12px 24px;\s
+                  border: none;\s
+                  border-radius: 6px;\s
+                  cursor: pointer;\s
+                  display: inline-block;
+                  -webkit-appearance: none;
+                  -moz-appearance: none;
+                  appearance: none;">
+                  Reset Password
+                </button>
+              </a>
                   <p>If you didn't request a password reset, you can safely ignore this email.</p>
                 </body>
                 </html>

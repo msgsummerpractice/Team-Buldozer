@@ -178,6 +178,7 @@
     "confirmPasswordPlaceholder": "Reintroduceți parola nouă",
     "passwordRequired": "Parola este obligatorie",
     "passwordMinLength": "Parola trebuie să conțină cel puțin 8 caractere",
+    "passwordMaxLength": "Parola trebuie să conțină cel mult 128 de caractere",
     "confirmPasswordRequired": "Vă rugăm să confirmați parola",
     "passwordMismatch": "Parolele nu se potrivesc",
     "resetButton": "Resetează parola",

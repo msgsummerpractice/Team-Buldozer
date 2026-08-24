@@ -178,6 +178,7 @@
     "confirmPasswordPlaceholder": "Re-enter new password",
     "passwordRequired": "Password is required",
     "passwordMinLength": "Password must be at least 8 characters",
+    "passwordMaxLength": "Password must be at most 128 characters",
     "confirmPasswordRequired": "Please confirm your password",
     "passwordMismatch": "Passwords do not match",
     "resetButton": "Reset Password",
