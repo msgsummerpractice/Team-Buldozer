@@ -30,6 +30,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { PageLayout } from '@shared/components/page-layout/page-layout';
 import {
   combineDateAndTime,
   eventDateRangeValidator,
@@ -82,6 +83,7 @@ interface EventFormControls {
     RouterLink,
     TranslocoPipe,
     MatSuffix,
+    PageLayout,
   ],
   templateUrl: './event-create.html',
 })

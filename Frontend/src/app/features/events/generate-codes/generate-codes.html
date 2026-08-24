@@ -1,6 +1,5 @@
-<div class="p-6 mx-auto max-w-2xl mt-8">
-  <h1 class="font-bold text-3xl mb-6">{{ 'events.generate-codes.title' | transloco }}</h1>
-
+<app-page-layout [title]="'events.generate-codes.title' | transloco">
+  <div class="mx-auto max-w-2xl">
   @if (error()) {
     <div class="flex flex-col items-center gap-4 py-12 text-center">
       <mat-icon class="!text-[48px] text-red-500">error_outline</mat-icon>
@@ -38,4 +37,5 @@
       </button>
     </div>
   }
-</div>
+  </div>
+</app-page-layout>
