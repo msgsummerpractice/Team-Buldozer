@@ -44,6 +44,9 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        if (!request.getNewPassword().equals(request.getNewPasswordConfirmation())) {
+            throw new IllegalArgumentException("Passwords do not match.");
+        }
         passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
         return ResponseEntity.ok().build();
     }
