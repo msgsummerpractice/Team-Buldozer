@@ -15,14 +15,14 @@
       </h2>
     </div>
 
-    <mat-card-content class="p-6 flex-1 overflow-y-auto min-h-0">
+    <mat-card-content class="flex-1 overflow-y-auto min-h-0">
       <form
         id="eventCreateForm"
         [formGroup]="eventForm"
         (ngSubmit)="onSubmit()"
         class="grid grid-cols-1 md:grid-cols-2 gap-5"
       >
-        <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full">
+        <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full pt-1">
           <mat-label>{{ 'events.fields.name.label' | transloco }}</mat-label>
           <input matInput formControlName="name" />
           <mat-icon matSuffix>badge</mat-icon>

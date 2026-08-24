@@ -1,6 +1,6 @@
 <div class="p-6 mx-auto max-w-7xl rounded-2xl mt-8">
   <div class="flex items-center justify-between mb-4">
-    <h1 class="font-bold text-3xl">{{ 'events.manage-title' | transloco }}</h1>
+    <h1 class="font-bold text-3xl">{{ (isMarketing() ? 'events.manage-title' : 'events.title') | transloco }}</h1>
     @if (isMarketing()) {
       <button matButton="filled" color="primary" routerLink="/events/add">
         <mat-icon>add</mat-icon>
