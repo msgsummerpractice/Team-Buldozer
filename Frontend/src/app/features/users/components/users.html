@@ -117,9 +117,9 @@
               <mat-chip-set>
                 @for (role of user.roles; track role) {
                   <mat-chip
-                    [style.--mat-chip-outline-color]="getRoleColor(role)"
-                    [style.--mat-chip-label-text-color]="getRoleColor(role)"
-                    [style.--mat-chip-hover-state-layer-color]="getRoleColor(role)"
+                    [style.--mat-chip-outline-color]="getChipColor(role)"
+                    [style.--mat-chip-label-text-color]="getChipColor(role)"
+                    [style.--mat-chip-hover-state-layer-color]="getChipColor(role)"
                   >
                     {{ role }}
                   </mat-chip>

@@ -17,13 +17,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { UserLocationEnum } from '@core/users/model/user-location';
 import { NotificationService } from '@core/notification/services/notification.service';
-import { getRoleColor } from '@core/authorization/utils/role-colors';
-import { ConfirmDialog, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog';
 import {
   UserRolesDialog,
   UserRolesDialogData,
   UserRolesDialogResult,
 } from '../user-roles-select/user-roles-dialog';
+import { getChipColor } from '@shared/chip-color';
 
 @Component({
   selector: 'app-users',
@@ -135,7 +134,7 @@ export class Users implements OnInit, OnDestroy {
     });
   }
 
-  protected readonly getRoleColor = getRoleColor;
+  protected readonly getChipColor = getChipColor;
 
   protected isSaving(userId: number): boolean {
     return this.savingIds().has(userId);
