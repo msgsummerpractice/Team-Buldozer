@@ -22,7 +22,7 @@ import {
   UserRolesDialogData,
   UserRolesDialogResult,
 } from '../user-roles-select/user-roles-dialog';
-import { getChipColor } from '@shared/chip-color';
+import { getChipColor, getLocationChipColor } from '@shared/chip-color';
 import { PageLayout } from '@shared/components/page-layout/page-layout';
 
 @Component({
@@ -137,6 +137,7 @@ export class Users implements OnInit, OnDestroy {
   }
 
   protected readonly getChipColor = getChipColor;
+  protected readonly getLocationChipColor = getLocationChipColor;
 
   protected isSaving(userId: number): boolean {
     return this.savingIds().has(userId);
