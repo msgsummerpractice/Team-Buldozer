@@ -12,7 +12,7 @@ export class PasswordResetService {
   }
 
   validateToken(token: string): Observable<void> {
-    return this.http.get<void>(`${environment.apiUrl}/auth/validate-token`, { params: { token } });
+    return this.http.post<void>(`${environment.apiUrl}/auth/validate-token`, { token });
   }
 
   resetPassword(

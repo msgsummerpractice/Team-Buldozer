@@ -8,7 +8,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (req.url.endsWith('/auth/reset-password')) {
+      if (req.url.endsWith('/auth/reset-password') || req.url.endsWith('/auth/validate-token')) {
         return throwError(() => error);
       }
 

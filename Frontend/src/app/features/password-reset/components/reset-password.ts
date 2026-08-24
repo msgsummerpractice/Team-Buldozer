@@ -8,10 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, finalize } from 'rxjs';
 import { PasswordResetService } from '../services/password-reset.service';
 import { NotificationService } from '@core/notification/services/notification.service';
-import { LoadingService } from '@core/loading/services/loading.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -32,20 +31,15 @@ export class ResetPassword {
   private readonly router = inject(Router);
   private readonly passwordResetService = inject(PasswordResetService);
   private readonly notification = inject(NotificationService);
-  protected readonly loading = inject(LoadingService).isLoading;
+  protected readonly submitting = signal(false);
 
   protected readonly showPassword = signal(false);
   protected readonly showConfirmPassword = signal(false);
   protected readonly tokenError = signal<string | null>(null);
 
-  private readonly token = this.route.snapshot.queryParamMap.get('token');
+  private readonly token = this.route.snapshot.queryParamMap.get('token')!;
 
   constructor() {
-    if (!this.token) {
-      this.router.navigate(['/forgot-password']);
-      return;
-    }
-
     this.passwordResetService
       .validateToken(this.token)
       .pipe(
@@ -80,9 +74,11 @@ export class ResetPassword {
     }
 
     this.tokenError.set(null);
+    this.submitting.set(true);
     this.passwordResetService
-      .resetPassword(this.token!, password, confirmPassword)
+      .resetPassword(this.token, password, confirmPassword)
       .pipe(
+        finalize(() => this.submitting.set(false)),
         catchError((error: HttpErrorResponse) => {
           const code: string = error.error?.code;
           this.tokenError.set(`server-error-codes.${code ?? 'ERR-99'}`);
