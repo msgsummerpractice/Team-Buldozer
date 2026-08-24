@@ -8,12 +8,11 @@ export type EventQrPdfData = {
   codes: EventCodesResponse;
   eventName?: string;
   startDateTime?: string;
-  poster?: string;
 };
 
 @Injectable({ providedIn: 'root' })
 export class EventQrPdfService {
-  async download({ id, codes, eventName, startDateTime, poster }: EventQrPdfData): Promise<void> {
+  async download({ id, codes, eventName, startDateTime }: EventQrPdfData): Promise<void> {
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
@@ -27,27 +26,18 @@ export class EventQrPdfService {
 
     let currentY = 20;
 
-    if (poster) {
-      const mime = poster.startsWith('iVBORw0KGgo') ? 'image/png' : 'image/jpeg';
-      const imgSrc = `data:${mime};base64,${poster}`;
-      const { width, height } = await this.getImageDimensions(imgSrc);
-      const bannerH = Math.min(70, (height / width) * pageWidth);
-
-      doc.addImage(imgSrc, mime === 'image/png' ? 'PNG' : 'JPEG', 0, 0, pageWidth, bannerH);
-
-      currentY = bannerH + 10;
-    }
-
     if (eventName) {
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(22);
+      doc.setFontSize(26);
       doc.setTextColor(20, 20, 20);
 
       const nameLines = doc.splitTextToSize(eventName, pageWidth - margin * 2);
 
-      doc.text(nameLines, centerX, currentY, { align: 'center' });
+      doc.text(nameLines, centerX, currentY, {
+        align: 'center',
+      });
 
-      currentY += nameLines.length * 9 + 4;
+      currentY += nameLines.length * 10 + 6;
     }
 
     if (startDateTime) {
@@ -62,12 +52,14 @@ export class EventQrPdfService {
       doc.setFontSize(12);
       doc.setTextColor(100, 100, 100);
 
-      doc.text(dateStr, centerX, currentY, { align: 'center' });
+      doc.text(dateStr, centerX, currentY, {
+        align: 'center',
+      });
 
       currentY += 7;
     }
 
-    currentY += 8;
+    currentY += 25;
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
@@ -228,28 +220,6 @@ export class EventQrPdfService {
       };
 
       img.src = `data:image/png;base64,${base64}`;
-    });
-  }
-
-  private getImageDimensions(src: string): Promise<{ width: number; height: number }> {
-    return new Promise((resolve) => {
-      const img = new Image();
-
-      img.onload = () => {
-        resolve({
-          width: img.naturalWidth,
-          height: img.naturalHeight,
-        });
-      };
-
-      img.onerror = () => {
-        resolve({
-          width: 16,
-          height: 9,
-        });
-      };
-
-      img.src = src;
     });
   }
 }

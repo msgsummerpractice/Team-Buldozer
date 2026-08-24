@@ -133,7 +133,6 @@ export class EventDetailsDialog {
         id: event.id,
         eventName: event.name,
         startDateTime: event.startDateTime,
-        poster: event.poster,
       },
     });
   }

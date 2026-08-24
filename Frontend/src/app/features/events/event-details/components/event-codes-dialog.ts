@@ -15,7 +15,6 @@ export type EventCodesDialogData = {
   id: number;
   eventName?: string;
   startDateTime?: string;
-  poster?: string;
 };
 
 @Component({
@@ -59,9 +58,9 @@ export class EventCodesDialog {
       return;
     }
 
-    const { id, eventName, startDateTime, poster } = this.dialogData;
+    const { id, eventName, startDateTime } = this.dialogData;
 
-    await this.eventQrPdfService.download({ id, codes, eventName, startDateTime, poster });
+    await this.eventQrPdfService.download({ id, codes, eventName, startDateTime });
   }
 
   protected close(): void {
