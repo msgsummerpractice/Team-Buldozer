@@ -4,27 +4,39 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@features/events/services/event-service';
-import { EventCodesResponse } from '@features/events/model/event-codes-response';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { catchError } from 'rxjs/internal/operators/catchError';
 
-export type EventCodesDialogData = { id: number };
+import { NotificationService } from '@core/notification/services/notification.service';
+import { EventService } from '@features/events/services/event-service';
+import { EventQrPdfService } from '@features/events/services/event-qr-pdf-service';
+import { EventCodesResponse } from '@features/events/model/event-codes-response';
+
+export type EventCodesDialogData = {
+  id: number;
+  eventName?: string;
+  startDateTime?: string;
+};
 
 @Component({
   selector: 'app-event-codes-dialog',
   imports: [MatButtonModule, MatDialogModule, MatDividerModule, MatIconModule, TranslocoPipe],
+  providers: [EventQrPdfService],
   templateUrl: './event-codes-dialog.html',
 })
 export class EventCodesDialog {
   private readonly dialogRef = inject(MatDialogRef<EventCodesDialog>);
   private readonly eventService = inject(EventService);
+  private readonly eventQrPdfService = inject(EventQrPdfService);
+  private readonly notificationService = inject(NotificationService);
   private readonly dialogData = inject<EventCodesDialogData>(MAT_DIALOG_DATA);
 
   readonly codes = signal<EventCodesResponse | null>(null);
   readonly errorKey = signal<string | null>(null);
+
   protected readonly qrCodeSrc = computed(() => {
     const qr = this.codes()?.qrCode;
+
     return qr ? `data:image/png;base64,${qr}` : '';
   });
 
@@ -37,7 +49,25 @@ export class EventCodesDialog {
           return EMPTY;
         })
       )
-      .subscribe((data) => this.codes.set(data));
+      .subscribe((data) => {
+        this.codes.set(data);
+      });
+  }
+
+  protected async downloadQr(): Promise<void> {
+    const codes = this.codes();
+
+    if (!codes) {
+      return;
+    }
+
+    const { id, eventName, startDateTime } = this.dialogData;
+
+    try {
+      await this.eventQrPdfService.download({ id, codes, eventName, startDateTime });
+    } catch {
+      this.notificationService.showError('event-codes.dialog.download-error');
+    }
   }
 
   protected close(): void {
