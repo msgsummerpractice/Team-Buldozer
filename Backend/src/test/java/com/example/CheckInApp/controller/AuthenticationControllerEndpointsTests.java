@@ -6,9 +6,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.example.CheckInApp.exception.DuplicateEmailException;
+import com.example.CheckInApp.repository.UserRepository;
 import com.example.CheckInApp.security.AuthController;
 import com.example.CheckInApp.security.AuthService;
 import com.example.CheckInApp.security.JwtUtil;
+import com.example.CheckInApp.service.PasswordResetService;
 
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,10 +38,16 @@ public class AuthenticationControllerEndpointsTests {
         private AuthService registerService;
 
         @MockitoBean
+        private PasswordResetService passwordResetService;
+
+        @MockitoBean
         private JwtUtil jwtUtil;
 
         @MockitoBean
         private UserDetailsService userDetailsService;
+
+        @MockitoBean
+        private UserRepository userRepository;
 
         @Test
         void testRegisterUserSuccess() throws Exception {
