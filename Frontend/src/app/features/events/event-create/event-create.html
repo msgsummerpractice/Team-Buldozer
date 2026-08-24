@@ -21,27 +21,27 @@
         </h2>
       </div>
 
-      <mat-card-content class="p-6 flex-1 overflow-y-auto min-h-0">
-        <form
-          id="eventCreateForm"
-          [formGroup]="eventForm"
-          (ngSubmit)="onSubmit()"
-          class="grid grid-cols-1 md:grid-cols-2 gap-5"
-        >
-          <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full">
-            <mat-label>{{ 'events.fields.name.label' | transloco }}</mat-label>
-            <input matInput formControlName="name" />
-            <mat-icon matSuffix>badge</mat-icon>
-            @if (eventForm.get('name')?.hasError('required')) {
-              <mat-error>{{ 'events.fields.name.errors.required' | transloco }}</mat-error>
-            }
-            @if (eventForm.get('name')?.hasError('minlength')) {
-              <mat-error>{{ 'events.fields.name.errors.min-length' | transloco }}</mat-error>
-            }
-            @if (eventForm.get('name')?.hasError('maxlength')) {
-              <mat-error>{{ 'events.fields.name.errors.max-length' | transloco }}</mat-error>
-            }
-          </mat-form-field>
+    <mat-card-content class="flex-1 overflow-y-auto min-h-0">
+      <form
+        id="eventCreateForm"
+        [formGroup]="eventForm"
+        (ngSubmit)="onSubmit()"
+        class="grid grid-cols-1 md:grid-cols-2 gap-5 py-1"
+      >
+        <mat-form-field appearance="outline" class="col-span-1 md:col-span-2 w-full">
+          <mat-label>{{ 'events.fields.name.label' | transloco }}</mat-label>
+          <input matInput formControlName="name" />
+          <mat-icon matSuffix>badge</mat-icon>
+          @if (eventForm.get('name')?.hasError('required')) {
+            <mat-error>{{ 'events.fields.name.errors.required' | transloco }}</mat-error>
+          }
+          @if (eventForm.get('name')?.hasError('minlength')) {
+            <mat-error>{{ 'events.fields.name.errors.min-length' | transloco }}</mat-error>
+          }
+          @if (eventForm.get('name')?.hasError('maxlength')) {
+            <mat-error>{{ 'events.fields.name.errors.max-length' | transloco }}</mat-error>
+          }
+        </mat-form-field>
 
           <mat-form-field appearance="outline" class="col-span-1 w-full">
             <mat-label>{{ 'events.fields.type.label' | transloco }}</mat-label>

@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,14 +33,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        UserResponse user = userService.getUserById(id);
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id, Authentication authentication) {
+        UserResponse user = userService.getUserById(id, authentication.getName(), isAdmin(authentication));
         return ResponseEntity.ok(user);
     }
 
     @PatchMapping("/profile/{id}")
-    public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id, @Valid @RequestBody UserProfileRequest userProfileRequest) {
-        UserResponse updatedUserProfile = userService.updateUserProfile(id, userProfileRequest);
+    public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id, @Valid @RequestBody UserProfileRequest userProfileRequest, Authentication authentication) {
+        UserResponse updatedUserProfile = userService.updateUserProfile(id, userProfileRequest, authentication.getName(), isAdmin(authentication));
         return ResponseEntity.ok(updatedUserProfile);
     }
 
@@ -48,6 +49,11 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUserStatusAndRoles(@PathVariable Long id, @Valid @RequestBody UserRequestByAdmin userRequestByAdmin) {
         UserResponse updatedUser = userService.updateUserStatusAndRoles(id, userRequestByAdmin);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
     }
 
 }

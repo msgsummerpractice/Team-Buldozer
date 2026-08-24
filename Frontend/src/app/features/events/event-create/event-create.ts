@@ -127,14 +127,8 @@ export class EventCreate implements OnInit {
     ]),
     type: this.fb.control<EventType>(EventTypeEnum.LOCAL, Validators.required),
     location: this.fb.control<EventLocation>(EventLocationEnum.CLUJ, Validators.required),
-    startDate: this.fb.control<Date | null>(null, [
-      Validators.required,
-      futureEventStartValidator,
-    ]),
-    startTime: this.fb.control<Date | null>(null, [
-      Validators.required,
-      futureEventStartValidator,
-    ]),
+    startDate: this.fb.control<Date | null>(null, [Validators.required, futureEventStartValidator]),
+    startTime: this.fb.control<Date | null>(null, [Validators.required, futureEventStartValidator]),
     endDate: this.fb.control<Date | null>(null, [Validators.required, eventDateRangeValidator]),
     endTime: this.fb.control<Date | null>(null, [Validators.required, eventDateRangeValidator]),
     registrationStartDate: this.fb.control<Date | null>(null, [
@@ -470,10 +464,10 @@ export class EventCreate implements OnInit {
           return EMPTY;
         })
       )
-      .subscribe((created) => {
+      .subscribe(() => {
         this.notificationService.showSuccess('events.messages.success');
         this.submitting.set(false);
-        this.router.navigate(['events', created.id, 'edit']);
+        this.router.navigate(['/events']);
       });
   }
 }
