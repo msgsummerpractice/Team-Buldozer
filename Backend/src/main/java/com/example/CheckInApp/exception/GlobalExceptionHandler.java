@@ -134,6 +134,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_223, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(TooManyRequestsException.class)
+    public ResponseEntity<ErrorResponse> handleTooManyRequests(TooManyRequestsException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.TOO_MANY_REQUESTS, ErrorCode.ERR_224, ex.getMessage(), request);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())

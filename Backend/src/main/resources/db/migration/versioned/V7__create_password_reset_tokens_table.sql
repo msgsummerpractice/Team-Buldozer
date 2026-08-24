@@ -6,4 +6,4 @@ CREATE TABLE password_reset_tokens (
     used       BOOLEAN      NOT NULL DEFAULT FALSE
 );
 
-CREATE INDEX idx_password_reset_tokens_token ON password_reset_tokens(token);
+CREATE INDEX idx_password_reset_userid ON password_reset_tokens(user_id);

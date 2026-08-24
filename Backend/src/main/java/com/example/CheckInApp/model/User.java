@@ -3,6 +3,7 @@ package com.example.CheckInApp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +41,9 @@ public class User {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "profile_picture")
     private byte[] profilePicture;
+
+    @Column(name = "password_updated_at")
+    private Instant passwordUpdatedAt;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))

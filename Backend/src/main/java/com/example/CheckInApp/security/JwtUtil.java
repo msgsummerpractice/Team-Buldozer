@@ -78,9 +78,20 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
+    public Date extractIssuedAt(String token) {
+        return extractClaim(token, Claims::getIssuedAt);
+    }
+
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    public boolean isTokenIssuedBefore(String token, java.time.Instant instant) {
+        if (instant == null) {
+            return false;
+        }
+        return extractIssuedAt(token).toInstant().isBefore(instant);
     }
 
 }
