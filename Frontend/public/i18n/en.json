@@ -153,11 +153,40 @@
     "ERR-220": "You are not registered for this event.",
     "ERR-221": "Check-in is closed for this event.",
     "ERR-222": "Invalid QR code.",
-    "ERR-223": "You are already checked in for this event."
+    "ERR-223": "You are already checked in for this event.",
+    "ERR-224": "Too many requests. Please wait before trying again.",
+    "ERR-225": "Registration data is invalid.",
+    "ERR-226": "Registration is closed for this event.",
+    "ERR-227": "Already registered for this event.",
+    "ERR-228": "This reset link has expired. Please request a new one.",
+    "ERR-229": "This reset link has already been used. Please request a new one."
   },
   "success-messages": {
     "login-successful": "Login successful!",
     "user-updated": "User updated successfully."
+  },
+  "password-reset": {
+    "forgotTitle": "Forgot Password",
+    "forgotSubtitle": "Enter your email address and we'll send you a link to reset your password.",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
+    "sendLink": "Send Reset Link",
+    "emailSent": "If an account with that email exists, a reset link has been sent.",
+    "resetTitle": "Set New Password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter new password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordMaxLength": "Password must be at most 128 characters",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordMismatch": "Passwords do not match",
+    "resetButton": "Reset Password",
+    "resetSuccess": "Password has been reset successfully!",
+    "backToLogin": "Back to Login"
   },
   "common": {
     "close": "Close",

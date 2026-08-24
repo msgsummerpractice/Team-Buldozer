@@ -6,6 +6,7 @@ import { ownProfileGuard } from '@core/authentication/guards/own-profile.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { authGuard } from '@core/authentication/guards/login-guard';
 import { eventsRoutes } from '@features/events/events.routes';
+import { resetPasswordGuard } from '@features/password-reset/guards/reset-password.guard';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,17 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () => import('@features/register/components/register').then((m) => m.Register),
+  },
+  {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('@features/password-reset/components/forgot-password').then((m) => m.ForgotPassword),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('@features/password-reset/components/reset-password').then((m) => m.ResetPassword),
+    canActivate: [resetPasswordGuard],
   },
   {
     path: 'users',

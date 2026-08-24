@@ -135,12 +135,25 @@ public class EmailService {
     private String buildPasswordResetHtml(String resetUrl) {
         return """
                 <html>
-                <body style="font-family: Arial, sans-serif;">
+                <body style="font-family: Arial, sans-serif; color: #333;">
                   <h2>Password Reset Request</h2>
                   <p>We received a request to reset your password.</p>
-                  <p>Click the link below to set a new password. This link will expire in 15 minutes.</p>
-                  <p><a href="%s" style="display:inline-block;padding:10px 20px;background-color:#1976d2;color:#ffffff;text-decoration:none;border-radius:4px;">Reset Password</a></p>
-                  <p>If you didn't request a password reset, you can safely ignore this email.</p>
+                  <p>Click the button below to set a new password. This link will expire in 15 minutes.</p>
+                  <a href="%s" target="_blank" style="text-decoration: none; display: inline-block; margin-top: 15px;">
+                    <button type="button" style="
+                      background-color: #8e1239;
+                      color: #ffffff;
+                      font-family: Arial, sans-serif;
+                      font-size: 16px;
+                      font-weight: bold;
+                      padding: 12px 24px;
+                      border: none;
+                      border-radius: 6px;
+                      cursor: pointer;">
+                      Reset Password
+                    </button>
+                  </a>
+                  <p style="margin-top: 24px;">If you didn't request a password reset, you can safely ignore this email.</p>
                 </body>
                 </html>
                 """.formatted(resetUrl);
@@ -148,35 +161,34 @@ public class EmailService {
 
     private String buildHtmlBody(Event event) {
         String detailsUrl = frontendUrl + "/events/" + event.getId() + "/details";
+        String posterHtml = event.getPoster() != null
+                ? "<img src=\"cid:poster\" alt=\"Event poster\" style=\"max-width:600px;\"/>"
+                : "";
         return """
                 <html>
-                <body>
+                <body style="font-family: Arial, sans-serif; color: #333;">
                   %s
                   <h2>%s</h2>
-                  <p><strong>When:</strong> %s</p>
-                  <p><strong>Location:</strong> %s</p>
+                  <p>%s</p>
+                  <p>%s</p>
                   <a href="%s" target="_blank" style="text-decoration: none; display: inline-block; margin-top: 15px;">
                     <button type="button" style="
-                     background-color: #8e1239;\s
-                     color: #ffffff;\s
-                     font-family: Arial, sans-serif;\s
-                     font-size: 16px;\s
-                     font-weight: bold;\s
-                     padding: 12px 24px;\s
-                     border: none;\s
-                     border-radius: 6px;\s
-                     cursor: pointer;\s
-                     display: inline-block;
-                     -webkit-appearance: none;
-                     -moz-appearance: none;
-                     appearance: none;">
-                     View Event
+                      background-color: #8e1239;
+                      color: #ffffff;
+                      font-family: Arial, sans-serif;
+                      font-size: 16px;
+                      font-weight: bold;
+                      padding: 12px 24px;
+                      border: none;
+                      border-radius: 6px;
+                      cursor: pointer;">
+                      View Event
                     </button>
-                   </a>
+                  </a>
                 </body>
                 </html>
                 """.formatted(
-                event.getPoster() != null ? "<img src=\"cid:poster\" alt=\"Event poster\" style=\"max-width:600px;\"/>" : "",
+                posterHtml,
                 HtmlUtils.htmlEscape(event.getName()),
                 formatDateRange(event),
                 HtmlUtils.htmlEscape(event.getLocation().toString()),
