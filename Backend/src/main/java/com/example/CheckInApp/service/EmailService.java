@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.util.HtmlUtils;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -154,7 +155,24 @@ public class EmailService {
                   <h2>%s</h2>
                   <p><strong>When:</strong> %s</p>
                   <p><strong>Location:</strong> %s</p>
-                  <p><a href="%s">View event details</a></p>
+                  <a href="%s" target="_blank" style="text-decoration: none; display: inline-block; margin-top: 15px;">
+                    <button type="button" style="
+                     background-color: #8e1239;\s
+                     color: #ffffff;\s
+                     font-family: Arial, sans-serif;\s
+                     font-size: 16px;\s
+                     font-weight: bold;\s
+                     padding: 12px 24px;\s
+                     border: none;\s
+                     border-radius: 6px;\s
+                     cursor: pointer;\s
+                     display: inline-block;
+                     -webkit-appearance: none;
+                     -moz-appearance: none;
+                     appearance: none;">
+                     View Event
+                    </button>
+                   </a>
                 </body>
                 </html>
                 """.formatted(

@@ -95,11 +95,11 @@ public class EventService {
         return eventMapper.toResponse(event);
     }
 
-    private boolean hasFullAccess(User user) {
+    protected boolean hasFullAccess(User user) {
         return user.getRoles().contains(UserRole.MARKETING) || user.getRoles().contains(UserRole.HR);
     }
 
-    private boolean isEventVisibleTo(Event event, User user) {
+    protected boolean isEventVisibleTo(Event event, User user) {
         EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
         return event.getStatus() == EventStatus.PUBLISHED &&
                 (event.getLocation() == userLocation || event.getLocation() == EventLocation.ALL) &&
