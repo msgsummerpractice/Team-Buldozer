@@ -85,7 +85,8 @@ export class Events implements OnInit {
   protected readonly EventStatusEnum = EventStatusEnum;
 
   protected readonly displayedColumns = computed(() => {
-    return ['name', 'period', 'status', 'type', 'location', 'actions'];
+    const baseColumns = ['name', 'period', 'status', 'type', 'location', 'actions'];
+    return this.isMarketing() ? baseColumns : baseColumns.filter((col) => col !== 'status');
   });
 
   private readonly destroyRef = inject(DestroyRef);
