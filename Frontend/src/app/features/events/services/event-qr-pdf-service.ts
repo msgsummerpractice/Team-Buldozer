@@ -33,9 +33,7 @@ export class EventQrPdfService {
 
       const nameLines = doc.splitTextToSize(eventName, pageWidth - margin * 2);
 
-      doc.text(nameLines, centerX, currentY, {
-        align: 'center',
-      });
+      doc.text(nameLines, centerX, currentY, { align: 'center' });
 
       currentY += nameLines.length * 10 + 6;
     }
@@ -52,9 +50,7 @@ export class EventQrPdfService {
       doc.setFontSize(12);
       doc.setTextColor(100, 100, 100);
 
-      doc.text(dateStr, centerX, currentY, {
-        align: 'center',
-      });
+      doc.text(dateStr, centerX, currentY, { align: 'center' });
 
       currentY += 7;
     }
