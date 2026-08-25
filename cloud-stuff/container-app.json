@@ -1,0 +1,235 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "containerapps_team_buldozer_backend_name": {
+      "defaultValue": "team-buldozer-backend",
+      "type": "String"
+    },
+    "managedEnvironments_TeamBuldozer_externalid": {
+      "defaultValue": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.App/managedEnvironments/TeamBuldozer",
+      "type": "String"
+    },
+    "userAssignedIdentities_team_buldozer_kv_externalid": {
+      "defaultValue": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.ManagedIdentity/userAssignedIdentities/team-buldozer-kv",
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.App/containerapps",
+      "apiVersion": "2026-01-01",
+      "name": "[parameters('containerapps_team_buldozer_backend_name')]",
+      "location": "West Europe",
+      "tags": {
+        "SummerPractice": "Azure"
+      },
+      "kind": "containerapps",
+      "identity": {
+        "type": "SystemAssigned, UserAssigned",
+        "userAssignedIdentities": {
+          "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourcegroups/team_buldozer/providers/Microsoft.ManagedIdentity/userAssignedIdentities/team-buldozer-kv": {},
+          "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourcegroups/team_buldozer/providers/Microsoft.ManagedIdentity/userAssignedIdentities/UserCheckIn": {}
+        }
+      },
+      "properties": {
+        "managedEnvironmentId": "[parameters('managedEnvironments_TeamBuldozer_externalid')]",
+        "environmentId": "[parameters('managedEnvironments_TeamBuldozer_externalid')]",
+        "workloadProfileName": "Consumption",
+        "configuration": {
+          "secrets": [
+            {
+              "name": "spring-datasource-password",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/spring-datasource-password/27dca980e5f1473db3cb62afba93b308",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "frontend-url",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/frontend-url/1b9c5dbf196e4303b902d64af642aee8",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "jwt-secret",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/jwt-secret/1e78e8806abe4d3688a8389a6937fc0e",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "mail-host",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/mail-host/65aec3d0142a41cf9910a80e9d23333c",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "mail-port",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/mail-port/c0741e76635f4f18b838aa5a7258ec71",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "mail-username",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/mail-username/b0feb646926e46c8adf358cc04a71680",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "spring-datasource-url",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/spring-datasource-url/bafdc611d12646ab91677d56a01876bf",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "spring-datasource-username",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/spring-datasource-username/74fc44bb4c004d4fbb6c44cb6e2f5608",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "jwt-expiration",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/jwt-expiration/c307c569ff8d4aa7923e4d331ee99a84",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            },
+            {
+              "name": "reg-pswd-afb633f9-a112"
+            },
+            {
+              "name": "mail-password",
+              "keyVaultUrl": "https://kv-team-buldozer.vault.azure.net/secrets/mail-password/9d695d4bf2274465a61ad9e15c70e422",
+              "identity": "[parameters('userAssignedIdentities_team_buldozer_kv_externalid')]"
+            }
+          ],
+          "activeRevisionsMode": "Single",
+          "ingress": {
+            "external": true,
+            "targetPort": 8080,
+            "exposedPort": 0,
+            "transport": "Auto",
+            "traffic": [
+              {
+                "weight": 100,
+                "latestRevision": true
+              }
+            ],
+            "allowInsecure": false,
+            "stickySessions": {
+              "affinity": "none"
+            },
+            "additionalPortMappings": []
+          },
+          "registries": [
+            {
+              "server": "buldozerregistry.azurecr.io",
+              "username": "BuldozerRegistry",
+              "passwordSecretRef": "reg-pswd-afb633f9-a112"
+            }
+          ],
+          "maxInactiveRevisions": 100,
+          "identitySettings": []
+        },
+        "template": {
+          "containers": [
+            {
+              "image": "buldozerregistry.azurecr.io/backendapp:1.1.1",
+              "name": "[parameters('containerapps_team_buldozer_backend_name')]",
+              "command": [],
+              "args": [],
+              "env": [
+                {
+                  "name": "SPRING_DATASOURCE_URL",
+                  "value": "jdbc:postgresql://psql-team-buldozer.postgres.database.azure.com:5432/teambuldozerdb?sslmode=require"
+                },
+                {
+                  "name": "SPRING_DATASOURCE_USERNAME",
+                  "value": "pgadmin_checkin"
+                },
+                {
+                  "name": "SPRING_DATASOURCE_PASSWORD",
+                  "value": "Admin123!"
+                },
+                {
+                  "name": "JWT_SECRET",
+                  "value": "YmU1OGQ0OWEtMmRlYS00OTMxLTkxOWYtYzEyY2I3ZDNlMThiYzFiMGM4YWItYjY3My00ZTI0LWI2MzktNDVjMjE5YWEyNGE5NmFkYzFiOGMtZDZiYi00NmQ3LTkwN2MtYTNhM2IzMTdjMzc5"
+                },
+                {
+                  "name": "JWT_EXPIRATION",
+                  "value": "3600000"
+                },
+                {
+                  "name": "MAIL_HOST",
+                  "value": "smtp.gmail.com"
+                },
+                {
+                  "name": "MAIL_PORT",
+                  "value": "587"
+                },
+                {
+                  "name": "MAIL_USERNAME",
+                  "value": "msgcheckin2@gmail.com"
+                },
+                {
+                  "name": "MAIL_PASSWORD",
+                  "value": "wagvpwqktegxufxk"
+                },
+                {
+                  "name": "FRONTEND_URL",
+                  "value": "https://ashy-glacier-059589b03.7.azurestaticapps.net"
+                }
+              ],
+              "resources": {
+                "cpu": 0.75,
+                "memory": "1.5Gi"
+              },
+              "probes": [
+                {
+                  "type": "Liveness",
+                  "failureThreshold": 3,
+                  "initialDelaySeconds": 0,
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "tcpSocket": {
+                    "port": 8080
+                  },
+                  "timeoutSeconds": 5
+                },
+                {
+                  "type": "Readiness",
+                  "failureThreshold": 48,
+                  "initialDelaySeconds": 0,
+                  "periodSeconds": 5,
+                  "successThreshold": 1,
+                  "tcpSocket": {
+                    "port": 8080
+                  },
+                  "timeoutSeconds": 5
+                },
+                {
+                  "type": "Startup",
+                  "failureThreshold": 240,
+                  "initialDelaySeconds": 1,
+                  "periodSeconds": 1,
+                  "successThreshold": 1,
+                  "tcpSocket": {
+                    "port": 8080
+                  },
+                  "timeoutSeconds": 3
+                }
+              ]
+            }
+          ],
+          "scale": {
+            "minReplicas": 1,
+            "maxReplicas": 10,
+            "cooldownPeriod": 300,
+            "pollingInterval": 30,
+            "rules": [
+              {
+                "name": "http-scaler",
+                "http": {
+                  "metadata": {
+                    "concurrentRequests": "10"
+                  }
+                }
+              }
+            ]
+          },
+          "volumes": []
+        }
+      }
+    }
+  ]
+}

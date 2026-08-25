@@ -1,0 +1,64 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "metricAlerts_Backend_Memory_name": {
+      "defaultValue": "Backend Memory",
+      "type": "String"
+    },
+    "containerApps_team_buldozer_backend_externalid": {
+      "defaultValue": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.App/containerApps/team-buldozer-backend",
+      "type": "String"
+    },
+    "actiongroups_team_buldozer_action_group_externalid": {
+      "defaultValue": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/microsoft.insights/actiongroups/team-buldozer-action-group",
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "microsoft.insights/metricAlerts",
+      "apiVersion": "2024-03-01-preview",
+      "name": "[parameters('metricAlerts_Backend_Memory_name')]",
+      "location": "global",
+      "tags": {
+        "SummerPractice": "Azure"
+      },
+      "properties": {
+        "severity": 3,
+        "enabled": true,
+        "scopes": [
+          "[parameters('containerApps_team_buldozer_backend_externalid')]"
+        ],
+        "evaluationFrequency": "PT1M",
+        "autoMitigate": true,
+        "targetResourceType": "Microsoft.App/containerApps",
+        "targetResourceRegion": "westeurope",
+        "actions": [
+          {
+            "actionGroupId": "[parameters('actiongroups_team_buldozer_action_group_externalid')]",
+            "webHookProperties": {}
+          }
+        ],
+        "windowSize": "PT15M",
+        "criteria": {
+          "allOf": [
+            {
+              "operator": "GreaterThan",
+              "threshold": 80,
+              "name": "Metric1",
+              "metricNamespace": "Microsoft.App/containerApps",
+              "metricName": "MemoryPercentage",
+              "dimensions": [],
+              "timeAggregation": "Average",
+              "skipMetricValidation": false,
+              "criterionType": "StaticThresholdCriterion"
+            }
+          ],
+          "odata.type": "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria"
+        }
+      }
+    }
+  ]
+}
