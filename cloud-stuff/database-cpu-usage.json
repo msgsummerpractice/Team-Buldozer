@@ -1,0 +1,43 @@
+{
+  "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/microsoft.insights/metricAlerts/db-cpu-usage",
+  "name": "db-cpu-usage",
+  "type": "Microsoft.Insights/metricAlerts",
+  "location": "global",
+  "tags": {
+    "SummerPractice": "Azure"
+  },
+  "properties": {
+    "description": "",
+    "severity": 3,
+    "enabled": true,
+    "scopes": [
+      "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.DBforPostgreSQL/flexibleServers/psql-team-buldozer"
+    ],
+    "evaluationFrequency": "PT1M",
+    "windowSize": "PT15M",
+    "criteria": {
+      "allOf": [
+        {
+          "threshold": 80,
+          "name": "Metric1",
+          "metricNamespace": "Microsoft.DBforPostgreSQL/flexibleServers",
+          "metricName": "cpu_percent",
+          "operator": "GreaterThan",
+          "timeAggregation": "Average",
+          "skipMetricValidation": false,
+          "criterionType": "StaticThresholdCriterion"
+        }
+      ],
+      "odata.type": "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria"
+    },
+    "autoMitigate": true,
+    "targetResourceType": "Microsoft.DBforPostgreSQL/flexibleServers",
+    "targetResourceRegion": "westeurope",
+    "actions": [
+      {
+        "actionGroupId": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourcegroups/team_buldozer/providers/microsoft.insights/actiongroups/team-buldozer-action-group",
+        "webHookProperties": {}
+      }
+    ]
+  }
+}

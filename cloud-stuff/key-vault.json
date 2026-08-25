@@ -1,0 +1,32 @@
+{
+  "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.KeyVault/vaults/kv-team-buldozer",
+  "name": "kv-team-buldozer",
+  "type": "Microsoft.KeyVault/vaults",
+  "location": "westeurope",
+  "tags": {
+    "SummerPractice": "Azure"
+  },
+  "properties": {
+    "sku": {
+      "family": "A",
+      "name": "Standard"
+    },
+    "tenantId": "763b2760-45c5-46d3-883e-29705bba49b7",
+    "networkAcls": {
+      "bypass": "None",
+      "defaultAction": "Allow",
+      "ipRules": [],
+      "virtualNetworkRules": []
+    },
+    "accessPolicies": [],
+    "enabledForDeployment": false,
+    "enabledForDiskEncryption": false,
+    "enabledForTemplateDeployment": false,
+    "enableSoftDelete": true,
+    "softDeleteRetentionInDays": 90,
+    "enableRbacAuthorization": true,
+    "enablePurgeProtection": true,
+    "vaultUri": "https://kv-team-buldozer.vault.azure.net/",
+    "provisioningState": "Succeeded"
+  }
+}
