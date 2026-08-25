@@ -14,7 +14,7 @@ import { NotificationService } from '@core/notification/services/notification.se
 import { ConfirmDialog, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog';
 import { FormsModule } from '@angular/forms';
 import { combineLatest, debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -55,9 +55,9 @@ const CHECK_IN_DIALOG_CONFIG = {
   maxWidth: '95vw',
 };
 
-const REGISTER_TO_EVENT_DIALOG_CONFIG = {
-  width: '480px',
-  maxWidth: '95vw',
+const REGISTER_TO_EVENT_DIALOG_CONFIG: MatDialogConfig<RegisterToEventDialogData> = {
+  width: '60%',
+  minWidth: '30.375rem',
   autoFocus: 'dialog' as const,
   restoreFocus: true,
 };

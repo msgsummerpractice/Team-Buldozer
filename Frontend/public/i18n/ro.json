@@ -477,7 +477,7 @@
     "fields": {
       "gdpr-consent": {
         "label": "Consimțământ GDPR",
-        "placeholder-text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "placeholder-text": "Datele completate în formularul de mai jos vor fi folosite pentru înscrierea la <strong class=\"text-(--mat-sys-primary)\">{{name}}</strong>.<br><br>Chiar și în cazul unui astfel de formular, aveți dreptul la informații, precum și la ștergerea datelor dvs. personale în conformitate cu reglementările privind protecția datelor. Puteți revoca această declarație de consimțământ în orice moment, contactând organizatorul evenimentului. După revocare, datele dvs. vor fi șterse.<br><br>Unde sunt procesate datele? În cazul formularelor care utilizează Microsoft Forms, datele sunt stocate pe servere din Europa pentru clienții aflați în Europa:<ul><li><a href=\"https://docs.microsoft.com/de-de/office365/enterprise/o365-data-locations#germany\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-(--mat-sys-primary) underline font-medium\">Microsoft 365-Datenspeicherorte - Microsoft 365 Enterprise | Microsoft Learn</a></li><li><a href=\"https://docs.microsoft.com/de-de/office365/enterprise/o365-data-locations\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-(--mat-sys-primary) underline font-medium\">Microsoft 365-Datenspeicherorte - Microsoft 365 Enterprise | Microsoft Learn</a></li></ul>Datele din acest formular vor fi șterse în interval de o lună de la data trimiterii lui. În cazul în care datele vor fi exportate, cele care conțin informații cu caracter personal vor fi anonimizate, dacă este cazul.",
         "checkbox": "Am citit și sunt de acord cu termenii de prelucrare a datelor GDPR.",
         "errors": {
           "required": "Trebuie să accepți consimțământul GDPR pentru a te înscrie."
@@ -485,7 +485,7 @@
       },
       "photo-consent": {
         "label": "Consimțământ foto",
-        "placeholder-text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "placeholder-text": "Prin acordarea acestui consimțământ, sunteți de acord ca fotografiile și/sau înregistrările video realizate în timpul evenimentului <strong class=\"text-(--mat-sys-primary)\">{{name}}</strong> să vă poată include, iar msg să poată utiliza, stoca și publica acest conținut — inclusiv pe site-ul web al companiei, canalele de social media, newsletter-e și alte materiale de marketing sau promovare, actuale sau viitoare. Puteți revoca acest consimțământ în orice moment, contactând organizatorul evenimentului; revocarea nu afectează materialele publicate deja anterior.",
         "checkbox": "Sunt de acord ca fotografii să fie făcute în timpul evenimentului."
       },
       "food-preference": {
@@ -510,7 +510,7 @@
         "errors": {
           "required": "Numărul de telefon al șoferului este obligatoriu.",
           "min-length": "Lungimea minimă este de 5 caractere",
-          "max-length": "Lungimea maximă este de 16 caractere"
+          "max-length": "Lungimea maximă este de 12 caractere"
         }
       },
       "accommodation-needed": {

@@ -17,9 +17,11 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     // Includes events past their registration deadline when the user is already registered, so they can still check in.
-    @Query("select e from Event e where e.status = :status and e.location in :locations "
-            + "and (e.registrationEndDate >= :today or e.id in :registeredEventIds) "
-            + "order by e.startDateTime desc")
+    @Query("""
+            SELECT e FROM Event e WHERE e.status = :status AND e.location IN :locations
+            AND (e.registrationEndDate >= :today OR e.id IN :registeredEventIds)
+            ORDER BY e.startDateTime DESC
+            """)
     List<Event> findEligibleOrRegisteredEvents(@Param("status") EventStatus status,
             @Param("locations") List<EventLocation> locations,
             @Param("today") LocalDate today,

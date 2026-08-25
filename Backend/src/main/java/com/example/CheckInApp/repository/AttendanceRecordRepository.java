@@ -6,18 +6,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface AttendanceRecordRepository extends JpaRepository<AttendanceRecord, Long> {
 
     Optional<AttendanceRecord> findByEventIdAndUserId(Long eventId, Long userId);
 
-    @Query("select ar.event.id from AttendanceRecord ar where ar.user.id = :userId")
-    Set<Long> findEventIdsByUserId(@Param("userId") Long userId);
-
-    @Query("select ar.event.id from AttendanceRecord ar where ar.user.id = :userId and ar.checkedIn = true")
-    Set<Long> findCheckedInEventIdsByUserId(@Param("userId") Long userId);
+    @Query("""
+            SELECT new com.example.CheckInApp.repository.EventAttendanceView(ar.event.id, ar.checkedIn)
+            FROM AttendanceRecord ar WHERE ar.user.id = :userId
+            """)
+    List<EventAttendanceView> findAttendanceByUserId(@Param("userId") Long userId);
 
 }

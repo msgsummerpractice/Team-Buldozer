@@ -9,7 +9,7 @@ CREATE TABLE registrations
     food_preference      VARCHAR(16),
     transport_needed     BOOLEAN,
     driver_name          VARCHAR(64),
-    driver_phone_number  VARCHAR(16),
+    driver_phone_number  VARCHAR(12),
     accommodation_needed BOOLEAN,
     accommodation_days   INTEGER,
     CONSTRAINT pk_registrations PRIMARY KEY (id)

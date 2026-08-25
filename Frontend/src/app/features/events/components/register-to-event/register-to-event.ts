@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   FormGroup,
@@ -19,7 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { EMPTY, catchError } from 'rxjs';
+import { EMPTY, catchError, finalize } from 'rxjs';
 import { NotificationService } from '@core/notification/services/notification.service';
 import { ConfirmDialog, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog';
 import { EventResponse } from '@features/events/model/event-response';
@@ -66,7 +67,7 @@ export class RegisterToEvent {
   protected readonly data = inject<RegisterToEventDialogData>(MAT_DIALOG_DATA);
   protected readonly event = this.data.event;
 
-  protected readonly FoodPreferences = Object.values(FoodPreferenceEnum) as FoodPreference[];
+  protected readonly foodPreferences: FoodPreference[] = Object.values(FoodPreferenceEnum);
   protected readonly isInternal = this.event.type === EventTypeEnum.INTERNAL;
   protected readonly isExternal = this.event.type === EventTypeEnum.EXTERNAL;
   protected readonly requiresFoodPreference = this.event.foodProvided === true;
@@ -94,10 +95,12 @@ export class RegisterToEvent {
     if (this.isInternal) {
       this.registrationForm
         .get('transportNeeded')!
-        .valueChanges.subscribe((needed) => this.toggleDriverValidators(needed));
+        .valueChanges.pipe(takeUntilDestroyed())
+        .subscribe((needed) => this.toggleDriverValidators(needed));
       this.registrationForm
         .get('accommodationNeeded')!
-        .valueChanges.subscribe((needed) => this.toggleAccommodationValidators(needed));
+        .valueChanges.pipe(takeUntilDestroyed())
+        .subscribe((needed) => this.toggleAccommodationValidators(needed));
     }
   }
 
@@ -114,7 +117,7 @@ export class RegisterToEvent {
       driverPhoneNumber.setValidators([
         Validators.required,
         Validators.minLength(5),
-        Validators.maxLength(16),
+        Validators.maxLength(12),
       ]);
     } else {
       driverName.clearValidators();
@@ -168,7 +171,7 @@ export class RegisterToEvent {
         confirmLabelKey: 'event-registration.actions.save',
         confirmIcon: 'how_to_reg',
       },
-      width: '440px',
+      width: '27.5rem',
       autoFocus: 'dialog',
       restoreFocus: true,
     });
@@ -185,10 +188,8 @@ export class RegisterToEvent {
     this.registrationService
       .register(this.event.id, this.buildRequest())
       .pipe(
-        catchError(() => {
-          this.saving.set(false);
-          return EMPTY;
-        })
+        catchError(() => EMPTY),
+        finalize(() => this.saving.set(false))
       )
       .subscribe(() => {
         this.notification.showSuccess('event-registration.messages.success');

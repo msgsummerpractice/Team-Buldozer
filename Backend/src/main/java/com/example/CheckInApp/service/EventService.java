@@ -16,6 +16,7 @@ import com.example.CheckInApp.exception.CheckInCodeGenerationException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.AttendanceRecordRepository;
+import com.example.CheckInApp.repository.EventAttendanceView;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
 
@@ -41,6 +42,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -306,8 +308,14 @@ public class EventService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
 
-        Set<Long> registeredEventIds = attendanceRecordRepository.findEventIdsByUserId(user.getId());
-        Set<Long> checkedInEventIds = attendanceRecordRepository.findCheckedInEventIdsByUserId(user.getId());
+        List<EventAttendanceView> attendance = attendanceRecordRepository.findAttendanceByUserId(user.getId());
+        Set<Long> registeredEventIds = attendance.stream()
+                .map(EventAttendanceView::eventId)
+                .collect(Collectors.toSet());
+        Set<Long> checkedInEventIds = attendance.stream()
+                .filter(EventAttendanceView::checkedIn)
+                .map(EventAttendanceView::eventId)
+                .collect(Collectors.toSet());
 
         List<Event> events;
 
@@ -315,9 +323,10 @@ public class EventService {
             events = eventRepository.findAllByOrderByStartDateTimeDesc();
         } else {
             EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
+            Set<Long> eventIdsParam = registeredEventIds.isEmpty() ? Set.of(-1L) : registeredEventIds;
             events = eventRepository.findEligibleOrRegisteredEvents(
                     EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), LocalDate.now(),
-                    registeredEventIds);
+                    eventIdsParam);
         }
 
         return events.stream()

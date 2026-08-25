@@ -5,16 +5,20 @@
 
 <form [formGroup]="registrationForm">
   <mat-dialog-content>
-    <div class="flex flex-col gap-4 py-2 min-w-72">
+    <div class="flex flex-col gap-4 py-2">
       <div class="rounded-xl bg-(--mat-sys-surface-container) p-4 flex flex-col gap-2">
         <span class="text-xs font-semibold uppercase tracking-widest opacity-60">
           {{ 'event-registration.fields.gdpr-consent.label' | transloco }}
         </span>
         @if (!gdprExpanded()) {
           <div class="relative">
-            <p class="text-sm leading-relaxed break-words pr-16 line-clamp-3">
-              {{ 'event-registration.fields.gdpr-consent.placeholder-text' | transloco }}
-            </p>
+            <p
+              class="text-sm leading-relaxed break-words pr-16 line-clamp-3"
+              [innerHTML]="
+                'event-registration.fields.gdpr-consent.placeholder-text'
+                  | transloco: { name: event.name }
+              "
+            ></p>
             <button
               type="button"
               class="absolute bottom-0 right-0 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
@@ -24,16 +28,20 @@
             </button>
           </div>
         } @else {
-          <p class="text-sm leading-relaxed break-words">
-            {{ 'event-registration.fields.gdpr-consent.placeholder-text' | transloco }}
-            <button
-              type="button"
-              class="ml-1 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
-              (click)="gdprExpanded.set(false)"
-            >
-              {{ 'common.see-less' | transloco }}
-            </button>
-          </p>
+          <p
+            class="text-sm leading-relaxed break-words"
+            [innerHTML]="
+              'event-registration.fields.gdpr-consent.placeholder-text'
+                | transloco: { name: event.name }
+            "
+          ></p>
+          <button
+            type="button"
+            class="self-start text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
+            (click)="gdprExpanded.set(false)"
+          >
+            {{ 'common.see-less' | transloco }}
+          </button>
         }
         <mat-checkbox formControlName="gdprConsent" color="primary">
           {{ 'event-registration.fields.gdpr-consent.checkbox' | transloco }}
@@ -54,9 +62,13 @@
         </span>
         @if (!photoExpanded()) {
           <div class="relative">
-            <p class="text-sm leading-relaxed break-words pr-16 line-clamp-3">
-              {{ 'event-registration.fields.photo-consent.placeholder-text' | transloco }}
-            </p>
+            <p
+              class="text-sm leading-relaxed break-words pr-16 line-clamp-3"
+              [innerHTML]="
+                'event-registration.fields.photo-consent.placeholder-text'
+                  | transloco: { name: event.name }
+              "
+            ></p>
             <button
               type="button"
               class="absolute bottom-0 right-0 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
@@ -66,16 +78,20 @@
             </button>
           </div>
         } @else {
-          <p class="text-sm leading-relaxed break-words">
-            {{ 'event-registration.fields.photo-consent.placeholder-text' | transloco }}
-            <button
-              type="button"
-              class="ml-1 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
-              (click)="photoExpanded.set(false)"
-            >
-              {{ 'common.see-less' | transloco }}
-            </button>
-          </p>
+          <p
+            class="text-sm leading-relaxed break-words"
+            [innerHTML]="
+              'event-registration.fields.photo-consent.placeholder-text'
+                | transloco: { name: event.name }
+            "
+          ></p>
+          <button
+            type="button"
+            class="self-start text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
+            (click)="photoExpanded.set(false)"
+          >
+            {{ 'common.see-less' | transloco }}
+          </button>
         }
         <mat-checkbox formControlName="photoConsent" color="primary">
           {{ 'event-registration.fields.photo-consent.checkbox' | transloco }}
@@ -86,7 +102,7 @@
         <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
           <mat-label>{{ 'event-registration.fields.food-preference.label' | transloco }}</mat-label>
           <mat-select formControlName="foodPreference">
-            @for (preference of FoodPreferences; track preference) {
+            @for (preference of foodPreferences; track preference) {
               <mat-option [value]="preference">
                 {{ 'event-registration.food-preference-values.' + preference | transloco }}
               </mat-option>

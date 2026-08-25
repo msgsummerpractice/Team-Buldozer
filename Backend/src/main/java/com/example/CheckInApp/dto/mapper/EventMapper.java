@@ -29,10 +29,6 @@ public class EventMapper {
         return toResponse(event, false, false);
     }
 
-    public EventResponse toResponse(Event event, boolean isUserRegistered) {
-        return toResponse(event, isUserRegistered, false);
-    }
-
     public EventResponse toResponse(Event event, boolean isUserRegistered, boolean isUserCheckedIn) {
         if (event == null) {
             return null;
