@@ -5,6 +5,7 @@ import { authorizationGuard } from '@core/authorization/guards/authorization.gua
 import { ownProfileGuard } from '@core/authentication/guards/own-profile.guard';
 import { UserRoleEnum } from '@core/users/model/user-role';
 import { authGuard } from '@core/authentication/guards/login-guard';
+import { guestGuard } from '@core/authentication/guards/guest.guard';
 import { eventsRoutes } from '@features/events/events.routes';
 import { resetPasswordGuard } from '@features/password-reset/guards/reset-password.guard';
 
@@ -26,10 +27,12 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('@features/login/components/login').then((m) => m.Login),
+    canActivate: [guestGuard],
   },
   {
     path: 'register',
     loadComponent: () => import('@features/register/components/register').then((m) => m.Register),
+    canActivate: [guestGuard],
   },
   {
     path: 'forgot-password',
