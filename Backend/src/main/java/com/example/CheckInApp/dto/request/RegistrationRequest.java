@@ -23,7 +23,7 @@ public class RegistrationRequest {
     @Size(min = 2, max = 64, message = "Driver name must be between 2 and 64 characters long.")
     private String driverName;
 
-    @Size(min = 5, max = 16, message = "Driver phone number must be between 5 and 16 characters long.")
+    @Size(min = 5, max = 12, message = "Driver phone number must be between 5 and 12 characters long.")
     private String driverPhoneNumber;
 
     private Boolean accommodationNeeded;

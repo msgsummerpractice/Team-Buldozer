@@ -15,6 +15,8 @@ import com.example.CheckInApp.exception.CodesAlreadyGeneratedException;
 import com.example.CheckInApp.exception.CheckInCodeGenerationException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.*;
+import com.example.CheckInApp.repository.AttendanceRecordRepository;
+import com.example.CheckInApp.repository.EventAttendanceView;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
 
@@ -39,6 +41,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +59,7 @@ public class EventService {
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final AttendanceRecordRepository attendanceRecordRepository;
 
     @Transactional
     public CreateEventResponse addEvent(EventRequest request, String userEmail) {
@@ -303,19 +308,30 @@ public class EventService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
 
+        List<EventAttendanceView> attendance = attendanceRecordRepository.findAttendanceByUserId(user.getId());
+        Set<Long> registeredEventIds = attendance.stream()
+                .map(EventAttendanceView::eventId)
+                .collect(Collectors.toSet());
+        Set<Long> checkedInEventIds = attendance.stream()
+                .filter(EventAttendanceView::checkedIn)
+                .map(EventAttendanceView::eventId)
+                .collect(Collectors.toSet());
+
         List<Event> events;
 
         if (hasFullAccess(user)) {
             events = eventRepository.findAllByOrderByStartDateTimeDesc();
         } else {
             EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
-            events = eventRepository
-                    .findByStatusAndLocationInAndRegistrationEndDateGreaterThanEqualOrderByStartDateTimeDesc(
-                            EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), LocalDate.now());
+            Set<Long> eventIdsParam = registeredEventIds.isEmpty() ? Set.of(-1L) : registeredEventIds;
+            events = eventRepository.findEligibleOrRegisteredEvents(
+                    EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), LocalDate.now(),
+                    eventIdsParam);
         }
 
         return events.stream()
-                .map(eventMapper::toResponse)
+                .map(event -> eventMapper.toResponse(event, registeredEventIds.contains(event.getId()),
+                        checkedInEventIds.contains(event.getId())))
                 .toList();
     }
 

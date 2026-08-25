@@ -191,7 +191,9 @@
   "common": {
     "close": "Close",
     "ok": "OK",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "see-more": "See more",
+    "see-less": "See less"
   },
   "event-codes": {
     "dialog": {
@@ -325,6 +327,9 @@
     "sort-asc": "Sort: soonest first",
     "sort-desc": "Sort: latest first",
     "check-in-tooltip": "Check-In",
+    "checked-in-tooltip": "Already checked in",
+    "register-tooltip": "Register for this event",
+    "register-disabled-tooltip": "Registration has closed for this event",
     "status-values": {
       "DRAFT": "Draft",
       "PUBLISHED": "Published",
@@ -463,6 +468,85 @@
       "update-success": "Event updated successfully!",
       "load-error": "Failed to load event.",
       "error": "Failed to create event. Please verify your inputs."
+    }
+  },
+  "event-registration": {
+    "dialog": {
+      "title": "Register for Event"
+    },
+    "fields": {
+      "gdpr-consent": {
+        "label": "GDPR Consent",
+        "intro": "The information you fill in the form below will be used to register for",
+        "rights": "Even in the case of such a form, you have the right to information, as well as to have your personal data deleted, in accordance with data protection regulations. You can revoke this consent statement at any time by contacting the event organizer. After revocation, your data will be deleted.",
+        "data-location-intro": "Where is the data processed? For forms using Microsoft Forms, the data is stored on servers in Europe for customers located in Europe:",
+        "data-location-link": "Microsoft 365 data locations - Microsoft 365 Enterprise | Microsoft Learn",
+        "deletion-note": "The data from this form will be deleted within one month of its submission. If the data is exported, any information containing personal data will be anonymized, where applicable.",
+        "checkbox": "I have read and agree to the GDPR data processing terms.",
+        "errors": {
+          "required": "You must accept the GDPR consent to register."
+        }
+      },
+      "photo-consent": {
+        "label": "Photo Consent",
+        "intro": "By providing this consent, you agree that photographs and/or video recordings taken during",
+        "details": "may include you, and that msg may use, store and publish this content — including on the company website, social media channels, newsletters and other marketing or promotional materials, whether current or future. You may withdraw this consent at any time by contacting the event organizer; withdrawal does not affect materials already published beforehand.",
+        "checkbox": "I consent to having my photo taken during the event."
+      },
+      "food-preference": {
+        "label": "Food Preference",
+        "errors": {
+          "required": "Food preference is required because food is provided at this event."
+        }
+      },
+      "transport-needed": {
+        "label": "I need transportation"
+      },
+      "driver-name": {
+        "label": "Driver Name",
+        "errors": {
+          "required": "Driver name is required.",
+          "min-length": "Min length is 2 characters",
+          "max-length": "Max length is 64 characters"
+        }
+      },
+      "driver-phone-number": {
+        "label": "Driver Phone Number",
+        "errors": {
+          "required": "Driver phone number is required.",
+          "min-length": "Min length is 5 characters",
+          "max-length": "Max length is 12 characters"
+        }
+      },
+      "accommodation-needed": {
+        "label": "I need accommodation"
+      },
+      "accommodation-days": {
+        "label": "Number of Accommodation Days",
+        "decrease": "Decrease number of accommodation days",
+        "increase": "Increase number of accommodation days",
+        "errors": {
+          "required": "Number of accommodation days is required.",
+          "min": "Must be at least 1 day."
+        }
+      }
+    },
+    "food-preference-values": {
+      "NONE": "No preference",
+      "VEGETARIAN": "Vegetarian",
+      "VEGAN": "Vegan"
+    },
+    "confirm-dialog": {
+      "title": "Confirm registration",
+      "message": "Are you sure you want to register for \"{{name}}\"?",
+      "warning": "You will not be able to change your registration details afterwards."
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Register"
+    },
+    "messages": {
+      "success": "You have successfully registered for this event!"
     }
   },
   "toggle-lang": "Switch to Romanian"
