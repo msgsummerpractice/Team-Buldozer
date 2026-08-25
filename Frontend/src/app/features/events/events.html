@@ -1,5 +1,5 @@
 <app-page-layout
-  [title]="'events.manage-title' | transloco"
+  [title]="(isMarketing() ? 'events.manage-title' : 'events.title') | transloco"
   [subtitle]="'events.subtitle' | transloco"
 >
   <div sidebar-actions>
