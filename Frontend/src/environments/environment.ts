@@ -5,5 +5,5 @@ export type Environment = {
 
 export const environment: Environment = {
   production: true,
-  apiUrl: '',
+  apiUrl: 'https://team-buldozer-backend.proudflower-f34c512a.westeurope.azurecontainerapps.io',
 };
