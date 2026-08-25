@@ -12,13 +12,11 @@
         </span>
         @if (!gdprExpanded()) {
           <div class="relative">
-            <p
-              class="text-sm leading-relaxed break-words pr-16 line-clamp-3"
-              [innerHTML]="
-                'event-registration.fields.gdpr-consent.placeholder-text'
-                  | transloco: { name: event.name }
-              "
-            ></p>
+            <p class="text-sm leading-relaxed break-words pr-16 line-clamp-3">
+              {{ 'event-registration.fields.gdpr-consent.intro' | transloco }}
+              <strong class="text-(--mat-sys-primary)">{{ event.name }}</strong>
+              . {{ 'event-registration.fields.gdpr-consent.rights' | transloco }}
+            </p>
             <button
               type="button"
               class="absolute bottom-0 right-0 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
@@ -28,13 +26,40 @@
             </button>
           </div>
         } @else {
-          <p
-            class="text-sm leading-relaxed break-words"
-            [innerHTML]="
-              'event-registration.fields.gdpr-consent.placeholder-text'
-                | transloco: { name: event.name }
-            "
-          ></p>
+          <div class="flex flex-col gap-2 text-sm leading-relaxed break-words">
+            <p>
+              {{ 'event-registration.fields.gdpr-consent.intro' | transloco }}
+              <strong class="text-(--mat-sys-primary)">{{ event.name }}</strong>
+              .
+            </p>
+            <p>{{ 'event-registration.fields.gdpr-consent.rights' | transloco }}</p>
+            <p>
+              {{ 'event-registration.fields.gdpr-consent.data-location-intro' | transloco }}
+            </p>
+            <ul class="list-disc pl-5">
+              <li>
+                <a
+                  href="https://docs.microsoft.com/de-de/office365/enterprise/o365-data-locations#germany"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-(--mat-sys-primary) underline font-medium"
+                >
+                  {{ 'event-registration.fields.gdpr-consent.data-location-link' | transloco }}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://docs.microsoft.com/de-de/office365/enterprise/o365-data-locations"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-(--mat-sys-primary) underline font-medium"
+                >
+                  {{ 'event-registration.fields.gdpr-consent.data-location-link' | transloco }}
+                </a>
+              </li>
+            </ul>
+            <p>{{ 'event-registration.fields.gdpr-consent.deletion-note' | transloco }}</p>
+          </div>
           <button
             type="button"
             class="self-start text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
@@ -62,13 +87,11 @@
         </span>
         @if (!photoExpanded()) {
           <div class="relative">
-            <p
-              class="text-sm leading-relaxed break-words pr-16 line-clamp-3"
-              [innerHTML]="
-                'event-registration.fields.photo-consent.placeholder-text'
-                  | transloco: { name: event.name }
-              "
-            ></p>
+            <p class="text-sm leading-relaxed break-words pr-16 line-clamp-3">
+              {{ 'event-registration.fields.photo-consent.intro' | transloco }}
+              <strong class="text-(--mat-sys-primary)">{{ event.name }}</strong>
+              {{ 'event-registration.fields.photo-consent.details' | transloco }}
+            </p>
             <button
               type="button"
               class="absolute bottom-0 right-0 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
@@ -78,13 +101,11 @@
             </button>
           </div>
         } @else {
-          <p
-            class="text-sm leading-relaxed break-words"
-            [innerHTML]="
-              'event-registration.fields.photo-consent.placeholder-text'
-                | transloco: { name: event.name }
-            "
-          ></p>
+          <p class="text-sm leading-relaxed break-words">
+            {{ 'event-registration.fields.photo-consent.intro' | transloco }}
+            <strong class="text-(--mat-sys-primary)">{{ event.name }}</strong>
+            {{ 'event-registration.fields.photo-consent.details' | transloco }}
+          </p>
           <button
             type="button"
             class="self-start text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"

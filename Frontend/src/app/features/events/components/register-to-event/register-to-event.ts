@@ -171,7 +171,7 @@ export class RegisterToEvent {
         confirmLabelKey: 'event-registration.actions.save',
         confirmIcon: 'how_to_reg',
       },
-      width: '27.5rem',
+      width: '28rem',
       autoFocus: 'dialog',
       restoreFocus: true,
     });

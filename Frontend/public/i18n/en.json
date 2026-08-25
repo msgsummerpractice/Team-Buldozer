@@ -477,7 +477,11 @@
     "fields": {
       "gdpr-consent": {
         "label": "GDPR Consent",
-        "placeholder-text": "The information you fill in the form below will be used to register for <strong class=\"text-(--mat-sys-primary)\">{{name}}</strong>.<br><br>Even in the case of such a form, you have the right to information, as well as to have your personal data deleted, in accordance with data protection regulations. You can revoke this consent statement at any time by contacting the event organizer. After revocation, your data will be deleted.<br><br>Where is the data processed? For forms using Microsoft Forms, the data is stored on servers in Europe for customers located in Europe:<ul><li><a href=\"https://docs.microsoft.com/de-de/office365/enterprise/o365-data-locations#germany\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-(--mat-sys-primary) underline font-medium\">Microsoft 365 data locations - Microsoft 365 Enterprise | Microsoft Learn</a></li><li><a href=\"https://docs.microsoft.com/de-de/office365/enterprise/o365-data-locations\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-(--mat-sys-primary) underline font-medium\">Microsoft 365 data locations - Microsoft 365 Enterprise | Microsoft Learn</a></li></ul>The data from this form will be deleted within one month of its submission. If the data is exported, any information containing personal data will be anonymized, where applicable.",
+        "intro": "The information you fill in the form below will be used to register for",
+        "rights": "Even in the case of such a form, you have the right to information, as well as to have your personal data deleted, in accordance with data protection regulations. You can revoke this consent statement at any time by contacting the event organizer. After revocation, your data will be deleted.",
+        "data-location-intro": "Where is the data processed? For forms using Microsoft Forms, the data is stored on servers in Europe for customers located in Europe:",
+        "data-location-link": "Microsoft 365 data locations - Microsoft 365 Enterprise | Microsoft Learn",
+        "deletion-note": "The data from this form will be deleted within one month of its submission. If the data is exported, any information containing personal data will be anonymized, where applicable.",
         "checkbox": "I have read and agree to the GDPR data processing terms.",
         "errors": {
           "required": "You must accept the GDPR consent to register."
@@ -485,7 +489,8 @@
       },
       "photo-consent": {
         "label": "Photo Consent",
-        "placeholder-text": "By providing this consent, you agree that photographs and/or video recordings taken during <strong class=\"text-(--mat-sys-primary)\">{{name}}</strong> may include you, and that msg may use, store and publish this content — including on the company website, social media channels, newsletters and other marketing or promotional materials, whether current or future. You may withdraw this consent at any time by contacting the event organizer; withdrawal does not affect materials already published beforehand.",
+        "intro": "By providing this consent, you agree that photographs and/or video recordings taken during",
+        "details": "may include you, and that msg may use, store and publish this content — including on the company website, social media channels, newsletters and other marketing or promotional materials, whether current or future. You may withdraw this consent at any time by contacting the event organizer; withdrawal does not affect materials already published beforehand.",
         "checkbox": "I consent to having my photo taken during the event."
       },
       "food-preference": {
