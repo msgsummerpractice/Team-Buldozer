@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '@core/authentication/services/authentication.service';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -26,6 +26,8 @@ import { finalize } from 'rxjs';
 export class Login {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthenticationService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly isLoading = signal(false);
   protected readonly showPassword = signal(false);
@@ -49,6 +51,11 @@ export class Login {
     this.auth
       .login(email, password)
       .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe();
+      .subscribe({
+        next: () => {
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/home';
+          this.router.navigateByUrl(returnUrl);
+        },
+      });
   }
 }
