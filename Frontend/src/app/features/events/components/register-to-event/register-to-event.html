@@ -1,0 +1,246 @@
+<h2 mat-dialog-title>
+  {{ 'event-registration.dialog.title' | transloco }}
+  <span class="font-normal text-black ml-1">— {{ event.name }}</span>
+</h2>
+
+<form [formGroup]="registrationForm">
+  <mat-dialog-content>
+    <div class="flex flex-col gap-4 py-2">
+      <div class="rounded-xl bg-(--mat-sys-surface-container) p-4 flex flex-col gap-2">
+        <span class="text-xs font-semibold uppercase tracking-widest opacity-60">
+          {{ 'event-registration.fields.gdpr-consent.label' | transloco }}
+        </span>
+        @if (!gdprExpanded()) {
+          <div class="relative">
+            <p class="text-sm leading-relaxed break-words pr-16 line-clamp-3">
+              {{ 'event-registration.fields.gdpr-consent.intro' | transloco }}
+              <strong class="text-(--mat-sys-primary)">{{ event.name }}</strong>
+              . {{ 'event-registration.fields.gdpr-consent.rights' | transloco }}
+            </p>
+            <button
+              type="button"
+              class="absolute bottom-0 right-0 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
+              (click)="gdprExpanded.set(true)"
+            >
+              {{ 'common.see-more' | transloco }}
+            </button>
+          </div>
+        } @else {
+          <div class="flex flex-col gap-2 text-sm leading-relaxed break-words">
+            <p>
+              {{ 'event-registration.fields.gdpr-consent.intro' | transloco }}
+              <strong class="text-(--mat-sys-primary)">{{ event.name }}</strong>
+              .
+            </p>
+            <p>{{ 'event-registration.fields.gdpr-consent.rights' | transloco }}</p>
+            <p>
+              {{ 'event-registration.fields.gdpr-consent.data-location-intro' | transloco }}
+            </p>
+            <ul class="list-disc pl-5">
+              <li>
+                <a
+                  href="https://docs.microsoft.com/de-de/office365/enterprise/o365-data-locations#germany"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-(--mat-sys-primary) underline font-medium"
+                >
+                  {{ 'event-registration.fields.gdpr-consent.data-location-link' | transloco }}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://docs.microsoft.com/de-de/office365/enterprise/o365-data-locations"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-(--mat-sys-primary) underline font-medium"
+                >
+                  {{ 'event-registration.fields.gdpr-consent.data-location-link' | transloco }}
+                </a>
+              </li>
+            </ul>
+            <p>{{ 'event-registration.fields.gdpr-consent.deletion-note' | transloco }}</p>
+          </div>
+          <button
+            type="button"
+            class="self-start text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
+            (click)="gdprExpanded.set(false)"
+          >
+            {{ 'common.see-less' | transloco }}
+          </button>
+        }
+        <mat-checkbox formControlName="gdprConsent" color="primary">
+          {{ 'event-registration.fields.gdpr-consent.checkbox' | transloco }}
+        </mat-checkbox>
+        @if (
+          registrationForm.get('gdprConsent')?.hasError('required') &&
+          registrationForm.get('gdprConsent')?.touched
+        ) {
+          <p class="text-xs text-red-600">
+            {{ 'event-registration.fields.gdpr-consent.errors.required' | transloco }}
+          </p>
+        }
+      </div>
+
+      <div class="rounded-xl bg-(--mat-sys-surface-container) p-4 flex flex-col gap-2">
+        <span class="text-xs font-semibold uppercase tracking-widest opacity-60">
+          {{ 'event-registration.fields.photo-consent.label' | transloco }}
+        </span>
+        @if (!photoExpanded()) {
+          <div class="relative">
+            <p class="text-sm leading-relaxed break-words pr-16 line-clamp-3">
+              {{ 'event-registration.fields.photo-consent.intro' | transloco }}
+              <strong class="text-(--mat-sys-primary)">{{ event.name }}</strong>
+              {{ 'event-registration.fields.photo-consent.details' | transloco }}
+            </p>
+            <button
+              type="button"
+              class="absolute bottom-0 right-0 text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
+              (click)="photoExpanded.set(true)"
+            >
+              {{ 'common.see-more' | transloco }}
+            </button>
+          </div>
+        } @else {
+          <p class="text-sm leading-relaxed break-words">
+            {{ 'event-registration.fields.photo-consent.intro' | transloco }}
+            <strong class="text-(--mat-sys-primary)">{{ event.name }}</strong>
+            {{ 'event-registration.fields.photo-consent.details' | transloco }}
+          </p>
+          <button
+            type="button"
+            class="self-start text-(--mat-sys-primary) bg-transparent border-none p-0 cursor-pointer text-sm font-medium"
+            (click)="photoExpanded.set(false)"
+          >
+            {{ 'common.see-less' | transloco }}
+          </button>
+        }
+        <mat-checkbox formControlName="photoConsent" color="primary">
+          {{ 'event-registration.fields.photo-consent.checkbox' | transloco }}
+        </mat-checkbox>
+      </div>
+
+      @if (requiresFoodPreference) {
+        <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+          <mat-label>{{ 'event-registration.fields.food-preference.label' | transloco }}</mat-label>
+          <mat-select formControlName="foodPreference">
+            @for (preference of foodPreferences; track preference) {
+              <mat-option [value]="preference">
+                {{ 'event-registration.food-preference-values.' + preference | transloco }}
+              </mat-option>
+            }
+          </mat-select>
+          @if (registrationForm.get('foodPreference')?.hasError('required')) {
+            <mat-error>
+              {{ 'event-registration.fields.food-preference.errors.required' | transloco }}
+            </mat-error>
+          }
+        </mat-form-field>
+      }
+
+      @if (isInternal) {
+        <mat-checkbox formControlName="transportNeeded" color="primary">
+          {{ 'event-registration.fields.transport-needed.label' | transloco }}
+        </mat-checkbox>
+
+        @if (registrationForm.get('transportNeeded')?.value) {
+          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+            <mat-label>{{ 'event-registration.fields.driver-name.label' | transloco }}</mat-label>
+            <input matInput formControlName="driverName" />
+            @if (registrationForm.get('driverName')?.hasError('required')) {
+              <mat-error>
+                {{ 'event-registration.fields.driver-name.errors.required' | transloco }}
+              </mat-error>
+            }
+            @if (registrationForm.get('driverName')?.hasError('minlength')) {
+              <mat-error>
+                {{ 'event-registration.fields.driver-name.errors.min-length' | transloco }}
+              </mat-error>
+            }
+            @if (registrationForm.get('driverName')?.hasError('maxlength')) {
+              <mat-error>
+                {{ 'event-registration.fields.driver-name.errors.max-length' | transloco }}
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+            <mat-label>
+              {{ 'event-registration.fields.driver-phone-number.label' | transloco }}
+            </mat-label>
+            <input matInput formControlName="driverPhoneNumber" />
+            @if (registrationForm.get('driverPhoneNumber')?.hasError('required')) {
+              <mat-error>
+                {{ 'event-registration.fields.driver-phone-number.errors.required' | transloco }}
+              </mat-error>
+            }
+            @if (registrationForm.get('driverPhoneNumber')?.hasError('minlength')) {
+              <mat-error>
+                {{ 'event-registration.fields.driver-phone-number.errors.min-length' | transloco }}
+              </mat-error>
+            }
+            @if (registrationForm.get('driverPhoneNumber')?.hasError('maxlength')) {
+              <mat-error>
+                {{ 'event-registration.fields.driver-phone-number.errors.max-length' | transloco }}
+              </mat-error>
+            }
+          </mat-form-field>
+        }
+
+        <mat-checkbox formControlName="accommodationNeeded" color="primary">
+          {{ 'event-registration.fields.accommodation-needed.label' | transloco }}
+        </mat-checkbox>
+
+        @if (registrationForm.get('accommodationNeeded')?.value) {
+          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+            <mat-label>
+              {{ 'event-registration.fields.accommodation-days.label' | transloco }}
+            </mat-label>
+            <input matInput type="number" min="1" formControlName="accommodationDays" />
+            <button
+              matIconButton
+              matSuffix
+              type="button"
+              [attr.aria-label]="
+                'event-registration.fields.accommodation-days.decrease' | transloco
+              "
+              (click)="decrementAccommodationDays()"
+            >
+              <mat-icon>remove</mat-icon>
+            </button>
+            <button
+              matIconButton
+              matSuffix
+              type="button"
+              [attr.aria-label]="
+                'event-registration.fields.accommodation-days.increase' | transloco
+              "
+              (click)="incrementAccommodationDays()"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+            @if (registrationForm.get('accommodationDays')?.hasError('required')) {
+              <mat-error>
+                {{ 'event-registration.fields.accommodation-days.errors.required' | transloco }}
+              </mat-error>
+            }
+            @if (registrationForm.get('accommodationDays')?.hasError('min')) {
+              <mat-error>
+                {{ 'event-registration.fields.accommodation-days.errors.min' | transloco }}
+              </mat-error>
+            }
+          </mat-form-field>
+        }
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button matButton type="button" (click)="cancel()">
+      {{ 'event-registration.actions.cancel' | transloco }}
+    </button>
+    <button matButton="filled" color="primary" type="button" [disabled]="saving()" (click)="save()">
+      <mat-icon>how_to_reg</mat-icon>
+      {{ 'event-registration.actions.save' | transloco }}
+    </button>
+  </mat-dialog-actions>
+</form>

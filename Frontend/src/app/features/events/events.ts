@@ -14,7 +14,7 @@ import { NotificationService } from '@core/notification/services/notification.se
 import { ConfirmDialog, ConfirmDialogData } from '@shared/components/confirm-dialog/confirm-dialog';
 import { FormsModule } from '@angular/forms';
 import { combineLatest, debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,8 +30,18 @@ import {
   EventDetailsDialogData,
 } from '@features/events/event-details/components/event-details-dialog';
 import { CheckInDialog } from '@features/events/check-in/components/check-in-dialog';
-import { getChipColor, getTypeChipColor, getLocationChipColor, getTypeIcon, withAlpha } from '@shared/chip-color';
+import {
+  getChipColor,
+  getTypeChipColor,
+  getLocationChipColor,
+  getTypeIcon,
+  withAlpha,
+} from '@shared/chip-color';
 import { PageLayout } from '@shared/components/page-layout/page-layout';
+import {
+  RegisterToEvent,
+  RegisterToEventDialogData,
+} from '@features/events/components/register-to-event/register-to-event';
 
 const EVENT_DETAILS_DIALOG_CONFIG = {
   width: '95vw',
@@ -43,6 +53,13 @@ const EVENT_DETAILS_DIALOG_CONFIG = {
 const CHECK_IN_DIALOG_CONFIG = {
   width: '360px',
   maxWidth: '95vw',
+};
+
+const REGISTER_TO_EVENT_DIALOG_CONFIG: MatDialogConfig<RegisterToEventDialogData> = {
+  width: '60%',
+  minWidth: '31rem',
+  autoFocus: 'dialog' as const,
+  restoreFocus: true,
 };
 
 interface RouteDialogState {
@@ -234,8 +251,25 @@ export class Events implements OnInit {
     );
   }
 
+  protected canRegister(event: EventResponse): boolean {
+    const today = new Date().toISOString().slice(0, 10);
+    return event.registrationEndDate >= today;
+  }
+
   protected onCheckIn(event: EventResponse): void {
     this.router.navigate(['/events', event.id, 'checkin']);
+  }
+
+  protected onRegister(event: EventResponse): void {
+    const ref = this.dialog.open<RegisterToEvent, RegisterToEventDialogData, boolean>(
+      RegisterToEvent,
+      { ...REGISTER_TO_EVENT_DIALOG_CONFIG, data: { event } }
+    );
+
+    ref.afterClosed().subscribe((registered) => {
+      if (!registered) return;
+      this.loadEvents();
+    });
   }
 
   protected canPublish(event: EventResponse): boolean {

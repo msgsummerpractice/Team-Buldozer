@@ -191,7 +191,9 @@
   "common": {
     "close": "Închide",
     "ok": "OK",
-    "cancel": "Anulează"
+    "cancel": "Anulează",
+    "see-more": "Vezi mai mult",
+    "see-less": "Vezi mai puțin"
   },
   "event-codes": {
     "dialog": {
@@ -325,6 +327,9 @@
     "sort-asc": "Sortare: cele mai apropiate primele",
     "sort-desc": "Sortare: cele mai recente primele",
     "check-in-tooltip": "Check-In",
+    "checked-in-tooltip": "Deja înregistrat la eveniment",
+    "register-tooltip": "Înscrie-te la acest eveniment",
+    "register-disabled-tooltip": "Înscrierea la acest eveniment s-a închis",
     "status-values": {
       "DRAFT": "Schiță",
       "PUBLISHED": "Publicat",
@@ -463,6 +468,85 @@
       "update-success": "Evenimentul a fost actualizat cu succes!",
       "load-error": "Nu s-a putut încărca evenimentul.",
       "error": "Eroare la crearea evenimentului. Te rugăm să verifici datele introduse."
+    }
+  },
+  "event-registration": {
+    "dialog": {
+      "title": "Înscriere la eveniment"
+    },
+    "fields": {
+      "gdpr-consent": {
+        "label": "Consimțământ GDPR",
+        "intro": "Datele completate în formularul de mai jos vor fi folosite pentru înscrierea la",
+        "rights": "Chiar și în cazul unui astfel de formular, aveți dreptul la informații, precum și la ștergerea datelor dvs. personale în conformitate cu reglementările privind protecția datelor. Puteți revoca această declarație de consimțământ în orice moment, contactând organizatorul evenimentului. După revocare, datele dvs. vor fi șterse.",
+        "data-location-intro": "Unde sunt procesate datele? În cazul formularelor care utilizează Microsoft Forms, datele sunt stocate pe servere din Europa pentru clienții aflați în Europa:",
+        "data-location-link": "Microsoft 365-Datenspeicherorte - Microsoft 365 Enterprise | Microsoft Learn",
+        "deletion-note": "Datele din acest formular vor fi șterse în interval de o lună de la data trimiterii lui. În cazul în care datele vor fi exportate, cele care conțin informații cu caracter personal vor fi anonimizate, dacă este cazul.",
+        "checkbox": "Am citit și sunt de acord cu termenii de prelucrare a datelor GDPR.",
+        "errors": {
+          "required": "Trebuie să accepți consimțământul GDPR pentru a te înscrie."
+        }
+      },
+      "photo-consent": {
+        "label": "Consimțământ foto",
+        "intro": "Prin acordarea acestui consimțământ, sunteți de acord ca fotografiile și/sau înregistrările video realizate în timpul evenimentului",
+        "details": "să vă poată include, iar msg să poată utiliza, stoca și publica acest conținut — inclusiv pe site-ul web al companiei, canalele de social media, newsletter-e și alte materiale de marketing sau promovare, actuale sau viitoare. Puteți revoca acest consimțământ în orice moment, contactând organizatorul evenimentului; revocarea nu afectează materialele publicate deja anterior.",
+        "checkbox": "Sunt de acord ca fotografii să fie făcute în timpul evenimentului."
+      },
+      "food-preference": {
+        "label": "Preferință alimentară",
+        "errors": {
+          "required": "Preferința alimentară este obligatorie deoarece mâncarea este asigurată la acest eveniment."
+        }
+      },
+      "transport-needed": {
+        "label": "Am nevoie de transport"
+      },
+      "driver-name": {
+        "label": "Numele șoferului",
+        "errors": {
+          "required": "Numele șoferului este obligatoriu.",
+          "min-length": "Lungimea minimă este de 2 caractere",
+          "max-length": "Lungimea maximă este de 64 de caractere"
+        }
+      },
+      "driver-phone-number": {
+        "label": "Numărul de telefon al șoferului",
+        "errors": {
+          "required": "Numărul de telefon al șoferului este obligatoriu.",
+          "min-length": "Lungimea minimă este de 5 caractere",
+          "max-length": "Lungimea maximă este de 12 caractere"
+        }
+      },
+      "accommodation-needed": {
+        "label": "Am nevoie de cazare"
+      },
+      "accommodation-days": {
+        "label": "Numărul de zile de cazare",
+        "decrease": "Scade numărul de zile de cazare",
+        "increase": "Crește numărul de zile de cazare",
+        "errors": {
+          "required": "Numărul de zile de cazare este obligatoriu.",
+          "min": "Trebuie să fie cel puțin 1 zi."
+        }
+      }
+    },
+    "food-preference-values": {
+      "NONE": "Fără preferință",
+      "VEGETARIAN": "Vegetarian",
+      "VEGAN": "Vegan"
+    },
+    "confirm-dialog": {
+      "title": "Confirmare înscriere",
+      "message": "Sigur dorești să te înscrii la „{{name}}”?",
+      "warning": "Nu vei putea modifica detaliile înscrierii ulterior."
+    },
+    "actions": {
+      "cancel": "Anulează",
+      "save": "Înscrie-te"
+    },
+    "messages": {
+      "success": "Te-ai înscris cu succes la acest eveniment!"
     }
   },
   "toggle-lang": "Schimbă în engleză"

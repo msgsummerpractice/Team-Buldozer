@@ -40,6 +40,8 @@ import com.example.CheckInApp.model.EventType;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.model.UserLocation;
 import com.example.CheckInApp.model.UserRole;
+import com.example.CheckInApp.repository.AttendanceRecordRepository;
+import com.example.CheckInApp.repository.EventAttendanceView;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.UserRepository;
 import com.google.zxing.BinaryBitmap;
@@ -69,6 +71,9 @@ class EventServiceTest {
 
         @Mock
         private EmailService emailService;
+
+        @Mock
+        private AttendanceRecordRepository attendanceRecordRepository;
 
         @InjectMocks
         private EventService eventService;
@@ -267,8 +272,9 @@ class EventServiceTest {
                 Event event = Event.builder().id(1L).build();
                 when(userRepository.findByEmail("user@example.com"))
                                 .thenReturn(Optional.of(marketingUser()));
+                when(attendanceRecordRepository.findAttendanceByUserId(any())).thenReturn(List.of());
                 when(eventRepository.findAllByOrderByStartDateTimeDesc()).thenReturn(List.of(event));
-                when(eventMapper.toResponse(event)).thenReturn(EventResponse.builder().id(1L).build());
+                when(eventMapper.toResponse(event, false, false)).thenReturn(EventResponse.builder().id(1L).build());
 
                 List<EventResponse> result = eventService.getAllEvents("user@example.com");
 
@@ -281,22 +287,78 @@ class EventServiceTest {
                 Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED).location(EventLocation.CLUJ).build();
                 when(userRepository.findByEmail("user@example.com"))
                                 .thenReturn(Optional.of(participantUser(UserLocation.CLUJ)));
-                when(eventRepository
-                                .findByStatusAndLocationInAndRegistrationEndDateGreaterThanEqualOrderByStartDateTimeDesc(
-                                                eq(EventStatus.PUBLISHED),
-                                                eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
-                                                any(LocalDate.class)))
+                when(attendanceRecordRepository.findAttendanceByUserId(any())).thenReturn(List.of());
+                when(eventRepository.findEligibleOrRegisteredEvents(
+                                eq(EventStatus.PUBLISHED),
+                                eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
+                                any(LocalDate.class),
+                                eq(Set.of(-1L))))
                                 .thenReturn(List.of(event));
-                when(eventMapper.toResponse(event)).thenReturn(EventResponse.builder().id(1L).build());
+                when(eventMapper.toResponse(event, false, false)).thenReturn(EventResponse.builder().id(1L).build());
 
                 List<EventResponse> result = eventService.getAllEvents("user@example.com");
 
                 assertThat(result).hasSize(1);
-                verify(eventRepository)
-                                .findByStatusAndLocationInAndRegistrationEndDateGreaterThanEqualOrderByStartDateTimeDesc(
-                                                eq(EventStatus.PUBLISHED),
-                                                eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
-                                                any(LocalDate.class));
+                verify(eventRepository).findEligibleOrRegisteredEvents(
+                                eq(EventStatus.PUBLISHED),
+                                eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
+                                any(LocalDate.class),
+                                eq(Set.of(-1L)));
+        }
+
+        @Test
+        void getAllEvents_includesRegisteredEventPastRegistrationDeadline_whenUserIsParticipant() {
+                Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED).location(EventLocation.CLUJ)
+                                .registrationEndDate(LocalDate.now().minusDays(1)).build();
+                when(userRepository.findByEmail("user@example.com"))
+                                .thenReturn(Optional.of(participantUser(UserLocation.CLUJ)));
+                when(attendanceRecordRepository.findAttendanceByUserId(any()))
+                                .thenReturn(List.of(new EventAttendanceView(1L, false)));
+                when(eventRepository.findEligibleOrRegisteredEvents(
+                                eq(EventStatus.PUBLISHED),
+                                eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
+                                any(LocalDate.class),
+                                eq(Set.of(1L))))
+                                .thenReturn(List.of(event));
+                when(eventMapper.toResponse(event, true, false))
+                                .thenReturn(EventResponse.builder().id(1L).userRegistered(true).build());
+
+                List<EventResponse> result = eventService.getAllEvents("user@example.com");
+
+                assertThat(result).hasSize(1);
+                assertThat(result.get(0).isUserRegistered()).isTrue();
+        }
+
+        @Test
+        void getAllEvents_marksEventAsRegistered_whenUserHasAttendanceRecordForEvent() {
+                Event event = Event.builder().id(1L).build();
+                when(userRepository.findByEmail("user@example.com"))
+                                .thenReturn(Optional.of(marketingUser()));
+                when(attendanceRecordRepository.findAttendanceByUserId(any()))
+                                .thenReturn(List.of(new EventAttendanceView(1L, false)));
+                when(eventRepository.findAllByOrderByStartDateTimeDesc()).thenReturn(List.of(event));
+                when(eventMapper.toResponse(event, true, false))
+                                .thenReturn(EventResponse.builder().id(1L).userRegistered(true).build());
+
+                List<EventResponse> result = eventService.getAllEvents("user@example.com");
+
+                assertThat(result.get(0).isUserRegistered()).isTrue();
+        }
+
+        @Test
+        void getAllEvents_marksEventAsCheckedIn_whenUserHasCheckedInAttendanceRecord() {
+                Event event = Event.builder().id(1L).build();
+                when(userRepository.findByEmail("user@example.com"))
+                                .thenReturn(Optional.of(marketingUser()));
+                when(attendanceRecordRepository.findAttendanceByUserId(any()))
+                                .thenReturn(List.of(new EventAttendanceView(1L, true)));
+                when(eventRepository.findAllByOrderByStartDateTimeDesc()).thenReturn(List.of(event));
+                when(eventMapper.toResponse(event, true, true))
+                                .thenReturn(EventResponse.builder().id(1L).userRegistered(true).userCheckedIn(true).build());
+
+                List<EventResponse> result = eventService.getAllEvents("user@example.com");
+
+                assertThat(result.get(0).isUserCheckedIn()).isTrue();
         }
 
         @Test
