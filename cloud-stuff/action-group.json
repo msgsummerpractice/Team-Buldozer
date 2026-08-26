@@ -1,0 +1,31 @@
+{
+  "id": "/subscriptions/BFF82F66-027A-4464-A242-3E971760BB2E/resourceGroups/team_buldozer/providers/microsoft.insights/actionGroups/team-buldozer-action-group",
+  "type": "Microsoft.Insights/ActionGroups",
+  "name": "team-buldozer-action-group",
+  "location": "germanywestcentral",
+  "kind": null,
+  "tags": {
+    "SummerPractice": "Azure"
+  },
+  "properties": {
+    "groupShortName": "action-group",
+    "enabled": true,
+    "emailReceivers": [
+      {
+        "name": "msgcheckin2@gmail.com_-EmailAction-",
+        "useCommonAlertSchema": false,
+        "status": "Enabled"
+      }
+    ],
+    "smsReceivers": [],
+    "webhookReceivers": [],
+    "eventHubReceivers": [],
+    "itsmReceivers": [],
+    "azureAppPushReceivers": [],
+    "automationRunbookReceivers": [],
+    "voiceReceivers": [],
+    "logicAppReceivers": [],
+    "azureFunctionReceivers": [],
+    "armRoleReceivers": []
+  }
+}

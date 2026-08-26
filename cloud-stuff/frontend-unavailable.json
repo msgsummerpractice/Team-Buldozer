@@ -1,0 +1,42 @@
+{
+  "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/microsoft.insights/metricAlerts/frontend-unavailable",
+  "name": "frontend-unavailable",
+  "type": "Microsoft.Insights/metricAlerts",
+  "location": "global",
+  "tags": {
+    "SummerPractice": "Azure"
+  },
+  "properties": {
+    "description": "",
+    "severity": 3,
+    "enabled": true,
+    "scopes": [
+      "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.Web/staticSites/team-buldozer-static-web-app"
+    ],
+    "evaluationFrequency": "PT1M",
+    "windowSize": "PT5M",
+    "criteria": {
+      "allOf": [
+        {
+          "threshold": 1,
+          "name": "Metric1",
+          "metricNamespace": "microsoft.web/staticsites",
+          "metricName": "CdnRequestCount",
+          "operator": "LessThan",
+          "timeAggregation": "Total",
+          "criterionType": "StaticThresholdCriterion"
+        }
+      ],
+      "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+    },
+    "autoMitigate": true,
+    "targetResourceType": "Microsoft.Web/staticSites",
+    "targetResourceRegion": "westeurope",
+    "actions": [
+      {
+        "actionGroupId": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourcegroups/team_buldozer/providers/microsoft.insights/actiongroups/team-buldozer-action-group",
+        "webHookProperties": {}
+      }
+    ]
+  }
+}

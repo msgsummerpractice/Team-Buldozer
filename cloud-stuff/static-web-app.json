@@ -1,0 +1,53 @@
+{
+  "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.Web/staticSites/team-buldozer-static-web-app",
+  "name": "team-buldozer-static-web-app",
+  "type": "Microsoft.Web/staticSites",
+  "location": "West Europe",
+  "tags": {
+    "SummerPractice": "Azure"
+  },
+  "properties": {
+    "defaultHostname": "ashy-glacier-059589b03.7.azurestaticapps.net",
+    "repositoryUrl": "https://github.com/msgsummerpractice/Team-Buldozer",
+    "branch": "main",
+    "customDomains": [],
+    "stableInboundIP": "9.163.40.246",
+    "privateEndpointConnections": [],
+    "stagingEnvironmentPolicy": "Enabled",
+    "allowConfigFileUpdates": true,
+    "contentDistributionEndpoint": "https://content-am2.infrastructure.7.azurestaticapps.net",
+    "keyVaultReferenceIdentity": "SystemAssigned",
+    "userProvidedFunctionApps": null,
+    "linkedBackends": [],
+    "provider": "GitHub",
+    "enterpriseGradeCdnStatus": "Disabled",
+    "publicNetworkAccess": null,
+    "databaseConnections": [],
+    "trafficSplitting": {
+      "environmentDistribution": {
+        "default": 100
+      }
+    },
+    "targetResourceGroupResourceId": null,
+    "trialExpirationTimeUtc": null,
+    "prettyNameStatus": null,
+    "prettyName": null,
+    "prettyNameHostname": null,
+    "backendRegion": {
+      "regionName": null,
+      "status": null
+    },
+    "stagingEnvironmentRegion": null,
+    "deploymentAuthPolicy": "DeploymentToken",
+    "federatedIdentityTenantId": null,
+    "federatedIdentityClientId": null,
+    "federatedIdentitySubscriptionId": null,
+    "deploymentStorageAccountResourceId": null,
+    "deploymentStorageAccountReferenceIdentity": null,
+    "networkConfigurations": null
+  },
+  "sku": {
+    "name": "Standard",
+    "tier": "Standard"
+  }
+}
