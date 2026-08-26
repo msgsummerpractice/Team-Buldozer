@@ -245,9 +245,11 @@ export class Events implements OnInit {
   }
 
   protected canCheckIn(event: EventResponse): boolean {
+    const now = Date.now();
     return (
       event.status === EventStatusEnum.PUBLISHED &&
-      new Date(event.endDateTime).getTime() > Date.now()
+      new Date(event.startDateTime).getTime() <= now &&
+      new Date(event.endDateTime).getTime() > now
     );
   }
 
