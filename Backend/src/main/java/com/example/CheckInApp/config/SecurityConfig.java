@@ -63,6 +63,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of("http://localhost:4200", "https://ashy-glacier-059589b03.7.azurestaticapps.net"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Content-Disposition"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
