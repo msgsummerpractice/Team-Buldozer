@@ -194,7 +194,7 @@
       {{ 'event-details.dialog.export-attendance' | transloco }}
     </button>
   }
-  @if (event()) {
+  @if (event()?.userRegistered) {
     @let checkInTooltip = isCheckInDisabled() ? ('check-in.button-ended-tooltip' | transloco) : '';
     <span [matTooltip]="checkInTooltip">
       <button matButton="filled" type="button" (click)="checkIn()" [disabled]="isCheckInDisabled()">
