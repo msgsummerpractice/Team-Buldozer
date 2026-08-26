@@ -129,6 +129,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_222, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(WithdrawnRegistrationException.class)
+    public ResponseEntity<ErrorResponse> handleWithdrawnRegistration(WithdrawnRegistrationException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_230, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(AlreadyCheckedInException.class)
     public ResponseEntity<ErrorResponse> handleAlreadyCheckedIn(AlreadyCheckedInException ex, HttpServletRequest request) {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_223, ex.getMessage(), request);

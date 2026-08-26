@@ -7,6 +7,7 @@ import com.example.CheckInApp.exception.AlreadyRegisteredException;
 import com.example.CheckInApp.exception.InvalidRegistrationDataException;
 import com.example.CheckInApp.exception.RegistrationClosedException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
+import com.example.CheckInApp.exception.WithdrawnRegistrationException;
 import com.example.CheckInApp.model.*;
 import com.example.CheckInApp.repository.AttendanceRecordRepository;
 import com.example.CheckInApp.repository.EventRepository;
@@ -51,6 +52,7 @@ public class RegistrationService {
                 .gdprConsent(Boolean.TRUE.equals(request.getGdprConsent()))
                 .photoConsent(Boolean.TRUE.equals(request.getPhotoConsent()))
                 .registrationDate(LocalDate.now())
+                .status(RegistrationStatus.CONFIRMED)
                 .build();
 
         applyFoodPreference(event, request, registration);
@@ -150,6 +152,53 @@ public class RegistrationService {
             }
             registration.setAccommodationDays(request.getAccommodationDays());
         }
+    }
+
+    public RegistrationResponse getMyRegistration(Long eventId, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
+        Registration registration = registrationRepository.findByEventIdAndUserId(eventId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Registration not found for event " + eventId));
+
+        return registrationMapper.toResponse(registration);
+    }
+
+    @Transactional
+    public RegistrationResponse editRegistration(Long eventId, RegistrationRequest request, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+
+        Registration registration = registrationRepository.findByEventIdAndUserId(eventId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Registration not found for event " + eventId));
+
+        if (registration.getStatus() == RegistrationStatus.WITHDRAWN) {
+            throw new WithdrawnRegistrationException("Cannot edit a withdrawn registration.");
+        }
+
+        applyFoodPreference(event, request, registration);
+        applyInternalEventDetails(event, request, registration);
+
+        return registrationMapper.toResponse(registrationRepository.save(registration));
+    }
+
+    @Transactional
+    public RegistrationResponse withdrawRegistration(Long eventId, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
+
+        Registration registration = registrationRepository.findByEventIdAndUserId(eventId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Registration not found for event " + eventId));
+
+        if (registration.getStatus() == RegistrationStatus.WITHDRAWN) {
+            throw new WithdrawnRegistrationException("Registration is already withdrawn.");
+        }
+
+        registration.setStatus(RegistrationStatus.WITHDRAWN);
+        return registrationMapper.toResponse(registrationRepository.save(registration));
     }
 
 }
