@@ -234,7 +234,9 @@
       "status-completed": "Completed",
       "type-internal": "Internal",
       "type-external": "External",
-      "type-local": "Local"
+      "type-local": "Local",
+      "export-attendance": "Export Attendance",
+      "export-error": "Failed to export attendance list."
     }
   },
   "users": {
