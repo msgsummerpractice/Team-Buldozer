@@ -46,7 +46,8 @@ public enum ErrorCode {
     ERR_227("Already registered for this event"),
     ERR_228("Reset link has expired"),
     ERR_229("Reset link has already been used"),
-    ERR_230("Registration has been withdrawn");
+    ERR_230("Registration has been withdrawn"),
+    ERR_231("User cannot have both MARKETING and HR roles at the same time");
 
     private final String defaultMessage;
 

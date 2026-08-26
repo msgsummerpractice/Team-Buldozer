@@ -80,6 +80,12 @@ public class UserService {
             throw new ForbiddenActionException("Last admin can not be disabled!");
         }
 
+        boolean hasMarketing = request.getRoles().contains(UserRole.MARKETING);
+        boolean hasHr = request.getRoles().contains(UserRole.HR);
+        if (hasMarketing && hasHr) {
+            throw new IllegalArgumentException("User cannot have both MARKETING and HR roles at the same time.");
+        }
+
         existingUser.setStatus(request.getStatus());
         existingUser.setRoles(request.getRoles());
 

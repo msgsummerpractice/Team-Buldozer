@@ -48,6 +48,13 @@ export class UserRolesDialog {
     return current.length === 1 && current[0] === role;
   }
 
+  protected isConflictingRole(role: UserRole): boolean {
+    const current = this.rolesControl.value;
+    if (role === UserRoleEnum.MARKETING) return current.includes(UserRoleEnum.HR as UserRole);
+    if (role === UserRoleEnum.HR) return current.includes(UserRoleEnum.MARKETING as UserRole);
+    return false;
+  }
+
   protected cancel(): void {
     this.dialogRef.close(undefined);
   }
