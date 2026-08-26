@@ -6,6 +6,7 @@ import com.example.CheckInApp.dto.response.CreateEventResponse;
 import com.example.CheckInApp.dto.response.EventCodesResponse;
 import com.example.CheckInApp.dto.response.EventResponse;
 import com.example.CheckInApp.service.EventService;
+import com.example.CheckInApp.service.EventExportService;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventController {
 
     private final EventService eventService;
+    private final EventExportService eventExportService;
 
     @PostMapping
     @PreAuthorize("hasRole('MARKETING')")
@@ -83,6 +88,18 @@ public class EventController {
     @PreAuthorize("hasRole('MARKETING')")
     public ResponseEntity<EventResponse> completeEvent(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.completeEvent(id));
+    }
+
+    @GetMapping("/{id}/export")
+    @PreAuthorize("hasRole('HR')")
+    public ResponseEntity<byte[]> exportAttendance(@PathVariable Long id) {
+        EventExportService.ExportResult result = eventExportService.exportAttendance(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        headers.setContentDisposition(
+                ContentDisposition.attachment().filename(result.eventName() + ".xlsx").build());
+        return ResponseEntity.ok().headers(headers).body(result.data());
     }
 
 }

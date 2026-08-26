@@ -10,6 +10,7 @@ import com.example.CheckInApp.model.EventStatus;
 import com.example.CheckInApp.model.EventType;
 import com.example.CheckInApp.repository.UserRepository;
 import com.example.CheckInApp.security.JwtUtil;
+import com.example.CheckInApp.service.EventExportService;
 import com.example.CheckInApp.service.EventService;
 import com.example.CheckInApp.config.SecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +54,9 @@ class EventControllerTest {
 
     @MockitoBean
     private EventService eventService;
+
+    @MockitoBean
+    private EventExportService eventExportService;
 
     @MockitoBean
     private JwtUtil jwtUtil;
@@ -302,6 +306,31 @@ class EventControllerTest {
     @Test
     void getEventCodes_returnsForbidden_whenUserIsNotMarketing() throws Exception {
         mockMvc.perform(get("/api/v1/events/1/codes")
+                        .with(user("user@example.com").roles("PARTICIPANT")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void exportAttendance_returnsXlsxFile_whenUserHasHrRole() throws Exception {
+        byte[] xlsxData = new byte[]{1, 2, 3};
+        when(eventExportService.exportAttendance(1L))
+                .thenReturn(new EventExportService.ExportResult("Team Building Event", xlsxData));
+
+        mockMvc.perform(get("/api/v1/events/1/export")
+                        .with(user("user@example.com").roles("HR")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .andExpect(header().string("Content-Disposition",
+                        "attachment; filename=\"Team Building Event.xlsx\""))
+                .andExpect(content().bytes(xlsxData));
+
+        verify(eventExportService).exportAttendance(1L);
+    }
+
+    @Test
+    void exportAttendance_returnsForbidden_whenUserIsNotHr() throws Exception {
+        mockMvc.perform(get("/api/v1/events/1/export")
                         .with(user("user@example.com").roles("PARTICIPANT")))
                 .andExpect(status().isForbidden());
     }

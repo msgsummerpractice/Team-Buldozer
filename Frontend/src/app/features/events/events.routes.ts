@@ -11,6 +11,7 @@ export const eventsRoutes: Routes = [
       {
         path: 'list',
         loadComponent: () => import('@features/events/events').then((m) => m.Events),
+        canActivate: [authGuard],
       },
       {
         path: 'add',
@@ -30,6 +31,7 @@ export const eventsRoutes: Routes = [
           {
             path: 'details',
             loadComponent: () => import('@features/events/events').then((m) => m.Events),
+            canActivate: [authGuard],
           },
           {
             path: 'codes',
