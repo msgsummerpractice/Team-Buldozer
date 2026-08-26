@@ -254,7 +254,11 @@ export class Events implements OnInit {
   }
 
   protected canRegister(event: EventResponse): boolean {
-    return new Date(event.registrationEndDate).getTime() >= Date.now();
+    const now = Date.now();
+    return (
+      new Date(event.registrationStartDate).getTime() <= now &&
+      new Date(event.registrationEndDate).getTime() >= now
+    );
   }
 
   protected onCheckIn(event: EventResponse): void {
