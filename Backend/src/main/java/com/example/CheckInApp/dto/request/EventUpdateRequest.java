@@ -7,8 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -20,17 +19,17 @@ public class EventUpdateRequest {
     
     private EventLocation location;
 
-    private LocalDateTime startDateTime;
+    private Instant startDateTime;
 
-    private LocalDateTime endDateTime;
+    private Instant endDateTime;
 
     private EventType type;
 
     private String poster;
 
-    private LocalDate registrationStartDate;
+    private Instant registrationStartDate;
 
-    private LocalDate registrationEndDate;
+    private Instant registrationEndDate;
 
     @Size(min = 3, max = 128, message = "Address must be between 3 and 128 characters long.")
     private String address;

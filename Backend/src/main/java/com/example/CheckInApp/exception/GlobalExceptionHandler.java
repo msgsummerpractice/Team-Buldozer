@@ -1,6 +1,6 @@
 package com.example.CheckInApp.exception;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -193,7 +193,7 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message,
             HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(status.value())
                 .error(status.getReasonPhrase())
                 .message(message)

@@ -9,8 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -25,10 +24,10 @@ public class EventRequest {
     private EventLocation location;
 
     @NotNull(message = "Start date time cannot be null.")
-    private LocalDateTime startDateTime;
+    private Instant startDateTime;
 
     @NotNull(message = "End date time cannot be null.")
-    private LocalDateTime endDateTime;
+    private Instant endDateTime;
 
     @NotNull(message = "Type cannot be null.")
     private EventType type;
@@ -36,10 +35,10 @@ public class EventRequest {
     private String poster;
 
     @NotNull(message = "Registration start date cannot be null.")
-    private LocalDate registrationStartDate;
+    private Instant registrationStartDate;
 
     @NotNull(message = "Registration end date cannot be null.")
-    private LocalDate registrationEndDate;
+    private Instant registrationEndDate;
 
     @NotBlank(message = "Address cannot be blank.")
     @Size(min = 3, max = 128, message = "Address must be between 3 and 128 characters long.")

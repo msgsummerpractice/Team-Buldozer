@@ -18,7 +18,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +54,7 @@ public class RegistrationService {
 
         registration.setGdprConsent(Boolean.TRUE.equals(request.getGdprConsent()));
         registration.setPhotoConsent(Boolean.TRUE.equals(request.getPhotoConsent()));
-        registration.setRegistrationDate(LocalDate.now());
+        registration.setRegistrationDate(Instant.now());
         registration.setStatus(RegistrationStatus.CONFIRMED);
 
         applyFoodPreference(event, request, registration);
@@ -83,11 +83,11 @@ public class RegistrationService {
             throw new InvalidRegistrationDataException("Registration is only possible for published events.");
         }
 
-        LocalDate today = LocalDate.now();
-        if (event.getRegistrationStartDate().isAfter(today)) {
+        Instant now = Instant.now();
+        if (event.getRegistrationStartDate().isAfter(now)) {
             throw new RegistrationClosedException("Registration has not started yet for this event.");
         }
-        if (event.getRegistrationEndDate().isBefore(today)) {
+        if (event.getRegistrationEndDate().isBefore(now)) {
             throw new RegistrationClosedException("Registration is closed for this event.");
         }
 
@@ -187,7 +187,7 @@ public class RegistrationService {
         Registration registration = registrationRepository.findByEventIdAndUserId(eventId, user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Registration not found for event " + eventId));
 
-        if (event.getRegistrationEndDate().isBefore(LocalDate.now())) {
+        if (event.getRegistrationEndDate().isBefore(Instant.now())) {
             throw new RegistrationClosedException("Registration is closed for this event.");
         }
 
@@ -217,7 +217,7 @@ public class RegistrationService {
             throw new WithdrawnRegistrationException("Registration is already withdrawn.");
         }
 
-        if (LocalDate.now().isAfter(registration.getEvent().getRegistrationEndDate())) {
+        if (Instant.now().isAfter(registration.getEvent().getRegistrationEndDate())) {
             throw new RegistrationClosedException("Withdrawal is no longer permitted after the registration deadline.");
         }
 

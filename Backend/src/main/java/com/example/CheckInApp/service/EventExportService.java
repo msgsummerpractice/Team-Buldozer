@@ -16,12 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class EventExportService {
+
+    private static final ZoneId EXPORT_ZONE = ZoneId.of("Europe/Bucharest");
+    private static final DateTimeFormatter EXPORT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     public record ExportResult(String eventName, byte[] data) {
     }
@@ -67,8 +73,7 @@ public class EventExportService {
                 row.createCell(2).setCellValue(reg.getUser().getFirstName());
                 row.createCell(3).setCellValue(reg.getUser().getEmail());
                 row.createCell(4).setCellValue(Boolean.TRUE.equals(reg.getGdprConsent()) ? "yes" : "no");
-                row.createCell(5).setCellValue(
-                        reg.getRegistrationDate() != null ? reg.getRegistrationDate().toString() : "");
+                row.createCell(5).setCellValue(formatRegistrationDate(reg));
                 row.createCell(6).setCellValue(
                         checkedInUserIds.contains(reg.getUser().getId()) ? "yes" : "no");
                 rowNum++;
@@ -84,5 +89,13 @@ public class EventExportService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to generate attendance Excel file.", e);
         }
+    }
+
+    private static String formatRegistrationDate(Registration reg) {
+        if (reg.getRegistrationDate() == null) {
+            return "";
+        }
+        ZonedDateTime bucharestTime = reg.getRegistrationDate().atZone(EXPORT_ZONE);
+        return bucharestTime.format(EXPORT_DATE_FORMAT);
     }
 }

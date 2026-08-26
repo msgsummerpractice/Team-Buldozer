@@ -36,8 +36,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -70,7 +69,7 @@ public class EventService {
         User currentUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
         event.setCreatedBy(currentUser);
-        event.setCreatedAt(LocalDateTime.now());
+        event.setCreatedAt(Instant.now());
 
         applyTypeSpecificRules(event, request.getType(), request.getLocation(), request.getFoodProvided());
 
@@ -108,7 +107,7 @@ public class EventService {
         EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
         return event.getStatus() == EventStatus.PUBLISHED &&
                 (event.getLocation() == userLocation || event.getLocation() == EventLocation.ALL) &&
-                !event.getRegistrationEndDate().isBefore(LocalDate.now());
+                !event.getRegistrationEndDate().isBefore(Instant.now());
     }
 
     @Transactional
@@ -230,10 +229,11 @@ public class EventService {
     }
 
     private void validateDates(Event request) {
-        if (request.getStartDateTime().isBefore(LocalDateTime.now())) {
+        Instant now = Instant.now();
+        if (request.getStartDateTime().isBefore(now)) {
             throw new InvalidEventDataException("Start date time cannot be in the past.");
         }
-        if (request.getRegistrationStartDate().isBefore(LocalDate.now())) {
+        if (request.getRegistrationStartDate().isBefore(now)) {
             throw new InvalidEventDataException("Registration start date cannot be in the past.");
         }
         if (request.getEndDateTime().isBefore(request.getStartDateTime())) {
@@ -325,7 +325,7 @@ public class EventService {
             EventLocation userLocation = EventLocation.valueOf(user.getLocation().name());
             Set<Long> eventIdsParam = registeredEventIds.isEmpty() ? Set.of(-1L) : registeredEventIds;
             events = eventRepository.findEligibleOrRegisteredEvents(
-                    EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), LocalDate.now(),
+                    EventStatus.PUBLISHED, List.of(userLocation, EventLocation.ALL), Instant.now(),
                     eventIdsParam);
         }
 
@@ -372,7 +372,7 @@ public class EventService {
             throw new EventNotEditableException("Only published events can be completed.");
         }
 
-        if (event.getEndDateTime().isAfter(LocalDateTime.now())) {
+        if (event.getEndDateTime().isAfter(Instant.now())) {
             throw new EventNotEditableException("Event cannot be completed before its end time.");
         }
 

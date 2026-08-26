@@ -47,8 +47,8 @@ public class JwtUtil {
                 .subject(userDetails.getUsername())
                 .claim("roles", roles)
                 .claim("userId", user.getId())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .issuedAt(Date.from(java.time.Instant.now()))
+                .expiration(Date.from(java.time.Instant.now().plusMillis(expiration)))
                 .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
     }
@@ -75,7 +75,7 @@ public class JwtUtil {
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return extractExpiration(token).toInstant().isBefore(java.time.Instant.now());
     }
 
     public Date extractIssuedAt(String token) {

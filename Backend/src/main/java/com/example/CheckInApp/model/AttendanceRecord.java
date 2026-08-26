@@ -5,7 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "attendance_records")
@@ -34,6 +34,6 @@ public class AttendanceRecord {
     private boolean checkedIn;
 
     @Column(name = "checked_in_time")
-    private LocalDateTime checkedInTime;
+    private Instant checkedInTime;
 
 }
