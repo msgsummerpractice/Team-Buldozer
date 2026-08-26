@@ -234,7 +234,9 @@
       "status-completed": "Finalizat",
       "type-internal": "Intern",
       "type-external": "Extern",
-      "type-local": "Local"
+      "type-local": "Local",
+      "export-attendance": "Exportă Prezența",
+      "export-error": "Exportul listei de prezență a eșuat."
     }
   },
   "users": {

@@ -43,6 +43,7 @@ export class EventDetailsDialog {
   private readonly authorization = inject(AuthorizationService);
 
   readonly isMarketing = signal(this.authorization.hasAnyRole([UserRoleEnum.MARKETING]));
+  readonly isHr = signal(this.authorization.hasAnyRole([UserRoleEnum.HR]));
   protected readonly EventStatusEnum = EventStatusEnum;
   private readonly dialog = inject(MatDialog);
   private readonly notification = inject(NotificationService);
@@ -143,5 +144,26 @@ export class EventDetailsDialog {
 
   protected checkIn(): void {
     this.dialogRef.close({ action: 'checkin' });
+  }
+
+  protected exportAttendance(): void {
+    const event = this.event();
+    if (!event) return;
+    this.eventService
+      .exportAttendance(event.id)
+      .pipe(
+        catchError(() => {
+          this.notification.showError('event-details.dialog.export-error');
+          return EMPTY;
+        })
+      )
+      .subscribe((blob) => {
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = `attendance_event_${event.id}.xlsx`;
+        anchor.click();
+        URL.revokeObjectURL(url);
+      });
   }
 }

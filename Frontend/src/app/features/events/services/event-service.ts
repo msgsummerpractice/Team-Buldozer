@@ -44,4 +44,8 @@ export class EventService {
   getEventCodes(id: number): Observable<EventCodesResponse> {
     return this.http.get<EventCodesResponse>(`${this.eventsUrl}/${id}/codes`);
   }
+
+  exportAttendance(id: number): Observable<Blob> {
+    return this.http.get(`${this.eventsUrl}/${id}/export`, { responseType: 'blob' });
+  }
 }

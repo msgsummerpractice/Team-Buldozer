@@ -188,6 +188,12 @@
       {{ 'events.edit.title' | transloco }}
     </button>
   }
+  @if (isHr() && event()?.status === EventStatusEnum.COMPLETED) {
+    <button matButton="outlined" type="button" (click)="exportAttendance()">
+      <mat-icon>download</mat-icon>
+      {{ 'event-details.dialog.export-attendance' | transloco }}
+    </button>
+  }
   @if (event()) {
     @let checkInTooltip = isCheckInDisabled() ? ('check-in.button-ended-tooltip' | transloco) : '';
     <span [matTooltip]="checkInTooltip">
