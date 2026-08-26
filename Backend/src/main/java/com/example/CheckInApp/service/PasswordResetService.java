@@ -18,7 +18,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.HexFormat;
 import com.example.CheckInApp.exception.TooManyRequestsException;
@@ -38,7 +37,7 @@ public class PasswordResetService {
     public void requestPasswordReset(String email) {
         userRepository.findByEmail(email).ifPresent(user -> {
             tokenRepository.findFirstByUserOrderByCreatedAtDesc(user).ifPresent(lastToken -> {
-                if (lastToken.getCreatedAt().plusSeconds(RATE_LIMIT_SECONDS).isAfter(LocalDateTime.now())) {
+                if (lastToken.getCreatedAt().plusSeconds(RATE_LIMIT_SECONDS).isAfter(Instant.now())) {
                     throw new TooManyRequestsException(
                             "Please wait before requesting another password reset.");
                 }

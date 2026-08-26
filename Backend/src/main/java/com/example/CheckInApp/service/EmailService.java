@@ -17,18 +17,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.util.HtmlUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class EmailService {
 
     private static final int MAX_EMAIL_RETRIES = 2;
     private static final byte[] PNG_MAGIC = {(byte) 0x89, 0x50, 0x4E, 0x47};
-    private static final DateTimeFormatter EMAIL_DATE_FORMAT = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy, HH:mm", Locale.ENGLISH);
+    private static final ZoneId EMAIL_ZONE = ZoneId.of("Europe/Bucharest");
+    private static final DateTimeFormatter EMAIL_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private static final DateTimeFormatter TIME_ONLY_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
     private final String frontendUrl;
@@ -99,15 +101,17 @@ public class EmailService {
     }
 
     private String formatDateRange(Event event) {
-        LocalDateTime start = event.getStartDateTime();
-        LocalDateTime end = event.getEndDateTime();
-        if (end == null) {
-            return start.format(EMAIL_DATE_FORMAT);
+        Instant startInstant = event.getStartDateTime();
+        Instant endInstant = event.getEndDateTime();
+        ZonedDateTime bucharestStart = startInstant.atZone(EMAIL_ZONE);
+        if (endInstant == null) {
+            return bucharestStart.format(EMAIL_DATE_FORMAT);
         }
-        if (start.toLocalDate().equals(end.toLocalDate())) {
-            return start.format(EMAIL_DATE_FORMAT) + " – " + end.format(TIME_ONLY_FORMAT);
+        ZonedDateTime bucharestEnd = endInstant.atZone(EMAIL_ZONE);
+        if (bucharestStart.toLocalDate().equals(bucharestEnd.toLocalDate())) {
+            return bucharestStart.format(EMAIL_DATE_FORMAT) + " – " + bucharestEnd.format(TIME_ONLY_FORMAT);
         }
-        return start.format(EMAIL_DATE_FORMAT) + " – " + end.format(EMAIL_DATE_FORMAT);
+        return bucharestStart.format(EMAIL_DATE_FORMAT) + " – " + bucharestEnd.format(EMAIL_DATE_FORMAT);
     }
 
     private static String detectMimeType(byte[] data) {

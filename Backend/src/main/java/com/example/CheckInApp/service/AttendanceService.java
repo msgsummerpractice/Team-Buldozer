@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -75,7 +75,7 @@ public class AttendanceService {
             throw new CheckInClosedException("Check-in is closed because the event is not published.");
         }
 
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
         if (now.isBefore(event.getStartDateTime())) {
             throw new CheckInClosedException("Check-in is not yet open. The event has not started.");
         }

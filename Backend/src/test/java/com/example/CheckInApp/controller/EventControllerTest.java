@@ -29,8 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -87,17 +86,17 @@ class EventControllerTest {
                 .id(1L)
                 .name("Team Building Event")
                 .location(EventLocation.CLUJ)
-                .startDateTime(LocalDateTime.of(2026, 9, 15, 10, 0))
-                .endDateTime(LocalDateTime.of(2026, 9, 15, 18, 0))
+                .startDateTime(Instant.parse("2026-09-15T10:00:00Z"))
+                .endDateTime(Instant.parse("2026-09-15T18:00:00Z"))
                 .type(EventType.LOCAL)
                 .status(EventStatus.DRAFT)
-                .registrationStartDate(LocalDate.of(2026, 9, 1))
-                .registrationEndDate(LocalDate.of(2026, 9, 10))
+                .registrationStartDate(Instant.parse("2026-09-01T00:00:00Z"))
+                .registrationEndDate(Instant.parse("2026-09-10T00:00:00Z"))
                 .address("Central Park, Cluj")
                 .description("Annual team building event with activities")
                 .foodProvided(true)
                 .createdById(1L)
-                .createdAt(LocalDateTime.now())
+                .createdAt(Instant.now())
                 .build();
 
         when(eventService.getEventById(eq(1L), eq("user@example.com")))
@@ -141,12 +140,12 @@ class EventControllerTest {
         EventRequest request = new EventRequest(
                 "Team Building Event",
                 EventLocation.CLUJ,
-                LocalDateTime.of(2026, 9, 15, 10, 0),
-                LocalDateTime.of(2026, 9, 15, 18, 0),
+                Instant.parse("2026-09-15T10:00:00Z"),
+                Instant.parse("2026-09-15T18:00:00Z"),
                 EventType.LOCAL,
                 null,
-                LocalDate.of(2026, 9, 1),
-                LocalDate.of(2026, 9, 10),
+                Instant.parse("2026-09-01T00:00:00Z"),
+                Instant.parse("2026-09-10T00:00:00Z"),
                 "Central Park, Cluj",
                 "Annual team building event with activities",
                 true);

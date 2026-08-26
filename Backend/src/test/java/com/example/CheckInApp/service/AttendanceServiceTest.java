@@ -26,7 +26,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,8 +64,8 @@ class AttendanceServiceTest {
                 .name("Team Building Event")
                 .status(EventStatus.PUBLISHED)
                 .checkInCode(CHECK_IN_CODE)
-                .startDateTime(LocalDateTime.now().minusHours(1))
-                .endDateTime(LocalDateTime.now().plusHours(1))
+                .startDateTime(Instant.now().minus(1, ChronoUnit.HOURS))
+                .endDateTime(Instant.now().plus(1, ChronoUnit.HOURS))
                 .build();
     }
 
@@ -149,7 +150,7 @@ class AttendanceServiceTest {
 
         when(eventRepository.findByCheckInCode(CHECK_IN_CODE)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
-        when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.empty());
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> attendanceService.checkInByCode(request, USER_EMAIL))
                 .isInstanceOf(NotRegisteredForEventException.class)
@@ -162,13 +163,11 @@ class AttendanceServiceTest {
     void checkInByCode_throwsWithdrawnRegistrationException_whenRegistrationNotConfirmed() {
         Event event = publishedEvent();
         User user = user();
-        AttendanceRecord record = attendanceRecord(event, user, false);
         Registration registration = registration(event, user, RegistrationStatus.WITHDRAWN);
         CheckInRequest request = new CheckInRequest(CHECK_IN_CODE);
 
         when(eventRepository.findByCheckInCode(CHECK_IN_CODE)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
-        when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
         when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
 
         assertThatThrownBy(() -> attendanceService.checkInByCode(request, USER_EMAIL))
@@ -292,7 +291,7 @@ class AttendanceServiceTest {
 
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
-        when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.empty());
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> attendanceService.checkInByQrCode(request, USER_EMAIL))
                 .isInstanceOf(NotRegisteredForEventException.class)
@@ -305,13 +304,11 @@ class AttendanceServiceTest {
     void checkInByQrCode_throwsWithdrawnRegistrationException_whenRegistrationNotConfirmed() {
         Event event = publishedEvent();
         User user = user();
-        AttendanceRecord record = attendanceRecord(event, user, false);
         Registration registration = registration(event, user, RegistrationStatus.WITHDRAWN);
         QrCodeCheckInRequest request = new QrCodeCheckInRequest(1L, event.getName());
 
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
-        when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
         when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
 
         assertThatThrownBy(() -> attendanceService.checkInByQrCode(request, USER_EMAIL))
@@ -324,7 +321,7 @@ class AttendanceServiceTest {
     @Test
     void checkInByQrCode_throwsCheckInClosedException_whenEventAlreadyEnded() {
         Event event = publishedEvent();
-        event.setEndDateTime(LocalDateTime.now().minusHours(1));
+        event.setEndDateTime(Instant.now().minus(1, ChronoUnit.HOURS));
         User user = user();
         AttendanceRecord record = attendanceRecord(event, user, false);
         Registration registration = registration(event, user, RegistrationStatus.CONFIRMED);

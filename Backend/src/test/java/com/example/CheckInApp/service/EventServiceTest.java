@@ -6,8 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -78,10 +78,10 @@ class EventServiceTest {
         @InjectMocks
         private EventService eventService;
 
-        private static final LocalDateTime FUTURE_START = LocalDateTime.now().plusDays(10);
-        private static final LocalDateTime FUTURE_END = LocalDateTime.now().plusDays(11);
-        private static final LocalDate REG_START = LocalDate.now().plusDays(1);
-        private static final LocalDate REG_END = LocalDate.now().plusDays(5);
+        private static final Instant FUTURE_START = Instant.now().plus(10, ChronoUnit.DAYS);
+        private static final Instant FUTURE_END = Instant.now().plus(11, ChronoUnit.DAYS);
+        private static final Instant REG_START = Instant.now().plus(1, ChronoUnit.DAYS);
+        private static final Instant REG_END = Instant.now().plus(5, ChronoUnit.DAYS);
 
         @Test
         void addEvent_savesEventWithDraftStatus() {
@@ -198,7 +198,7 @@ class EventServiceTest {
         @Test
         void getEventById_returnsEvent_whenParticipantSeesPublishedEventInTheirLocation() {
                 Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED).location(EventLocation.CLUJ)
-                                .registrationEndDate(LocalDate.now().plusDays(1)).build();
+                                .registrationEndDate(Instant.now().plus(1, ChronoUnit.DAYS)).build();
                 EventResponse response = EventResponse.builder().id(1L).status(EventStatus.PUBLISHED).build();
 
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
@@ -212,7 +212,7 @@ class EventServiceTest {
         @Test
         void getEventById_throwsResourceNotFoundException_whenRegistrationEndDateIsInPast() {
                 Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED).location(EventLocation.CLUJ)
-                                .registrationEndDate(LocalDate.now().minusDays(1)).build();
+                                .registrationEndDate(Instant.now().minus(1, ChronoUnit.DAYS)).build();
 
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
                 when(userRepository.findByEmail("user@example.com"))
@@ -291,7 +291,7 @@ class EventServiceTest {
                 when(eventRepository.findEligibleOrRegisteredEvents(
                                 eq(EventStatus.PUBLISHED),
                                 eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
-                                any(LocalDate.class),
+                                any(Instant.class),
                                 eq(Set.of(-1L))))
                                 .thenReturn(List.of(event));
                 when(eventMapper.toResponse(event, false, false)).thenReturn(EventResponse.builder().id(1L).build());
@@ -302,14 +302,14 @@ class EventServiceTest {
                 verify(eventRepository).findEligibleOrRegisteredEvents(
                                 eq(EventStatus.PUBLISHED),
                                 eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
-                                any(LocalDate.class),
+                                any(Instant.class),
                                 eq(Set.of(-1L)));
         }
 
         @Test
         void getAllEvents_includesRegisteredEventPastRegistrationDeadline_whenUserIsParticipant() {
                 Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED).location(EventLocation.CLUJ)
-                                .registrationEndDate(LocalDate.now().minusDays(1)).build();
+                                .registrationEndDate(Instant.now().minus(1, ChronoUnit.DAYS)).build();
                 when(userRepository.findByEmail("user@example.com"))
                                 .thenReturn(Optional.of(participantUser(UserLocation.CLUJ)));
                 when(attendanceRecordRepository.findAttendanceByUserId(any()))
@@ -317,7 +317,7 @@ class EventServiceTest {
                 when(eventRepository.findEligibleOrRegisteredEvents(
                                 eq(EventStatus.PUBLISHED),
                                 eq(List.of(EventLocation.CLUJ, EventLocation.ALL)),
-                                any(LocalDate.class),
+                                any(Instant.class),
                                 eq(Set.of(1L))))
                                 .thenReturn(List.of(event));
                 when(eventMapper.toResponse(event, true, false))
@@ -372,7 +372,7 @@ class EventServiceTest {
         @Test
         void completeEvent_throwsEventNotEditableException_whenEventIsAlreadyCompleted() {
                 Event event = Event.builder().id(1L).status(EventStatus.COMPLETED)
-                                .endDateTime(LocalDateTime.now().minusDays(1)).build();
+                                .endDateTime(Instant.now().minus(1, ChronoUnit.DAYS)).build();
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
 
                 assertThatThrownBy(() -> eventService.completeEvent(1L))
@@ -382,7 +382,7 @@ class EventServiceTest {
         @Test
         void completeEvent_throwsEventNotEditableException_whenEventIsDraft() {
                 Event event = Event.builder().id(1L).status(EventStatus.DRAFT)
-                                .endDateTime(LocalDateTime.now().minusDays(1)).build();
+                                .endDateTime(Instant.now().minus(1, ChronoUnit.DAYS)).build();
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
 
                 assertThatThrownBy(() -> eventService.completeEvent(1L))
@@ -402,7 +402,7 @@ class EventServiceTest {
         @Test
         void completeEvent_setsStatusToCompleted_whenPublishedAndEndDateInPast() {
                 Event event = Event.builder().id(1L).status(EventStatus.PUBLISHED)
-                                .endDateTime(LocalDateTime.now().minusHours(1)).build();
+                                .endDateTime(Instant.now().minus(1, ChronoUnit.HOURS)).build();
                 Event saved = Event.builder().id(1L).status(EventStatus.COMPLETED).build();
 
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));

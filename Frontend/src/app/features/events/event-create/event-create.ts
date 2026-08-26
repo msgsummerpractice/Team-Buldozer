@@ -36,10 +36,7 @@ import {
   eventDateRangeValidator,
   futureEventStartValidator,
   futureRegistrationStartValidator,
-  parseDate,
   registrationDateRangeValidator,
-  toDateString,
-  toDateTimeString,
 } from '@features/events/event-create/utils/event-utils';
 import { catchError, distinctUntilChanged, EMPTY } from 'rxjs';
 
@@ -181,8 +178,9 @@ export class EventCreate implements OnInit {
   }
 
   private populateForm(event: EventResponse): void {
-    const startDate = parseDate(event.startDateTime, true);
-    const endDate = parseDate(event.endDateTime, true);
+    // Backend sends UTC ISO 8601 strings; new Date() converts them to local time for the form controls.
+    const startDate = new Date(event.startDateTime);
+    const endDate = new Date(event.endDateTime);
 
     this.eventForm.patchValue({
       name: event.name,
@@ -192,8 +190,8 @@ export class EventCreate implements OnInit {
       startTime: startDate,
       endDate,
       endTime: endDate,
-      registrationStartDate: parseDate(event.registrationStartDate),
-      registrationEndDate: parseDate(event.registrationEndDate),
+      registrationStartDate: new Date(event.registrationStartDate),
+      registrationEndDate: new Date(event.registrationEndDate),
       address: event.address,
       description: event.description,
       foodProvided: event.foodProvided,
@@ -410,12 +408,15 @@ export class EventCreate implements OnInit {
     const start = combineDateAndTime(startDate, startTime);
     const end = combineDateAndTime(endDate, endTime);
 
+    // All dates are converted to UTC ISO 8601 strings before being sent to the backend.
     const basePayload = {
       ...rest,
-      startDateTime: toDateTimeString(start),
-      endDateTime: toDateTimeString(end),
-      registrationStartDate: toDateString(registrationStartDate),
-      registrationEndDate: toDateString(registrationEndDate),
+      startDateTime: start ? new Date(start).toISOString() : '',
+      endDateTime: end ? new Date(end).toISOString() : '',
+      registrationStartDate: registrationStartDate
+        ? new Date(registrationStartDate).toISOString()
+        : '',
+      registrationEndDate: registrationEndDate ? new Date(registrationEndDate).toISOString() : '',
       location: location || undefined,
       foodProvided: foodProvided ?? undefined,
     };

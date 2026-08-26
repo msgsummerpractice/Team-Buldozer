@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -18,7 +18,7 @@ public class RegistrationResponse {
     private Long id;
     private Long eventId;
     private Long userId;
-    private LocalDate registrationDate;
+    private Instant registrationDate;
     private Boolean gdprConsent;
     private Boolean photoConsent;
     private FoodPreference foodPreference;

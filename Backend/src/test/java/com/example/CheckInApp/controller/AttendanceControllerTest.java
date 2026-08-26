@@ -29,7 +29,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,7 +80,7 @@ class AttendanceControllerTest {
     @Test
     void checkInByCode_returnsOkWithCheckInResponse_whenValid() throws Exception {
         CheckInRequest request = new CheckInRequest("123456");
-        CheckInResponse response = new CheckInResponse(1L, "Team Building Event", LocalDateTime.of(2026, 9, 15, 10, 0));
+        CheckInResponse response = new CheckInResponse(1L, "Team Building Event", Instant.parse("2026-09-15T10:00:00Z"));
 
         when(attendanceService.checkInByCode(any(CheckInRequest.class), any(String.class)))
                 .thenReturn(response);
@@ -171,7 +172,7 @@ class AttendanceControllerTest {
     @Test
     void checkInByQrCode_returnsOkWithCheckInResponse_whenValid() throws Exception {
         QrCodeCheckInRequest request = new QrCodeCheckInRequest(1L, "Team Building Event");
-        CheckInResponse response = new CheckInResponse(1L, "Team Building Event", LocalDateTime.of(2026, 9, 15, 10, 0));
+        CheckInResponse response = new CheckInResponse(1L, "Team Building Event", Instant.parse("2026-09-15T10:00:00Z"));
 
         when(attendanceService.checkInByQrCode(any(QrCodeCheckInRequest.class), any(String.class)))
                 .thenReturn(response);
