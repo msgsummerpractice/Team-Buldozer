@@ -332,6 +332,7 @@
     "checked-in-tooltip": "Already checked in",
     "register-tooltip": "Register for this event",
     "register-disabled-tooltip": "Registration has closed for this event",
+    "manage-registration-tooltip": "View and manage your registration",
     "status-values": {
       "DRAFT": "Draft",
       "PUBLISHED": "Published",
@@ -474,7 +475,9 @@
   },
   "event-registration": {
     "dialog": {
-      "title": "Register for Event"
+      "title": "Register for Event",
+      "edit-title": "Manage Registration",
+      "readonly-notice": "The registration period has ended. Your registration details are read-only and can no longer be edited or withdrawn."
     },
     "fields": {
       "gdpr-consent": {
@@ -516,8 +519,7 @@
         "label": "Driver Phone Number",
         "errors": {
           "required": "Driver phone number is required.",
-          "min-length": "Min length is 5 characters",
-          "max-length": "Max length is 12 characters"
+          "invalid": "Must be a valid Romanian phone number (e.g. 07XXXXXXXX or +407XXXXXXXX)."
         }
       },
       "accommodation-needed": {
@@ -541,14 +543,28 @@
     "confirm-dialog": {
       "title": "Confirm registration",
       "message": "Are you sure you want to register for \"{{name}}\"?",
-      "warning": "You will not be able to change your registration details afterwards."
+      "warning": "You can edit or withdraw your registration until the registration deadline."
+    },
+    "edit-dialog": {
+      "title": "Confirm changes",
+      "message": "Are you sure you want to save the changes to your registration for \"{{name}}\"?"
+    },
+    "withdraw-dialog": {
+      "title": "Withdraw registration",
+      "message": "Are you sure you want to withdraw from \"{{name}}\"?",
+      "warning": "Your registration will be removed entirely."
     },
     "actions": {
       "cancel": "Cancel",
-      "save": "Register"
+      "save": "Register",
+      "update": "Save Changes",
+      "withdraw": "Withdraw"
     },
     "messages": {
-      "success": "You have successfully registered for this event!"
+      "success": "You have successfully registered for this event!",
+      "update-success": "Your registration has been updated!",
+      "withdraw-success": "You have withdrawn from this event.",
+      "load-error": "Failed to load your registration. Please try again."
     }
   },
   "toggle-lang": "Switch to Romanian"

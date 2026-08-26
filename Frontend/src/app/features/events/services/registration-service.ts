@@ -16,4 +16,25 @@ export class RegistrationService {
       request
     );
   }
+
+  getRegistration(eventId: number): Observable<RegistrationResponse> {
+    return this.http.get<RegistrationResponse>(`${this.eventsUrl}/${eventId}/registrations`);
+  }
+
+  editRegistration(
+    eventId: number,
+    request: RegistrationRequest
+  ): Observable<RegistrationResponse> {
+    return this.http.put<RegistrationResponse>(
+      `${this.eventsUrl}/${eventId}/registrations`,
+      request
+    );
+  }
+
+  withdraw(eventId: number): Observable<RegistrationResponse> {
+    return this.http.patch<RegistrationResponse>(
+      `${this.eventsUrl}/${eventId}/registrations/withdraw`,
+      {}
+    );
+  }
 }

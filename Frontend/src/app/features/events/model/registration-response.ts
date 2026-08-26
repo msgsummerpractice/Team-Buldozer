@@ -1,4 +1,5 @@
 import { FoodPreference } from '@features/events/model/food-preference';
+import { RegistrationStatus } from '@features/events/model/registration-status';
 
 export type RegistrationResponse = {
   id: number;
@@ -13,4 +14,5 @@ export type RegistrationResponse = {
   driverPhoneNumber: string | null;
   accommodationNeeded: boolean | null;
   accommodationDays: number | null;
+  status: RegistrationStatus;
 };
