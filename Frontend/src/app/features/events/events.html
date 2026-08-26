@@ -207,26 +207,36 @@
                 </div>
               }
               @if (event.status === EventStatusEnum.PUBLISHED) {
-                @if (event.userCheckedIn) {
-                  <span [matTooltip]="'events.checked-in-tooltip' | transloco">
-                    <button matIconButton disabled>
-                      <mat-icon class="text-green-600!">how_to_reg</mat-icon>
-                    </button>
-                  </span>
-                } @else if (event.userRegistered) {
-                  @let checkIn = canCheckIn(event);
-                  @let checkInTooltip =
-                    checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
-                  <span [matTooltip]="checkInTooltip | transloco">
-                    <button
-                      matIconButton
-                      color="primary"
-                      [disabled]="!checkIn"
-                      (click)="onCheckIn(event)"
-                    >
-                      <mat-icon>qr_code</mat-icon>
-                    </button>
-                  </span>
+                @if (event.userRegistered || event.userCheckedIn) {
+                  <button
+                    matIconButton
+                    color="primary"
+                    [matTooltip]="'events.manage-registration-tooltip' | transloco"
+                    (click)="onManageRegistration(event)"
+                  >
+                    <mat-icon>assignment</mat-icon>
+                  </button>
+                  @if (event.userCheckedIn) {
+                    <span [matTooltip]="'events.checked-in-tooltip' | transloco">
+                      <button matIconButton disabled>
+                        <mat-icon class="text-green-600!">how_to_reg</mat-icon>
+                      </button>
+                    </span>
+                  } @else {
+                    @let checkIn = canCheckIn(event);
+                    @let checkInTooltip =
+                      checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
+                    <span [matTooltip]="checkInTooltip | transloco">
+                      <button
+                        matIconButton
+                        color="primary"
+                        [disabled]="!checkIn"
+                        (click)="onCheckIn(event)"
+                      >
+                        <mat-icon>qr_code</mat-icon>
+                      </button>
+                    </span>
+                  }
                 } @else {
                   @let register = canRegister(event);
                   @let registerTooltip =
@@ -381,25 +391,36 @@
                 </div>
               }
               @if (event.status === EventStatusEnum.PUBLISHED) {
-                @if (event.userCheckedIn) {
-                  <span [matTooltip]="'events.checked-in-tooltip' | transloco">
-                    <button matIconButton disabled>
-                      <mat-icon class="text-green-600!">how_to_reg</mat-icon>
-                    </button>
-                  </span>
-                } @else if (event.userRegistered) {
-                  @let checkIn = canCheckIn(event);
-                  @let checkInTooltip =
-                    checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
+                @if (event.userRegistered || event.userCheckedIn) {
                   <button
                     matIconButton
                     color="primary"
-                    [matTooltip]="checkInTooltip | transloco"
-                    [disabled]="!checkIn"
-                    (click)="onCheckIn(event)"
+                    [matTooltip]="'events.manage-registration-tooltip' | transloco"
+                    (click)="onManageRegistration(event)"
                   >
-                    <mat-icon>qr_code</mat-icon>
+                    <mat-icon>assignment</mat-icon>
                   </button>
+                  @if (event.userCheckedIn) {
+                    <span [matTooltip]="'events.checked-in-tooltip' | transloco">
+                      <button matIconButton disabled>
+                        <mat-icon class="text-green-600!">how_to_reg</mat-icon>
+                      </button>
+                    </span>
+                  } @else {
+                    @let checkIn = canCheckIn(event);
+                    @let checkInTooltip =
+                      checkIn ? 'events.check-in-tooltip' : 'check-in.button-ended-tooltip';
+                    <span [matTooltip]="checkInTooltip | transloco">
+                      <button
+                        matIconButton
+                        color="primary"
+                        [disabled]="!checkIn"
+                        (click)="onCheckIn(event)"
+                      >
+                        <mat-icon>qr_code</mat-icon>
+                      </button>
+                    </span>
+                  }
                 } @else {
                   @let register = canRegister(event);
                   @let registerTooltip =

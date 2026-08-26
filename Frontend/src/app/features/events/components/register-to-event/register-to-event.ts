@@ -19,6 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { EMPTY, catchError, finalize } from 'rxjs';
 import { NotificationService } from '@core/notification/services/notification.service';
@@ -27,9 +28,15 @@ import { EventResponse } from '@features/events/model/event-response';
 import { EventTypeEnum } from '@features/events/model/event-type';
 import { FoodPreference, FoodPreferenceEnum } from '@features/events/model/food-preference';
 import { RegistrationRequest } from '@features/events/model/registration-request';
+import { RegistrationResponse } from '@features/events/model/registration-response';
 import { RegistrationService } from '@features/events/services/registration-service';
 
-export type RegisterToEventDialogData = { event: EventResponse };
+export type RegisterToEventDialogMode = 'register' | 'edit';
+
+export type RegisterToEventDialogData = {
+  event: EventResponse;
+  mode?: RegisterToEventDialogMode;
+};
 
 interface RegistrationFormControls {
   gdprConsent: FormControl<boolean>;
@@ -53,6 +60,7 @@ interface RegistrationFormControls {
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     TranslocoPipe,
   ],
   templateUrl: './register-to-event.html',
@@ -66,15 +74,19 @@ export class RegisterToEvent {
 
   protected readonly data = inject<RegisterToEventDialogData>(MAT_DIALOG_DATA);
   protected readonly event = this.data.event;
+  protected readonly isEditMode = this.data.mode === 'edit';
 
   protected readonly foodPreferences: FoodPreference[] = Object.values(FoodPreferenceEnum);
   protected readonly isInternal = this.event.type === EventTypeEnum.INTERNAL;
   protected readonly isExternal = this.event.type === EventTypeEnum.EXTERNAL;
   protected readonly requiresFoodPreference = this.event.foodProvided === true;
+  protected readonly registrationClosed =
+    this.isEditMode && this.event.registrationEndDate < new Date().toISOString().slice(0, 10);
 
   protected readonly gdprExpanded = signal(false);
   protected readonly photoExpanded = signal(false);
   protected readonly saving = signal(false);
+  protected readonly loading = signal(this.isEditMode);
 
   protected readonly registrationForm: FormGroup<RegistrationFormControls> =
     this.fb.group<RegistrationFormControls>({
@@ -102,6 +114,42 @@ export class RegisterToEvent {
         .valueChanges.pipe(takeUntilDestroyed())
         .subscribe((needed) => this.toggleAccommodationValidators(needed));
     }
+
+    if (this.isEditMode) {
+      this.registrationService
+        .getRegistration(this.event.id)
+        .pipe(takeUntilDestroyed())
+        .subscribe({
+          next: (registration) => {
+            this.applyRegistration(registration);
+            this.loading.set(false);
+          },
+          error: () => {
+            this.notification.showError('event-registration.messages.load-error');
+            this.dialogRef.close(false);
+          },
+        });
+    }
+  }
+
+  private applyRegistration(registration: RegistrationResponse): void {
+    this.registrationForm.patchValue({
+      gdprConsent: registration.gdprConsent,
+      photoConsent: registration.photoConsent,
+      foodPreference: registration.foodPreference,
+      transportNeeded: registration.transportNeeded ?? false,
+      accommodationNeeded: registration.accommodationNeeded ?? false,
+    });
+    // Patched after the toggles above so conditional validators do not reset these values.
+    this.registrationForm.patchValue({
+      driverName: registration.driverName ?? '',
+      driverPhoneNumber: registration.driverPhoneNumber ?? '',
+      accommodationDays: registration.accommodationDays ?? 1,
+    });
+
+    if (this.registrationClosed) {
+      this.registrationForm.disable();
+    }
   }
 
   private toggleDriverValidators(needed: boolean): void {
@@ -116,8 +164,8 @@ export class RegisterToEvent {
       ]);
       driverPhoneNumber.setValidators([
         Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(12),
+        // Must match the backend phone validation: Romanian numbers only.
+        Validators.pattern(/^(\+40|0)7[0-9]{8}$/),
       ]);
     } else {
       driverName.clearValidators();
@@ -157,20 +205,30 @@ export class RegisterToEvent {
   }
 
   protected save(): void {
+    if (this.registrationClosed) return;
+
     if (this.registrationForm.invalid) {
       this.registrationForm.markAllAsTouched();
       return;
     }
 
     const confirmRef = this.dialog.open<ConfirmDialog, ConfirmDialogData, boolean>(ConfirmDialog, {
-      data: {
-        titleKey: 'event-registration.confirm-dialog.title',
-        messageKey: 'event-registration.confirm-dialog.message',
-        messageParams: { name: this.event.name },
-        warningKey: 'event-registration.confirm-dialog.warning',
-        confirmLabelKey: 'event-registration.actions.save',
-        confirmIcon: 'how_to_reg',
-      },
+      data: this.isEditMode
+        ? {
+            titleKey: 'event-registration.edit-dialog.title',
+            messageKey: 'event-registration.edit-dialog.message',
+            messageParams: { name: this.event.name },
+            confirmLabelKey: 'event-registration.actions.update',
+            confirmIcon: 'save',
+          }
+        : {
+            titleKey: 'event-registration.confirm-dialog.title',
+            messageKey: 'event-registration.confirm-dialog.message',
+            messageParams: { name: this.event.name },
+            warningKey: 'event-registration.confirm-dialog.warning',
+            confirmLabelKey: 'event-registration.actions.save',
+            confirmIcon: 'how_to_reg',
+          },
       width: '28rem',
       autoFocus: 'dialog',
       restoreFocus: true,
@@ -182,17 +240,56 @@ export class RegisterToEvent {
     });
   }
 
+  protected withdraw(): void {
+    const confirmRef = this.dialog.open<ConfirmDialog, ConfirmDialogData, boolean>(ConfirmDialog, {
+      data: {
+        titleKey: 'event-registration.withdraw-dialog.title',
+        messageKey: 'event-registration.withdraw-dialog.message',
+        messageParams: { name: this.event.name },
+        warningKey: 'event-registration.withdraw-dialog.warning',
+        confirmLabelKey: 'event-registration.actions.withdraw',
+        confirmIcon: 'person_remove',
+      },
+      width: '28rem',
+      autoFocus: 'dialog',
+      restoreFocus: true,
+    });
+
+    confirmRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) return;
+
+      this.saving.set(true);
+      this.registrationService
+        .withdraw(this.event.id)
+        .pipe(
+          catchError(() => EMPTY),
+          finalize(() => this.saving.set(false))
+        )
+        .subscribe(() => {
+          this.notification.showSuccess('event-registration.messages.withdraw-success');
+          this.dialogRef.close(true);
+        });
+    });
+  }
+
   private submit(): void {
     this.saving.set(true);
 
-    this.registrationService
-      .register(this.event.id, this.buildRequest())
+    const request$ = this.isEditMode
+      ? this.registrationService.editRegistration(this.event.id, this.buildRequest())
+      : this.registrationService.register(this.event.id, this.buildRequest());
+
+    request$
       .pipe(
         catchError(() => EMPTY),
         finalize(() => this.saving.set(false))
       )
       .subscribe(() => {
-        this.notification.showSuccess('event-registration.messages.success');
+        this.notification.showSuccess(
+          this.isEditMode
+            ? 'event-registration.messages.update-success'
+            : 'event-registration.messages.success'
+        );
         this.dialogRef.close(true);
       });
   }
