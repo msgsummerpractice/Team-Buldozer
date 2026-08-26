@@ -8,8 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -19,18 +18,18 @@ public class EventResponse {
     private Long id;
     private String name;
     private EventLocation location;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private Instant startDateTime;
+    private Instant endDateTime;
     private EventType type;
     private EventStatus status;
     private String poster;
-    private LocalDate registrationStartDate;
-    private LocalDate registrationEndDate;
+    private Instant registrationStartDate;
+    private Instant registrationEndDate;
     private String address;
     private String description;
     private Long createdById;
     private Boolean foodProvided;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
     private boolean codesGenerated;
     private boolean userRegistered;
     private boolean userCheckedIn;

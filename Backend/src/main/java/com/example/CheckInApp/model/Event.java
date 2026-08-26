@@ -6,8 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "events")
@@ -32,10 +31,10 @@ public class Event {
     private EventLocation location;
 
     @Column(nullable = false)
-    private LocalDateTime startDateTime;
+    private Instant startDateTime;
 
     @Column(nullable = false)
-    private LocalDateTime endDateTime;
+    private Instant endDateTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -50,10 +49,10 @@ public class Event {
     private byte[] poster;
 
     @Column(nullable = false)
-    private LocalDate registrationStartDate;
+    private Instant registrationStartDate;
 
     @Column(nullable = false)
-    private LocalDate registrationEndDate;
+    private Instant registrationEndDate;
 
     @Column(nullable = false, length = 128)
     private String address;
@@ -69,7 +68,7 @@ public class Event {
     private Boolean foodProvided;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(length = 6, unique = true)
     @Pattern(regexp = CHECKIN_CODE_REGEX)

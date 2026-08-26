@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Entity
 @Table(name = "registrations", uniqueConstraints = @UniqueConstraint(name = "uq_registrations_event_user", columnNames = {
@@ -33,7 +33,7 @@ public class Registration {
         private User user;
 
         @Column(nullable = false)
-        private LocalDate registrationDate;
+        private Instant registrationDate;
 
         private Boolean gdprConsent;
 

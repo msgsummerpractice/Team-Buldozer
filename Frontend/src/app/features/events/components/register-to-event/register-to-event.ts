@@ -81,7 +81,7 @@ export class RegisterToEvent {
   protected readonly isExternal = this.event.type === EventTypeEnum.EXTERNAL;
   protected readonly requiresFoodPreference = this.event.foodProvided === true;
   protected readonly registrationClosed =
-    this.isEditMode && this.event.registrationEndDate < new Date().toISOString().slice(0, 10);
+    this.isEditMode && new Date(this.event.registrationEndDate).getTime() < Date.now();
 
   protected readonly gdprExpanded = signal(false);
   protected readonly photoExpanded = signal(false);
