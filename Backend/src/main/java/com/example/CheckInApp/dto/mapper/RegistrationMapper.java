@@ -25,6 +25,7 @@ public class RegistrationMapper {
                 .driverPhoneNumber(registration.getDriverPhoneNumber())
                 .accommodationNeeded(registration.getAccommodationNeeded())
                 .accommodationDays(registration.getAccommodationDays())
+                .status(registration.getStatus())
                 .build();
     }
 

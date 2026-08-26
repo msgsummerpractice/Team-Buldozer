@@ -1,6 +1,7 @@
 package com.example.CheckInApp.dto.response;
 
 import com.example.CheckInApp.model.FoodPreference;
+import com.example.CheckInApp.model.RegistrationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,5 +27,6 @@ public class RegistrationResponse {
     private String driverPhoneNumber;
     private Boolean accommodationNeeded;
     private Integer accommodationDays;
+    private RegistrationStatus status;
 
 }
