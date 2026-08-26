@@ -14,8 +14,11 @@ import java.util.Set;
 public interface AttendanceRecordRepository extends JpaRepository<AttendanceRecord, Long> {
 
     Optional<AttendanceRecord> findByEventIdAndUserId(Long eventId, Long userId);
-
-    @Query("SELECT ar.user.id FROM AttendanceRecord ar WHERE ar.event.id = :eventId AND ar.checkedIn = true")
+    
+    @Query("""
+            SELECT ar.user.id
+            FROM AttendanceRecord ar WHERE ar.event.id = :eventId AND ar.checkedIn = true
+            """)
     Set<Long> findCheckedInUserIdsByEventId(@Param("eventId") Long eventId);
 
     @Query("""
