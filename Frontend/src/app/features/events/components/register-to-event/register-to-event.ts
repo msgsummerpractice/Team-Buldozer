@@ -118,16 +118,17 @@ export class RegisterToEvent {
     if (this.isEditMode) {
       this.registrationService
         .getRegistration(this.event.id)
-        .pipe(takeUntilDestroyed())
-        .subscribe({
-          next: (registration) => {
-            this.applyRegistration(registration);
-            this.loading.set(false);
-          },
-          error: () => {
+        .pipe(
+          catchError(() => {
             this.notification.showError('event-registration.messages.load-error');
             this.dialogRef.close(false);
-          },
+            return EMPTY;
+          }),
+          takeUntilDestroyed()
+        )
+        .subscribe((registration) => {
+          this.applyRegistration(registration);
+          this.loading.set(false);
         });
     }
   }
@@ -140,7 +141,6 @@ export class RegisterToEvent {
       transportNeeded: registration.transportNeeded ?? false,
       accommodationNeeded: registration.accommodationNeeded ?? false,
     });
-    // Patched after the toggles above so conditional validators do not reset these values.
     this.registrationForm.patchValue({
       driverName: registration.driverName ?? '',
       driverPhoneNumber: registration.driverPhoneNumber ?? '',
@@ -164,7 +164,6 @@ export class RegisterToEvent {
       ]);
       driverPhoneNumber.setValidators([
         Validators.required,
-        // Must match the backend phone validation: Romanian numbers only.
         Validators.pattern(/^(\+40|0)7[0-9]{8}$/),
       ]);
     } else {
