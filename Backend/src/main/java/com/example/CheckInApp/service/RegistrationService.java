@@ -217,6 +217,10 @@ public class RegistrationService {
             throw new WithdrawnRegistrationException("Registration is already withdrawn.");
         }
 
+        if (LocalDate.now().isAfter(registration.getEvent().getRegistrationEndDate())) {
+            throw new RegistrationClosedException("Withdrawal is no longer permitted after the registration deadline.");
+        }
+
         registration.setStatus(RegistrationStatus.WITHDRAWN);
         registrationRepository.save(registration);
 
