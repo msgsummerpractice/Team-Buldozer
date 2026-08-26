@@ -131,43 +131,43 @@
               "env": [
                 {
                   "name": "SPRING_DATASOURCE_URL",
-                  "value": "jdbc:postgresql://psql-team-buldozer.postgres.database.azure.com:5432/teambuldozerdb?sslmode=require"
+                  "value": ""
                 },
                 {
                   "name": "SPRING_DATASOURCE_USERNAME",
-                  "value": "pgadmin_checkin"
+                  "value": ""
                 },
                 {
                   "name": "SPRING_DATASOURCE_PASSWORD",
-                  "value": "Admin123!"
+                  "value": ""
                 },
                 {
                   "name": "JWT_SECRET",
-                  "value": "YmU1OGQ0OWEtMmRlYS00OTMxLTkxOWYtYzEyY2I3ZDNlMThiYzFiMGM4YWItYjY3My00ZTI0LWI2MzktNDVjMjE5YWEyNGE5NmFkYzFiOGMtZDZiYi00NmQ3LTkwN2MtYTNhM2IzMTdjMzc5"
+                  "value": ""
                 },
                 {
                   "name": "JWT_EXPIRATION",
-                  "value": "3600000"
+                  "value": ""
                 },
                 {
                   "name": "MAIL_HOST",
-                  "value": "smtp.gmail.com"
+                  "value": ""
                 },
                 {
                   "name": "MAIL_PORT",
-                  "value": "587"
+                  "value": ""
                 },
                 {
                   "name": "MAIL_USERNAME",
-                  "value": "msgcheckin2@gmail.com"
+                  "value": ""
                 },
                 {
                   "name": "MAIL_PASSWORD",
-                  "value": "wagvpwqktegxufxk"
+                  "value": ""
                 },
                 {
                   "name": "FRONTEND_URL",
-                  "value": "https://ashy-glacier-059589b03.7.azurestaticapps.net"
+                  "value": ""
                 }
               ],
               "resources": {
