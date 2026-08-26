@@ -13,7 +13,10 @@ public interface RegistrationRepository extends JpaRepository<Registration, Long
 
     boolean existsByEventIdAndUserId(Long eventId, Long userId);
 
-    @Query("SELECT r FROM Registration r JOIN FETCH r.user WHERE r.event.id = :eventId ORDER BY r.id")
+    @Query("""
+            SELECT r
+            FROM Registration r JOIN FETCH r.user WHERE r.event.id = :eventId ORDER BY r.id
+            """)
     List<Registration> findAllByEventIdWithUser(@Param("eventId") Long eventId);
 
 }

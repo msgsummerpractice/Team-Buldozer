@@ -236,7 +236,7 @@
       "type-external": "Extern",
       "type-local": "Local",
       "export-attendance": "Exportă Prezența",
-      "export-error": "Exportul listei de prezență a eșuat."
+      "export-error": "Exportarea listei de prezență a eșuat."
     }
   },
   "users": {
