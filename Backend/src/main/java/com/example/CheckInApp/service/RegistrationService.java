@@ -195,9 +195,9 @@ public class RegistrationService {
             throw new WithdrawnRegistrationException("Cannot edit a withdrawn registration.");
         }
 
+        validateConsents(event, request);
         applyFoodPreference(event, request, registration);
         applyInternalEventDetails(event, request, registration);
-        validateConsents(event, request);
 
         registration.setGdprConsent(Boolean.TRUE.equals(request.getGdprConsent()));
         registration.setPhotoConsent(Boolean.TRUE.equals(request.getPhotoConsent()));

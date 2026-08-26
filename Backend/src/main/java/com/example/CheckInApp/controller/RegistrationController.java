@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +40,7 @@ public class RegistrationController {
         return ResponseEntity.ok(registrationService.getMyRegistration(eventId, authentication.getName()));
     }
 
-    @PatchMapping
+    @PutMapping
     public ResponseEntity<RegistrationResponse> editRegistration(
             @PathVariable Long eventId,
             @Valid @RequestBody RegistrationRequest request,
