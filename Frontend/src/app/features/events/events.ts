@@ -261,13 +261,21 @@ export class Events implements OnInit {
   }
 
   protected onRegister(event: EventResponse): void {
+    this.openRegistrationDialog(event, 'register');
+  }
+
+  protected onManageRegistration(event: EventResponse): void {
+    this.openRegistrationDialog(event, 'edit');
+  }
+
+  private openRegistrationDialog(event: EventResponse, mode: 'register' | 'edit'): void {
     const ref = this.dialog.open<RegisterToEvent, RegisterToEventDialogData, boolean>(
       RegisterToEvent,
-      { ...REGISTER_TO_EVENT_DIALOG_CONFIG, data: { event } }
+      { ...REGISTER_TO_EVENT_DIALOG_CONFIG, data: { event, mode } }
     );
 
-    ref.afterClosed().subscribe((registered) => {
-      if (!registered) return;
+    ref.afterClosed().subscribe((changed) => {
+      if (!changed) return;
       this.loadEvents();
     });
   }

@@ -332,6 +332,7 @@
     "checked-in-tooltip": "Deja înregistrat la eveniment",
     "register-tooltip": "Înscrie-te la acest eveniment",
     "register-disabled-tooltip": "Înscrierea la acest eveniment s-a închis",
+    "manage-registration-tooltip": "Vizualizează și gestionează înscrierea ta",
     "status-values": {
       "DRAFT": "Schiță",
       "PUBLISHED": "Publicat",
@@ -474,7 +475,9 @@
   },
   "event-registration": {
     "dialog": {
-      "title": "Înscriere la eveniment"
+      "title": "Înscriere la eveniment",
+      "edit-title": "Gestionează înscrierea",
+      "readonly-notice": "Perioada de înscriere s-a încheiat. Detaliile înscrierii tale sunt doar pentru vizualizare și nu mai pot fi modificate sau retrase."
     },
     "fields": {
       "gdpr-consent": {
@@ -516,8 +519,7 @@
         "label": "Numărul de telefon al șoferului",
         "errors": {
           "required": "Numărul de telefon al șoferului este obligatoriu.",
-          "min-length": "Lungimea minimă este de 5 caractere",
-          "max-length": "Lungimea maximă este de 12 caractere"
+          "invalid": "Trebuie să fie un număr de telefon românesc valid (ex. 07XXXXXXXX sau +407XXXXXXXX)."
         }
       },
       "accommodation-needed": {
@@ -541,14 +543,28 @@
     "confirm-dialog": {
       "title": "Confirmare înscriere",
       "message": "Sigur dorești să te înscrii la „{{name}}”?",
-      "warning": "Nu vei putea modifica detaliile înscrierii ulterior."
+      "warning": "Poți modifica sau retrage înscrierea până la termenul limită de înscriere."
+    },
+    "edit-dialog": {
+      "title": "Confirmare modificări",
+      "message": "Sigur dorești să salvezi modificările înscrierii tale la „{{name}}”?"
+    },
+    "withdraw-dialog": {
+      "title": "Retragere înscriere",
+      "message": "Sigur dorești să te retragi de la „{{name}}”?",
+      "warning": "Înscrierea ta va fi eliminată complet."
     },
     "actions": {
       "cancel": "Anulează",
-      "save": "Înscrie-te"
+      "save": "Înscrie-te",
+      "update": "Salvează modificările",
+      "withdraw": "Retrage-te"
     },
     "messages": {
-      "success": "Te-ai înscris cu succes la acest eveniment!"
+      "success": "Te-ai înscris cu succes la acest eveniment!",
+      "update-success": "Înscrierea ta a fost actualizată!",
+      "withdraw-success": "Te-ai retras de la acest eveniment.",
+      "load-error": "Încărcarea înscrierii tale a eșuat. Te rugăm să încerci din nou."
     }
   },
   "toggle-lang": "Schimbă în engleză"
