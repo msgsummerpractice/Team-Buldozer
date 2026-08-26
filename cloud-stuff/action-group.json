@@ -13,7 +13,6 @@
     "emailReceivers": [
       {
         "name": "msgcheckin2@gmail.com_-EmailAction-",
-        "emailAddress": "msgcheckin2@gmail.com",
         "useCommonAlertSchema": false,
         "status": "Enabled"
       }
