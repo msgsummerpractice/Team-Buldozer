@@ -11,7 +11,9 @@
       <mat-label>{{ 'users.roles' | transloco }}</mat-label>
       <mat-select [formControl]="rolesControl" multiple>
         @for (role of UserRoles; track role) {
-          <mat-option [value]="role" [disabled]="isOnlySelected(role)">{{ role }}</mat-option>
+          <mat-option [value]="role" [disabled]="isOnlySelected(role) || isConflictingRole(role)">
+            {{ role }}
+          </mat-option>
         }
       </mat-select>
     </mat-form-field>
