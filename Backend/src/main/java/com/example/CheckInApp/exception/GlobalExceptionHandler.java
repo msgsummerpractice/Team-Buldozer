@@ -19,22 +19,26 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.NOT_FOUND, ErrorCode.ERR_20, ex.getMessage(), request);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.UNAUTHORIZED, ErrorCode.ERR_01, "Invalid credentials", request);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUsernameNotFound(UsernameNotFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleUsernameNotFound(UsernameNotFoundException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.NOT_FOUND, ErrorCode.ERR_02, "User not found", request);
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.UNAUTHORIZED, ErrorCode.ERR_01, ex.getMessage(), request);
     }
 
@@ -44,7 +48,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_40, ex.getMessage(), request);
     }
 
@@ -69,17 +74,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidEventDataException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidEventData(InvalidEventDataException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidEventData(InvalidEventDataException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_112, ex.getMessage(), request);
     }
 
     @ExceptionHandler(EventNotEditableException.class)
-    public ResponseEntity<ErrorResponse> handleEventNotEditable(EventNotEditableException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleEventNotEditable(EventNotEditableException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_113, ex.getMessage(), request);
     }
 
     @ExceptionHandler(ForbiddenActionException.class)
-    public ResponseEntity<ErrorResponse> handleForbiddenAction(ForbiddenActionException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleForbiddenAction(ForbiddenActionException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_114, ex.getMessage(), request);
 
     }
@@ -95,27 +103,32 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(QrCodeGenerationException.class)
-    public ResponseEntity<ErrorResponse> handleQrCodeGeneration(QrCodeGenerationException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleQrCodeGeneration(QrCodeGenerationException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_216, ex.getMessage(), request);
     }
 
     @ExceptionHandler(CodesAlreadyGeneratedException.class)
-    public ResponseEntity<ErrorResponse> handleCodesAlreadyGenerated(CodesAlreadyGeneratedException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleCodesAlreadyGenerated(CodesAlreadyGeneratedException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_217, ex.getMessage(), request);
     }
 
     @ExceptionHandler(CheckInCodeGenerationException.class)
-    public ResponseEntity<ErrorResponse> handleCheckInCodeGeneration(CheckInCodeGenerationException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleCheckInCodeGeneration(CheckInCodeGenerationException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_218, ex.getMessage(), request);
     }
 
     @ExceptionHandler(InvalidCheckInCodeException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidCheckInCode(InvalidCheckInCodeException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidCheckInCode(InvalidCheckInCodeException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_219, ex.getMessage(), request);
     }
 
     @ExceptionHandler(NotRegisteredForEventException.class)
-    public ResponseEntity<ErrorResponse> handleNotRegisteredForEvent(NotRegisteredForEventException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleNotRegisteredForEvent(NotRegisteredForEventException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.FORBIDDEN, ErrorCode.ERR_220, ex.getMessage(), request);
     }
 
@@ -125,37 +138,50 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidQrCodeCheckInException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidQrCodeCheckIn(InvalidQrCodeCheckInException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidQrCodeCheckIn(InvalidQrCodeCheckInException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_222, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(WithdrawnRegistrationException.class)
+    public ResponseEntity<ErrorResponse> handleWithdrawnRegistration(WithdrawnRegistrationException ex,
+            HttpServletRequest request) {
+        return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_230, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(AlreadyCheckedInException.class)
-    public ResponseEntity<ErrorResponse> handleAlreadyCheckedIn(AlreadyCheckedInException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleAlreadyCheckedIn(AlreadyCheckedInException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_223, ex.getMessage(), request);
     }
 
     @ExceptionHandler(TooManyRequestsException.class)
-    public ResponseEntity<ErrorResponse> handleTooManyRequests(TooManyRequestsException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleTooManyRequests(TooManyRequestsException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.TOO_MANY_REQUESTS, ErrorCode.ERR_224, ex.getMessage(), request);
     }
 
     @ExceptionHandler(InvalidRegistrationDataException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidRegistrationData(InvalidRegistrationDataException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidRegistrationData(InvalidRegistrationDataException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.BAD_REQUEST, ErrorCode.ERR_224, ex.getMessage(), request);
     }
 
     @ExceptionHandler(RegistrationClosedException.class)
-    public ResponseEntity<ErrorResponse> handleRegistrationClosed(RegistrationClosedException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleRegistrationClosed(RegistrationClosedException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_225, ex.getMessage(), request);
     }
 
     @ExceptionHandler(AlreadyRegisteredException.class)
-    public ResponseEntity<ErrorResponse> handleAlreadyRegistered(AlreadyRegisteredException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleAlreadyRegistered(AlreadyRegisteredException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_226, ex.getMessage(), request);
     }
 
     @ExceptionHandler(ExpiredResetTokenException.class)
-    public ResponseEntity<ErrorResponse> handleExpiredResetToken(ExpiredResetTokenException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleExpiredResetToken(ExpiredResetTokenException ex,
+            HttpServletRequest request) {
         return buildResponse(HttpStatus.GONE, ErrorCode.ERR_228, ex.getMessage(), request);
     }
 
@@ -164,7 +190,8 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, ErrorCode.ERR_229, ex.getMessage(), request);
     }
 
-    private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message, HttpServletRequest request) {
+    private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, ErrorCode errorCode, String message,
+            HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(status.value())

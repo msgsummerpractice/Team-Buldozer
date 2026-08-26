@@ -1,6 +1,7 @@
 package com.example.CheckInApp.dto.request;
 
 import com.example.CheckInApp.model.FoodPreference;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class RegistrationRequest {
     @Size(min = 2, max = 64, message = "Driver name must be between 2 and 64 characters long.")
     private String driverName;
 
-    @Size(min = 5, max = 12, message = "Driver phone number must be between 5 and 12 characters long.")
+    @Pattern(regexp = "^(\\+40|0)[7][0-9]{8}$", message = "Phone number is not a valid phone number.")
     private String driverPhoneNumber;
 
     private Boolean accommodationNeeded;

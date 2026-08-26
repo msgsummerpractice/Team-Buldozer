@@ -9,12 +9,16 @@ import com.example.CheckInApp.exception.InvalidCheckInCodeException;
 import com.example.CheckInApp.exception.InvalidQrCodeCheckInException;
 import com.example.CheckInApp.exception.NotRegisteredForEventException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
+import com.example.CheckInApp.exception.WithdrawnRegistrationException;
 import com.example.CheckInApp.model.AttendanceRecord;
 import com.example.CheckInApp.model.Event;
 import com.example.CheckInApp.model.EventStatus;
+import com.example.CheckInApp.model.Registration;
+import com.example.CheckInApp.model.RegistrationStatus;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.AttendanceRecordRepository;
 import com.example.CheckInApp.repository.EventRepository;
+import com.example.CheckInApp.repository.RegistrationRepository;
 import com.example.CheckInApp.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +47,9 @@ class AttendanceServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private RegistrationRepository registrationRepository;
 
     @InjectMocks
     private AttendanceService attendanceService;
@@ -74,6 +81,15 @@ class AttendanceServiceTest {
                 .build();
     }
 
+    private Registration registration(Event event, User user, RegistrationStatus status) {
+        return Registration.builder()
+                .id(1L)
+                .event(event)
+                .user(user)
+                .status(status)
+                .build();
+    }
+
     // ---- checkInByCode ----
 
     @Test
@@ -81,11 +97,13 @@ class AttendanceServiceTest {
         Event event = publishedEvent();
         User user = user();
         AttendanceRecord record = attendanceRecord(event, user, false);
+        Registration registration = registration(event, user, RegistrationStatus.CONFIRMED);
         CheckInRequest request = new CheckInRequest(CHECK_IN_CODE);
 
         when(eventRepository.findByCheckInCode(CHECK_IN_CODE)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
 
         CheckInResponse response = attendanceService.checkInByCode(request, USER_EMAIL);
 
@@ -141,16 +159,38 @@ class AttendanceServiceTest {
     }
 
     @Test
-    void checkInByCode_throwsCheckInClosedException_whenEventNotPublished() {
+    void checkInByCode_throwsWithdrawnRegistrationException_whenRegistrationNotConfirmed() {
         Event event = publishedEvent();
-        event.setStatus(EventStatus.DRAFT);
         User user = user();
         AttendanceRecord record = attendanceRecord(event, user, false);
+        Registration registration = registration(event, user, RegistrationStatus.WITHDRAWN);
         CheckInRequest request = new CheckInRequest(CHECK_IN_CODE);
 
         when(eventRepository.findByCheckInCode(CHECK_IN_CODE)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
+
+        assertThatThrownBy(() -> attendanceService.checkInByCode(request, USER_EMAIL))
+                .isInstanceOf(WithdrawnRegistrationException.class)
+                .hasMessage("You cannot check in with a withdrawn registration.");
+
+        verify(attendanceRecordRepository, never()).save(any(AttendanceRecord.class));
+    }
+
+    @Test
+    void checkInByCode_throwsCheckInClosedException_whenEventNotPublished() {
+        Event event = publishedEvent();
+        event.setStatus(EventStatus.DRAFT);
+        User user = user();
+        AttendanceRecord record = attendanceRecord(event, user, false);
+        Registration registration = registration(event, user, RegistrationStatus.CONFIRMED);
+        CheckInRequest request = new CheckInRequest(CHECK_IN_CODE);
+
+        when(eventRepository.findByCheckInCode(CHECK_IN_CODE)).thenReturn(Optional.of(event));
+        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+        when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
 
         assertThatThrownBy(() -> attendanceService.checkInByCode(request, USER_EMAIL))
                 .isInstanceOf(CheckInClosedException.class)
@@ -164,11 +204,13 @@ class AttendanceServiceTest {
         Event event = publishedEvent();
         User user = user();
         AttendanceRecord record = attendanceRecord(event, user, true);
+        Registration registration = registration(event, user, RegistrationStatus.CONFIRMED);
         CheckInRequest request = new CheckInRequest(CHECK_IN_CODE);
 
         when(eventRepository.findByCheckInCode(CHECK_IN_CODE)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
 
         assertThatThrownBy(() -> attendanceService.checkInByCode(request, USER_EMAIL))
                 .isInstanceOf(AlreadyCheckedInException.class)
@@ -184,11 +226,13 @@ class AttendanceServiceTest {
         Event event = publishedEvent();
         User user = user();
         AttendanceRecord record = attendanceRecord(event, user, false);
+        Registration registration = registration(event, user, RegistrationStatus.CONFIRMED);
         QrCodeCheckInRequest request = new QrCodeCheckInRequest(1L, event.getName());
 
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
 
         CheckInResponse response = attendanceService.checkInByQrCode(request, USER_EMAIL);
 
@@ -258,16 +302,38 @@ class AttendanceServiceTest {
     }
 
     @Test
-    void checkInByQrCode_throwsCheckInClosedException_whenEventAlreadyEnded() {
+    void checkInByQrCode_throwsWithdrawnRegistrationException_whenRegistrationNotConfirmed() {
         Event event = publishedEvent();
-        event.setEndDateTime(LocalDateTime.now().minusHours(1));
         User user = user();
         AttendanceRecord record = attendanceRecord(event, user, false);
+        Registration registration = registration(event, user, RegistrationStatus.WITHDRAWN);
         QrCodeCheckInRequest request = new QrCodeCheckInRequest(1L, event.getName());
 
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
+
+        assertThatThrownBy(() -> attendanceService.checkInByQrCode(request, USER_EMAIL))
+                .isInstanceOf(WithdrawnRegistrationException.class)
+                .hasMessage("You cannot check in with a withdrawn registration.");
+
+        verify(attendanceRecordRepository, never()).save(any(AttendanceRecord.class));
+    }
+
+    @Test
+    void checkInByQrCode_throwsCheckInClosedException_whenEventAlreadyEnded() {
+        Event event = publishedEvent();
+        event.setEndDateTime(LocalDateTime.now().minusHours(1));
+        User user = user();
+        AttendanceRecord record = attendanceRecord(event, user, false);
+        Registration registration = registration(event, user, RegistrationStatus.CONFIRMED);
+        QrCodeCheckInRequest request = new QrCodeCheckInRequest(1L, event.getName());
+
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+        when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
 
         assertThatThrownBy(() -> attendanceService.checkInByQrCode(request, USER_EMAIL))
                 .isInstanceOf(CheckInClosedException.class)
@@ -281,11 +347,13 @@ class AttendanceServiceTest {
         Event event = publishedEvent();
         User user = user();
         AttendanceRecord record = attendanceRecord(event, user, true);
+        Registration registration = registration(event, user, RegistrationStatus.CONFIRMED);
         QrCodeCheckInRequest request = new QrCodeCheckInRequest(1L, event.getName());
 
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(attendanceRecordRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(record));
+        when(registrationRepository.findByEventIdAndUserId(1L, 1L)).thenReturn(Optional.of(registration));
 
         assertThatThrownBy(() -> attendanceService.checkInByQrCode(request, USER_EMAIL))
                 .isInstanceOf(AlreadyCheckedInException.class)

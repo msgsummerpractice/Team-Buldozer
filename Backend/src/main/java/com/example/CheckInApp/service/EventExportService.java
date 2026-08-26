@@ -4,6 +4,7 @@ import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.model.Event;
 import com.example.CheckInApp.model.EventStatus;
 import com.example.CheckInApp.model.Registration;
+import com.example.CheckInApp.model.RegistrationStatus;
 import com.example.CheckInApp.repository.AttendanceRecordRepository;
 import com.example.CheckInApp.repository.EventRepository;
 import com.example.CheckInApp.repository.RegistrationRepository;
@@ -22,7 +23,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class EventExportService {
 
-    public record ExportResult(String eventName, byte[] data) {}
+    public record ExportResult(String eventName, byte[] data) {
+    }
 
     private final EventRepository eventRepository;
     private final RegistrationRepository registrationRepository;
@@ -37,7 +39,8 @@ public class EventExportService {
             throw new IllegalArgumentException("Attendance export is only available for completed events.");
         }
 
-        List<Registration> registrations = registrationRepository.findAllByEventIdWithUser(eventId);
+        List<Registration> registrations = registrationRepository.findAllByEventIdWithUser(eventId,
+                RegistrationStatus.CONFIRMED);
         Set<Long> checkedInUserIds = attendanceRecordRepository.findCheckedInUserIdsByEventId(eventId);
 
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -49,7 +52,7 @@ public class EventExportService {
             headerStyle.setFont(headerFont);
 
             Row headerRow = sheet.createRow(0);
-            String[] columns = {"nr_crt", "lastName", "firstName", "email", "gdpr", "registration_date", "present"};
+            String[] columns = { "nr_crt", "lastName", "firstName", "email", "gdpr", "registration_date", "present" };
             for (int i = 0; i < columns.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(columns[i]);

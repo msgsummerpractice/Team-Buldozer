@@ -9,12 +9,16 @@ import com.example.CheckInApp.exception.InvalidCheckInCodeException;
 import com.example.CheckInApp.exception.InvalidQrCodeCheckInException;
 import com.example.CheckInApp.exception.NotRegisteredForEventException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
+import com.example.CheckInApp.exception.WithdrawnRegistrationException;
 import com.example.CheckInApp.model.AttendanceRecord;
+import com.example.CheckInApp.model.Registration;
 import com.example.CheckInApp.model.Event;
 import com.example.CheckInApp.model.EventStatus;
+import com.example.CheckInApp.model.RegistrationStatus;
 import com.example.CheckInApp.model.User;
 import com.example.CheckInApp.repository.AttendanceRecordRepository;
 import com.example.CheckInApp.repository.EventRepository;
+import com.example.CheckInApp.repository.RegistrationRepository;
 import com.example.CheckInApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +33,7 @@ public class AttendanceService {
     private final AttendanceRecordRepository attendanceRecordRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final RegistrationRepository registrationRepository;
 
     @Transactional
     public CheckInResponse checkInByCode(CheckInRequest request, String userEmail) {
@@ -54,9 +59,17 @@ public class AttendanceService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
 
+        Registration registration = registrationRepository.findByEventIdAndUserId(event.getId(), user.getId())
+                .orElseThrow(() -> new NotRegisteredForEventException("You are not registered for this event."));
+
+        if (registration.getStatus() != RegistrationStatus.CONFIRMED) {
+            throw new WithdrawnRegistrationException("You cannot check in with a withdrawn registration.");
+        }
+
         AttendanceRecord attendanceRecord = attendanceRecordRepository
                 .findByEventIdAndUserId(event.getId(), user.getId())
-                .orElseThrow(() -> new NotRegisteredForEventException("You are not registered for this event."));
+                .orElseThrow(
+                        () -> new WithdrawnRegistrationException("You cannot check in with a withdrawn registration."));
 
         if (event.getStatus() != EventStatus.PUBLISHED) {
             throw new CheckInClosedException("Check-in is closed because the event is not published.");

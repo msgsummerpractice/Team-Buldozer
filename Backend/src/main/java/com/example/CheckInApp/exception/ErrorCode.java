@@ -45,7 +45,8 @@ public enum ErrorCode {
     ERR_226("Registration is closed for this event"),
     ERR_227("Already registered for this event"),
     ERR_228("Reset link has expired"),
-    ERR_229("Reset link has already been used");
+    ERR_229("Reset link has already been used"),
+    ERR_230("Registration has been withdrawn");
 
     private final String defaultMessage;
 
