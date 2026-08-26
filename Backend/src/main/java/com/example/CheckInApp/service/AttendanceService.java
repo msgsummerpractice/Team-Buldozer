@@ -63,6 +63,9 @@ public class AttendanceService {
         }
 
         LocalDateTime now = LocalDateTime.now();
+        if (now.isBefore(event.getStartDateTime())) {
+            throw new CheckInClosedException("Check-in is not yet open. The event has not started.");
+        }
         if (event.getEndDateTime().isBefore(now)) {
             throw new CheckInClosedException("Check-in is closed because the event has already ended.");
         }
