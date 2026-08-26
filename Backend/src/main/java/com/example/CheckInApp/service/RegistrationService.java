@@ -46,27 +46,32 @@ public class RegistrationService {
         validateEligibility(event, user);
         validateConsents(event, request);
 
-        Registration registration = Registration.builder()
-                .event(event)
-                .user(user)
-                .gdprConsent(Boolean.TRUE.equals(request.getGdprConsent()))
-                .photoConsent(Boolean.TRUE.equals(request.getPhotoConsent()))
-                .registrationDate(LocalDate.now())
-                .status(RegistrationStatus.CONFIRMED)
-                .build();
+        Registration registration = registrationRepository.findByEventIdAndUserId(event.getId(), user.getId())
+                .orElseGet(() -> Registration.builder()
+                        .event(event)
+                        .user(user)
+                        .build());
+
+        registration.setGdprConsent(Boolean.TRUE.equals(request.getGdprConsent()));
+        registration.setPhotoConsent(Boolean.TRUE.equals(request.getPhotoConsent()));
+        registration.setRegistrationDate(LocalDate.now());
+        registration.setStatus(RegistrationStatus.CONFIRMED);
 
         applyFoodPreference(event, request, registration);
         applyInternalEventDetails(event, request, registration);
 
         try {
             Registration saved = registrationRepository.save(registration);
-            AttendanceRecord attendanceRecord = AttendanceRecord.builder()
-                    .event(event)
-                    .user(user)
-                    .checkedIn(false)
-                    .build();
 
-            attendanceRecordRepository.save(attendanceRecord);
+            if (attendanceRecordRepository.findByEventIdAndUserId(event.getId(), user.getId()).isEmpty()) {
+                AttendanceRecord attendanceRecord = AttendanceRecord.builder()
+                        .event(event)
+                        .user(user)
+                        .checkedIn(false)
+                        .build();
+                attendanceRecordRepository.save(attendanceRecord);
+            }
+
             return registrationMapper.toResponse(saved);
         } catch (DataIntegrityViolationException e) {
             throw new AlreadyRegisteredException("You are already registered for this event.");
@@ -86,9 +91,11 @@ public class RegistrationService {
             throw new RegistrationClosedException("Registration is closed for this event.");
         }
 
-        if (registrationRepository.existsByEventIdAndUserId(event.getId(), user.getId())) {
-            throw new AlreadyRegisteredException("You are already registered for this event.");
-        }
+        registrationRepository.findByEventIdAndUserId(event.getId(), user.getId())
+                .filter(r -> r.getStatus() == RegistrationStatus.CONFIRMED)
+                .ifPresent(r -> {
+                    throw new AlreadyRegisteredException("You are already registered for this event.");
+                });
     }
 
     private void validateConsents(Event event, RegistrationRequest request) {
@@ -137,6 +144,9 @@ public class RegistrationService {
             }
             registration.setDriverName(request.getDriverName());
             registration.setDriverPhoneNumber(request.getDriverPhoneNumber());
+        } else {
+            registration.setDriverName(null);
+            registration.setDriverPhoneNumber(null);
         }
 
         if (request.getAccommodationNeeded() == null) {
@@ -151,6 +161,8 @@ public class RegistrationService {
                         "A positive number of accommodation days is required when accommodation is needed.");
             }
             registration.setAccommodationDays(request.getAccommodationDays());
+        } else {
+            registration.setAccommodationDays(null);
         }
     }
 
@@ -175,12 +187,20 @@ public class RegistrationService {
         Registration registration = registrationRepository.findByEventIdAndUserId(eventId, user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Registration not found for event " + eventId));
 
+        if (event.getRegistrationEndDate().isBefore(LocalDate.now())) {
+            throw new RegistrationClosedException("Registration is closed for this event.");
+        }
+
         if (registration.getStatus() == RegistrationStatus.WITHDRAWN) {
             throw new WithdrawnRegistrationException("Cannot edit a withdrawn registration.");
         }
 
         applyFoodPreference(event, request, registration);
         applyInternalEventDetails(event, request, registration);
+        validateConsents(event, request);
+
+        registration.setGdprConsent(Boolean.TRUE.equals(request.getGdprConsent()));
+        registration.setPhotoConsent(Boolean.TRUE.equals(request.getPhotoConsent()));
 
         return registrationMapper.toResponse(registrationRepository.save(registration));
     }
@@ -198,7 +218,12 @@ public class RegistrationService {
         }
 
         registration.setStatus(RegistrationStatus.WITHDRAWN);
-        return registrationMapper.toResponse(registrationRepository.save(registration));
+        registrationRepository.save(registration);
+
+        attendanceRecordRepository.findByEventIdAndUserId(eventId, user.getId())
+                .ifPresent(attendanceRecordRepository::delete);
+
+        return registrationMapper.toResponse(registration);
     }
 
 }

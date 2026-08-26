@@ -32,14 +32,14 @@ public class RegistrationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<RegistrationResponse> getMyRegistration(
             @PathVariable Long eventId,
             Authentication authentication) {
         return ResponseEntity.ok(registrationService.getMyRegistration(eventId, authentication.getName()));
     }
 
-    @PatchMapping("/edit")
+    @PatchMapping
     public ResponseEntity<RegistrationResponse> editRegistration(
             @PathVariable Long eventId,
             @Valid @RequestBody RegistrationRequest request,
