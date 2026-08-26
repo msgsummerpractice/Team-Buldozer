@@ -157,11 +157,14 @@ export class EventDetailsDialog {
           return EMPTY;
         })
       )
-      .subscribe((blob) => {
-        const url = URL.createObjectURL(blob);
+      .subscribe((response) => {
+        const disposition = response.headers.get('Content-Disposition') ?? '';
+        const match = disposition.match(/filename="([^"]+)"/);
+        const filename = match ? match[1] : `attendance_event_${event.id}.xlsx`;
+        const url = URL.createObjectURL(response.body!);
         const anchor = document.createElement('a');
         anchor.href = url;
-        anchor.download = `attendance_event_${event.id}.xlsx`;
+        anchor.download = filename;
         anchor.click();
         URL.revokeObjectURL(url);
       });

@@ -1,5 +1,5 @@
 import { inject, Service } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EventResponse } from '@features/events/model/event-response';
 import { environment } from '@environments/environment';
@@ -45,7 +45,10 @@ export class EventService {
     return this.http.get<EventCodesResponse>(`${this.eventsUrl}/${id}/codes`);
   }
 
-  exportAttendance(id: number): Observable<Blob> {
-    return this.http.get(`${this.eventsUrl}/${id}/export`, { responseType: 'blob' });
+  exportAttendance(id: number): Observable<HttpResponse<Blob>> {
+    return this.http.get(`${this.eventsUrl}/${id}/export`, {
+      responseType: 'blob',
+      observe: 'response',
+    });
   }
 }
