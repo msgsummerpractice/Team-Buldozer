@@ -57,7 +57,7 @@ const CHECK_IN_DIALOG_CONFIG = {
 
 const REGISTER_TO_EVENT_DIALOG_CONFIG: MatDialogConfig<RegisterToEventDialogData> = {
   width: '60%',
-  minWidth: '31rem',
+  minWidth: 'min(31rem, 92vw)',
   autoFocus: 'dialog' as const,
   restoreFocus: true,
 };
