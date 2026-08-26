@@ -41,6 +41,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -97,7 +98,11 @@ public class EventService {
             throw new ResourceNotFoundException("Event not found with id " + id);
         }
 
-        return eventMapper.toResponse(event);
+        Optional<AttendanceRecord> attendance = attendanceRecordRepository.findByEventIdAndUserId(id, user.getId());
+        boolean userRegistered = attendance.isPresent();
+        boolean userCheckedIn = attendance.map(AttendanceRecord::isCheckedIn).orElse(false);
+
+        return eventMapper.toResponse(event, userRegistered, userCheckedIn);
     }
 
     protected boolean hasFullAccess(User user) {

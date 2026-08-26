@@ -91,7 +91,12 @@ export class EventDetailsDialog {
   protected readonly isCheckInDisabled = computed(() => {
     const evt = this.event();
     if (!evt) return true;
-    return evt.status !== EventStatusEnum.PUBLISHED || new Date(evt.endDateTime) < new Date();
+    const now = new Date();
+    return (
+      evt.status !== EventStatusEnum.PUBLISHED ||
+      new Date(evt.startDateTime) > now ||
+      new Date(evt.endDateTime) < now
+    );
   });
 
   protected readonly posterUrl = computed(() => {
