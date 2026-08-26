@@ -1,0 +1,77 @@
+====================================================
+TEAMB-216 — Create query: top failing endpoints
+====================================================
+Description: Identifies which API endpoints return the most 4xx/5xx errors in the last 24h, ranked by failure count. Requires Tomcat access logging enabled (server.tomcat.accesslog).
+
+ContainerAppConsoleLogs_CL
+| where ContainerAppName_s == "team-buldozer-backend"
+| where TimeGenerated > ago(24h)
+| where Log_s matches regex @'"\s(4\d{2}|5\d{2})\s'
+| extend Path = extract(@'"(GET|POST|PUT|DELETE|PATCH)\s(\S+)', 2, Log_s)
+| extend Status = extract(@'HTTP/1\.\d"\s(\d{3})', 1, Log_s)
+| summarize FailCount = count() by Path, Status
+| order by FailCount desc
+
+
+====================================================
+TEAMB-217 — Create query: exception count by type
+====================================================
+Description: Counts ERROR-level log entries from the last 24h grouped by exception class name, to spot the most frequent failure types.
+
+ContainerAppConsoleLogs_CL
+| where ContainerAppName_s == "team-buldozer-backend"
+| where TimeGenerated > ago(24h)
+| where Log_s matches regex @"^\d{4}-\d{2}-\d{2}T.*\sERROR\s"
+| extend ExceptionType = extract(@"([a-zA-Z0-9_.]+(?:Exception|Error))\b", 1, Log_s)
+| summarize Count = count() by ExceptionType = iif(isempty(ExceptionType), "Unknown", ExceptionType)
+| order by Count desc
+
+
+====================================================
+TEAMB-218 — Create query: slowest API routes (p95/p99)
+====================================================
+Description: Calculates p95/p99/avg response time per endpoint over the last 24h. Requires Tomcat access logging enabled with duration pattern (%D) so request latency is captured in stdout.
+
+ContainerAppConsoleLogs_CL
+| where ContainerAppName_s == "team-buldozer-backend"
+| where TimeGenerated > ago(24h)
+| extend Path = extract(@'"(GET|POST|PUT|DELETE|PATCH)\s(\S+)', 2, Log_s)
+| extend DurationMs = toint(extract(@'\s(\d+)$', 1, Log_s))
+| where isnotempty(Path) and isnotnull(DurationMs)
+| summarize p95=percentile(DurationMs,95), p99=percentile(DurationMs,99), avg=avg(DurationMs), count() by Path
+| order by p99 desc
+
+
+====================================================
+TEAMB-219 — Create query: service restarts and revisions
+====================================================
+Description: Lists container startup/shutdown events and revision changes over the last 7 days, useful for correlating incidents with deployments.
+
+ContainerAppConsoleLogs_CL
+| where ContainerAppName_s == "team-buldozer-backend"
+| where TimeGenerated > ago(7d)
+| where Log_s has_any ("GracefulShutdown", "Commencing graceful shutdown", "Initializing Servlet", "Started ", "Shutdown initiated", "Shutdown completed")
+| project TimeGenerated, RevisionName_s, ContainerName_s, Log_s
+| order by TimeGenerated desc
+
+-- Optional complementary query (platform-level restart/provisioning events):
+
+ContainerAppSystemLogs_CL
+| where ContainerAppName_s == "team-buldozer-backend"
+| where TimeGenerated > ago(7d)
+| project TimeGenerated, RevisionName_s, Log_s
+| order by TimeGenerated desc
+
+
+====================================================
+TEAMB-220 — Audit logs for sensitive data exposure
+====================================================
+Description: Scans console logs from the last 7 days for real email addresses or password-related mentions outside known safe SQL column names, to confirm no sensitive data is being leaked into logs.
+
+ContainerAppConsoleLogs_CL
+| where ContainerAppName_s == "team-buldozer-backend"
+| where TimeGenerated > ago(7d)
+| where Log_s matches regex @"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+   or (Log_s contains "password" and Log_s !contains "password_updated_at" and Log_s !contains "u1_0.password")
+| project TimeGenerated, ContainerName_s, Log_s
+| order by TimeGenerated desc
