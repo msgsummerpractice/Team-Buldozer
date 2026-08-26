@@ -13,8 +13,6 @@ import java.util.List;
 @Repository
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
 
-    boolean existsByEventIdAndUserId(Long eventId, Long userId);
-
     Optional<Registration> findByEventIdAndUserId(Long eventId, Long userId);
 
     @Query("""

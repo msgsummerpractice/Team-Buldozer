@@ -11,6 +11,7 @@ import com.example.CheckInApp.exception.NotRegisteredForEventException;
 import com.example.CheckInApp.exception.ResourceNotFoundException;
 import com.example.CheckInApp.exception.WithdrawnRegistrationException;
 import com.example.CheckInApp.model.AttendanceRecord;
+import com.example.CheckInApp.model.Registration;
 import com.example.CheckInApp.model.Event;
 import com.example.CheckInApp.model.EventStatus;
 import com.example.CheckInApp.model.RegistrationStatus;
@@ -58,13 +59,17 @@ public class AttendanceService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + userEmail));
 
-        AttendanceRecord attendanceRecord = attendanceRecordRepository
-                .findByEventIdAndUserId(event.getId(), user.getId())
+        Registration registration = registrationRepository.findByEventIdAndUserId(event.getId(), user.getId())
                 .orElseThrow(() -> new NotRegisteredForEventException("You are not registered for this event."));
 
-        registrationRepository.findByEventIdAndUserId(event.getId(), user.getId())
-                .filter(r -> r.getStatus() == RegistrationStatus.CONFIRMED)
-                .orElseThrow(() -> new WithdrawnRegistrationException("You cannot check in with a withdrawn registration."));
+        if (registration.getStatus() != RegistrationStatus.CONFIRMED) {
+            throw new WithdrawnRegistrationException("You cannot check in with a withdrawn registration.");
+        }
+
+        AttendanceRecord attendanceRecord = attendanceRecordRepository
+                .findByEventIdAndUserId(event.getId(), user.getId())
+                .orElseThrow(
+                        () -> new WithdrawnRegistrationException("You cannot check in with a withdrawn registration."));
 
         if (event.getStatus() != EventStatus.PUBLISHED) {
             throw new CheckInClosedException("Check-in is closed because the event is not published.");
