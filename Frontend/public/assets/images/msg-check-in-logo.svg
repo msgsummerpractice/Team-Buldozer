@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Check-in app logo</title>
+  <rect width="512" height="512" rx="112" fill="#8e1239" />
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="126" width="288" height="274" rx="54" stroke-width="32" />
+    <path d="M176 96v72M336 96v72M112 208h288" stroke-width="32" />
+    <path d="m171 303 55 55 122-126" stroke-width="38" />
+  </g>
+</svg>
