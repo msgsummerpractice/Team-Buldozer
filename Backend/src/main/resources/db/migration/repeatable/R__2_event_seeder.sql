@@ -69,7 +69,7 @@ Ce v-am pregătit?
         TIMESTAMP '2025-03-03 23:00:00' AT TIME ZONE 'Europe/Bucharest',
         'LOCAL', 'DRAFT', NULL,
         TIMESTAMP '2025-02-01 00:00:00' AT TIME ZONE 'Europe/Bucharest',
-        TIMESTAMP '2025-02-30 23:59:59' AT TIME ZONE 'Europe/Bucharest',
+        TIMESTAMP '2025-02-28 23:59:59' AT TIME ZONE 'Europe/Bucharest',
         'Bulevardul Cetatii 93, Timisoara',
         'De aproape un deceniu, scriem cod, creăm și ne distrăm împreună. Inovația este la ea acasă în orașul în care 59 de colegi gestionează 25 de proiecte, zilnic. Să fie încă de 9 x pe atât! 🚀🎊',
         2, false,
@@ -88,7 +88,7 @@ Ce v-am pregătit?
         TIMESTAMP '2024-07-30 10:00:00' AT TIME ZONE 'Europe/Bucharest',
         '100006'),
 
-       (7, 'Hackathon', NULL,
+       (7, 'Hackathon', 'CLUJ',
         TIMESTAMP '2026-01-15 15:00:00' AT TIME ZONE 'Europe/Bucharest',
         TIMESTAMP '2026-01-15 23:00:00' AT TIME ZONE 'Europe/Bucharest',
         'EXTERNAL', 'COMPLETED', NULL,
