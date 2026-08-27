@@ -1,11 +1,15 @@
-<div class="fixed inset-0 flex items-center justify-center p-4 overflow-hidden">
-  <div class="text-center max-w-sm">
-    <h1 class="text-5xl font-bold text-gray-900 mb-2">{{ 'not-found.title' | transloco }}</h1>
-    <p class="text-gray-600 mb-6 text-sm">{{ 'not-found.message' | transloco }}</p>
+<div
+  class="fixed inset-0 flex items-center justify-start p-16 overflow-hidden"
+  style="background: url('/assets/images/msg-building.jpg') center / cover no-repeat"
+>
+  <div class="absolute inset-0 bg-black/35"></div>
+  <div class="text-center relative z-10">
+    <h1 class="text-7xl font-extrabold text-white mb-3">{{ 'not-found.title' | transloco }}</h1>
+    <p class="text-gray-300 mb-6 text-lg font-semibold">{{ 'not-found.message' | transloco }}</p>
 
     <a
       routerLink="/"
-      class="inline-block px-4 py-2 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+      class="inline-block px-4 py-2 border border-white/50 rounded text-sm font-semibold text-white hover:bg-white/10 transition"
     >
       {{ 'not-found.back-home' | transloco }}
     </a>
