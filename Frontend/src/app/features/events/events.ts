@@ -1,6 +1,7 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 import { EventService } from '@features/events/services/event-service';
 import { EventResponse } from '@features/events/model/event-response';
 import { EventStatusEnum } from '@features/events/model/event-status';
@@ -93,6 +94,7 @@ export class Events implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
   private _events = signal<EventResponse[]>([]);
 
   protected readonly searchTerm = signal<string>('');
@@ -206,7 +208,7 @@ export class Events implements OnInit {
       } else if (result?.action === 'checkin') {
         this.router.navigate(['/events', id, 'checkin']);
       } else {
-        this.router.navigate(['/events/list']);
+        this.location.replaceState('/events/list');
       }
     });
   }
@@ -264,6 +266,12 @@ export class Events implements OnInit {
 
   protected canManageRegistration(event: EventResponse): boolean {
     return new Date(event.startDateTime).getTime() > Date.now();
+  }
+
+  protected onViewDetails(event: EventResponse): void {
+    this.currentDialogRef?.close();
+    this.location.go(`/events/${event.id}/details`);
+    this.openEventDetailsDialogForRoute(event.id);
   }
 
   protected onCheckIn(event: EventResponse): void {
