@@ -333,6 +333,7 @@
     "register-tooltip": "Register for this event",
     "register-disabled-tooltip": "Registration has closed for this event",
     "manage-registration-tooltip": "View and manage your registration",
+    "manage-registration-disabled-tooltip": "Registration changes are not allowed once check-in has started",
     "status-values": {
       "DRAFT": "Draft",
       "PUBLISHED": "Published",
