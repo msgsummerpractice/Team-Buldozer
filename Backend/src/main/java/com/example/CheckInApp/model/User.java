@@ -55,3 +55,4 @@ public class User {
     private List<Event> events;
 
 }
+

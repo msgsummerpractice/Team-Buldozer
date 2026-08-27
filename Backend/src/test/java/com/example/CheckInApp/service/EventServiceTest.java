@@ -178,7 +178,7 @@ class EventServiceTest {
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
                 when(userRepository.findByEmail("user@example.com"))
                                 .thenReturn(Optional.of(marketingUser()));
-                when(eventMapper.toResponse(event)).thenReturn(response);
+                when(eventMapper.toResponse(event, false, false)).thenReturn(response);
 
                 assertThat(eventService.getEventById(1L, "user@example.com").getId()).isEqualTo(1L);
         }
@@ -204,7 +204,7 @@ class EventServiceTest {
                 when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
                 when(userRepository.findByEmail("user@example.com"))
                                 .thenReturn(Optional.of(participantUser(UserLocation.CLUJ)));
-                when(eventMapper.toResponse(event)).thenReturn(response);
+                when(eventMapper.toResponse(event, false, false)).thenReturn(response);
 
                 assertThat(eventService.getEventById(1L, "user@example.com").getId()).isEqualTo(1L);
         }
