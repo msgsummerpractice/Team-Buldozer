@@ -333,6 +333,7 @@
     "register-tooltip": "Înscrie-te la acest eveniment",
     "register-disabled-tooltip": "Înscrierea la acest eveniment s-a închis",
     "manage-registration-tooltip": "Vizualizează și gestionează înscrierea ta",
+    "manage-registration-disabled-tooltip": "Modificarea înscrierii nu este permisă după ce check-in-ul a început",
     "status-values": {
       "DRAFT": "Schiță",
       "PUBLISHED": "Publicat",
