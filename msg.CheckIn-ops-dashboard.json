@@ -156,15 +156,6 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
-                  }
-                }
               }
             }
           },
@@ -271,18 +262,6 @@
                         },
                         "disablePinning": true
                       }
-                    }
-                  }
-                }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "absolute": {
-                      "fromDate": "2026-08-25T09:07:59.523Z",
-                      "toDate": "2026-08-25T12:03:52.195Z"
                     }
                   }
                 }
@@ -395,18 +374,6 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "absolute": {
-                      "fromDate": "2026-08-25T02:34:27.018Z",
-                      "toDate": "2026-08-25T12:24:22.438Z"
-                    }
-                  }
-                }
               }
             }
           },
@@ -516,15 +483,6 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
-                  }
-                }
               }
             }
           },
@@ -632,15 +590,6 @@
                         "disablePinning": true
                       }
                     }
-                  }
-                }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
                   }
                 }
               }
@@ -774,15 +723,6 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
-                  }
-                }
               }
             }
           },
@@ -890,15 +830,6 @@
                         "disablePinning": true
                       }
                     }
-                  }
-                }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
                   }
                 }
               }
@@ -1010,15 +941,6 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
-                  }
-                }
               }
             }
           },
@@ -1126,15 +1048,6 @@
                         "disablePinning": true
                       }
                     }
-                  }
-                }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
                   }
                 }
               }
@@ -1246,15 +1159,6 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
-                  }
-                }
               }
             }
           },
@@ -1362,15 +1266,6 @@
                         "disablePinning": true
                       }
                     }
-                  }
-                }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
                   }
                 }
               }
@@ -1482,22 +1377,13 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "1440m"
-                  }
-                }
               }
             }
           },
           {
             "position": {
               "x": 0,
-              "y": 15,
+              "y": 16,
               "colSpan": 17,
               "rowSpan": 2
             },
@@ -1518,7 +1404,7 @@
           {
             "position": {
               "x": 0,
-              "y": 17,
+              "y": 18,
               "colSpan": 4,
               "rowSpan": 4
             },
@@ -1619,15 +1505,6 @@
                         "disablePinning": true
                       }
                     }
-                  }
-                }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "30m",
-                    "relative": "10080m"
                   }
                 }
               }
@@ -1636,7 +1513,7 @@
           {
             "position": {
               "x": 4,
-              "y": 17,
+              "y": 18,
               "colSpan": 4,
               "rowSpan": 4
             },
@@ -1737,15 +1614,6 @@
                         "disablePinning": true
                       }
                     }
-                  }
-                }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "30m",
-                    "relative": "1440m"
                   }
                 }
               }
@@ -1754,7 +1622,7 @@
           {
             "position": {
               "x": 8,
-              "y": 17,
+              "y": 18,
               "colSpan": 4,
               "rowSpan": 4
             },
@@ -1769,18 +1637,29 @@
                           "resourceMetadata": {
                             "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.App/containerApps/team-buldozer-backend"
                           },
-                          "name": "Requests",
-                          "aggregationType": 1,
+                          "name": "ResiliencyRequestTimeouts",
+                          "aggregationType": 4,
                           "namespace": "microsoft.app/containerapps",
                           "metricVisualization": {
-                            "displayName": "Requests"
+                            "displayName": "Resiliency Request Timeouts"
+                          }
+                        },
+                        {
+                          "resourceMetadata": {
+                            "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.App/containerApps/team-buldozer-backend"
+                          },
+                          "name": "ResiliencyConnectTimeouts",
+                          "aggregationType": 4,
+                          "namespace": "microsoft.app/containerapps",
+                          "metricVisualization": {
+                            "displayName": "Resiliency Connection Timeouts"
                           }
                         }
                       ],
-                      "title": "Sum Requests where Status Code = '500-599'",
-                      "titleKind": 2,
+                      "title": "Avg Resiliency Request Timeouts and Avg Resiliency Connection Timeouts for team-buldozer-backend",
+                      "titleKind": 1,
                       "visualization": {
-                        "chartType": 1,
+                        "chartType": 2,
                         "legendVisualization": {
                           "isVisible": true,
                           "position": 2,
@@ -1797,17 +1676,6 @@
                             "axisType": 1
                           }
                         }
-                      },
-                      "filterCollection": {
-                        "filters": [
-                          {
-                            "key": "statusCode",
-                            "operator": 0,
-                            "values": [
-                              "500-599"
-                            ]
-                          }
-                        ]
                       },
                       "timespan": {
                         "relative": {
@@ -1835,18 +1703,29 @@
                           "resourceMetadata": {
                             "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.App/containerApps/team-buldozer-backend"
                           },
-                          "name": "Requests",
-                          "aggregationType": 1,
+                          "name": "ResiliencyRequestTimeouts",
+                          "aggregationType": 4,
                           "namespace": "microsoft.app/containerapps",
                           "metricVisualization": {
-                            "displayName": "Requests"
+                            "displayName": "Resiliency Request Timeouts"
+                          }
+                        },
+                        {
+                          "resourceMetadata": {
+                            "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.App/containerApps/team-buldozer-backend"
+                          },
+                          "name": "ResiliencyConnectTimeouts",
+                          "aggregationType": 4,
+                          "namespace": "microsoft.app/containerapps",
+                          "metricVisualization": {
+                            "displayName": "Resiliency Connection Timeouts"
                           }
                         }
                       ],
-                      "title": "Sum Requests where Status Code = '500-599'",
-                      "titleKind": 2,
+                      "title": "Avg Resiliency Request Timeouts and Avg Resiliency Connection Timeouts for team-buldozer-backend",
+                      "titleKind": 1,
                       "visualization": {
-                        "chartType": 1,
+                        "chartType": 2,
                         "legendVisualization": {
                           "isVisible": true,
                           "position": 2,
@@ -1870,18 +1749,10 @@
                 }
               },
               "filters": {
-                "statusCode": {
-                  "model": {
-                    "operator": "equals",
-                    "values": [
-                      "500-599"
-                    ]
-                  }
-                },
                 "MsPortalFx_TimeRange": {
                   "model": {
                     "format": "local",
-                    "granularity": "30m",
+                    "granularity": "auto",
                     "relative": "1440m"
                   }
                 }
@@ -1891,7 +1762,7 @@
           {
             "position": {
               "x": 12,
-              "y": 17,
+              "y": 18,
               "colSpan": 5,
               "rowSpan": 4
             },
@@ -1904,20 +1775,31 @@
                       "metrics": [
                         {
                           "resourceMetadata": {
-                            "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.App/containerApps/team-buldozer-backend"
+                            "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.Web/staticSites/team-buldozer-static-web-app"
                           },
-                          "name": "Requests",
+                          "name": "CdnPercentageOf4XX",
                           "aggregationType": 1,
-                          "namespace": "microsoft.app/containerapps",
+                          "namespace": "microsoft.web/staticsites",
                           "metricVisualization": {
-                            "displayName": "Requests"
+                            "displayName": "CdnPercentageOf4XX"
+                          }
+                        },
+                        {
+                          "resourceMetadata": {
+                            "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.Web/staticSites/team-buldozer-static-web-app"
+                          },
+                          "name": "CdnPercentageOf5XX",
+                          "aggregationType": 1,
+                          "namespace": "microsoft.web/staticsites",
+                          "metricVisualization": {
+                            "displayName": "CdnPercentageOf5XX"
                           }
                         }
                       ],
-                      "title": "Sum Requests where Status Code = '400-499'",
-                      "titleKind": 2,
+                      "title": "Sum CdnPercentageOf4XX and Sum CdnPercentageOf5XX for team-buldozer-static-web-app",
+                      "titleKind": 1,
                       "visualization": {
-                        "chartType": 1,
+                        "chartType": 2,
                         "legendVisualization": {
                           "isVisible": true,
                           "position": 2,
@@ -1934,17 +1816,6 @@
                             "axisType": 1
                           }
                         }
-                      },
-                      "filterCollection": {
-                        "filters": [
-                          {
-                            "key": "statusCode",
-                            "operator": 0,
-                            "values": [
-                              "400-499"
-                            ]
-                          }
-                        ]
                       },
                       "timespan": {
                         "relative": {
@@ -1970,20 +1841,31 @@
                       "metrics": [
                         {
                           "resourceMetadata": {
-                            "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.App/containerApps/team-buldozer-backend"
+                            "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.Web/staticSites/team-buldozer-static-web-app"
                           },
-                          "name": "Requests",
+                          "name": "CdnPercentageOf4XX",
                           "aggregationType": 1,
-                          "namespace": "microsoft.app/containerapps",
+                          "namespace": "microsoft.web/staticsites",
                           "metricVisualization": {
-                            "displayName": "Requests"
+                            "displayName": "CdnPercentageOf4XX"
+                          }
+                        },
+                        {
+                          "resourceMetadata": {
+                            "id": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e/resourceGroups/team_buldozer/providers/Microsoft.Web/staticSites/team-buldozer-static-web-app"
+                          },
+                          "name": "CdnPercentageOf5XX",
+                          "aggregationType": 1,
+                          "namespace": "microsoft.web/staticsites",
+                          "metricVisualization": {
+                            "displayName": "CdnPercentageOf5XX"
                           }
                         }
                       ],
-                      "title": "Sum Requests where Status Code = '400-499'",
-                      "titleKind": 2,
+                      "title": "Sum CdnPercentageOf4XX and Sum CdnPercentageOf5XX for team-buldozer-static-web-app",
+                      "titleKind": 1,
                       "visualization": {
-                        "chartType": 1,
+                        "chartType": 2,
                         "legendVisualization": {
                           "isVisible": true,
                           "position": 2,
@@ -2007,18 +1889,10 @@
                 }
               },
               "filters": {
-                "statusCode": {
-                  "model": {
-                    "operator": "equals",
-                    "values": [
-                      "400-499"
-                    ]
-                  }
-                },
                 "MsPortalFx_TimeRange": {
                   "model": {
                     "format": "local",
-                    "granularity": "30m",
+                    "granularity": "auto",
                     "relative": "1440m"
                   }
                 }
@@ -2028,7 +1902,7 @@
           {
             "position": {
               "x": 0,
-              "y": 22,
+              "y": 23,
               "colSpan": 17,
               "rowSpan": 2
             },
@@ -2049,7 +1923,7 @@
           {
             "position": {
               "x": 0,
-              "y": 24,
+              "y": 25,
               "colSpan": 8,
               "rowSpan": 4
             },
@@ -2152,22 +2026,13 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "10080m"
-                  }
-                }
               }
             }
           },
           {
             "position": {
               "x": 8,
-              "y": 24,
+              "y": 25,
               "colSpan": 9,
               "rowSpan": 4
             },
@@ -2270,15 +2135,6 @@
                     }
                   }
                 }
-              },
-              "filters": {
-                "MsPortalFx_TimeRange": {
-                  "model": {
-                    "format": "local",
-                    "granularity": "auto",
-                    "relative": "10080m"
-                  }
-                }
               }
             }
           },
@@ -2301,6 +2157,112 @@
                   "markdownUri": ""
                 }
               }
+            }
+          },
+          {
+            "position": {
+              "x": 0,
+              "y": 33,
+              "colSpan": 6,
+              "rowSpan": 4
+            },
+            "metadata": {
+              "inputs": [
+                {
+                  "name": "scope",
+                  "value": "/subscriptions/bff82f66-027a-4464-a242-3e971760bb2e"
+                },
+                {
+                  "name": "scopeName",
+                  "value": "DEV__summer-practice (az-2605-W9U5)"
+                },
+                {
+                  "name": "view",
+                  "value": {
+                    "displayName": "team-buldozer-daily-cost",
+                    "scope": "subscriptions/bff82f66-027a-4464-a242-3e971760bb2e",
+                    "createdOn": "2026-08-27T07:05:30.6821305Z",
+                    "modifiedOn": "2026-08-27T07:53:52.0195581Z",
+                    "query": {
+                      "type": "ActualCost",
+                      "dataSet": {
+                        "granularity": "Daily",
+                        "aggregation": {
+                          "totalCost": {
+                            "name": "Cost",
+                            "function": "Sum"
+                          },
+                          "totalCostUSD": {
+                            "name": "CostUSD",
+                            "function": "Sum"
+                          }
+                        },
+                        "sorting": [
+                          {
+                            "direction": "ascending",
+                            "name": "UsageDate"
+                          }
+                        ],
+                        "grouping": [
+                          {
+                            "type": "Dimension",
+                            "name": "ResourceId"
+                          }
+                        ],
+                        "filter": {
+                          "Dimensions": {
+                            "Name": "ResourceGroupName",
+                            "Operator": "In",
+                            "Values": [
+                              "team_buldozer"
+                            ]
+                          }
+                        }
+                      },
+                      "timeframe": "None"
+                    },
+                    "dateRange": "Last7Days",
+                    "currency": "EUR",
+                    "chart": "Area",
+                    "accumulated": "false",
+                    "metric": "ActualCost",
+                    "kpis": [
+                      {
+                        "type": "Budget",
+                        "id": "COST_NAVIGATOR.BUDGET_OPTIONS.NONE",
+                        "enabled": true,
+                        "extendedProperties": {
+                          "name": "COST_NAVIGATOR.BUDGET_OPTIONS.NONE"
+                        }
+                      },
+                      {
+                        "type": "Forecast",
+                        "enabled": true
+                      }
+                    ],
+                    "pivots": [
+                      {
+                        "type": "Dimension",
+                        "name": "ServiceName"
+                      },
+                      {
+                        "type": "Dimension",
+                        "name": "ResourceLocation"
+                      },
+                      {
+                        "type": "Dimension",
+                        "name": "ResourceId"
+                      }
+                    ]
+                  },
+                  "isOptional": true
+                },
+                {
+                  "name": "externalState",
+                  "isOptional": true
+                }
+              ],
+              "type": "Extension/Microsoft_Azure_CostManagement/PartType/CostAnalysisPinPart"
             }
           }
         ]
@@ -2326,31 +2288,31 @@
               "model": {
                 "format": "utc",
                 "granularity": "auto",
-                "relative": "24h"
+                "relative": "30m"
               },
               "displayCache": {
                 "name": "UTC Time",
-                "value": "Past 24 hours"
+                "value": "Past 30 minutes"
               },
               "filteredPartIds": [
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2012",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2014",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2016",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2018",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca201a",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca201c",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca201e",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2020",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2022",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2024",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2026",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2028",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca202c",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca202e",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2030",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2032",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2036",
-                "StartboardPart-MonitorChartPart-f91b7f42-121f-40e7-b9d3-b6b5f8ca2038"
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa012",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa014",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa016",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa018",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa01a",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa01c",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa01e",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa020",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa022",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa024",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa026",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa028",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa02c",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa02e",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa030",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa032",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa036",
+                "StartboardPart-MonitorChartPart-89ec2842-0b9c-487c-8d0f-169a34bfa038"
               ]
             }
           }
