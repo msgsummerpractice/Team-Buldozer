@@ -157,7 +157,7 @@
             <td mat-cell *matCellDef="let event" class="text-center">
               <button
                 matIconButton
-                [routerLink]="['/events', event.id, 'details']"
+                (click)="onViewDetails(event)"
                 [matTooltip]="'events.view-details' | transloco"
               >
                 <mat-icon style="color: var(--color-msg-blue)">info</mat-icon>
@@ -349,7 +349,7 @@
             <mat-card-actions align="end" class="gap-2 border-t border-(--mat-sys-outline-variant)">
               <button
                 matIconButton
-                [routerLink]="['/events', event.id, 'details']"
+                (click)="onViewDetails(event)"
                 [matTooltip]="'events.view-details' | transloco"
               >
                 <mat-icon style="color: var(--color-msg-blue)">info</mat-icon>
